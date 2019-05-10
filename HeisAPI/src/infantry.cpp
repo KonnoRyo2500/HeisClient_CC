@@ -56,7 +56,7 @@ uint16_t CInfantry::get_y_position()
 */
 void CInfantry::attack(Direction direction)
 {
-	
+
 }
 
 /*
@@ -66,7 +66,7 @@ void CInfantry::attack(Direction direction)
 */
 void CInfantry::move(Direction direction)
 {
-
+	// TODO: 移動処理を実装する
 }
 
 /* private関数 */
