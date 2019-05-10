@@ -1,3 +1,3 @@
-// heis ƒtƒB[ƒ‹ƒhƒNƒ‰ƒX
+ï»¿// heis ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #include "field.h"

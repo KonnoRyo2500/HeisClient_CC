@@ -1,4 +1,4 @@
-// heis ƒƒCƒ“ˆ—
+ï»¿// heis ãƒ¡ã‚¤ãƒ³å‡¦ç†
 // Author: Ryo Konno
 #include <cstdio>
 #include <cstdlib>

@@ -1,12 +1,12 @@
-// heis •ºmƒNƒ‰ƒX
+ï»¿// heis å…µå£«ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #include "infantry.h"
 
-/* publicŠÖ” */
+/* publicé–¢æ•° */
 
 /*
-	ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	ˆø”2: int infantry_ID •ºmID
+	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	å¼•æ•°2: int infantry_ID å…µå£«ID
 */
 CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, const uint16_t init_pos_x, uint16_t init_pos_y)
 	: m_id(infantry_ID)
@@ -15,13 +15,13 @@ CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, c
 	, m_pos_x(init_pos_x)
 	, m_pos_y(init_pos_y)
 {
-	// ˆ—‚È‚µ
+	// å‡¦ç†ãªã—
 }
 
 /*
-	•ºm‚ÌHP‚ğæ“¾‚·‚éŠÖ”
-	ˆø”‚È‚µ
-	•Ô‚è’l: uint8_t •ºm‚ÌHP
+	å…µå£«ã®HPã‚’å–å¾—ã™ã‚‹é–¢æ•°
+	å¼•æ•°ãªã—
+	è¿”ã‚Šå€¤: uint8_t å…µå£«ã®HP
 */
 uint8_t CInfantry::get_hp()
 {
@@ -29,9 +29,9 @@ uint8_t CInfantry::get_hp()
 }
 
 /*
-	•ºm‚ÌxÀ•W‚ğæ“¾‚·‚éŠÖ”
-	ˆø”‚È‚µ
-	•Ô‚è’l: uint16_t •ºm‚ÌxÀ•W
+	å…µå£«ã®xåº§æ¨™ã‚’å–å¾—ã™ã‚‹é–¢æ•°
+	å¼•æ•°ãªã—
+	è¿”ã‚Šå€¤: uint16_t å…µå£«ã®xåº§æ¨™
 */
 uint16_t CInfantry::get_x_position()
 {
@@ -39,9 +39,9 @@ uint16_t CInfantry::get_x_position()
 }
 
 /*
-	•ºm‚ÌyÀ•W‚ğæ“¾‚·‚éŠÖ”
-	ˆø”‚È‚µ
-	•Ô‚è’l: Position •ºm‚ÌyÀ•W
+	å…µå£«ã®yåº§æ¨™ã‚’å–å¾—ã™ã‚‹é–¢æ•°
+	å¼•æ•°ãªã—
+	è¿”ã‚Šå€¤: Position å…µå£«ã®yåº§æ¨™
 */
 uint16_t CInfantry::get_y_position()
 {
@@ -49,9 +49,9 @@ uint16_t CInfantry::get_y_position()
 }
 
 /*
-	w’è‚µ‚½•ûŒü‚ÉUŒ‚‚ğs‚¤ŠÖ”
-	ˆø”1: Direction direction UŒ‚•ûŒü
-	•Ô‚è’l‚È‚µ
+	æŒ‡å®šã—ãŸæ–¹å‘ã«æ”»æ’ƒã‚’è¡Œã†é–¢æ•°
+	å¼•æ•°1: Direction direction æ”»æ’ƒæ–¹å‘
+	è¿”ã‚Šå€¤ãªã—
 */
 void CInfantry::attack(Direction direction)
 {
@@ -59,22 +59,22 @@ void CInfantry::attack(Direction direction)
 }
 
 /*
-	w’è‚µ‚½•ûŒü‚É•ºm‚ğˆÚ“®‚·‚éŠÖ”
-	ˆø”1: Direction direction ˆÚ“®•ûŒü
-	•Ô‚è’l‚È‚µ
+	æŒ‡å®šã—ãŸæ–¹å‘ã«å…µå£«ã‚’ç§»å‹•ã™ã‚‹é–¢æ•°
+	å¼•æ•°1: Direction direction ç§»å‹•æ–¹å‘
+	è¿”ã‚Šå€¤ãªã—
 */
 void CInfantry::move(Direction direction)
 {
 
 }
 
-/* privateŠÖ” */
+/* privateé–¢æ•° */
 
 /*
-	“G‚Ì•ºm‚©‚ç‚ÌUŒ‚‚ğ”½‰f‚³‚¹‚éŠÖ”
-	ˆø”‚È‚µ
-	•Ô‚è’l‚È‚µ
-	’ˆÓ: ‚±‚ÌŠÖ”‚ÍC“à•”“I‚Èˆ—‚ğs‚¤‚½‚ß‚Ì‚à‚Ì‚È‚Ì‚ÅCƒ†[ƒUAI‚Í‚±‚ÌŠÖ”‚ğŒÄ‚ñ‚Å‚Í‚¢‚¯‚È‚¢
+	æ•µã®å…µå£«ã‹ã‚‰ã®æ”»æ’ƒã‚’åæ˜ ã•ã›ã‚‹é–¢æ•°
+	å¼•æ•°ãªã—
+	è¿”ã‚Šå€¤ãªã—
+	æ³¨æ„: ã“ã®é–¢æ•°ã¯ï¼Œå†…éƒ¨çš„ãªå‡¦ç†ã‚’è¡Œã†ãŸã‚ã®ã‚‚ã®ãªã®ã§ï¼Œãƒ¦ãƒ¼ã‚¶AIã¯ã“ã®é–¢æ•°ã‚’å‘¼ã‚“ã§ã¯ã„ã‘ãªã„
 */
 void CInfantry::attacked()
 {

@@ -1,4 +1,4 @@
-// heis •ºmƒNƒ‰ƒX
+ï»¿// heis å…µå£«ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #pragma once
 
@@ -6,9 +6,9 @@
 
 class CInfantry
 {
-	// \‘¢‘ÌC—ñ‹“‘Ì‚È‚Ç
+	// æ§‹é€ ä½“ï¼Œåˆ—æŒ™ä½“ãªã©
 	public:
-		// •ûŒü
+		// æ–¹å‘
 		enum Direction {
 			Direction_Up,
 			Direction_Right,
@@ -17,31 +17,31 @@ class CInfantry
 		};
 
 	private:
-		// ‰Šú’l(’è”)
+		// åˆæœŸå€¤(å®šæ•°)
 		enum InitialValue {
 			InitialValue_HP = 2,
 		};
 
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 	public:
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		explicit CInfantry(const std::string& team_name, const uint16_t infantry_ID, const uint16_t init_pos_x, uint16_t init_pos_y);
 
-		// ƒXƒe[ƒ^ƒX‚Ìæ“¾
+		// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®å–å¾—
 		uint8_t get_hp();
 		uint16_t get_x_position();
 		uint16_t get_y_position();
 
-		// s“®
+		// è¡Œå‹•
 		void attack(Direction direction);
 		void move(Direction direction);
 
-		// “à•”ˆ——p(ƒ†[ƒU’è‹`AI‚Å‚ÍŒÄ‚Î‚È‚¢‚±‚Æ)
+		// å†…éƒ¨å‡¦ç†ç”¨(ãƒ¦ãƒ¼ã‚¶å®šç¾©AIã§ã¯å‘¼ã°ãªã„ã“ã¨)
 		void attacked();
 
 	private:
 
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	private:
 		std::string m_team_name;
 		uint16_t m_id;

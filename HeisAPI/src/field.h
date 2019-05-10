@@ -1,4 +1,4 @@
-// heis ƒtƒB[ƒ‹ƒhƒNƒ‰ƒX
+ï»¿// heis ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #pragma once
 
@@ -7,19 +7,19 @@
 
 class CField
 {
-	// \‘¢‘ÌC—ñ‹“‘Ì‚È‚Ç
+	// æ§‹é€ ä½“ï¼Œåˆ—æŒ™ä½“ãªã©
 	private:
-		// ƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚é’è”
+		// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹å®šæ•°
 		enum FieldParam {
-			FieldParam_Width = 20,				// •
-			FieldParam_Height = 20,				// ‚‚³
+			FieldParam_Width = 20,				// å¹…
+			FieldParam_Height = 20,				// é«˜ã•
 		};
 
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	private:
-		std::array<CInfantry*, FieldParam_Width * FieldParam_Height> m_field;		// ƒtƒB[ƒ‹ƒh‚ÌŠeƒ}ƒX–Ú
+		std::array<CInfantry*, FieldParam_Width * FieldParam_Height> m_field;		// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å„ãƒã‚¹ç›®
 
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 	public:
 		CInfantry* get_infantry(uint16_t pos_x, uint16_t pos_y);
 		void set_infantry(uint16_t pos_x, uint16_t pos_y, CInfantry* infantry);
