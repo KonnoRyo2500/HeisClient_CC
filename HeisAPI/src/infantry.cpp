@@ -14,6 +14,7 @@ CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, c
 	, m_team_name(team_name)
 	, m_pos_x(init_pos_x)
 	, m_pos_y(init_pos_y)
+	, m_action_remain(InitialValue_ActionNum)
 {
 	// 処理なし
 }
