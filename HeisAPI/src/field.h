@@ -5,7 +5,6 @@
 #include "infantry.h"
 #include <array>
 
-// TODO: シングルトンパターンをこのクラスに適用する
 class CField
 {
 	// 構造体，列挙体など
@@ -16,13 +15,19 @@ class CField
 			FieldParam_Height = 20,				// 高さ
 		};
 
-	// メンバ変数
-	private:
-		std::array<CInfantry*, FieldParam_Width * FieldParam_Height> m_field;		// フィールドの各マス目
-
 	// メンバ関数
 	public:
-		CInfantry* get_infantry(uint16_t pos_x, uint16_t pos_y);
+		static CField* get_instance();
+		static void create_field();
+		static void delete_field();
+
+		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
 		void set_infantry(uint16_t pos_x, uint16_t pos_y, CInfantry* infantry);
-		void end_your_turn();
+	
+	private:
+		void initalize();
+	// メンバ変数
+	private:
+		static CField* m_instance;													// インスタンス
+		std::array<CInfantry*, FieldParam_Width* FieldParam_Height> m_field;		// フィールドの各マス目
 };

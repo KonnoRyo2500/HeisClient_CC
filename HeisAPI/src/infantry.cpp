@@ -24,7 +24,7 @@ CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, c
 	引数なし
 	返り値: uint8_t 兵士のHP
 */
-uint8_t CInfantry::get_hp()
+uint8_t CInfantry::get_hp() const
 {
 	return m_hp;
 }
@@ -34,7 +34,7 @@ uint8_t CInfantry::get_hp()
 	引数なし
 	返り値: uint16_t 兵士のx座標
 */
-uint16_t CInfantry::get_x_position()
+uint16_t CInfantry::get_x_position() const
 {
 	return m_pos_x;
 }
@@ -44,32 +44,37 @@ uint16_t CInfantry::get_x_position()
 	引数なし
 	返り値: Position 兵士のy座標
 */
-uint16_t CInfantry::get_y_position()
+uint16_t CInfantry::get_y_position() const
 {
 	return m_pos_y;
 }
 
 /*
 	指定した方向に攻撃を行う関数
-	引数1: Direction direction 攻撃方向
+	引数1: const Direction direction 攻撃方向
 	返り値なし
 */
-void CInfantry::attack(Direction direction)
+void CInfantry::attack(const Direction direction) const
 {
-
+	if (m_action_remain == 0) {
+		printf("行動回数の上限に達しています．\n");
+		return;
+	}
 }
 
 /*
 	指定した方向に兵士を移動する関数
-	引数1: Direction direction 移動方向
+	引数1: const Direction direction 移動方向
 	返り値なし
 */
-void CInfantry::move(Direction direction)
+void CInfantry::move(const Direction direction)
 {
-	// TODO: 移動処理を実装する
-}
+	if (m_action_remain == 0) {
+		printf("行動回数の上限に達しています．\n");
+		return;
+	}
 
-/* private関数 */
+}
 
 /*
 	敵の兵士からの攻撃を反映させる関数
@@ -80,4 +85,25 @@ void CInfantry::move(Direction direction)
 void CInfantry::attacked()
 {
 	m_hp--;
+}
+
+/* private関数 */
+
+/*
+	自分に隣接したマスのうち，指定された方向にいる兵士を取得する関数
+	引数1: const Direction direction
+	返り値: CInfantry* 指定されたマスにいる兵士(指定されたマスに兵士がいなければNULL)
+*/
+CInfantry* CInfantry::search_neighbor_infantry(const Direction direction) const
+{
+	CInfantry* dst_infantry = NULL;
+
+	switch (direction) {
+		case Direction_Up:
+			break;
+		default:
+			break;
+	}
+
+	return dst_infantry;
 }
