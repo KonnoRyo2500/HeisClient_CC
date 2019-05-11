@@ -34,19 +34,22 @@ class CInfantry
 		uint16_t get_y_position() const;
 
 		// 行動
-		void attack(const Direction direction) const;
+		void attack(const Direction direction);
 		void move(const Direction direction);
 
 		// 内部処理用(ユーザ定義AIでは呼ばないこと)
-		void attacked();
+		//void attacked();
 
 	private:
-		CInfantry* search_neighbor_infantry(const Direction direction) const;
+		void attacked();
+
+		uint16_t calc_neighbor_x_pos(const Direction direction) const;
+		uint16_t calc_neighbor_y_pos(const Direction direction) const;
 
 	// メンバ変数
 	private:
 		std::string m_team_name;
-		uint16_t m_id;
+		int m_id;
 		uint16_t m_pos_x;
 		uint16_t m_pos_y;
 		uint8_t m_action_remain;

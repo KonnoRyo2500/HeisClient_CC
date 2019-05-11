@@ -1,6 +1,7 @@
 ﻿// heis 兵士クラス
 // Author: Ryo Konno
 #include "infantry.h"
+#include "field.h"
 
 /* public関数 */
 
@@ -16,7 +17,7 @@ CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, c
 	, m_pos_y(init_pos_y)
 	, m_action_remain(InitialValue_ActionNum)
 {
-	// 処理なし
+	CField::get_instance()->set_infantry(init_pos_x, init_pos_y, this);
 }
 
 /*
@@ -54,11 +55,22 @@ uint16_t CInfantry::get_y_position() const
 	引数1: const Direction direction 攻撃方向
 	返り値なし
 */
-void CInfantry::attack(const Direction direction) const
+void CInfantry::attack(const Direction direction)
 {
 	if (m_action_remain == 0) {
-		printf("行動回数の上限に達しています．\n");
+		printf("行動回数の上限に達しています\n");
 		return;
+	}
+
+	CField* field = CField::get_instance();
+	CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
+
+	if (dst_infantry != NULL) {
+		dst_infantry->attacked();
+		m_action_remain--;
+	}
+	else {
+		printf("攻撃しようとした方向に兵士がいません\n");
 	}
 }
 
@@ -70,11 +82,28 @@ void CInfantry::attack(const Direction direction) const
 void CInfantry::move(const Direction direction)
 {
 	if (m_action_remain == 0) {
-		printf("行動回数の上限に達しています．\n");
+		printf("行動回数の上限に達しています\n");
 		return;
 	}
 
+	CField* field = CField::get_instance();
+	CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
+
+	if (dst_infantry == NULL) {
+		field->set_infantry(m_pos_x, m_pos_y, NULL);
+		field->set_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction), this);
+
+		m_pos_x = calc_neighbor_x_pos(direction);
+		m_pos_y = calc_neighbor_y_pos(direction);
+
+		m_action_remain--;
+	}
+	else {
+		printf("移動先に兵士がいます\n");
+	}
 }
+
+/* private関数 */
 
 /*
 	敵の兵士からの攻撃を反映させる関数
@@ -87,23 +116,50 @@ void CInfantry::attacked()
 	m_hp--;
 }
 
-/* private関数 */
-
 /*
-	自分に隣接したマスのうち，指定された方向にいる兵士を取得する関数
-	引数1: const Direction direction
-	返り値: CInfantry* 指定されたマスにいる兵士(指定されたマスに兵士がいなければNULL)
+	フィールドのマスのうち，指定した方向に隣接したマスのx座標を取得する関数
+	引数1: const Direction direction 方向
+	返り値: uint16_t x座標
 */
-CInfantry* CInfantry::search_neighbor_infantry(const Direction direction) const
+uint16_t CInfantry::calc_neighbor_x_pos(const Direction direction) const
 {
-	CInfantry* dst_infantry = NULL;
+	uint16_t dst_x_pos;
 
 	switch (direction) {
-		case Direction_Up:
+		case Direction_Left:
+			dst_x_pos = m_pos_x - 1;
+			break;
+		case Direction_Right:
+			dst_x_pos = m_pos_x + 1;
 			break;
 		default:
+			dst_x_pos = m_pos_x;
 			break;
 	}
 
-	return dst_infantry;
+	return dst_x_pos;
+}
+
+/*
+	フィールドのマスのうち，指定した方向に隣接したマスのy座標を取得する関数
+	引数1: const Direction direction 方向
+	返り値: uint16_t y座標
+*/
+uint16_t CInfantry::calc_neighbor_y_pos(const Direction direction) const
+{
+	uint16_t dst_y_pos;
+
+	switch (direction) {
+	case Direction_Up:
+		dst_y_pos = m_pos_y - 1;
+		break;
+	case Direction_Down:
+		dst_y_pos = m_pos_y + 1;
+		break;
+	default:
+		dst_y_pos = m_pos_y;
+		break;
+	}
+
+	return dst_y_pos;
 }

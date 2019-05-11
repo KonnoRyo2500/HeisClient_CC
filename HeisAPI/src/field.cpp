@@ -25,6 +25,7 @@ void CField::create_field()
 {
 	if (m_instance == NULL) {
 		m_instance = new CField;
+		m_instance->initalize();
 	}
 }
 
@@ -49,14 +50,28 @@ void CField::delete_field()
 CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) const
 {
 	// 指定された座標が不正でないかどうかチェック
-	bool position_error = (pos_x < 0 || FieldParam_Width <= pos_x);
-	position_error |= (pos_y < 0 || FieldParam_Height <= pos_y);
-	if (position_error) {
-		printf("指定された座標(%d, %d)は不正です\n", pos_x, pos_y);
+	if (!validate_position(pos_x, pos_y)) {
 		return NULL;
 	}
 
-	return m_field[pos_x + (FieldParam_Width * pos_y)];
+	return m_grid[pos_x + (FieldParam_Width * pos_y)];
+}
+
+/*
+	指定した座標に兵士を配置する関数
+	引数1: const uint16_t pos_x 兵士を配置するx座標
+	引数2: const uint16_t pos_y 兵士を配置するy座標
+	引数3: CInfantry* infantry 配置する兵士
+	返り値なし
+*/
+void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry)
+{
+	// 指定された座標が不正でないかどうかチェック
+	if (!validate_position(pos_x, pos_y)) {
+		return;
+	}
+
+	m_grid[pos_x + (FieldParam_Width * pos_y)] = infantry;
 }
 
 /* private関数 */
@@ -68,5 +83,24 @@ CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) cons
 */
 void CField::initalize()
 {
-	m_field.fill(NULL);
+	m_grid.fill(NULL);
+}
+
+/*
+	座標を検証する関数
+	引数1: const uint16_t pos_x x座標
+	引数2: const uint16_t pos_y y座標
+	返り値: bool 座標が正常か(true: 正常, false: 不正)
+*/
+bool CField::validate_position(const uint16_t pos_x, const uint16_t pos_y) const
+{
+	// if文で条件判定すると条件文が長くなるのでこのような書き方をした
+	bool is_position_valid = (0 <= pos_x && pos_x < FieldParam_Width);
+
+	is_position_valid &= (0 <= pos_y && pos_y < FieldParam_Height);
+	if (!is_position_valid) {
+		printf("指定された座標(%d, %d)は不正です\n", pos_x, pos_y);
+	}
+
+	return is_position_valid;
 }

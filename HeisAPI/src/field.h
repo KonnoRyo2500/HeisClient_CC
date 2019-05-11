@@ -22,12 +22,14 @@ class CField
 		static void delete_field();
 
 		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
-		void set_infantry(uint16_t pos_x, uint16_t pos_y, CInfantry* infantry);
+		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
 	
 	private:
 		void initalize();
+		bool validate_position(const uint16_t pos_x, const uint16_t pos_y) const;
+
 	// メンバ変数
 	private:
-		static CField* m_instance;													// インスタンス
-		std::array<CInfantry*, FieldParam_Width* FieldParam_Height> m_field;		// フィールドの各マス目
+		static CField* m_instance;												// インスタンス
+		std::array<CInfantry*, FieldParam_Width* FieldParam_Height> m_grid;		// フィールドの各マス目
 };
