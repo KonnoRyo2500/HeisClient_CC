@@ -2,6 +2,7 @@
 // Author: Ryo Konno
 #include "infantry.h"
 #include "field.h"
+#include <stdexcept>
 
 /* public関数 */
 
@@ -63,14 +64,19 @@ void CInfantry::attack(const Direction direction)
 	}
 
 	CField* field = CField::get_instance();
-	CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
 
-	if (dst_infantry != NULL) {
-		dst_infantry->attacked();
-		m_action_remain--;
+	try {
+		CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
+		if (dst_infantry != NULL) {
+			dst_infantry->attacked();
+			m_action_remain--;
+		}
+		else {
+			printf("攻撃しようとした方向に兵士がいません\n");
+		}
 	}
-	else {
-		printf("攻撃しようとした方向に兵士がいません\n");
+	catch (std::exception & e) {
+		fprintf(stderr, "攻撃に失敗しました\n理由: %s\n", e.what());
 	}
 }
 
@@ -87,19 +93,24 @@ void CInfantry::move(const Direction direction)
 	}
 
 	CField* field = CField::get_instance();
-	CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
 
-	if (dst_infantry == NULL) {
-		field->set_infantry(m_pos_x, m_pos_y, NULL);
-		field->set_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction), this);
+	try {
+		CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
+		if (dst_infantry == NULL) {
+			field->set_infantry(m_pos_x, m_pos_y, NULL);
+			field->set_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction), this);
 
-		m_pos_x = calc_neighbor_x_pos(direction);
-		m_pos_y = calc_neighbor_y_pos(direction);
+			m_pos_x = calc_neighbor_x_pos(direction);
+			m_pos_y = calc_neighbor_y_pos(direction);
 
-		m_action_remain--;
+			m_action_remain--;
+		}
+		else {
+			printf("移動先に兵士がいます\n");
+		}
 	}
-	else {
-		printf("移動先に兵士がいます\n");
+	catch (std::exception & e) {
+		fprintf(stderr, "移動に失敗しました\n理由: %s\n", e.what());
 	}
 }
 

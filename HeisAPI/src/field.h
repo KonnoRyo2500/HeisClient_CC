@@ -5,6 +5,7 @@
 #include "infantry.h"
 #include <array>
 
+// 備考: このクラスは，シングルトンパターンを用いて作成されている
 class CField
 {
 	// 構造体，列挙体など
@@ -26,7 +27,7 @@ class CField
 	
 	private:
 		void initalize();
-		bool validate_position(const uint16_t pos_x, const uint16_t pos_y) const;
+		void validate_position(const uint16_t pos_x, const uint16_t pos_y) const;
 
 	// メンバ変数
 	private:
