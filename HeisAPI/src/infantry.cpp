@@ -156,7 +156,6 @@ void CInfantry::move(const Direction direction)
 	敵の兵士からの攻撃を反映させる関数
 	引数なし
 	返り値なし
-	注意: この関数は，内部的な処理を行うためのものなので，ユーザAIはこの関数を呼んではいけない
 */
 void CInfantry::attacked()
 {

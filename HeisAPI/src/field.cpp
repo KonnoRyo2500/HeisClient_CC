@@ -89,7 +89,7 @@ void CField::initalize()
 	座標を検証する関数
 	引数1: const uint16_t pos_x x座標
 	引数2: const uint16_t pos_y y座標
-	返り値: bool 座標が正常か(true: 正常, false: 不正)
+	返り値なし
 	例外: 指定した座標が範囲外のとき
 */
 void CField::validate_position(const uint16_t pos_x, const uint16_t pos_y) const
