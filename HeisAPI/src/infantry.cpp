@@ -99,6 +99,11 @@ void CInfantry::attack(const Direction direction)
 	try {
 		CInfantry* dst_infantry = field->get_infantry(calc_neighbor_x_pos(direction), calc_neighbor_y_pos(direction));
 		if (dst_infantry != NULL) {
+			if (dst_infantry->get_team_name() == m_team_name) {
+				fprintf(stderr, "味方の兵士を攻撃しようとしています\n");
+				return;
+			}
+
 			dst_infantry->attacked();
 			m_action_remain--;
 		}
