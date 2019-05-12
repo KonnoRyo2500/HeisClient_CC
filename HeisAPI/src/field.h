@@ -18,10 +18,12 @@ class CField
 
 	// メンバ関数
 	public:
+		// フィールドの取得，作成，削除
 		static CField* get_instance();
 		static void create_field();
 		static void delete_field();
 
+		// マス目情報(各マスにいる兵士の情報)の管理
 		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
 		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
 	

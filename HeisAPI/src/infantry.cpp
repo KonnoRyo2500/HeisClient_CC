@@ -22,13 +22,23 @@ CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, c
 }
 
 /*
-	兵士のHPを取得する関数
+	兵士のチーム名を取得する関数
 	引数なし
-	返り値: uint8_t 兵士のHP
+	返り値: std::string 兵士のチーム名
 */
-uint8_t CInfantry::get_hp() const
+std::string CInfantry::get_team_name() const
 {
-	return m_hp;
+	return m_team_name;
+}
+
+/*
+	兵士のIDを取得する関数
+	引数なし
+	返り値: uint16_t 兵士のID
+*/
+uint16_t CInfantry::get_id() const
+{
+	return m_id;
 }
 
 /*
@@ -44,12 +54,33 @@ uint16_t CInfantry::get_x_position() const
 /*
 	兵士のy座標を取得する関数
 	引数なし
-	返り値: Position 兵士のy座標
+	返り値: uint16_t 兵士のy座標
 */
 uint16_t CInfantry::get_y_position() const
 {
 	return m_pos_y;
 }
+
+/*
+	兵士の残り行動回数を取得する関数
+	引数なし
+	返り値: uint8_t 兵士の残り行動回数
+*/
+uint8_t CInfantry::get_action_remain() const
+{
+	return m_action_remain;
+}
+
+/*
+	兵士のHPを取得する関数
+	引数なし
+	返り値: uint8_t 兵士のHP
+*/
+uint8_t CInfantry::get_hp() const
+{
+	return m_hp;
+}
+
 
 /*
 	指定した方向に攻撃を行う関数
@@ -59,7 +90,7 @@ uint16_t CInfantry::get_y_position() const
 void CInfantry::attack(const Direction direction)
 {
 	if (m_action_remain == 0) {
-		printf("行動回数の上限に達しています\n");
+		fprintf(stderr, "行動回数の上限に達しています\n");
 		return;
 	}
 
@@ -72,7 +103,7 @@ void CInfantry::attack(const Direction direction)
 			m_action_remain--;
 		}
 		else {
-			printf("攻撃しようとした方向に兵士がいません\n");
+			fprintf(stderr, "攻撃しようとした方向に兵士がいません\n");
 		}
 	}
 	catch (std::exception & e) {
@@ -88,7 +119,7 @@ void CInfantry::attack(const Direction direction)
 void CInfantry::move(const Direction direction)
 {
 	if (m_action_remain == 0) {
-		printf("行動回数の上限に達しています\n");
+		fprintf(stderr, "行動回数の上限に達しています\n");
 		return;
 	}
 
@@ -106,7 +137,7 @@ void CInfantry::move(const Direction direction)
 			m_action_remain--;
 		}
 		else {
-			printf("移動先に兵士がいます\n");
+			fprintf(stderr, "移動先に兵士がいます\n");
 		}
 	}
 	catch (std::exception & e) {

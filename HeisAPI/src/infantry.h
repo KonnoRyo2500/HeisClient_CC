@@ -29,16 +29,16 @@ class CInfantry
 		explicit CInfantry(const std::string& team_name, const uint16_t infantry_ID, const uint16_t init_pos_x, uint16_t init_pos_y);
 
 		// ステータスの取得
-		uint8_t get_hp() const;
+		std::string get_team_name() const;
+		uint16_t get_id() const;
 		uint16_t get_x_position() const;
 		uint16_t get_y_position() const;
+		uint8_t get_action_remain() const;
+		uint8_t get_hp() const;
 
 		// 行動
 		void attack(const Direction direction);
 		void move(const Direction direction);
-
-		// 内部処理用(ユーザ定義AIでは呼ばないこと)
-		//void attacked();
 
 	private:
 		void attacked();
@@ -49,7 +49,7 @@ class CInfantry
 	// メンバ変数
 	private:
 		std::string m_team_name;
-		int m_id;
+		uint16_t m_id;
 		uint16_t m_pos_x;
 		uint16_t m_pos_y;
 		uint8_t m_action_remain;
