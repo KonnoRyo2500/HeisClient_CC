@@ -1,4 +1,4 @@
-// heis i—ßŠ¯ƒNƒ‰ƒX
+ï»¿// heis å¸ä»¤å®˜ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #pragma once
 
@@ -7,26 +7,26 @@
 
 class CCommander
 {
-	// \‘¢‘ÌC—ñ‹“‘Ì‚È‚Ç
+	// æ§‹é€ ä½“ï¼Œåˆ—æŒ™ä½“ãªã©
 	private:
-		// ‰Šú’l
+		// åˆæœŸå€¤
 		enum InitialValue {
-			InitialValue_NumInfantry = 30,			// •ºm‚Ìl”
+			InitialValue_NumInfantry = 30,			// å…µå£«ã®äººæ•°
 		};
 
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 	public:
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		explicit CCommander(std::string team_name);
 
-		// “à•”ˆ——p(ƒ†[ƒUAI‚Í‚±‚Ìˆ—‚ğŒÄ‚Î‚È‚¢‚±‚Æ)
+		// å†…éƒ¨å‡¦ç†ç”¨(ãƒ¦ãƒ¼ã‚¶AIã¯ã“ã®å‡¦ç†ã‚’å‘¼ã°ãªã„ã“ã¨)
 		void update_all_infantries();
 
 	private:
 		int search_infantry_by_id(uint16_t id);
 
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	private:
 		std::string m_team_name;
-		std::array<CInfantry*, InitialValue_NumInfantry> m_infantries;		// ƒ`[ƒ€‚Ì‘S•ºm
+		std::array<CInfantry*, InitialValue_NumInfantry> m_infantries;		// ãƒãƒ¼ãƒ ã®å…¨å…µå£«
 };

@@ -1,2 +1,2 @@
-// heis i—ßŠ¯ƒNƒ‰ƒX
+ï»¿// heis å¸ä»¤å®˜ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno

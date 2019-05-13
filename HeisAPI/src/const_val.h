@@ -1,19 +1,19 @@
-// heis Šeí’è”
+ï»¿// heis å„ç¨®å®šæ•°
 // Author: Ryo Konno
 #pragma once
 
-// ƒvƒƒOƒ‰ƒ€’†‚Å‹¤’Ê‚µ‚Äg‚¤’è”‚ğ‚±‚±‚É‹Lq‚·‚é
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ä¸­ã§å…±é€šã—ã¦ä½¿ã†å®šæ•°ã‚’ã“ã“ã«è¨˜è¿°ã™ã‚‹
 
-// •ûŒü
+// æ–¹å‘
 enum Direction {
-	Direction_Up,					// ã
-	Direction_Down,					// ‰º
-	Direction_Left,					// ¶
-	Direction_Right,				// ‰E
+	Direction_Up,					// ä¸Š
+	Direction_Down,					// ä¸‹
+	Direction_Left,					// å·¦
+	Direction_Right,				// å³
 };
 
-// ƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚é’è”
+// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹å®šæ•°
 enum FieldParam {
-	FieldParam_Width = 20,				// •
-	FieldParam_Height = 20,				// ‚‚³
+	FieldParam_Width = 20,				// å¹…
+	FieldParam_Height = 20,				// é«˜ã•
 };
