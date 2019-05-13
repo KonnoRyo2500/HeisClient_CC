@@ -11,3 +11,9 @@ enum Direction {
 	Direction_Left,					// 左
 	Direction_Right,				// 右
 };
+
+// フィールドに関する定数
+enum FieldParam {
+	FieldParam_Width = 20,				// 幅
+	FieldParam_Height = 20,				// 高さ
+};

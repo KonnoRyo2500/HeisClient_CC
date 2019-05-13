@@ -32,8 +32,13 @@ class CInfantry
 		void attack(const Direction direction);
 		void move(const Direction direction);
 
+		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
+		void update_status();
+
 	private:
 		void attacked();
+
+		bool is_self(const CInfantry* infantry) const;
 
 		uint16_t calc_neighbor_x_pos(const Direction direction) const;
 		uint16_t calc_neighbor_y_pos(const Direction direction) const;

@@ -7,14 +7,6 @@
 
 class CField
 {
-	// 構造体，列挙体など
-	private:
-		// フィールドに関する定数
-		enum FieldParam {
-			FieldParam_Width = 20,				// 幅
-			FieldParam_Height = 20,				// 高さ
-		};
-
 	// メンバ関数
 	public:
 		// フィールドの取得，作成，削除
@@ -26,6 +18,9 @@ class CField
 		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
 		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
 	
+		// 更新
+		void update_field();
+
 	private:
 		void initalize();
 		void validate_position(const uint16_t pos_x, const uint16_t pos_y) const;
@@ -33,5 +28,5 @@ class CField
 	// メンバ変数
 	private:
 		static CField* m_instance;												// インスタンス
-		std::array<CInfantry*, FieldParam_Width* FieldParam_Height> m_grid;		// フィールドの各マス目
+		std::array<CInfantry*, FieldParam_Width * FieldParam_Height> m_grid;	// フィールドの各マス目
 };
