@@ -26,7 +26,7 @@ class CInfantry
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CInfantry(const std::string& team_name, const uint16_t infantry_ID, const uint16_t init_pos_x, uint16_t init_pos_y);
+		explicit CInfantry(const std::string& team_name, const uint16_t infantry_ID, const uint16_t init_pos_x, const uint16_t init_pos_y);
 
 		// ステータスの取得
 		std::string get_team_name() const;
