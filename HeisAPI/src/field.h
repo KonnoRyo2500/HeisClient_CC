@@ -5,7 +5,6 @@
 #include "infantry.h"
 #include <array>
 
-// 備考: このクラスは，シングルトンパターンを用いて作成されている
 class CField
 {
 	// 構造体，列挙体など
