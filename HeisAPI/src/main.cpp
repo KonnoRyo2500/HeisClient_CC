@@ -13,7 +13,7 @@ int main()
 	CInfantry infantry("test", 0, 0, 0);
 	CInfantry enemy_infantry("test_enemy", 0, 1, 0);
 
-	infantry.attack(CInfantry::Direction_Left);
+	infantry.attack(Direction_Left);
 
 	CField::delete_field();
 

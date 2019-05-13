@@ -2,20 +2,12 @@
 // Author: Ryo Konno
 #pragma once
 
+#include "const_val.h"
 #include <string>
 
 class CInfantry
 {
 	// 構造体，列挙体など
-	public:
-		// 方向
-		enum Direction {
-			Direction_Up,					// 上
-			Direction_Down,					// 下
-			Direction_Left,					// 左
-			Direction_Right,				// 右
-		};
-
 	private:
 		// 初期値
 		enum InitialValue {
