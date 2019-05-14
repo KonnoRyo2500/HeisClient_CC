@@ -19,7 +19,7 @@ CInfantry::CInfantry(const std::string& team_name, const uint16_t infantry_ID, c
 	, m_team_name(team_name)
 	, m_pos_x(init_pos_x)
 	, m_pos_y(init_pos_y)
-	, m_action_remain(InitialValue_ActionNum)
+	, m_action_remain(InitialValue_ActionRemain)
 {
 	CField::get_instance()->set_infantry(init_pos_x, init_pos_y, this);
 }
@@ -164,6 +164,9 @@ void CInfantry::update_status()
 	CField* field = CField::get_instance();
 	CInfantry* field_infantry = field->get_infantry(m_pos_x, m_pos_y);
 
+	// 残り行動回数をリセットする
+	reset_action_remain();
+
 	// メンバ変数で持っている現在位置とフィールド上の位置が一致していたら，即終了
 	if (is_self(field_infantry)) {
 		// HPに関しては修正の可能性があるので修正する
@@ -199,6 +202,16 @@ void CInfantry::update_status()
 void CInfantry::attacked()
 {
 	m_hp--;
+}
+
+/*
+	行動回数をリセットする関数
+	引数なし
+	返り値なし
+*/
+void CInfantry::reset_action_remain()
+{
+	m_action_remain = InitialValue_ActionRemain;
 }
 
 /*

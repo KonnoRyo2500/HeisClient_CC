@@ -11,8 +11,8 @@ class CInfantry
 	private:
 		// 初期値
 		enum InitialValue {
-			InitialValue_HP = 2,			// HP
-			InitialValue_ActionNum = 2,		// 行動回数
+			InitialValue_HP = 2,				// HP
+			InitialValue_ActionRemain = 2,		// 残り行動回数
 		};
 
 	// メンバ関数
@@ -37,6 +37,7 @@ class CInfantry
 
 	private:
 		void attacked();
+		void reset_action_remain();
 
 		bool is_self(const CInfantry* infantry) const;
 
