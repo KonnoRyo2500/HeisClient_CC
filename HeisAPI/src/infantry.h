@@ -31,6 +31,7 @@ class CInfantry
 		// 行動
 		void attack(const Direction direction);
 		void move(const Direction direction);
+		void double_move(const Direction first_move_direction, const Direction second_move_direction);
 
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_status();
