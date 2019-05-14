@@ -11,8 +11,8 @@ int main()
 	CField::create_field();
 
 	CField* field = CField::get_instance();
-	CInfantry infantry("test", 0, 0, 0);
-	CInfantry enemy_infantry("test_enemy", 0, 1, 0);
+	CInfantry infantry("test", "te01", 0, 0);
+	CInfantry enemy_infantry("test_enemy", "en01", 1, 0);
 
 	field->set_infantry(0, 15, &infantry);
 	field->set_infantry(0, 0, NULL);

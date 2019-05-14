@@ -18,11 +18,11 @@ class CInfantry
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CInfantry(const std::string& team_name, const uint16_t infantry_ID, const uint16_t init_pos_x, const uint16_t init_pos_y);
+		explicit CInfantry(const std::string& team_name, const std::string& infantry_ID, const uint16_t init_pos_x, const uint16_t init_pos_y);
 
 		// ステータスの取得
 		std::string get_team_name() const;
-		uint16_t get_id() const;
+		std::string get_id() const;
 		uint16_t get_x_position() const;
 		uint16_t get_y_position() const;
 		uint8_t get_action_remain() const;
@@ -47,7 +47,7 @@ class CInfantry
 	// メンバ変数
 	private:
 		std::string m_team_name;
-		uint16_t m_id;
+		std::string m_id;
 		uint16_t m_pos_x;
 		uint16_t m_pos_y;
 		uint8_t m_action_remain;

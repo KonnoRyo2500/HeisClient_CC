@@ -15,11 +15,16 @@ class CCommander
 		// コンストラクタ
 		explicit CCommander(std::string team_name);
 
+		// 行動(指定したIDを持つ兵士への命令)
+
+		// ユーザAI作成支援用
+		std::vector<CInfantry*> get_all_movable_infantries();
+
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_all_infantries();
 
 	private:
-		int search_infantry_by_id(uint16_t id);
+		int search_infantry_by_id(const std::string& id);
 
 	// メンバ変数
 	private:

@@ -5,6 +5,7 @@
 #include "infantry.h"
 #include <array>
 
+// ユーザAIはこのクラスの関数を呼ばないこと
 class CField
 {
 	// メンバ関数
