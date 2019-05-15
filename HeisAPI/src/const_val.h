@@ -14,6 +14,6 @@ enum Direction {
 
 // フィールドに関する定数
 enum FieldParam {
-	FieldParam_Width = 20,				// 幅
-	FieldParam_Height = 20,				// 高さ
+	FieldParam_Width = 20,			// 幅
+	FieldParam_Height = 20,			// 高さ
 };

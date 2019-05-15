@@ -4,10 +4,18 @@
 
 #include "const_val.h"
 #include <string>
+#include <vector>
 
 class CInfantry
 {
 	// 構造体，列挙体など
+	public:
+		// 自分の周囲のマスにいる兵士の情報
+		struct NeighborInfantryData {
+			Direction direction;
+			CInfantry* infantry;
+		};
+
 	private:
 		// 初期値
 		enum InitialValue {
@@ -31,6 +39,7 @@ class CInfantry
 		// 行動
 		void attack(const Direction direction);
 		void move(const Direction direction);
+		std::vector<NeighborInfantryData> look_around();
 
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_status();

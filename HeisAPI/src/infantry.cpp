@@ -154,6 +154,30 @@ void CInfantry::move(const Direction direction)
 }
 
 /*
+	自分の周囲4マスを探索する関数
+	引数なし
+	返り値: std::vector<CInfantry::NeighborInfantryData> 周囲のマスにいる兵士の情報(最大4マス)
+*/
+std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around()
+{
+	std::vector<NeighborInfantryData> neighbor_infantries;
+	CField* field = CField::get_instance();
+
+	for (auto direction : {Direction_Up, Direction_Down, Direction_Left, Direction_Right}) {
+		CInfantry* infantry = field->get_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction));
+
+		// ある方向で，自分のいるマスを参照していたら，その方向にはマスが存在していない
+		if (!is_self(infantry)) {
+			NeighborInfantryData infantry_data = {direction, infantry};
+
+			neighbor_infantries.push_back(infantry_data);
+		}
+	}
+
+	return neighbor_infantries;
+}
+
+/*
 	更新後のフィールドに合わせて，自身のステータスを修正する関数
 	引数なし
 	返り値なし
