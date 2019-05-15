@@ -16,15 +16,15 @@ class CField
 		static void delete_field();
 
 		// マス目情報(各マスにいる兵士の情報)の管理
-		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
-		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
+		CInfantry* get_infantry(const int16_t pos_x, const int16_t pos_y) const;
+		void set_infantry(const int16_t pos_x, const int16_t pos_y, CInfantry* infantry);
 	
 		// 更新
 		void update_field();
 
 	private:
 		void initalize();
-		void validate_position(const uint16_t pos_x, const uint16_t pos_y) const;
+		void validate_position(const int16_t pos_x, const int16_t pos_y) const;
 
 	// メンバ変数
 	private:
