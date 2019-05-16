@@ -9,9 +9,6 @@
 
 class CCommander
 {
-	// 構造体，列挙体など
-	private:
-
 	// メンバ関数
 	public:
 		// コンストラクタ
