@@ -276,6 +276,13 @@ int16_t CInfantry::get_neighbor_x_pos(const Direction direction) const
 			break;
 	}
 
+	if (dst_x_pos < 0) {
+		dst_x_pos = 0;
+	}
+	else if (FieldParam_Width <= dst_x_pos) {
+		dst_x_pos = FieldParam_Width - 1;
+	}
+
 	return dst_x_pos;
 }
 
@@ -298,6 +305,13 @@ int16_t CInfantry::get_neighbor_y_pos(const Direction direction) const
 	default:
 		dst_y_pos = m_pos_y;
 		break;
+	}
+
+	if (dst_y_pos < 0) {
+		dst_y_pos = 0;
+	}
+	else if (FieldParam_Height <= dst_y_pos) {
+		dst_y_pos = FieldParam_Width - 1;
 	}
 
 	return dst_y_pos;

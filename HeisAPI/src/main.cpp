@@ -11,15 +11,17 @@ int main()
 	CField::create_field();
 
 	CField* field = CField::get_instance();
-	CInfantry infantry("test", "te01", 0, 0);
-	CInfantry enemy_infantry("test_enemy", "en01", 1, 0);
+	CInfantry infantry("test", "te01", 2, 1);
+	CInfantry enemy_infantry("test_enemy", "en01", 1, 1);
 
-	field->set_infantry(0, 15, &infantry);
-	field->set_infantry(0, 0, NULL);
-
-	infantry.update_status();
-
-	printf("infantry is in (%d, %d)\n", infantry.get_x_position(), infantry.get_y_position());
+	for (auto v : enemy_infantry.look_around()) {
+		if (v.infantry != NULL) {
+			printf("direction: %d, ID: %s\n", v.direction, v.infantry->get_id().c_str());
+		}
+		else {
+			printf("direction: %d, ID: NULL\n", v.direction);
+		}
+	}
 
 	CField::delete_field();
 
