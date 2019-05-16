@@ -39,7 +39,7 @@ class CInfantry
 		// 行動
 		void attack(const Direction direction);
 		void move(const Direction direction);
-		std::vector<NeighborInfantryData> look_around();
+		std::vector<NeighborInfantryData> look_around() const;
 
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_status();

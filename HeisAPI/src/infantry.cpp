@@ -158,7 +158,7 @@ void CInfantry::move(const Direction direction)
 	引数なし
 	返り値: std::vector<CInfantry::NeighborInfantryData> 周囲のマスにいる兵士の情報(最大4マス)
 */
-std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around()
+std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 {
 	std::vector<NeighborInfantryData> neighbor_infantries;
 	CField* field = CField::get_instance();

@@ -27,14 +27,15 @@ class CCommander
 		void attack(const std::string& id, const Direction direction) const;
 		void move(const std::string& id, const Direction direction) const;
 
-		// 行動可能な兵士の取得
-		std::vector<std::string&> get_all_movable_infantry_ids() const;
+		// 行動可能な兵士IDの取得
+		std::vector<std::string> get_all_movable_infantry_ids() const;
 
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_all_infantries();
 
 	private:
 		CInfantry* search_infantry_by_id(const std::string& id) const;
+		bool is_movable(const CInfantry* infantry) const;
 
 	// メンバ変数
 	private:
