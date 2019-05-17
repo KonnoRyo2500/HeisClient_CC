@@ -25,7 +25,7 @@ void CGame::play_game()
 	// 勝敗判定
 	battle_result = judge_win();
 	// 勝敗を表示
-	printf("%s", battle_result ? "You win!" : "You lose...");
+	printf("%s\n", battle_result ? "You win!" : "You lose...");
 }
 
 /* private関数 */

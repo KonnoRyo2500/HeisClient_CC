@@ -9,9 +9,14 @@ int main()
 {
 	printf("Hello heis!\n");
 
-	CGame game;
+	try {
+		CGame game;
 
-	game.play_game();
+		game.play_game();
+	}
+	catch (const std::exception & e) {
+		printf("heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
+	}
 
 #if 0
 	CField::create_field();
