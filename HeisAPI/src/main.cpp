@@ -2,12 +2,18 @@
 // Author: Ryo Konno
 #include <cstdio>
 #include <cstdlib>
-#include "field.h"
+//#include "field.h"
+#include "game.h"
 
 int main()
 {
 	printf("Hello heis!\n");
 
+	CGame game;
+
+	game.play_game();
+
+#if 0
 	CField::create_field();
 
 	CField* field = CField::get_instance();
@@ -24,6 +30,6 @@ int main()
 	}
 
 	CField::delete_field();
-
+#endif
 	return EXIT_SUCCESS;
 }
