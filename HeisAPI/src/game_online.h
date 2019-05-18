@@ -1,10 +1,10 @@
-﻿// heis ゲーム進行管理クラス
+﻿// heis ゲーム(オンラインモード)進行管理クラス
 // Author: Ryo Konno
 #pragma once
 
 #include <string>
 
-class CGame {
+class CGameOnline {
 	// 構造体，列挙体など
 
 	// メンバ関数

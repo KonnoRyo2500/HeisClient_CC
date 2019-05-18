@@ -1,7 +1,7 @@
-﻿// heis ゲーム進行管理クラス
+﻿// heis ゲーム(オンラインモード)進行管理クラス
 // Author: Ryo Konno
 
-#include "game.h"
+#include "game_online.h"
 
 /* public関数 */
 
@@ -10,7 +10,7 @@
 	引数なし
 	返り値なし
 */
-void CGame::play_game()
+void CGameOnline::play_game()
 {
 	bool battle_result;
 
@@ -35,7 +35,7 @@ void CGame::play_game()
 	引数なし
 	返り値なし
 */
-void CGame::prepare_to_battle()
+void CGameOnline::prepare_to_battle()
 {
 	// メッセージ(名前要求)を受信
 	recv_name_request();
@@ -50,7 +50,7 @@ void CGame::prepare_to_battle()
 	引数なし
 	返り値なし
 */
-void CGame::recv_name_request()
+void CGameOnline::recv_name_request()
 {
 	// TODO: サーバーからメッセージを受け取り，名前要求かどうか判定する
 	// 名前要求でなければエラー
@@ -61,7 +61,7 @@ void CGame::recv_name_request()
 	引数1: const std::string& name 名前
 	返り値なし
 */
-void CGame::name_entry(const std::string& name)
+void CGameOnline::name_entry(const std::string& name)
 {
 	m_team_name = name;
 	// TODO: m_team_nameをサーバーに送信
@@ -72,7 +72,7 @@ void CGame::name_entry(const std::string& name)
 	引数なし
 	返り値なし
 */
-void CGame::name_register()
+void CGameOnline::name_register()
 {
 	// TODO: サーバーから名前を受信し，それをm_team_nameに入れる
 }
@@ -82,7 +82,7 @@ void CGame::name_register()
 	引数なし
 	返り値: bool 対戦が終了しているか
 */
-bool CGame::is_battle_end()
+bool CGameOnline::is_battle_end()
 {
 	// TODO: サーバーから受信したJSONの"finished"フィールドを返す
 	return true;
@@ -93,7 +93,7 @@ bool CGame::is_battle_end()
 	引数なし
 	返り値: bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
 */
-bool CGame::judge_win()
+bool CGameOnline::judge_win()
 {
 	// TODO: フィールドを参照し，自チームの兵士が一人でもいたらtrue, 一人もいなかったらfalseを返す
 	return true;
