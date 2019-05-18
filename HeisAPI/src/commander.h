@@ -13,6 +13,10 @@ class CCommander
 	public:
 		// コンストラクタ
 		explicit CCommander(const std::string& team_name);
+		explicit CCommander(const std::string& team_name, const int init_area_width, const int init_area_height, const bool is_bottom_left); // ローカルモード用
+
+		// デストラクタ
+		~CCommander();
 
 		// ステータスの取得
 		int16_t get_x_position(const std::string& id) const;
@@ -30,7 +34,20 @@ class CCommander
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_all_infantries();
 
+		// デバッグ用
+		void show_infantry_ids();
+
 	private:
+		// インスタンスの生成，削除時の処理
+		void positioning_infantries(const int init_area_width, const int init_area_height, const bool is_bottom_left);
+		void clear_infantries();
+		std::string make_id(const std::string& prefix, const int16_t number);
+
+		// 兵士の追加，削除
+		void append_infantry(const std::string& id, const int16_t pos_x, const int16_t pos_y);
+		void remove_infantry(const std::string& id);
+
+		// 兵士の探索
 		CInfantry* search_infantry_by_id(const std::string& id) const;
 		bool is_movable(const CInfantry* infantry) const;
 

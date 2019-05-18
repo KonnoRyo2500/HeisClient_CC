@@ -73,6 +73,30 @@ void CField::set_infantry(const int16_t pos_x, const int16_t pos_y, CInfantry* i
 	m_grid[pos_x + (FieldParam_Width * pos_y)] = infantry;
 }
 
+/*
+	フィールドを画面に表示する関数
+	引数なし
+	返り値なし
+	備考: 動作確認・デバッグ用
+*/
+void CField::show()
+{
+	for (int y = 0; y < FieldParam_Height; y++) {
+		for (int x = 0; x < FieldParam_Width; x++) {
+			CInfantry* infantry = get_infantry(x, y);
+
+			if (infantry == NULL) {
+				printf("null");
+			}
+			else {
+				printf("%s", infantry->get_id().c_str());
+			}
+			printf(" ");
+		}
+		printf("\n");
+	}
+}
+
 /* private関数 */
 
 /*

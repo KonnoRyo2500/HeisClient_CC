@@ -28,6 +28,9 @@ class CInfantry
 		// コンストラクタ
 		explicit CInfantry(const std::string& team_name, const std::string& infantry_ID, const int16_t init_pos_x, const int16_t init_pos_y);
 
+		// デストラクタ
+		~CInfantry();
+
 		// ステータスの取得
 		std::string get_team_name() const;
 		std::string get_id() const;

@@ -25,6 +25,15 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_I
 }
 
 /*
+	デストラクタ
+	引数なし
+*/
+CInfantry::~CInfantry()
+{
+	CField::get_instance()->set_infantry(m_pos_x, m_pos_y, NULL);
+}
+
+/*
 	兵士のチーム名を取得する関数
 	引数なし
 	返り値: std::string 兵士のチーム名

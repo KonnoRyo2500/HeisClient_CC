@@ -22,6 +22,9 @@ class CField
 		// 更新
 		void update_field();
 
+		// デバッグ，動作確認用
+		void show();
+
 	private:
 		void initalize();
 		void validate_position(const int16_t pos_x, const int16_t pos_y) const;

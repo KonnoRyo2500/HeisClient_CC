@@ -34,46 +34,19 @@ void CGameLocal::play_game()
 */
 void CGameLocal::prepare_to_battle()
 {
+	const bool is_my_team_bottom_left = true;		// 自軍を左下に配置するか
+
+	// 必要なインスタンスの生成
 	CField::create_field();
-	// 兵士の初期配置
-	positioning_infantry();
-}
 
-/*
-	兵士をフィールド上に初期配置する関数
-	引数なし
-	返り値なし
-*/
-void CGameLocal::positioning_infantry()
-{
-	const bool start_from_bottom_left = true;			// 自軍の初期配置を左下にするか(falseだと右上になる)
-	const int infantry_positioning_area_width = 6;		// 兵士を初期配置する領域(四角形)の幅
-	const int infantry_positioning_area_height = 4;		// 兵士を初期配置する領域(四角形)の高さ
+	// 兵士の初期配置はここで行われる
+	m_my_commander = new CCommander(m_my_team_name, InitAreaParam_Width, InitAreaParam_Height, is_my_team_bottom_left);
+	m_enemy_commander = new CCommander(m_enemy_team_name, InitAreaParam_Width, InitAreaParam_Height, !is_my_team_bottom_left);
 
-	// 兵士の初期配置
-	CField* field = CField::get_instance();
+	m_my_commander->show_infantry_ids();
+	m_enemy_commander->show_infantry_ids();
 
-	if (start_from_bottom_left) {
-		for (int x = 0; x < infantry_positioning_area_width; x++) {
-			for (int y = 0; y < infantry_positioning_area_height; y++) {
-
-			}
-		}
-	}
-	else {
-
-	}
-}
-
-/*
-	兵士のIDを作成する関数
-	引数1: const std::string& prefix 接頭辞(IDの先頭につく2文字のアルファベット)
-	引数2: const int16_t number IDの数字部分
-	返り値: std::string 作成されたID
-*/
-std::string CGameLocal::make_id(const std::string& prefix, const int16_t number)
-{
-	return "te01";
+	CField::get_instance()->show();
 }
 
 /*

@@ -3,14 +3,14 @@
 #include <cstdio>
 #include <cstdlib>
 //#include "field.h"
-#include "game_online.h"
+#include "game_local.h"
 
 int main()
 {
 	printf("Hello heis!\n");
 
 	try {
-		CGameOnline game;
+		CGameLocal game;
 
 		game.play_game();
 	}
