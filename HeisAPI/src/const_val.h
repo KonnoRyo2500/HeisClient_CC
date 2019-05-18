@@ -12,7 +12,7 @@ enum Direction {
 	Direction_Right,				// 右
 };
 
-// フィールドに関する定数
+// フィールドに関する定数(ローカルモードで用いる)
 enum FieldParam {
 	FieldParam_Width = 20,			// 幅
 	FieldParam_Height = 20,			// 高さ
