@@ -3,6 +3,7 @@
 #pragma once
 
 #include "commander.h"
+#include "AI.h"
 #include <string>
 
 class CGameLocal {
@@ -22,8 +23,8 @@ class CGameLocal {
 		// 対戦開始前処理
 		void prepare_to_battle();
 
-		// 対戦開始前処理の実行関数
-		
+		// 大戦終了後処理
+		void cleanup_after_battle();
 
 		// 対戦の終了判定
 		bool is_battle_end();
@@ -40,4 +41,7 @@ class CGameLocal {
 
 		CCommander* m_my_commander;
 		CCommander* m_enemy_commander;
+
+		CUserAI* m_my_AI;
+		CUserAI* m_enemy_AI;
 };

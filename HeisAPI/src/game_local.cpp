@@ -21,6 +21,8 @@ void CGameLocal::play_game()
 		// ユーザAIの行動
 	}
 
+	// 大戦終了後処理
+	cleanup_after_battle();
 	// 勝敗判定
 	battle_result = judge_win();
 	// 勝敗を表示
@@ -43,10 +45,28 @@ void CGameLocal::prepare_to_battle()
 	m_my_commander = new CCommander(m_my_team_name, InitAreaParam_Width, InitAreaParam_Height, is_my_team_bottom_left);
 	m_enemy_commander = new CCommander(m_enemy_team_name, InitAreaParam_Width, InitAreaParam_Height, !is_my_team_bottom_left);
 
-	m_my_commander->show_infantry_ids();
-	m_enemy_commander->show_infantry_ids();
+	m_my_AI = new CUserAI(m_my_commander);
+	m_enemy_AI = new CUserAI(m_my_commander);
+}
 
-	CField::get_instance()->show();
+/*
+	大戦終了後の後処理を行う関数
+	引数なし
+	返り値なし
+*/
+void CGameLocal::cleanup_after_battle()
+{
+	delete m_my_commander;
+	delete m_enemy_commander;
+	delete m_my_AI;
+	delete m_enemy_AI;
+
+	m_my_commander = NULL;
+	m_enemy_commander = NULL;
+	m_my_AI = NULL;
+	m_enemy_AI = NULL;
+
+	CField::delete_field();
 }
 
 /*
