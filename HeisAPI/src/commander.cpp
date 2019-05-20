@@ -139,10 +139,27 @@ void CCommander::move(const std::string& id, const Direction direction) const
 }
 
 /*
+	行動可能なすべての兵士のIDを取得する関数
+	引数なし
+	返り値: std::vector<std::string&> 行動可能な各兵士のID
+*/
+std::vector<std::string> CCommander::get_all_actable_infantry_ids() const
+{
+	std::vector<std::string> actable_infantry_ids;
+
+	for (CInfantry* my_team_infantry : m_infantries) {
+		if (is_actable(my_team_infantry)) {
+			actable_infantry_ids.push_back(my_team_infantry->get_id());
+		}
+	}
+
+	return actable_infantry_ids;
+}
+
+/*
 	移動可能なすべての兵士のIDを取得する関数
 	引数なし
 	返り値: std::vector<std::string&> 移動可能な各兵士のID
-	備考: ユーザAIは，この関数を呼んでから具体的な行動(探索など)を行うとよい
 */
 std::vector<std::string> CCommander::get_all_movable_infantry_ids() const
 {
@@ -155,6 +172,24 @@ std::vector<std::string> CCommander::get_all_movable_infantry_ids() const
 	}
 
 	return movable_infantry_ids;
+}
+
+/*
+	攻撃可能なすべての兵士のIDを取得する関数
+	引数なし
+	返り値: std::vector<std::string&> 攻撃可能な各兵士のID
+*/
+std::vector<std::string> CCommander::get_all_attackable_infantry_ids() const
+{
+	std::vector<std::string> attackable_infantry_ids;
+
+	for (CInfantry* my_team_infantry : m_infantries) {
+		if (is_attackable(my_team_infantry)) {
+			attackable_infantry_ids.push_back(my_team_infantry->get_id());
+		}
+	}
+
+	return attackable_infantry_ids;
 }
 
 /*
@@ -286,14 +321,48 @@ CInfantry* CCommander::search_infantry_by_id(const std::string& id) const
 }
 
 /*
+	与えられた兵士が何かしら行動可能かを調べる関数
+	引数1: const CInfantry* infantry 兵士
+	返り値: bool 兵士が行動可能か(true: 何かしらの行動ができる, false: 手詰まりになっている)
+*/
+bool CCommander::is_actable(const CInfantry* infantry) const
+{
+	return is_movable(infantry) || is_attackable(infantry);
+}
+
+/*
 	与えられた兵士が隣接したマスに移動可能かを調べる関数
 	引数1: const CInfantry* infantry 兵士
 	返り値: bool 兵士が移動可能か(true: 移動可能なマスがある, false: 隣接したどのマスにも移動できない)
 */
 bool CCommander::is_movable(const CInfantry* infantry) const
 {
+	if (infantry->get_action_remain() <= 0) {
+		return false;
+	}
+
 	for (auto look_result : infantry->look_around()) {
 		if (look_result.infantry == NULL) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/*
+	与えられた兵士が隣接したマスの兵士に攻撃可能かを調べる関数
+	引数1: const CInfantry* infantry 兵士
+	返り値: bool 兵士が攻撃可能か(true: 攻撃可能な兵士が隣のマスに存在する, false: 攻撃可能な兵士が隣のマスに存在しない)
+*/
+bool CCommander::is_attackable(const CInfantry* infantry) const
+{
+	if (infantry->get_action_remain() <= 0) {
+		return false;
+	}
+
+	for (auto look_result : infantry->look_around()) {
+		if ((look_result.infantry != NULL) && (look_result.infantry->get_team_name() != m_team_name)) {
 			return true;
 		}
 	}
