@@ -194,6 +194,8 @@ std::vector<std::string> CCommander::get_all_attackable_infantry_ids() const
 
 /*
 	自チームの兵士IDをすべて表示する関数
+	引数なし
+	返り値なし
 	備考: 動作確認・デバッグ用
 */
 void CCommander::show_infantry_ids()
@@ -203,6 +205,23 @@ void CCommander::show_infantry_ids()
 		printf("%s ", infantry->get_id().c_str());
 	}
 	printf("\n");
+}
+
+/*
+	自チームの兵士をすべて更新する関数
+	引数なし
+	返り値なし
+*/
+void CCommander::update_all_infantries()
+{
+	for (CInfantry* infantry : m_infantries) {
+		if (infantry->get_hp() <= 0) {
+			remove_infantry(infantry->get_id());
+		}
+		else {
+			infantry->update_status();
+		}
+	}
 }
 
 /* private関数 */
@@ -301,6 +320,7 @@ void CCommander::remove_infantry(const std::string& id)
 	if (infantry_it != m_infantries.end()) {
 		m_infantries.erase(infantry_it);
 	}
+
 	delete del_infantry;
 }
 

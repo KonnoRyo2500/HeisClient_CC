@@ -74,6 +74,16 @@ void CField::set_infantry(const int16_t pos_x, const int16_t pos_y, CInfantry* i
 }
 
 /*
+	フィールドの状態を更新する関数
+	引数なし
+	返り値なし
+*/
+void CField::update_field()
+{
+	
+}
+
+/*
 	フィールドを画面に表示する関数
 	引数なし
 	返り値なし
@@ -95,6 +105,7 @@ void CField::show()
 		}
 		printf("\n");
 	}
+	printf("\n");
 }
 
 /* private関数 */

@@ -320,7 +320,7 @@ int16_t CInfantry::get_neighbor_y_pos(const Direction direction) const
 		dst_y_pos = 0;
 	}
 	else if (FieldParam_Height <= dst_y_pos) {
-		dst_y_pos = FieldParam_Width - 1;
+		dst_y_pos = FieldParam_Height - 1;
 	}
 
 	return dst_y_pos;

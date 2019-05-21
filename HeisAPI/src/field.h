@@ -19,7 +19,7 @@ class CField
 		CInfantry* get_infantry(const int16_t pos_x, const int16_t pos_y) const;
 		void set_infantry(const int16_t pos_x, const int16_t pos_y, CInfantry* infantry);
 	
-		// 更新
+		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update_field();
 
 		// デバッグ，動作確認用

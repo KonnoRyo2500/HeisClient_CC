@@ -18,7 +18,14 @@ void CGameLocal::play_game()
 
 	// 対戦
 	while (!is_battle_end()) {
+		// ターン開始時処理
+		turn_entry();
+
 		// ユーザAIの行動
+		m_my_AI->AI_main();
+		m_enemy_AI->AI_main();
+
+		CField::get_instance()->show();
 	}
 
 	// 大戦終了後処理
@@ -46,7 +53,18 @@ void CGameLocal::prepare_to_battle()
 	m_enemy_commander = new CCommander(m_enemy_team_name, InitAreaParam_Width, InitAreaParam_Height, !is_my_team_bottom_left);
 
 	m_my_AI = new CUserAI(m_my_commander);
-	m_enemy_AI = new CUserAI(m_my_commander);
+	m_enemy_AI = new CUserAI(m_enemy_commander);
+}
+
+/*
+	ターン開始時の処理を行う関数
+	引数なし
+	返り値なし
+*/
+void CGameLocal::turn_entry()
+{
+	m_my_commander->update_all_infantries();
+	m_enemy_commander->update_all_infantries();
 }
 
 /*
@@ -76,7 +94,10 @@ void CGameLocal::cleanup_after_battle()
 */
 bool CGameLocal::is_battle_end()
 {
-	return true;
+	static int cnt = 0;
+
+	cnt++;
+	return cnt > 100;
 }
 
 /*

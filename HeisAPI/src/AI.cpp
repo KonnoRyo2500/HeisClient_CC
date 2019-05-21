@@ -23,21 +23,41 @@ CUserAI::CUserAI(CCommander* commander)
 void CUserAI::AI_main()
 {
 	/* この関数内に，ユーザAIの動作を記述すること */
+	while (m_commander->get_all_actable_infantry_ids().size() != 0) {
+		std::string infantry_id;
+
+		if (sample_decide_action() == SampleAction_Move) {
+			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids());
+			if (infantry_id.size() > 0) {
+				m_commander->move(infantry_id, sample_decide_direction());
+			}
+		}
+		else {
+			infantry_id = sample_select_next_infantry(m_commander->get_all_attackable_infantry_ids());
+			if (infantry_id.size() > 0) {
+				m_commander->attack(infantry_id, sample_decide_direction());
+			}
+		}
+	}
 }
 
 /* private関数 */
 
 /*
 	(サンプルAI用処理)次に行動する兵士をランダムに選択する関数
-	引数1: const std::vector<CInfantry*>& infantries 行動可能なすべての兵士
-	返り値: CInfantry* 次に行動する兵士
+	引数1: const std::vector<std::string>& infantry_ids 行動可能なすべての兵士のID
+	返り値: std::string 次に行動する兵士のID
 */
-CInfantry* CUserAI::sample_select_next_infantry(const std::vector<CInfantry*>& infantries) const
+std::string CUserAI::sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const
 {
-	std::random_device rnd_dev;
-	int infantry_idx = rnd_dev() % infantries.size();
+	if (infantry_ids.size() == 0) {
+		return "";
+	}
 
-	return infantries[infantry_idx];
+	std::random_device rnd_dev;
+	int infantry_idx = rnd_dev() % infantry_ids.size();
+
+	return infantry_ids[infantry_idx];
 }
 
 /*
@@ -65,5 +85,7 @@ CUserAI::SampleAction CUserAI::sample_decide_action() const
 */
 Direction CUserAI::sample_decide_direction() const
 {
-	return Direction_Right;
+	std::random_device rnd_dev;
+
+	return static_cast<Direction>(rnd_dev() % 4);
 }
