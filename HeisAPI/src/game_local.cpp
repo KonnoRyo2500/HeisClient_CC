@@ -28,7 +28,7 @@ void CGameLocal::play_game()
 		CField::get_instance()->show();
 	}
 
-	// 大戦終了後処理
+	// 対戦終了後処理
 	cleanup_after_battle();
 	// 勝敗を表示
 	printf("%s\n", battle_result == BattleResult_MyTeamWin ? "You win!" : "You lose...");
@@ -66,7 +66,7 @@ void CGameLocal::turn_entry()
 }
 
 /*
-	大戦終了後の後処理を行う関数
+	対戦終了後の後処理を行う関数
 	引数なし
 	返り値なし
 */
