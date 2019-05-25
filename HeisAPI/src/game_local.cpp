@@ -11,13 +11,13 @@
 */
 void CGameLocal::play_game()
 {
-	bool battle_result;
+	BattleResult battle_result;
 
 	// 対戦開始前の準備
 	prepare_to_battle();
 
 	// 対戦
-	while (!is_battle_end()) {
+	while ((battle_result = judge_battle_result()) == BattleResult_Remain) {
 		// ターン開始時処理
 		turn_entry();
 
@@ -30,10 +30,8 @@ void CGameLocal::play_game()
 
 	// 大戦終了後処理
 	cleanup_after_battle();
-	// 勝敗判定
-	battle_result = judge_win();
 	// 勝敗を表示
-	printf("%s\n", battle_result ? "You win!" : "You lose...");
+	printf("%s\n", battle_result == BattleResult_MyTeamWin ? "You win!" : "You lose...");
 }
 
 /*
@@ -88,24 +86,40 @@ void CGameLocal::cleanup_after_battle()
 }
 
 /*
-	対戦が終了したか判定する関数
+	対戦結果を判定する関数
 	引数なし
-	返り値: bool 対戦が終了しているか
+	返り値: BattleResult 対戦結果
 */
-bool CGameLocal::is_battle_end()
+CGameLocal::BattleResult CGameLocal::judge_battle_result()
 {
-	static int cnt = 0;
+	CField* field = CField::get_instance();
+	bool my_team_alive = false;
+	bool enemy_team_alive = false;
 
-	cnt++;
-	return cnt > 100;
-}
+	// フィールド上のすべての兵士を探索し，少なくとも一方のチームの兵士が全滅していたら終了
+	for (int x = 0; x < FieldParam_Width; x++) {
+		for (int y = 0; y < FieldParam_Height; y++) {
+			CInfantry* infantry = field->get_infantry(x, y);
 
-/*
-	対戦の決着がついた後，フィールドの状態から勝敗を決定する関数
-	引数なし
-	返り値: bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
-*/
-bool CGameLocal::judge_win()
-{
-	return true;
+			if (infantry != NULL) {
+				if (infantry->get_team_name() == m_my_team_name) {
+					my_team_alive = true;
+				}
+				else if (infantry->get_team_name() == m_enemy_team_name) {
+					enemy_team_alive = true;
+				}
+			}
+		}
+	}
+
+	BattleResult result = BattleResult_Remain;
+
+	if (!my_team_alive) {
+		result = BattleResult_EnemyTeamWin;
+	}
+	else if (!enemy_team_alive) {
+		result = BattleResult_MyTeamWin;
+	}
+
+	return result;
 }

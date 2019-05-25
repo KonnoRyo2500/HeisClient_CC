@@ -15,6 +15,14 @@ class CGameLocal {
 			InitAreaParam_Height = 4,		// 高さ
 		};
 
+		// 対戦結果
+		enum BattleResult {
+			BattleResult_MyTeamWin,			// 自チームの勝利
+			BattleResult_EnemyTeamWin,		// 敵チームの勝利
+			BattleResult_Remain,			// 対戦が続行中
+			// 注) ゲームの仕様上，引き分けはありえないはず
+		};
+
 	// メンバ関数
 	public:
 		void play_game();
@@ -29,11 +37,8 @@ class CGameLocal {
 		// 対戦終了後処理
 		void cleanup_after_battle();
 
-		// 対戦の終了判定
-		bool is_battle_end();
-
-		// 対戦後の勝敗判定
-		bool judge_win();
+		// 対戦結果の判定
+		BattleResult judge_battle_result();
 
 	// メンバ変数
 	private:
