@@ -96,7 +96,7 @@ void CField::show()
 			CInfantry* infantry = get_infantry(x, y);
 
 			if (infantry == NULL) {
-				printf("null");
+				printf("----");
 			}
 			else {
 				printf("%s", infantry->get_id().c_str());
