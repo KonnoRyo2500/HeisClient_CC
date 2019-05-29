@@ -295,7 +295,7 @@ std::string CCommander::make_id(const std::string& prefix, const int16_t number)
 	char id[10];
 
 	if (number >= 100) {
-		printf("警告: 兵士IDが衝突する恐れがあります\n");
+		fprintf(stderr, "警告: 兵士IDが衝突する恐れがあります\n");
 	}
 	snprintf(id, sizeof(id) / sizeof(char), "%s%02d", prefix.c_str(), number);
 

@@ -6,8 +6,15 @@ class CSocket {
 
 	// メンバ関数
 	public:
+		// コンストラクタ
+		explicit CSocket();
+		// デストラクタ
+		~CSocket();
 
 	private:
+		void initialize_winsock();
+		void finalize_winsock();
+
 
 	// メンバ変数
 	private:
