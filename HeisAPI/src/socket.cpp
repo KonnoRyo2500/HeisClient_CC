@@ -42,7 +42,7 @@ CSocket::~CSocket()
 */
 void CSocket::send_to(const std::string& msg) const
 {
-
+	send(m_sck, msg.c_str(), msg.size(), 0);
 }
 
 /*
@@ -52,7 +52,10 @@ void CSocket::send_to(const std::string& msg) const
 */
 std::string CSocket::recv_from() const
 {
-	return "";
+	char buf[10000] = {0};
+
+	recv(m_sck, buf, sizeof(buf), 0);
+	return std::string(buf);
 }
 
 /* private関数 */

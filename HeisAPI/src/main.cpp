@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 //#include "field.h"
-//#include "socket.h"
+#include "socket.h"
 #include "game_local.h"
 
 int main()
@@ -12,10 +12,12 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-		//CSocket sck("192.168.219.49", 50000);
-		CGameLocal game;
+		CSocket sck("192.168.1.102", 8823);
+		sck.send_to("test message");
+		printf("recvmsg: %s\n", sck.recv_from().c_str());
+		//CGameLocal game;
 
-		game.play_game();
+		//game.play_game();
 	}
 	catch (const std::exception & e) {
 		printf("heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
