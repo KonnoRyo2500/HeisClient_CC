@@ -4,6 +4,7 @@
 #include "socket.h"
 #ifdef WIN32
 #include <winsock2.h>
+#include <WS2tcpip.h>
 #endif // WIN32
 #include <stdexcept>
 
@@ -12,12 +13,16 @@
 
 /*
 	コンストラクタ
-	引数なし
+	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
+	引数2: const uint16_t dst_port_no 通信相手のポート番号
 */
-CSocket::CSocket()
+CSocket::CSocket(const std::string& dst_ip_addr, const uint16_t dst_port_no)
+	: m_sck(0)
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
 	initialize_winsock();
+	make_TCP_socket();
+	connect_TCP_socket(dst_ip_addr, dst_port_no);
 }
 
 /*
@@ -30,15 +35,36 @@ CSocket::~CSocket()
 	finalize_winsock();
 }
 
+/*
+	メッセージを送信する関数
+	引数1: const std::string& msg 送信するメッセージ
+	返り値なし
+*/
+void CSocket::send_to(const std::string& msg) const
+{
+
+}
+
+/*
+	サーバからメッセージを受信する関数
+	引数なし
+	返り値: std::string サーバから受信したメッセージ
+*/
+std::string CSocket::recv_from() const
+{
+	return "";
+}
+
 /* private関数 */
 
 /*
 	winsockを初期化する関数
 	引数なし
 	返り値なし
+	例外: winsockの初期化に失敗したとき
 	備考: この関数は，windows環境以外の環境では何もしない
 */
-void CSocket::initialize_winsock()
+void CSocket::initialize_winsock() const
 {
 #ifdef WIN32
 	WSADATA wsaData;
@@ -54,12 +80,50 @@ void CSocket::initialize_winsock()
 }
 
 /*
+	TCP通信用ソケットを作成する関数
+	引数なし
+	返り値なし
+	例外: ソケットの作成に失敗したとき
+*/
+void CSocket::make_TCP_socket()
+{
+	m_sck = socket(AF_INET, SOCK_STREAM, 0);
+	if (m_sck == INVALID_SOCKET) {
+		throw std::runtime_error("ソケットの作成に失敗しました");
+	}
+}
+
+/*
+	TCP通信用ソケットを相手に接続する関数
+	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
+	引数2: const uint16_t dst_port_no 通信相手のポート番号
+	返り値なし
+*/
+void CSocket::connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const
+{
+	sockaddr_in sa = { 0 };
+	int ercd;
+
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(dst_port_no);
+	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
+	if (ercd <= 0) {
+		throw std::runtime_error("IPアドレスが不正です");
+	}
+
+	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
+	if (ercd < 0) {
+		throw std::runtime_error("サーバとの接続に失敗しました");
+	}
+}
+
+/*
 	winsockの終了処理を行う関数
 	引数なし
 	返り値なし
 	備考: この関数は，windows環境以外の環境では何もしない
 */
-void CSocket::finalize_winsock()
+void CSocket::finalize_winsock() const
 {
 #ifdef WIN32
 	WSACleanup();
