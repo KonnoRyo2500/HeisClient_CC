@@ -3,19 +3,23 @@
 #include <cstdio>
 #include <cstdlib>
 //#include "field.h"
+//#include "socket.h"
 #include "game_local.h"
 
 int main()
 {
+	int exit_code = EXIT_SUCCESS;
 	printf("Hello heis!\n");
 
 	try {
+		//CSocket sck("192.168.219.49", 50000);
 		CGameLocal game;
 
 		game.play_game();
 	}
 	catch (const std::exception & e) {
 		printf("heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
+		exit_code = EXIT_FAILURE;
 	}
 
 #if 0
@@ -36,5 +40,5 @@ int main()
 
 	CField::delete_field();
 #endif
-	return EXIT_SUCCESS;
+	return exit_code;
 }
