@@ -75,6 +75,7 @@ std::string CSocket::recv_from() const
 
 	// 入力キューにデータが残っていれば，それらもすべて受信する
 	{
+		// 受信データがないときに無限待ちにならないよう，一旦ソケットをノンブロッキングにする
 		unsigned long nonblocking_enable = 1;
 		ioctlsocket(m_sck, FIONBIO, &nonblocking_enable);
 	}
@@ -83,6 +84,7 @@ std::string CSocket::recv_from() const
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 		if (recv_size < 0) {
 			if (WSAGetLastError() == WSAEWOULDBLOCK) {
+				// すべて受信できたので，受信終了
 				break;
 			}
 			else {
@@ -91,6 +93,11 @@ std::string CSocket::recv_from() const
 		}
 		recv_message += std::string(buf);
 	} while (recv_size > 0);
+	{
+		// 次の呼び出しでの最初の受信をブロッキングにするため，ソケットをブロッキングに戻す
+		unsigned long nonblocking_disable = 0;
+		ioctlsocket(m_sck, FIONBIO, &nonblocking_disable);
+	}
 
 	return recv_message;
 }
