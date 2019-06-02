@@ -12,8 +12,8 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-		CSocket sck("192.168.1.101", 8823);
-		sck.send_to("test message");
+		CSocket sck("192.168.1.102", 8823);
+		sck.send_to("The quick brown fox jumps over the lazy dog.");
 		printf("recvmsg: %s\n", sck.recv_from().c_str());
 		//CGameLocal game;
 

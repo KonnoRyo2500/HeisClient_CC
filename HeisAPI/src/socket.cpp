@@ -8,7 +8,6 @@
 #endif // WIN32
 #include <stdexcept>
 
-
 /* public関数 */
 
 /*
@@ -39,14 +38,16 @@ CSocket::~CSocket()
 	メッセージを送信する関数
 	引数1: const std::string& msg 送信するメッセージ
 	返り値なし
+	例外: 送信エラーが発生したとき
 */
 void CSocket::send_to(const std::string& msg) const
 {
-	int send_size = send(m_sck, msg.c_str(), msg.size(), 0);
+	// メッセージを確実にNULL終端させるため，size + 1文字送信する
+	int send_size = send(m_sck, msg.c_str(), msg.size() + 1, 0);
 
 	if (static_cast<size_t>(send_size) < msg.size()) {
 		if (send_size < 0) {
-			throw std::runtime_error("送信に失敗しました");
+			throw std::runtime_error("送信でエラーが発生しました");
 		}
 		fprintf(stderr, "警告: 不完全なメッセージが送信されました\n");
 	}
@@ -56,18 +57,42 @@ void CSocket::send_to(const std::string& msg) const
 	サーバからメッセージを受信する関数
 	引数なし
 	返り値: std::string サーバから受信したメッセージ
+	例外: 受信エラーが発生したとき
 */
 std::string CSocket::recv_from() const
 {
-	char buf[SocketConstVal_RecvBufSize] = {0};
+	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
+	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
 	int recv_size;
+	std::string recv_message;
 
-	recv_size = recv(m_sck, buf, sizeof(buf), 0);
+	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
+	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
-		throw std::runtime_error("受信に失敗しました");
+		throw std::runtime_error("受信でエラーが発生しました");
 	}
+	recv_message += std::string(buf);
 
-	return std::string(buf);
+	// 入力キューにデータが残っていれば，それらもすべて受信する
+	{
+		unsigned long nonblocking_enable = 1;
+		ioctlsocket(m_sck, FIONBIO, &nonblocking_enable);
+	}
+	do {
+		memset(buf, 0, sizeof(buf));
+		recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
+		if (recv_size < 0) {
+			if (WSAGetLastError() == WSAEWOULDBLOCK) {
+				break;
+			}
+			else {
+				throw std::runtime_error("受信でエラーが発生しました");
+			}
+		}
+		recv_message += std::string(buf);
+	} while (recv_size > 0);
+
+	return recv_message;
 }
 
 /* private関数 */

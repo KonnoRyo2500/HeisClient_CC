@@ -8,7 +8,7 @@ class CSocket {
 	// 構造体，列挙体など
 	// ソケットに関する諸定数
 	enum SocketConstVal {
-		SocketConstVal_RecvBufSize = 10000,		// 受信バッファサイズ
+		SocketConstVal_RecvBufSize = 10,		// 受信バッファサイズ
 	};
 
 	// メンバ関数
