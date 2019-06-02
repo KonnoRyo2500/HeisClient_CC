@@ -12,7 +12,7 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-		CSocket sck("192.168.1.102", 8823);
+		CSocket sck("192.168.1.101", 8823);
 		sck.send_to("test message");
 		printf("recvmsg: %s\n", sck.recv_from().c_str());
 		//CGameLocal game;

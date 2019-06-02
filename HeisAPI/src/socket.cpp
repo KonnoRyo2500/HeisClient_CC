@@ -42,7 +42,14 @@ CSocket::~CSocket()
 */
 void CSocket::send_to(const std::string& msg) const
 {
-	send(m_sck, msg.c_str(), msg.size(), 0);
+	int send_size = send(m_sck, msg.c_str(), msg.size(), 0);
+
+	if (static_cast<size_t>(send_size) < msg.size()) {
+		if (send_size < 0) {
+			throw std::runtime_error("送信に失敗しました");
+		}
+		fprintf(stderr, "警告: 不完全なメッセージが送信されました\n");
+	}
 }
 
 /*
@@ -52,9 +59,14 @@ void CSocket::send_to(const std::string& msg) const
 */
 std::string CSocket::recv_from() const
 {
-	char buf[10000] = {0};
+	char buf[SocketConstVal_RecvBufSize] = {0};
+	int recv_size;
 
-	recv(m_sck, buf, sizeof(buf), 0);
+	recv_size = recv(m_sck, buf, sizeof(buf), 0);
+	if (recv_size < 0) {
+		throw std::runtime_error("受信に失敗しました");
+	}
+
 	return std::string(buf);
 }
 
