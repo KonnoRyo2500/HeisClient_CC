@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #include <cstring>
 #endif // WIN32
 #include <stdexcept>
@@ -24,7 +25,7 @@ CSocket::CSocket(const std::string& dst_ip_addr, const uint16_t dst_port_no)
 	: m_sck(0)
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
-	initialize_winsock();
+	initialize_TCP_socket();
 	make_TCP_socket();
 	connect_TCP_socket(dst_ip_addr, dst_port_no);
 }
@@ -36,7 +37,7 @@ CSocket::CSocket(const std::string& dst_ip_addr, const uint16_t dst_port_no)
 CSocket::~CSocket()
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その終了処理を行う
-	finalize_winsock();
+	finalize_TCP_socket();
 }
 
 /*
@@ -76,13 +77,12 @@ std::string CSocket::recv_from() const
 /* private関数 */
 
 /*
-	winsockを初期化する関数
+	ソケットを初期化する関数
 	引数なし
 	返り値なし
-	例外: winsockの初期化に失敗したとき
-	備考: この関数は，windows環境以外の環境では何もしない
+	例外: ソケットの初期化に失敗したとき
 */
-void CSocket::initialize_winsock() const
+void CSocket::initialize_TCP_socket() const
 {
 #ifdef WIN32
 	WSADATA wsaData;
@@ -141,10 +141,13 @@ void CSocket::connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t 
 	返り値なし
 	備考: この関数は，windows環境以外の環境では何もしない
 */
-void CSocket::finalize_winsock() const
+void CSocket::finalize_TCP_socket() const
 {
 #ifdef WIN32
 	WSACleanup();
+	closesocket(m_sck);
+#else
+	close(m_sck);
 #endif // WIN32
 }
 

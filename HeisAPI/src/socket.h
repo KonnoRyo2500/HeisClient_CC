@@ -26,10 +26,10 @@ class CSocket {
 
 	private:
 		// 初期化，終了処理
-		void initialize_winsock() const;
+		void initialize_TCP_socket() const;
 		void make_TCP_socket();
 		void connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
-		void finalize_winsock() const;
+		void finalize_TCP_socket() const;
 
 		// プラットフォーム別の受信処理
 		std::string recv_from_core_win() const;			// Windows用

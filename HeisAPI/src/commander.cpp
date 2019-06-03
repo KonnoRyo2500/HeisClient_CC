@@ -2,6 +2,7 @@
 // Author: Ryo Konno
 
 #include "commander.h"
+#include <algorithm>
 
 /* public関数 */
 
