@@ -5,6 +5,11 @@
 #ifdef WIN32
 #include <winsock2.h>
 #include <WS2tcpip.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <cstring>
 #endif // WIN32
 #include <stdexcept>
 
@@ -61,6 +66,99 @@ void CSocket::send_to(const std::string& msg) const
 */
 std::string CSocket::recv_from() const
 {
+#ifdef WIN32
+	return recv_from_core_win();
+#else
+	return recv_from_core_linux();
+#endif
+}
+
+/* private関数 */
+
+/*
+	winsockを初期化する関数
+	引数なし
+	返り値なし
+	例外: winsockの初期化に失敗したとき
+	備考: この関数は，windows環境以外の環境では何もしない
+*/
+void CSocket::initialize_winsock() const
+{
+#ifdef WIN32
+	WSADATA wsaData;
+	int init_ercd;
+
+	init_ercd = WSAStartup(MAKEWORD(2, 0), &wsaData);
+	if (init_ercd != 0) {
+		// winsockの初期化失敗
+		// 初期化に失敗すると，その後の処理が不安定になるので失敗したら例外を投げてプログラムを終了させる
+		throw std::runtime_error("winsockの初期化に失敗しました");
+	}
+#endif // WIN32
+}
+
+/*
+	TCP通信用ソケットを作成する関数
+	引数なし
+	返り値なし
+	例外: ソケットの作成に失敗したとき
+*/
+void CSocket::make_TCP_socket()
+{
+	m_sck = socket(AF_INET, SOCK_STREAM, 0);
+	if (m_sck < 0) {
+		throw std::runtime_error("ソケットの作成に失敗しました");
+	}
+}
+
+/*
+	TCP通信用ソケットを相手に接続する関数
+	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
+	引数2: const uint16_t dst_port_no 通信相手のポート番号
+	返り値なし
+*/
+void CSocket::connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const
+{
+	sockaddr_in sa = { 0 };
+	int ercd;
+
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(dst_port_no);
+	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
+	if (ercd <= 0) {
+		throw std::runtime_error("IPアドレスが不正です");
+	}
+
+	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
+	if (ercd < 0) {
+		throw std::runtime_error("サーバとの接続に失敗しました");
+	}
+}
+
+/*
+	winsockの終了処理を行う関数
+	引数なし
+	返り値なし
+	備考: この関数は，windows環境以外の環境では何もしない
+*/
+void CSocket::finalize_winsock() const
+{
+#ifdef WIN32
+	WSACleanup();
+#endif // WIN32
+}
+
+// 受信処理に関しては、#ifdefが関数中に入り乱れるのを防ぐため、プラットフォーム別に関数を分ける
+// REQUEST: プラットフォームに依らない受信処理の実装
+/*
+	受信処理(Windows向け)
+	引数なし
+	返り値: std::string 受信したメッセージ
+	例外: 受信エラーが発生したとき
+*/
+std::string CSocket::recv_from_core_win() const
+{
+#ifdef WIN32
 	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
 	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
 	int recv_size;
@@ -100,79 +198,50 @@ std::string CSocket::recv_from() const
 	}
 
 	return recv_message;
-}
-
-/* private関数 */
-
-/*
-	winsockを初期化する関数
-	引数なし
-	返り値なし
-	例外: winsockの初期化に失敗したとき
-	備考: この関数は，windows環境以外の環境では何もしない
-*/
-void CSocket::initialize_winsock() const
-{
-#ifdef WIN32
-	WSADATA wsaData;
-	int init_ercd;
-
-	init_ercd = WSAStartup(MAKEWORD(2, 0), &wsaData);
-	if (init_ercd != 0) {
-		// winsockの初期化失敗
-		// 初期化に失敗すると，その後の処理が不安定になるので失敗したら例外を投げてプログラムを終了させる
-		throw std::runtime_error("winsockの初期化に失敗しました");
-	}
+#else
+	return "";
 #endif // WIN32
 }
 
 /*
-	TCP通信用ソケットを作成する関数
+	受信処理(Linux向け)
 	引数なし
-	返り値なし
-	例外: ソケットの作成に失敗したとき
+	返り値: std::string 受信したメッセージ
+	例外: 受信エラーが発生したとき
 */
-void CSocket::make_TCP_socket()
+std::string CSocket::recv_from_core_linux() const
 {
-	m_sck = socket(AF_INET, SOCK_STREAM, 0);
-	if (m_sck == INVALID_SOCKET) {
-		throw std::runtime_error("ソケットの作成に失敗しました");
+#ifndef WIN32
+	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
+	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
+	int recv_size;
+	std::string recv_message;
+
+	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
+	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
+	if (recv_size < 0) {
+		throw std::runtime_error("受信でエラーが発生しました");
 	}
-}
+	recv_message += std::string(buf);
 
-/*
-	TCP通信用ソケットを相手に接続する関数
-	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
-	引数2: const uint16_t dst_port_no 通信相手のポート番号
-	返り値なし
-*/
-void CSocket::connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const
-{
-	sockaddr_in sa = { 0 };
-	int ercd;
+	// 入力キューにデータが残っていれば，それらもすべて受信する
+	do {
+		memset(buf, 0, sizeof(buf));
+		recv_size = recv(m_sck, buf, sizeof(buf) - 1, MSG_DONTWAIT);
+		if (recv_size < 0) {
+			if (errno == EAGAIN) {
+				// すべて受信できたので，受信終了
+				break;
+			}
+			else {
+				throw std::runtime_error("受信でエラーが発生しました");
+			}
+		}
+		recv_message += std::string(buf);
+	} while (recv_size > 0);
 
-	sa.sin_family = AF_INET;
-	sa.sin_port = htons(dst_port_no);
-	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
-	if (ercd <= 0) {
-		throw std::runtime_error("IPアドレスが不正です");
-	}
-
-	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
-	if (ercd < 0) {
-		throw std::runtime_error("サーバとの接続に失敗しました");
-	}
-}
-
-/*
-	winsockの終了処理を行う関数
-	引数なし
-	返り値なし
-	備考: この関数は，windows環境以外の環境では何もしない
-*/
-void CSocket::finalize_winsock() const
-{
-#ifdef WIN32
-	WSACleanup();
+	return recv_message;
+#else
+	return "";
 #endif // WIN32
 }

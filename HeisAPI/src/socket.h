@@ -30,6 +30,9 @@ class CSocket {
 		void connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
 		void finalize_winsock() const;
 
+		// プラットフォーム別の受信処理
+		std::string recv_from_core_win() const;			// Windows用
+		std::string recv_from_core_linux() const;		// Linux用
 
 	// メンバ変数
 	private:
