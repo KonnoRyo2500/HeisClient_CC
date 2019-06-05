@@ -9,6 +9,16 @@
 
 class CCommander
 {
+	// 構造体，列挙体など
+	public:
+		/* JSON関連のデータ(JSONの仕様に関しては，資料「兵ズ通信仕様.ods」を参照すること) */
+		// サーバに送信するデータ
+		// 「行動」JSONのデータ
+		struct JSONSendData_Action {
+			std::string turn_team;									// "turn_team"(フィールド)
+			std::vector<CInfantry::JSONSendData_Content> contents;	// "contents"(配列)
+		};
+
 	// メンバ関数
 	public:
 		// コンストラクタ

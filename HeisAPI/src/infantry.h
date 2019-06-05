@@ -16,6 +16,17 @@ class CInfantry
 			CInfantry* infantry;
 		};
 
+		/* JSON関連のデータ(JSONの仕様に関しては，資料「兵ズ通信仕様.ods」を参照すること) */
+		// サーバに送信するデータ
+		// 「行動」JSONに含まれる"contents"配列の要素
+		struct JSONSendData_Content {
+			std::string unit_id;		// "unit_id"フィールドの値
+			int16_t to_x;				// "to"."x"フィールドの値
+			int16_t to_y;				// "to"."y"フィールドの値
+			int16_t atk_x;				// "atk"."x"フィールドの値
+			int16_t atk_y;				// "atk"."y"フィールドの値
+		};
+
 	private:
 		// 初期値
 		enum InitialValue {

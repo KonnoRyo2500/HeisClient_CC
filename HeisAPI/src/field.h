@@ -8,6 +8,36 @@
 // ユーザAIはこのクラスの関数を呼ばないこと
 class CField
 {
+	// 構造体，列挙体など
+	public:
+		/* JSON関連のデータ(JSONの仕様に関しては，資料「兵ズ通信仕様.ods」を参照すること) */
+		// サーバから受け取るデータ
+		// 「盤面」JSONの"units"配列に含まれる"locate"オブジェクトのデータ
+		struct JSONRecvData_Locate {
+			int16_t x;		// "x"(フィールド)
+			int16_t y;		// "y"(フィールド)
+		};
+
+		// 「盤面」JSONに含まれる"units"配列の要素
+		struct JSONRecvData_Unit {
+			std::string type;				// "type"(フィールド)
+			std::string id;					// "id"(フィールド)
+			JSONRecvData_Locate locate;		// "locate"(オブジェクト)
+			int8_t hp;						// "hp"(フィールド)
+			std::string team;				// "team"(フィールド)
+		};
+
+		// 「盤面」JSONのデータ
+		struct JSONRecvData_Field {
+			int16_t width;							// "width"(フィールド)
+			int16_t height;							// "height"(フィールド)
+			std::string turn_team;					// "turn_team"(フィールド)
+			std::vector<std::string> players;		// "players"(配列)
+			bool finished;							// "finished"(フィールド)
+			uint32_t count;							// "count"(フィールド)
+			std::vector<JSONRecvData_Unit> units;	// "units"(配列)
+		};
+
 	// メンバ関数
 	public:
 		// フィールドの取得，作成，削除
