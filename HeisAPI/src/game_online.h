@@ -34,6 +34,7 @@ class CGameOnline {
 
 	// メンバ関数
 	public:
+		// 対戦開始
 		void play_game();
 		
 	private:
