@@ -6,16 +6,19 @@
 #include "commander.h"
 #include "game_online.h"
 #include "field.h"
+#include "picojson.h"
 
 class CJSONAnalyzer{
 	// 構造体，列挙体など
 	public:
 		// 受信したJSONの種別
 		enum RecvJSONType {
-			RecvJSONType_Field,			// 「盤面」JSON
-			RecvJSONType_Result,		// 「結果」JSON
-			RecvJSONType_NameDecided,	// 「名前確定」JSON
-			RecvJSONType_Message,		// 「メッセージ」JSON
+			RecvJSONType_Field,				// 「盤面」JSON
+			RecvJSONType_Result,			// 「結果」JSON
+			RecvJSONType_NameDecided,		// 「名前確定」JSON
+			RecvJSONType_Message,			// 「メッセージ」JSON
+			RecvJSONType_UnknownJSON,		// 未定義のJSON
+			RecvJSONType_NoJSONReceived,	// まだJSONを受信していない
 		};
 
 	private:
@@ -41,10 +44,19 @@ class CJSONAnalyzer{
 		RecvJSONType get_received_JSON_type();
 
 	private:
-		// JSONをサーバへ送信
-		void send_JSON(const std::string& json);
+		// JSONの送受信
+		void recv_JSON();
+		void send_JSON(const std::string& JSON);
+
+		// 受信したJSONの種類を判定
+		RecvJSONType distinguish_recv_JSON_type();
 
 	// メンバ変数
 	private:
+		// サーバとの通信用ソケット
 		CSocket* m_sck;
+		// 直前に受信したJSONの種類
+		RecvJSONType m_latest_JSON_type;
+		// 受信したパース済みのJSONデータ
+		picojson::value m_parsed_recv_JSON;
 };

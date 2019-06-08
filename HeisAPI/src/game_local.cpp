@@ -4,6 +4,8 @@
 #include "game_local.h"
 #include "field.h"
 
+/* public関数 */
+
 /*
 	heis ゲーム(ローカルモード)実行メイン処理
 	引数なし
@@ -33,6 +35,8 @@ void CGameLocal::play_game()
 	// 勝敗を表示
 	printf("%s\n", battle_result == BattleResult_MyTeamWin ? "You win!" : "You lose...");
 }
+
+/* private関数 */
 
 /*
 	対戦を開始する前の準備を行う関数
