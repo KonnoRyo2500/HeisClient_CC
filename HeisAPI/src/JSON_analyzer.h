@@ -32,8 +32,8 @@ class CJSONAnalyzer{
 		~CJSONAnalyzer();
 
 		// 必要な情報をサーバへ送信
-		void send_action_data(const CCommander::JSONSendData_Action& action_data);
-		void send_name_data(const CGameOnline::JSONSendData_Name& name_data);
+		void send_action_data(const CCommander::JSONSendData_Action& action_data) const;
+		void send_name_data(const CGameOnline::JSONSendData_Name& name_data) const;
 
 		// サーバから情報を取得
 		CGameOnline::JSONRecvData_NameDecided recv_name_decided_data();
@@ -46,10 +46,16 @@ class CJSONAnalyzer{
 	private:
 		// JSONの送受信
 		void recv_JSON();
-		void send_JSON(const std::string& JSON);
+		void send_JSON(const picojson::object& JSON_obj) const;
+
+		// JSON作成補助
+		picojson::array make_contents_array(const std::vector<CInfantry::JSONSendData_Content>& contents_data) const;
 
 		// 受信したJSONの種類を判定
-		RecvJSONType distinguish_recv_JSON_type();
+		RecvJSONType distinguish_recv_JSON_type() const;
+
+		// 受信したJSONと要求するJSONの種類が一致しているか
+		void validate_JSON_type(const RecvJSONType req_JSON_type) const;
 
 	// メンバ変数
 	private:

@@ -2,8 +2,7 @@
 // Author: Ryo Konno
 #include <cstdio>
 #include <cstdlib>
-//#include "field.h"
-#include "socket.h"
+#include "JSON_analyzer.h"
 #include "game_local.h"
 
 int main()
@@ -12,12 +11,15 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-		CSocket sck("192.168.1.102", 8823);
-		sck.send_to("The quick brown fox jumps over the lazy dog.");
-		printf("recvmsg: %s\n", sck.recv_from().c_str());
-		//CGameLocal game;
+		CJSONAnalyzer json_analyzer;
+		CGameOnline::JSONSendData_Name name = {"test"};
 
-		//game.play_game();
+		json_analyzer.send_name_data(name);
+#if 0
+		CGameLocal game;
+
+		game.play_game();
+#endif
 	}
 	catch (const std::exception & e) {
 		printf("heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
