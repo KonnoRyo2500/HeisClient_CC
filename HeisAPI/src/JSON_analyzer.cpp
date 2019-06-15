@@ -22,6 +22,7 @@ CJSONAnalyzer::CJSONAnalyzer()
 */
 CJSONAnalyzer::~CJSONAnalyzer()
 {
+	// ソケットを削除
 	delete m_sck;
 	m_sck = NULL;
 }
@@ -45,8 +46,11 @@ void CJSONAnalyzer::send_action_data(const CCommander::JSONSendData_Action& acti
 {
 	picojson::object action_JSON;
 
+	// JSON作成
 	action_JSON.insert(std::make_pair("turn_team", action_data.turn_team));
 	action_JSON.insert(std::make_pair("contents", picojson::value(make_contents_array(action_data.contents))));
+
+	// JSON送信
 	send_JSON(action_JSON);
 }
 
@@ -59,7 +63,10 @@ void CJSONAnalyzer::send_name_data(const CGameOnline::JSONSendData_Name& name_da
 {
 	picojson::object name_JSON;
 
+	// JSON作成
 	name_JSON.insert(std::make_pair("team_name", name_data.team_name));
+
+	// JSON送信
 	send_JSON(name_JSON);
 }
 
@@ -92,6 +99,7 @@ void CJSONAnalyzer::recv_JSON()
 */
 void CJSONAnalyzer::send_JSON(const picojson::object& JSON_obj) const
 {
+	// std::stringに変換できるのはpicojson::valueなので，変換してから送信する
 	m_sck->send_to(picojson::value(JSON_obj).serialize());
 }
 
