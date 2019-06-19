@@ -18,7 +18,7 @@ class CGameOnline {
 		// サーバから受け取るデータ
 		// 「名前確定」JSONのデータ
 		struct JSONRecvData_NameDecided {
-			std::string your_name;		// "your_name"(フィールド)
+			std::string your_team;		// "your_team"(フィールド)
 		};
 
 		// 「結果」JSONに含まれる"result"配列の要素
@@ -30,6 +30,11 @@ class CGameOnline {
 		// 「結果」JSONのデータ
 		struct JSONRecvData_Result {
 			std::vector<JSONRecvData_ResultElem> result;	// "result"(配列)
+		};
+
+		// 「メッセージ」JSONのデータ
+		struct JSONRecvData_Message {
+			std::string message;		// "message"(フィールド)
 		};
 
 	// メンバ関数

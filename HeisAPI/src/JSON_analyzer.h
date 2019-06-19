@@ -11,14 +11,14 @@
 class CJSONAnalyzer{
 	// 構造体，列挙体など
 	public:
-		// 受信したJSONの種別
-		enum RecvJSONType {
-			RecvJSONType_Field,				// 「盤面」JSON
-			RecvJSONType_Result,			// 「結果」JSON
-			RecvJSONType_NameDecided,		// 「名前確定」JSON
-			RecvJSONType_Message,			// 「メッセージ」JSON
-			RecvJSONType_UnknownJSON,		// 未定義のJSON
-			RecvJSONType_NoJSONReceived,	// まだJSONを受信していない
+		// JSONの種別
+		enum JSONKind {
+			JSONKind_Field,				// 「盤面」JSON
+			JSONKind_Result,			// 「結果」JSON
+			JSONKind_NameDecided,		// 「名前確定」JSON
+			JSONKind_Message,			// 「メッセージ」JSON
+			JSONKind_UnknownJSON,		// 未定義のJSON
+			JSONKind_NoJSONAnalyzed,	// まだJSONを解析していない
 		};
 
 	private:
@@ -31,38 +31,96 @@ class CJSONAnalyzer{
 		// デストラクタ
 		~CJSONAnalyzer();
 
-		// 必要な情報をサーバへ送信
-		void send_action_data(const CCommander::JSONSendData_Action& action_data) const;
-		void send_name_data(const CGameOnline::JSONSendData_Name& name_data) const;
+		// 各種パケットをJSONに変換
+		std::string create_action_JSON(const CCommander::JSONSendData_Action& action_pkt) const;
+		std::string create_name_JSON(const CGameOnline::JSONSendData_Name& name_pkt) const;
 
-		// サーバから情報を取得
-		CGameOnline::JSONRecvData_NameDecided recv_name_decided_data();
-		CGameOnline::JSONRecvData_Result recv_result_data();
-		CField::JSONRecvData_Field recv_field_data();
+		// 解析したJSONから各種パケットを生成
+		CGameOnline::JSONRecvData_NameDecided create_name_decided_pkt(const std::string& name_decided_JSON);
+		CGameOnline::JSONRecvData_Result create_result_pkt(const std::string& result_JSON);
+		CGameOnline::JSONRecvData_Message create_message_pkt(const std::string& message_JSON);
+		CField::JSONRecvData_Field create_field_pkt(const std::string& field_JSON);
 
-		// 受信したJSONの種別を取得
-		RecvJSONType get_received_JSON_type();
+		// 解析したJSONの種別を取得
+		JSONKind get_analyzed_JSON_kind();
 
 	private:
-		// JSONの送受信
-		void recv_JSON();
-		void send_JSON(const picojson::object& JSON_obj) const;
+		// JSONを解析
+		void analyze_JSON(const std::string& src_JSON);
 
 		// JSON作成補助
-		picojson::array make_contents_array(const std::vector<CInfantry::JSONSendData_Content>& contents_data) const;
+		std::string serialize_JSON_obj(const picojson::object& obj) const;
+		picojson::array make_contents_JSON(const std::vector<CInfantry::JSONSendData_Content>& contents_data) const;
 
-		// 受信したJSONの種類を判定
-		RecvJSONType distinguish_recv_JSON_type() const;
+		// 各種パケット作成補助
+		std::vector<CGameOnline::JSONRecvData_ResultElem> make_result_array(const picojson::array& result_array) const;
+		std::vector<std::string> make_players_array(const picojson::array& players_array) const;
+		std::vector<CField::JSONRecvData_Unit> make_units_array(const picojson::array& units_array) const;
+		CField::JSONRecvData_Locate make_locate_object(const picojson::object& locate_obj) const;
 
-		// 受信したJSONと要求するJSONの種類が一致しているか
-		void validate_JSON_type(const RecvJSONType req_JSON_type) const;
+		// 解析したJSONの種類を判定
+		JSONKind distinguish_analyzed_JSON_kind() const;
+
+		// 解析したJSONと要求するJSONの種類が一致しているか
+		void validate_JSON_kind(const JSONKind req_JSON_kind) const;
+
+		// テンプレート関数
+		// TODO: 必須でない値も適切に処理できるようにする(現時点での実装だと，必須でない値が欠けた時，例外が投げられてしまう)
+		/*
+			直近に解析したJSONから，キーを指定して数値型の値を取得する関数
+			引数1: const std::string& key キー名
+			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+			返り値: T 取得した値
+			例外: 指定されたキーに対応する値が存在しないとき
+		*/
+		template <typename T>
+		T get_number_val_from_JSON_obj(const std::string& key, const picojson::object& src_JSON_obj) const
+		{
+			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+				// 指定したキーがある場合のみ，解析したJSONから要素を取得する
+				// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
+				/*
+					picojsonの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない(constにするとコンパイルエラーになる)
+					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
+					これを防ぐため，const_castで一旦const修飾子を外す
+				*/
+				return static_cast<T>(const_cast<picojson::object&>(src_JSON_obj)[key].get<double>());
+			}
+			else {
+				// キーに対応する値がない
+				throw std::runtime_error("JSONが不正です(指定されたキーが存在しません)");
+			}
+		}
+
+		/*
+			直近に解析したJSONから，キーを指定して非数値型(文字列型，真偽値型, オブジェクトなど)の値を取得する関数
+			引数1: const std::string& key キー名
+			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+			返り値: T 取得した値
+			例外: 指定されたキーに対応する値が存在しないとき
+		*/
+		template <typename T>
+		T get_not_number_val_from_JSON_obj(const std::string& key, const picojson::object& src_JSON_obj) const
+		{
+			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+				// 指定したキーがある場合のみ，解析したJSONから要素を取得する
+				/*
+					picojsonの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない(constにするとコンパイルエラーになる)
+					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
+					これを防ぐため，const_castで一旦const修飾子を外す
+				*/
+				return const_cast<picojson::object&>(src_JSON_obj)[key].get<T>();
+			}
+			else {
+				// キーに対応する値がない
+				throw std::runtime_error("JSONが不正です(指定されたキーが存在しません)");
+			}
+		}
 
 	// メンバ変数
 	private:
-		// サーバとの通信用ソケット
-		CSocket* m_sck;
-		// 直前に受信したJSONの種類
-		RecvJSONType m_latest_JSON_type;
-		// 受信したパース済みのJSONデータ
-		picojson::value m_parsed_recv_JSON;
+		// 解析したJSONの種類
+		JSONKind m_analyzed_JSON_kind;
+		// 解析した結果得られたJSONオブジェクト(最上位のオブジェクト)
+		picojson::object m_analyzed_JSON_root_obj;
 };

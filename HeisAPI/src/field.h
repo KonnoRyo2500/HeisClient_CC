@@ -21,7 +21,7 @@ class CField
 		// 「盤面」JSONに含まれる"units"配列の要素
 		struct JSONRecvData_Unit {
 			std::string type;				// "type"(フィールド)
-			std::string id;					// "id"(フィールド)
+			std::string unit_id;					// "unit_id"(フィールド)
 			JSONRecvData_Locate locate;		// "locate"(オブジェクト)
 			int8_t hp;						// "hp"(フィールド)
 			std::string team;				// "team"(フィールド)
