@@ -2,10 +2,7 @@
 // Author: Ryo Konno
 #pragma once
 
-#include "socket.h"
-#include "commander.h"
-#include "game_online.h"
-#include "field.h"
+#include "JSON_data_packet.h"
 #include "picojson.h"
 
 class CJSONAnalyzer{
@@ -32,14 +29,14 @@ class CJSONAnalyzer{
 		~CJSONAnalyzer();
 
 		// 各種パケットをJSONに変換
-		std::string create_action_JSON(const CCommander::JSONSendData_Action& action_pkt) const;
-		std::string create_name_JSON(const CGameOnline::JSONSendData_Name& name_pkt) const;
+		std::string create_action_JSON(const JSONSendPacket_Action& action_pkt) const;
+		std::string create_name_JSON(const JSONSendPacket_Name& name_pkt) const;
 
 		// 解析したJSONから各種パケットを生成
-		CGameOnline::JSONRecvData_NameDecided create_name_decided_pkt(const std::string& name_decided_JSON);
-		CGameOnline::JSONRecvData_Result create_result_pkt(const std::string& result_JSON);
-		CGameOnline::JSONRecvData_Message create_message_pkt(const std::string& message_JSON);
-		CField::JSONRecvData_Field create_field_pkt(const std::string& field_JSON);
+		JSONRecvPacket_NameDecided create_name_decided_pkt(const std::string& name_decided_JSON);
+		JSONRecvPacket_Result create_result_pkt(const std::string& result_JSON);
+		JSONRecvPacket_Message create_message_pkt(const std::string& message_JSON);
+		JSONRecvPacket_Field create_field_pkt(const std::string& field_JSON);
 
 		// 解析したJSONの種別を取得
 		JSONKind get_analyzed_JSON_kind();
@@ -50,13 +47,13 @@ class CJSONAnalyzer{
 
 		// JSON作成補助
 		std::string serialize_JSON_obj(const picojson::object& obj) const;
-		picojson::array make_contents_JSON(const std::vector<CInfantry::JSONSendData_Content>& contents_data) const;
+		picojson::array make_contents_JSON(const std::vector<ContentsArrayElem>& contents_data) const;
 
 		// 各種パケット作成補助
-		std::vector<CGameOnline::JSONRecvData_ResultElem> make_result_array(const picojson::array& result_array) const;
+		std::vector<ResultArrayElem> make_result_array(const picojson::array& result_array) const;
 		std::vector<std::string> make_players_array(const picojson::array& players_array) const;
-		std::vector<CField::JSONRecvData_Unit> make_units_array(const picojson::array& units_array) const;
-		CField::JSONRecvData_Locate make_locate_object(const picojson::object& locate_obj) const;
+		std::vector<UnitsArrayElem> make_units_array(const picojson::array& units_array) const;
+		LocateObjData make_locate_object(const picojson::object& locate_obj) const;
 
 		// 解析したJSONの種類を判定
 		JSONKind distinguish_analyzed_JSON_kind() const;

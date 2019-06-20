@@ -6,18 +6,18 @@
 #include "game_local.h"
 
 // デバッグ用関数
-static CCommander::JSONSendData_Action create_sample_action_pkt();
-static CGameOnline::JSONSendData_Name create_sample_name_pkt();
+static JSONSendPacket_Action create_sample_action_pkt();
+static JSONSendPacket_Name create_sample_name_pkt();
 
 static std::string create_sample_name_decided_JSON();
 static std::string create_sample_message_JSON();
 static std::string create_sample_result_JSON();
 static std::string create_sample_field_JSON();
 
-static void show_name_decided_pkt(const CGameOnline::JSONRecvData_NameDecided& name_decided_pkt);
-static void show_message_pkt(const CGameOnline::JSONRecvData_Message& message_pkt);
-static void show_result_pkt(const CGameOnline::JSONRecvData_Result& result_pkt);
-static void show_field_pkt(const CField::JSONRecvData_Field& field_pkt);
+static void show_name_decided_pkt(const JSONRecvPacket_NameDecided& name_decided_pkt);
+static void show_message_pkt(const JSONRecvPacket_Message& message_pkt);
+static void show_result_pkt(const JSONRecvPacket_Result& result_pkt);
+static void show_field_pkt(const JSONRecvPacket_Field& field_pkt);
 
 int main()
 {
@@ -25,7 +25,7 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-#if 0
+#if 1
 		CJSONAnalyzer json_analyzer;
 		printf("「行動」JSON: %s\n", json_analyzer.create_action_JSON(create_sample_action_pkt()).c_str());
 		printf("「名前」JSON: %s\n", json_analyzer.create_name_JSON(create_sample_name_pkt()).c_str());
@@ -47,13 +47,13 @@ int main()
 }
 
 // 「行動」パケットを作成(デバッグ用)
-static CCommander::JSONSendData_Action create_sample_action_pkt()
+static JSONSendPacket_Action create_sample_action_pkt()
 {
-	CCommander::JSONSendData_Action sample_action_pkt;
+	JSONSendPacket_Action sample_action_pkt;
 
 	sample_action_pkt.turn_team = "test";
 	for (int i = 1; i <= 5; i++) {
-		CInfantry::JSONSendData_Content content;
+		ContentsArrayElem content;
 
 		content.atk_x = 1 * i;
 		content.atk_y = 2 * i;
@@ -71,9 +71,9 @@ static CCommander::JSONSendData_Action create_sample_action_pkt()
 }
 
 // 「名前」パケットを作成(デバッグ用)
-static CGameOnline::JSONSendData_Name create_sample_name_pkt()
+static JSONSendPacket_Name create_sample_name_pkt()
 {
-	CGameOnline::JSONSendData_Name sample_name_pkt;
+	JSONSendPacket_Name sample_name_pkt;
 
 	sample_name_pkt.team_name = "sample";
 
@@ -144,21 +144,21 @@ static std::string create_sample_field_JSON()
 }
 
 // 「名前確定」パケットの中身を表示(デバッグ用)
-static void show_name_decided_pkt(const CGameOnline::JSONRecvData_NameDecided& name_decided_pkt)
+static void show_name_decided_pkt(const JSONRecvPacket_NameDecided& name_decided_pkt)
 {
 	printf("「名前確定」パケット:\n");
 	printf("\tyour_team: %s\n", name_decided_pkt.your_team.c_str());
 }
 
 // 「メッセージ」パケットの中身を表示(デバッグ用)
-static void show_message_pkt(const CGameOnline::JSONRecvData_Message& message_pkt)
+static void show_message_pkt(const JSONRecvPacket_Message& message_pkt)
 {
 	printf("「メッセージ」パケット:\n");
 	printf("\tmessage: %s\n", message_pkt.message.c_str());
 }
 
 // 「結果」パケットの中身を表示(デバッグ用)
-static void show_result_pkt(const CGameOnline::JSONRecvData_Result& result_pkt)
+static void show_result_pkt(const JSONRecvPacket_Result& result_pkt)
 {
 	printf("「結果」パケット\n");
 	int i = 1;
@@ -172,7 +172,7 @@ static void show_result_pkt(const CGameOnline::JSONRecvData_Result& result_pkt)
 }
 
 // 「盤面」パケットの中身を表示(デバッグ用)
-static void show_field_pkt(const CField::JSONRecvData_Field& field_pkt)
+static void show_field_pkt(const JSONRecvPacket_Field& field_pkt)
 {
 	int i;
 
