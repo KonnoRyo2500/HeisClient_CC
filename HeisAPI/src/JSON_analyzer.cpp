@@ -269,6 +269,7 @@ std::vector<CField::JSONRecvData_Unit> CJSONAnalyzer::make_units_array(const pic
 		unit.type = get_not_number_val_from_JSON_obj<std::string>("type", elem_obj);
 		unit.team = get_not_number_val_from_JSON_obj<std::string>("team", elem_obj);
 		unit.locate = make_locate_object(get_not_number_val_from_JSON_obj<picojson::object>("locate", elem_obj));
+		units_data.push_back(unit);
 	}
 	return units_data;
 }
