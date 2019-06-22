@@ -230,6 +230,7 @@ std::string CSocket::recv_from_core_linux() const
 	// 入力キューにデータが残っていれば，それらもすべて受信する
 	do {
 		memset(buf, 0, sizeof(buf));
+		// 受信データがないときに無限待ちにならないよう，ノンブロッキングで受信する
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, MSG_DONTWAIT);
 		if (recv_size < 0) {
 			if (errno == EAGAIN) {
