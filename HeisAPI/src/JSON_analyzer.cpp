@@ -79,7 +79,7 @@ JSONRecvPacket_NameDecided CJSONAnalyzer::create_name_decided_pkt(const std::str
 	// JSONからパケット作成
 	JSONRecvPacket_NameDecided name_decided_pkt;
 
-	name_decided_pkt.your_team = get_not_number_val_from_JSON_obj<std::string>("your_team", m_analyzed_JSON_root_obj);
+	name_decided_pkt.your_team = get_obligatory_not_number_val<std::string>("your_team", m_analyzed_JSON_root_obj);
 	return name_decided_pkt;
 }
 
@@ -97,7 +97,7 @@ JSONRecvPacket_Result CJSONAnalyzer::create_result_pkt(const std::string& result
 	// JSONからパケット作成
 	JSONRecvPacket_Result result_pkt;
 
-	result_pkt.result = make_result_array(get_not_number_val_from_JSON_obj<picojson::array>("result", m_analyzed_JSON_root_obj));
+	result_pkt.result = make_result_array(get_obligatory_not_number_val<picojson::array>("result", m_analyzed_JSON_root_obj));
 	return result_pkt;
 }
 
@@ -115,7 +115,7 @@ JSONRecvPacket_Message CJSONAnalyzer::create_message_pkt(const std::string& mess
 	// JSONからパケット作成
 	JSONRecvPacket_Message message_pkt;
 
-	message_pkt.message = get_not_number_val_from_JSON_obj<std::string>("message", m_analyzed_JSON_root_obj);
+	message_pkt.message = get_obligatory_not_number_val<std::string>("message", m_analyzed_JSON_root_obj);
 	return message_pkt;
 }
 
@@ -133,13 +133,13 @@ JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JS
 	// JSONからデータ作成
 	JSONRecvPacket_Field field_pkt;
 
-	field_pkt.width = get_number_val_from_JSON_obj<int16_t>("width", m_analyzed_JSON_root_obj);
-	field_pkt.height = get_number_val_from_JSON_obj<int16_t>("height", m_analyzed_JSON_root_obj);
-	field_pkt.turn_team = get_not_number_val_from_JSON_obj<std::string>("turn_team", m_analyzed_JSON_root_obj);
-	field_pkt.finished = get_not_number_val_from_JSON_obj<bool>("finished", m_analyzed_JSON_root_obj);
-	field_pkt.count = get_number_val_from_JSON_obj<uint32_t>("count", m_analyzed_JSON_root_obj);
-	field_pkt.players = make_players_array(get_not_number_val_from_JSON_obj<picojson::array>("players", m_analyzed_JSON_root_obj));
-	field_pkt.units = make_units_array(get_not_number_val_from_JSON_obj<picojson::array>("units", m_analyzed_JSON_root_obj));
+	field_pkt.width = get_obligatory_number_val<int16_t>("width", m_analyzed_JSON_root_obj);
+	field_pkt.height = get_obligatory_number_val<int16_t>("height", m_analyzed_JSON_root_obj);
+	field_pkt.turn_team = get_obligatory_not_number_val<std::string>("turn_team", m_analyzed_JSON_root_obj);
+	field_pkt.finished = get_obligatory_not_number_val<bool>("finished", m_analyzed_JSON_root_obj);
+	field_pkt.count = get_obligatory_number_val<uint32_t>("count", m_analyzed_JSON_root_obj);
+	field_pkt.players = make_players_array(get_obligatory_not_number_val<picojson::array>("players", m_analyzed_JSON_root_obj));
+	field_pkt.units = make_units_array(get_obligatory_not_number_val<picojson::array>("units", m_analyzed_JSON_root_obj));
 	return field_pkt;
 }
 
@@ -229,8 +229,8 @@ std::vector<ResultArrayElem> CJSONAnalyzer::make_result_array(const picojson::ar
 		ResultArrayElem result_data_elem;
 		picojson::object elem_obj = result_array_val.get<picojson::object>();
 
-		result_data_elem.unit_id = get_not_number_val_from_JSON_obj<std::string>("unit_id", elem_obj);
-		result_data_elem.error = get_not_number_val_from_JSON_obj<std::string>("error", elem_obj);
+		result_data_elem.unit_id = get_optional_not_number_val<std::string>("unit_id", elem_obj);
+		result_data_elem.error = get_obligatory_not_number_val<std::string>("error", elem_obj);
 		result_data.push_back(result_data_elem);
 	}
 	return result_data;
@@ -264,11 +264,11 @@ std::vector<UnitsArrayElem> CJSONAnalyzer::make_units_array(const picojson::arra
 		UnitsArrayElem unit;
 		picojson::object elem_obj = units_array_val.get<picojson::object>();
 
-		unit.hp = get_number_val_from_JSON_obj<int8_t>("hp", elem_obj);
-		unit.unit_id = get_not_number_val_from_JSON_obj<std::string>("unit_id", elem_obj);
-		unit.type = get_not_number_val_from_JSON_obj<std::string>("type", elem_obj);
-		unit.team = get_not_number_val_from_JSON_obj<std::string>("team", elem_obj);
-		unit.locate = make_locate_object(get_not_number_val_from_JSON_obj<picojson::object>("locate", elem_obj));
+		unit.hp = get_obligatory_number_val<int8_t>("hp", elem_obj);
+		unit.unit_id = get_obligatory_not_number_val<std::string>("unit_id", elem_obj);
+		unit.type = get_obligatory_not_number_val<std::string>("type", elem_obj);
+		unit.team = get_obligatory_not_number_val<std::string>("team", elem_obj);
+		unit.locate = make_locate_object(get_obligatory_not_number_val<picojson::object>("locate", elem_obj));
 		units_data.push_back(unit);
 	}
 	return units_data;
@@ -283,8 +283,8 @@ LocateObjData CJSONAnalyzer::make_locate_object(const picojson::object& locate_o
 {
 	LocateObjData locate_data;
 
-	locate_data.x = get_number_val_from_JSON_obj<int16_t>("x", locate_obj);
-	locate_data.y = get_number_val_from_JSON_obj<int16_t>("y", locate_obj);
+	locate_data.x = get_obligatory_number_val<int16_t>("x", locate_obj);
+	locate_data.y = get_obligatory_number_val<int16_t>("y", locate_obj);
 	return locate_data;
 }
 

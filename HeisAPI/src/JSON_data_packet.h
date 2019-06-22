@@ -5,6 +5,60 @@
 #include <string>
 #include <vector>
 
+/* 任意値パケット */
+
+template <typename T>
+struct OptionalVal {
+	
+	public:
+		// コンストラクタ
+		OptionalVal()
+			: m_omit_flag(true)
+			, m_val()	// 警告抑止(この記述に特に意味はない)
+		{
+			// 処理なし
+		}
+
+		// 値の取得
+		T get() const
+		{
+			if (m_omit_flag) {
+				throw std::runtime_error("省略された値を取得しようとしています");
+			}
+			return m_val;
+		}
+
+		// 値が省略されているか
+		bool is_omitted() const
+		{
+			return m_omit_flag;
+		}
+
+		/* 以下の関数は，CJSONAnalyzerクラスでパケットを作成するときだけ呼ぶこと */
+
+		// 値をセットする
+		void set_val(const T& new_val)
+		{
+			m_val = new_val;
+		}
+
+		// 省略フラグをセットする(値が省略されたとき)
+		void set_omit_flag()
+		{
+			m_omit_flag = true;
+		}
+
+		// 省略フラグを降ろす(値が省略されなかったとき)
+		void clear_omit_flag()
+		{
+			m_omit_flag = false;
+		}
+
+	private:
+		T m_val;				// 値本体
+		bool m_omit_flag;		// 省略フラグ(JSONで対応するキーが省略されていればtrue, あればfalse)
+};
+
 /* 以下のパケットの構造は，ファイル「兵ズ通信仕様.ods」で定義されているJSONの仕様に基づく */
 
 /* 各種パケットの要素 */
@@ -35,8 +89,8 @@ struct UnitsArrayElem {
 
 // 「結果」パケット -> resultの要素
 struct ResultArrayElem {
-	std::string unit_id;		// "unit_id"(フィールド)
-	std::string error;			// "error"(フィールド)
+	OptionalVal<std::string> unit_id;		// "unit_id"(フィールド, 省略可能)
+	std::string error;						// "error"(フィールド)
 };
 
 /* サーバに送信するJSONを作成するためのパケット */

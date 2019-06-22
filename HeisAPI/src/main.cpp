@@ -165,7 +165,9 @@ static void show_result_pkt(const JSONRecvPacket_Result& result_pkt)
 	printf("\tresult:\n");
 	for (auto& result_elem : result_pkt.result) {
 		printf("\t\t(要素%d)\n", i);
-		printf("\t\t\tunit_id: %s\n", result_elem.unit_id.c_str());
+		if (!result_elem.unit_id.is_omitted()) {
+			printf("\t\t\tunit_id: %s\n", result_elem.unit_id.get().c_str());
+		}
 		printf("\t\t\terror: %s\n", result_elem.error.c_str());
 		i++;
 	}

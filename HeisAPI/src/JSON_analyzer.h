@@ -62,22 +62,87 @@ class CJSONAnalyzer{
 		void validate_JSON_kind(const JSONKind req_JSON_kind) const;
 
 		// テンプレート関数
-		// TODO: 必須でない値も適切に処理できるようにする(現時点での実装だと，必須でない値が欠けた時，例外が投げられてしまう)
 		/*
-			直近に解析したJSONから，キーを指定して数値型の値を取得する関数
+			直近に解析したJSONから，キーを指定して必須でない数値を取得する関数
+			引数1: const std::string& key キー名
+			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+			返り値: T 取得した値
+			例外: 指定されたキーに対する必須の値が存在しないとき
+		*/
+		template <typename T>
+		OptionalVal<T> get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+		{
+			OptionalVal<T> ret_optional_val;
+
+			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+				/*
+					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない
+					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
+					これを防ぐため，const_castで一旦const修飾子を外す
+				*/
+				ret_optional_val.set_val(static_cast<T>(const_cast<picojson::object&>(src_JSON_obj)[key].get<double>()));
+				ret_optional_val.clear_omit_flag();
+			}
+			else {
+				// キーに対応する値がなければ，デフォルト値を返す
+				// デフォルト値の生成には，std::mapの[]演算子で得られるデフォルト値を返す
+				std::map<std::string, T> dummy_map;
+
+				ret_optional_val.set_val(dummy_map[key]);
+				ret_optional_val.set_omit_flag();
+			}
+
+			return ret_optional_val;
+		}
+
+		/*
+			直近に解析したJSONから，キーを指定して必須でない非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
+			引数1: const std::string& key キー名
+			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+			返り値: T 取得した値
+			例外: 指定されたキーに対する必須の値が存在しないとき
+		*/
+		template <typename T>
+		OptionalVal<T> get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+		{
+			OptionalVal<T> ret_optional_val;
+
+			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+				/*
+					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない
+					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
+					これを防ぐため，const_castで一旦const修飾子を外す
+				*/
+				ret_optional_val.set_val(const_cast<picojson::object&>(src_JSON_obj)[key].get<T>());
+				ret_optional_val.clear_omit_flag();
+			}
+			else {
+				// キーに対応する値がなければ，デフォルト値を返す
+				// デフォルト値の生成には，std::mapの[]演算子で得られるデフォルト値を返す
+				std::map<std::string, T> dummy_map;
+				
+				ret_optional_val.set_val(dummy_map[key]);
+				ret_optional_val.set_omit_flag();
+			}
+
+			return ret_optional_val;
+		}
+
+		/*
+			直近に解析したJSONから，キーを指定して必須の数値を取得する関数
 			引数1: const std::string& key キー名
 			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
 			返り値: T 取得した値
 			例外: 指定されたキーに対応する値が存在しないとき
 		*/
 		template <typename T>
-		T get_number_val_from_JSON_obj(const std::string& key, const picojson::object& src_JSON_obj) const
+		T get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
 		{
 			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
 				// 指定したキーがある場合のみ，解析したJSONから要素を取得する
 				// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
 				/*
-					picojsonの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない(constにするとコンパイルエラーになる)
+					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない
 					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
 					これを防ぐため，const_castで一旦const修飾子を外す
 				*/
@@ -90,19 +155,19 @@ class CJSONAnalyzer{
 		}
 
 		/*
-			直近に解析したJSONから，キーを指定して非数値型(文字列型，真偽値型, オブジェクトなど)の値を取得する関数
+			直近に解析したJSONから，キーを指定して必須の非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
 			引数1: const std::string& key キー名
 			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
 			返り値: T 取得した値
 			例外: 指定されたキーに対応する値が存在しないとき
 		*/
 		template <typename T>
-		T get_not_number_val_from_JSON_obj(const std::string& key, const picojson::object& src_JSON_obj) const
+		T get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
 		{
 			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
 				// 指定したキーがある場合のみ，解析したJSONから要素を取得する
 				/*
-					picojsonの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない(constにするとコンパイルエラーになる)
+					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない(constにするとコンパイルエラーになる)
 					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
 					これを防ぐため，const_castで一旦const修飾子を外す
 				*/
