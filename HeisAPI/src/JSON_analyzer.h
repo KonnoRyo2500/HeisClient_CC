@@ -8,14 +8,14 @@
 class CJSONAnalyzer{
 	// 構造体，列挙体など
 	public:
-		// JSONの種別
-		enum JSONKind {
-			JSONKind_Field,				// 「盤面」JSON
-			JSONKind_Result,			// 「結果」JSON
-			JSONKind_NameDecided,		// 「名前確定」JSON
-			JSONKind_Message,			// 「メッセージ」JSON
-			JSONKind_UnknownJSON,		// 未定義のJSON
-			JSONKind_NoJSONAnalyzed,	// まだJSONを解析していない
+		// 解析したJSONの種別
+		enum AnalyzedJSONKind {
+			AnalyzedJSONKind_Field,				// 「盤面」JSON
+			AnalyzedJSONKind_Result,			// 「結果」JSON
+			AnalyzedJSONKind_NameDecided,		// 「名前確定」JSON
+			AnalyzedJSONKind_Message,			// 「メッセージ」JSON
+			AnalyzedJSONKind_UnknownJSON,		// 未定義のJSON
+			AnalyzedJSONKind_NoJSONAnalyzed,	// まだJSONを解析していない
 		};
 
 	private:
@@ -39,7 +39,7 @@ class CJSONAnalyzer{
 		JSONRecvPacket_Field create_field_pkt(const std::string& field_JSON);
 
 		// 解析したJSONの種別を取得
-		JSONKind get_analyzed_JSON_kind();
+		AnalyzedJSONKind get_analyzed_JSON_kind();
 
 	private:
 		// JSONを解析
@@ -56,10 +56,19 @@ class CJSONAnalyzer{
 		LocateObjData make_locate_object(const picojson::object& locate_obj) const;
 
 		// 解析したJSONの種類を判定
-		JSONKind distinguish_analyzed_JSON_kind() const;
+		AnalyzedJSONKind distinguish_analyzed_JSON_kind() const;
+
+		// JSON種類判定処理
+		AnalyzedJSONKind check_whether_name_decided_JSON() const;
+		AnalyzedJSONKind check_whether_result_JSON() const;
+		AnalyzedJSONKind check_whether_message_JSON() const;
+		AnalyzedJSONKind check_whether_field_JSON() const;
+
+		// JSON種類判定補助
+		bool exists_key_in_JSON_object(const std::string& key, const picojson::object& obj) const;
 
 		// 解析したJSONと要求するJSONの種類が一致しているか
-		void validate_JSON_kind(const JSONKind req_JSON_kind) const;
+		void validate_JSON_kind(const AnalyzedJSONKind req_JSON_kind) const;
 
 		// テンプレート関数
 		/*
@@ -182,7 +191,7 @@ class CJSONAnalyzer{
 	// メンバ変数
 	private:
 		// 解析したJSONの種類
-		JSONKind m_analyzed_JSON_kind;
+		AnalyzedJSONKind m_analyzed_JSON_kind;
 		// 解析した結果得られたJSONオブジェクト(最上位のオブジェクト)
 		picojson::object m_analyzed_JSON_root_obj;
 };

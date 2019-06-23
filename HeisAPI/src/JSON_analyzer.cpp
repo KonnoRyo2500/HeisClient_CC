@@ -10,7 +10,7 @@
 	引数なし
 */
 CJSONAnalyzer::CJSONAnalyzer()
-	: m_analyzed_JSON_kind(JSONKind_NoJSONAnalyzed)
+	: m_analyzed_JSON_kind(AnalyzedJSONKind_NoJSONAnalyzed)
 {
 	// 処理なし
 }
@@ -27,9 +27,9 @@ CJSONAnalyzer::~CJSONAnalyzer()
 /*
 	最後に解析したJSONの種類を取得する関数
 	引数なし
-	返り値: CJSONAnalyzer::JSONKind 最後に解析したJSONの種類
+	返り値: CJSONAnalyzer::AnalyzedJSONKind 最後に解析したJSONの種類
 */
-CJSONAnalyzer::JSONKind CJSONAnalyzer::get_analyzed_JSON_kind()
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::get_analyzed_JSON_kind()
 {
 	return m_analyzed_JSON_kind;
 }
@@ -74,7 +74,7 @@ JSONRecvPacket_NameDecided CJSONAnalyzer::create_name_decided_pkt(const std::str
 {
 	// JSONの解析+種別チェック
 	analyze_JSON(name_decided_JSON);
-	validate_JSON_kind(JSONKind_NameDecided);
+	validate_JSON_kind(AnalyzedJSONKind_NameDecided);
 
 	// JSONからパケット作成
 	JSONRecvPacket_NameDecided name_decided_pkt;
@@ -92,7 +92,7 @@ JSONRecvPacket_Result CJSONAnalyzer::create_result_pkt(const std::string& result
 {
 	// JSONの解析+種別チェック
 	analyze_JSON(result_JSON);
-	validate_JSON_kind(JSONKind_Result);
+	validate_JSON_kind(AnalyzedJSONKind_Result);
 
 	// JSONからパケット作成
 	JSONRecvPacket_Result result_pkt;
@@ -110,7 +110,7 @@ JSONRecvPacket_Message CJSONAnalyzer::create_message_pkt(const std::string& mess
 {
 	// JSONの解析+種別チェック
 	analyze_JSON(message_JSON);
-	validate_JSON_kind(JSONKind_Message);
+	validate_JSON_kind(AnalyzedJSONKind_Message);
 
 	// JSONからパケット作成
 	JSONRecvPacket_Message message_pkt;
@@ -128,7 +128,7 @@ JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JS
 {
 	// JSONの解析+種別チェック
 	analyze_JSON(field_JSON);
-	validate_JSON_kind(JSONKind_Field);
+	validate_JSON_kind(AnalyzedJSONKind_Field);
 
 	// JSONからデータ作成
 	JSONRecvPacket_Field field_pkt;
@@ -291,22 +291,118 @@ LocateObjData CJSONAnalyzer::make_locate_object(const picojson::object& locate_o
 /*
 	解析したJSONの種類を判定する関数
 	引数なし
-	返り値: CJSONAnalyzer::JSONKind 解析したJSONの種類
+	返り値: CJSONAnalyzer::AnalyzedJSONKind 解析したJSONの種類
 */
-CJSONAnalyzer::JSONKind CJSONAnalyzer::distinguish_analyzed_JSON_kind() const
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::distinguish_analyzed_JSON_kind() const
 {
-	return JSONKind_Message;
+	AnalyzedJSONKind JSON_kind = AnalyzedJSONKind_UnknownJSON;
+
+	// JSONの種類が判明するまで，JSON種類確認用関数を呼ぶ
+	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_name_decided_JSON() : JSON_kind);
+	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_result_JSON() : JSON_kind);
+	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_message_JSON() : JSON_kind);
+	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_field_JSON() : JSON_kind);
+
+	return JSON_kind;
+}
+
+/*
+	解析したJSONが「名前確定」JSONであるかどうか判定する関数
+	引数なし
+	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「名前確定」JSONであればAnalyzedJSONKind_NameDecided, そうでなければAnalyzedJSONKind_UnknownJSON)
+*/
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_name_decided_JSON() const
+{
+	bool is_contain_all_keys = true;
+	const size_t num_obligatory_key = 1;
+
+	// 必須のキーの存在を確認
+	is_contain_all_keys &= exists_key_in_JSON_object("your_team", m_analyzed_JSON_root_obj);
+
+	// 必須のキーの個数を確認
+	is_contain_all_keys &= m_analyzed_JSON_root_obj.size() == num_obligatory_key;
+	return is_contain_all_keys ? AnalyzedJSONKind_NameDecided : AnalyzedJSONKind_UnknownJSON;
+}
+
+/*
+	解析したJSONが「結果」JSONであるかどうか判定する関数
+	引数なし
+	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「結果」JSONであればAnalyzedJSONKind_Result, そうでなければAnalyzedJSONKind_UnknownJSON)
+*/
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_result_JSON() const
+{
+	bool is_contain_all_keys = true;
+	const size_t num_obligatory_key = 1;
+
+	// 必須のキーの存在を確認
+	is_contain_all_keys &= exists_key_in_JSON_object("result", m_analyzed_JSON_root_obj);
+
+	// 必須のキーの個数を確認
+	is_contain_all_keys &= m_analyzed_JSON_root_obj.size() == num_obligatory_key;
+	return is_contain_all_keys ? AnalyzedJSONKind_Result : AnalyzedJSONKind_UnknownJSON;
+}
+
+/*
+	解析したJSONが「メッセージ」JSONであるかどうか判定する関数
+	引数なし
+	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「メッセージ」JSONであればAnalyzedJSONKind_Message, そうでなければAnalyzedJSONKind_UnknownJSON)
+*/
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_message_JSON() const
+{
+	bool is_contain_all_keys = true;
+	const size_t num_obligatory_key = 1;
+
+	// 必須のキーの存在を確認
+	is_contain_all_keys &= exists_key_in_JSON_object("message", m_analyzed_JSON_root_obj);
+
+	// 必須のキーの個数を確認
+	is_contain_all_keys &= m_analyzed_JSON_root_obj.size() == num_obligatory_key;
+	return is_contain_all_keys ? AnalyzedJSONKind_Message : AnalyzedJSONKind_UnknownJSON;
+}
+
+/*
+	解析したJSONが「盤面」JSONであるかどうか判定する関数
+	引数なし
+	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「盤面」JSONであればAnalyzedJSONKind_Field, そうでなければAnalyzedJSONKind_UnknownJSON)
+*/
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_field_JSON() const
+{
+	bool is_contain_all_keys = true;
+	const size_t num_obligatory_key = 7;
+
+	// 必須のキーの存在を確認
+	is_contain_all_keys &= exists_key_in_JSON_object("width", m_analyzed_JSON_root_obj);
+	is_contain_all_keys &= exists_key_in_JSON_object("height", m_analyzed_JSON_root_obj);
+	is_contain_all_keys &= exists_key_in_JSON_object("turn_team", m_analyzed_JSON_root_obj);
+	is_contain_all_keys &= exists_key_in_JSON_object("players", m_analyzed_JSON_root_obj);
+	is_contain_all_keys &= exists_key_in_JSON_object("finished", m_analyzed_JSON_root_obj);
+	is_contain_all_keys &= exists_key_in_JSON_object("count", m_analyzed_JSON_root_obj);
+	is_contain_all_keys &= exists_key_in_JSON_object("units", m_analyzed_JSON_root_obj);
+
+	// 必須のキーの個数を確認
+	is_contain_all_keys &= m_analyzed_JSON_root_obj.size() == num_obligatory_key;
+	return is_contain_all_keys ? AnalyzedJSONKind_Field : AnalyzedJSONKind_UnknownJSON;
+}
+
+/*
+	指定されたキーが与えられたJSONオブジェクトの中に存在するかどうかを判定する関数
+	引数1: const std::string& key キー
+	引数2: const picojson::object& obj オブジェクト
+	返り値: bool keyがobjに存在するか
+*/
+bool CJSONAnalyzer::exists_key_in_JSON_object(const std::string& key, const picojson::object& obj) const
+{
+	return obj.find(key) != obj.end();
 }
 
 /*
 	解析したJSONの種類と要求しているJSONの種類が一致しているかを判定する関数
-	引数1: const JSONKind req_JSON_kind 要求しているJSONの種類
+	引数1: const AnalyzedJSONKind req_JSON_kind 要求しているJSONの種類
 	返り値なし
 */
-void CJSONAnalyzer::validate_JSON_kind(const JSONKind req_JSON_kind) const
+void CJSONAnalyzer::validate_JSON_kind(const AnalyzedJSONKind req_JSON_kind) const
 {
 	if (req_JSON_kind != m_analyzed_JSON_kind) {
-		// TODO: 例外を投げるようにする?(動作を再考する)
-		fprintf(stderr, "警告: 直前に解析したJSONの種類と要求しているJSONの種類が一致しません\n");
+		throw std::runtime_error("警告: 直前に解析したJSONの種類と要求しているJSONの種類が一致しません");
 	}
 }
