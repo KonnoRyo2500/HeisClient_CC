@@ -2,6 +2,19 @@
 // Author: Ryo Konno
 #pragma once
 
-class CHeisClientException {
+#include <stdexcept>
 
+class CHeisClientException : public std::runtime_error
+{
+	// メンバ関数
+	public:
+		// コンストラクタ
+		explicit CHeisClientException(const char* format, ...);
+
+		// 内容を表示
+		const char* what() const override;
+
+	// メンバ変数
+	private:
+		std::string m_error_message;
 };

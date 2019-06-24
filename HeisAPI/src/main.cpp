@@ -39,7 +39,7 @@ int main()
 		game.play_game();
 #endif
 	}
-	catch (const std::exception & e) {
+	catch (const std::exception& e) {
 		printf("heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
 		exit_code = EXIT_FAILURE;
 	}
