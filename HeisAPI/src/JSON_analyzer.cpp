@@ -159,8 +159,7 @@ void CJSONAnalyzer::analyze_JSON(const std::string& src_JSON)
 		std::string errmsg = picojson::parse(parsed_JSON_val, src_JSON);
 
 		if (errmsg.size() > 0) {
-			fprintf(stderr, "JSONのパースでエラーが発生しました(エラー内容: %s)\n", errmsg.c_str());
-			throw std::runtime_error("JSONのパースに失敗しました");
+			throw CHeisClientException("JSONのパースに失敗しました(エラー内容: %s)", errmsg.c_str());
 		}
 		// JSON -> データへの変換を行いやすくするため，picojson::value -> picojson::objectへの変換を行う
 		m_analyzed_JSON_root_obj = parsed_JSON_val.get<picojson::object>();
@@ -403,6 +402,6 @@ bool CJSONAnalyzer::exists_key_in_JSON_object(const std::string& key, const pico
 void CJSONAnalyzer::validate_JSON_kind(const AnalyzedJSONKind req_JSON_kind) const
 {
 	if (req_JSON_kind != m_analyzed_JSON_kind) {
-		throw std::runtime_error("警告: 直前に解析したJSONの種類と要求しているJSONの種類が一致しません");
+		throw CHeisClientException("直前に解析したJSONの種類と要求しているJSONの種類が一致しません");
 	}
 }

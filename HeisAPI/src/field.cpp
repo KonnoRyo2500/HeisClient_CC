@@ -1,6 +1,7 @@
 ﻿// heis フィールドクラス
 // Author: Ryo Konno
 #include "field.h"
+#include "heis_client_exception.h"
 
 CField* CField::m_instance = NULL;
 
@@ -134,6 +135,6 @@ void CField::validate_position(const int16_t pos_x, const int16_t pos_y) const
 
 	is_position_valid &= (0 <= pos_y && pos_y < FieldParam_Height);
 	if (!is_position_valid) {
-		throw std::runtime_error("指定された座標が不正です");
+		throw CHeisClientException("指定された座標(%d, %d)は不正です", pos_x, pos_y);
 	}
 }

@@ -35,5 +35,7 @@ class CField
 	// メンバ変数
 	private:
 		static CField* m_instance;												// インスタンス
+		// TODO: ID(std::string)のvectorにする(今の実装だと，コマの種類が増えた時に対応できない)
+		// TODO: コマの実体のvectorを作成する(IDのvectorから実体が取れる)
 		std::array<CInfantry*, FieldParam_Width * FieldParam_Height> m_grid;	// フィールドの各マス目
 };

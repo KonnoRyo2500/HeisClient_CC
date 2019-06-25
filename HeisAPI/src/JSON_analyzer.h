@@ -4,6 +4,7 @@
 
 #include "JSON_data_packet.h"
 #include "picojson.h"
+#include "heis_client_exception.h"
 
 class CJSONAnalyzer{
 	// 構造体，列挙体など
@@ -159,7 +160,7 @@ class CJSONAnalyzer{
 			}
 			else {
 				// キーに対応する値がない
-				throw std::runtime_error("JSONが不正です(指定されたキーが存在しません)");
+				throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
 			}
 		}
 
@@ -184,7 +185,7 @@ class CJSONAnalyzer{
 			}
 			else {
 				// キーに対応する値がない
-				throw std::runtime_error("JSONが不正です(指定されたキーが存在しません)");
+				throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
 			}
 		}
 

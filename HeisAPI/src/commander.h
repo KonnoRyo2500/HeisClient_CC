@@ -21,7 +21,7 @@ class CCommander
 		// デストラクタ
 		~CCommander();
 
-		// ステータスの取得
+		// 指定したIDを持つ兵士のステータス取得
 		int16_t get_x_position(const std::string& id) const;
 		int16_t get_y_position(const std::string& id) const;
 		int8_t get_action_remain(const std::string& id) const;

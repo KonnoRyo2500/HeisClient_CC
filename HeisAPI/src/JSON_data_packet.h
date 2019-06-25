@@ -2,6 +2,7 @@
 // Author: Ryo Konno
 #pragma once
 
+#include "heis_client_exception.h"
 #include <string>
 #include <vector>
 
@@ -23,7 +24,7 @@ struct OptionalVal {
 		T get() const
 		{
 			if (m_omit_flag) {
-				throw std::runtime_error("省略された値を取得しようとしています");
+				throw CHeisClientException("省略されたJSONキーを取得しようとしています");
 			}
 			return m_val;
 		}

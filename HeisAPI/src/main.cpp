@@ -40,7 +40,7 @@ int main()
 #endif
 	}
 	catch (const std::exception& e) {
-		printf("heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
+		fprintf(stderr, "heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
 		exit_code = EXIT_FAILURE;
 	}
 	return exit_code;

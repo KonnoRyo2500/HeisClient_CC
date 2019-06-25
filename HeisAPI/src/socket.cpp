@@ -1,7 +1,7 @@
 ﻿// heis TCP/IP通信用ソケットクラス
 // Author: Ryo Konno
-
 #include "socket.h"
+#include "heis_client_exception.h"
 #ifdef WIN32
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -53,9 +53,9 @@ void CSocket::send_to(const std::string& msg) const
 
 	if (static_cast<size_t>(send_size) < msg.size()) {
 		if (send_size < 0) {
-			throw std::runtime_error("送信でエラーが発生しました");
+			throw CHeisClientException("送信でエラーが発生しました(エラーコード: %d)", errno);
 		}
-		fprintf(stderr, "警告: 不完全なメッセージが送信されました\n");
+		fprintf(stderr, "警告: 不完全なメッセージが送信されました(%d文字中%d文字が送信されました)\n", msg.size(), send_size);
 	}
 }
 
@@ -92,7 +92,7 @@ void CSocket::initialize_TCP_socket() const
 	if (init_ercd != 0) {
 		// winsockの初期化失敗
 		// 初期化に失敗すると，その後の処理が不安定になるので失敗したら例外を投げてプログラムを終了させる
-		throw std::runtime_error("winsockの初期化に失敗しました");
+		throw CHeisClientException("winsockの初期化に失敗しました(エラーコード: %d)", init_ercd);
 	}
 #endif // WIN32
 }
@@ -107,7 +107,7 @@ void CSocket::make_TCP_socket()
 {
 	m_sck = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_sck < 0) {
-		throw std::runtime_error("ソケットの作成に失敗しました");
+		throw CHeisClientException("ソケットの作成に失敗しました(エラーコード: %d)", errno);
 	}
 }
 
@@ -126,12 +126,12 @@ void CSocket::connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t 
 	sa.sin_port = htons(dst_port_no);
 	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
 	if (ercd <= 0) {
-		throw std::runtime_error("IPアドレスが不正です");
+		throw CHeisClientException("IPアドレス\"%s\"は不正です", dst_ip_addr.c_str());
 	}
 
 	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
 	if (ercd < 0) {
-		throw std::runtime_error("サーバとの接続に失敗しました");
+		throw CHeisClientException("サーバとの接続に失敗しました(エラーコード: %d)", errno);
 	}
 }
 
@@ -170,7 +170,7 @@ std::string CSocket::recv_from_core_win() const
 	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
 	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
-		throw std::runtime_error("受信でエラーが発生しました");
+		throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
 	}
 	recv_message += std::string(buf);
 
@@ -189,7 +189,7 @@ std::string CSocket::recv_from_core_win() const
 				break;
 			}
 			else {
-				throw std::runtime_error("受信でエラーが発生しました");
+				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
 			}
 		}
 		recv_message += std::string(buf);
@@ -223,7 +223,7 @@ std::string CSocket::recv_from_core_linux() const
 	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
 	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
-		throw std::runtime_error("受信でエラーが発生しました");
+		throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
 	}
 	recv_message += std::string(buf);
 
@@ -238,7 +238,7 @@ std::string CSocket::recv_from_core_linux() const
 				break;
 			}
 			else {
-				throw std::runtime_error("受信でエラーが発生しました");
+				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
 			}
 		}
 		recv_message += std::string(buf);
