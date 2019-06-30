@@ -26,7 +26,7 @@ class CInfantry
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CInfantry(const std::string& team_name, const std::string& infantry_ID, const int16_t init_pos_x, const int16_t init_pos_y);
+		explicit CInfantry(const std::string& team_name, const std::string& infantry_ID, const uint16_t init_pos_x, const uint16_t init_pos_y);
 
 		// デストラクタ
 		~CInfantry();
@@ -34,9 +34,9 @@ class CInfantry
 		// ステータスの取得
 		std::string get_team_name() const;
 		std::string get_id() const;
-		int16_t get_x_position() const;
-		int16_t get_y_position() const;
-		int8_t get_action_remain() const;
+		uint16_t get_x_position() const;
+		uint16_t get_y_position() const;
+		uint8_t get_action_remain() const;
 		int8_t get_hp() const;
 
 		// 行動
@@ -53,16 +53,16 @@ class CInfantry
 
 		bool is_self(const CInfantry* infantry) const;
 
-		int16_t get_neighbor_x_pos(const Direction direction) const;
-		int16_t get_neighbor_y_pos(const Direction direction) const;
+		uint16_t get_neighbor_x_pos(const Direction direction) const;
+		uint16_t get_neighbor_y_pos(const Direction direction) const;
 
 	// メンバ変数
 	private:
 		std::string m_team_name;
 		std::string m_id;
-		// エラー値(負の値)も表現したいので，符号付きの値にする
-		int16_t m_pos_x;
-		int16_t m_pos_y;
-		int8_t m_action_remain;
+		uint16_t m_pos_x;
+		uint16_t m_pos_y;
+		uint8_t m_action_remain;
+		// HPについては，値が負になることも考慮して符号付きの値にする(それ以外の値は，負になることはないので符号なしの値にする)
 		int8_t m_hp;
 };

@@ -22,9 +22,9 @@ class CCommander
 		~CCommander();
 
 		// 指定したIDを持つ兵士のステータス取得
-		int16_t get_x_position(const std::string& id) const;
-		int16_t get_y_position(const std::string& id) const;
-		int8_t get_action_remain(const std::string& id) const;
+		uint16_t get_x_position(const std::string& id) const;
+		uint16_t get_y_position(const std::string& id) const;
+		uint8_t get_action_remain(const std::string& id) const;
 		int8_t get_hp(const std::string& id) const;
 
 		// 行動(指定したIDを持つ兵士への命令)
@@ -46,10 +46,10 @@ class CCommander
 		// インスタンスの生成，削除時の処理
 		void positioning_infantries(const int init_area_width, const int init_area_height, const bool is_bottom_left);
 		void clear_infantries();
-		std::string make_id(const std::string& prefix, const int16_t number);
+		std::string make_id(const std::string& prefix, const uint16_t number);
 
 		// 兵士の追加，削除
-		void append_infantry(const std::string& id, const int16_t pos_x, const int16_t pos_y);
+		void append_infantry(const std::string& id, const uint16_t pos_x, const uint16_t pos_y);
 		void remove_infantry(const std::string& id);
 
 		// 兵士の探索

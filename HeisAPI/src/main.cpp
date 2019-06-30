@@ -25,7 +25,7 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-#if 1
+#if 0
 		CJSONAnalyzer json_analyzer;
 		printf("「行動」JSON: %s\n", json_analyzer.create_action_JSON(create_sample_action_pkt()).c_str());
 		printf("「名前」JSON: %s\n", json_analyzer.create_name_JSON(create_sample_name_pkt()).c_str());

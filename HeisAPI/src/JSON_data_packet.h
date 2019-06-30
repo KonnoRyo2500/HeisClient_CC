@@ -67,16 +67,16 @@ struct OptionalVal {
 // 「行動」パケット -> contents(配列)の要素
 struct ContentsArrayElem {
 	std::string unit_id;		// "unit_id"フィールドの値
-	int16_t to_x;				// "to"."x"フィールドの値
-	int16_t to_y;				// "to"."y"フィールドの値
-	int16_t atk_x;				// "atk"."x"フィールドの値
-	int16_t atk_y;				// "atk"."y"フィールドの値
+	uint16_t to_x;				// "to"."x"フィールドの値
+	uint16_t to_y;				// "to"."y"フィールドの値
+	uint16_t atk_x;				// "atk"."x"フィールドの値
+	uint16_t atk_y;				// "atk"."y"フィールドの値
 };
 
 // 「盤面」パケット -> units -> locate(オブジェクト)のデータ
 struct LocateObjData {
-	int16_t x;		// "x"(フィールド)
-	int16_t y;		// "y"(フィールド)
+	uint16_t x;		// "x"(フィールド)
+	uint16_t y;		// "y"(フィールド)
 };
 
 // 「盤面」パケット -> unitsの要素
@@ -111,8 +111,8 @@ struct JSONSendPacket_Action {
 
 // 「盤面」パケット
 struct JSONRecvPacket_Field {
-	int16_t width;								// "width"(フィールド)
-	int16_t height;								// "height"(フィールド)
+	uint16_t width;								// "width"(フィールド)
+	uint16_t height;								// "height"(フィールド)
 	std::string turn_team;						// "turn_team"(フィールド)
 	std::vector<std::string> players;			// "players"(配列)
 	bool finished;								// "finished"(フィールド)

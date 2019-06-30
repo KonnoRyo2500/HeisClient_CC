@@ -133,8 +133,8 @@ JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JS
 	// JSONからデータ作成
 	JSONRecvPacket_Field field_pkt;
 
-	field_pkt.width = get_obligatory_number_val<int16_t>("width", m_analyzed_JSON_root_obj);
-	field_pkt.height = get_obligatory_number_val<int16_t>("height", m_analyzed_JSON_root_obj);
+	field_pkt.width = get_obligatory_number_val<uint16_t>("width", m_analyzed_JSON_root_obj);
+	field_pkt.height = get_obligatory_number_val<uint16_t>("height", m_analyzed_JSON_root_obj);
 	field_pkt.turn_team = get_obligatory_not_number_val<std::string>("turn_team", m_analyzed_JSON_root_obj);
 	field_pkt.finished = get_obligatory_not_number_val<bool>("finished", m_analyzed_JSON_root_obj);
 	field_pkt.count = get_obligatory_number_val<uint32_t>("count", m_analyzed_JSON_root_obj);
@@ -282,8 +282,8 @@ LocateObjData CJSONAnalyzer::make_locate_object(const picojson::object& locate_o
 {
 	LocateObjData locate_data;
 
-	locate_data.x = get_obligatory_number_val<int16_t>("x", locate_obj);
-	locate_data.y = get_obligatory_number_val<int16_t>("y", locate_obj);
+	locate_data.x = get_obligatory_number_val<uint16_t>("x", locate_obj);
+	locate_data.y = get_obligatory_number_val<uint16_t>("y", locate_obj);
 	return locate_data;
 }
 

@@ -10,10 +10,10 @@
 	コンストラクタ
 	引数1: const std::string& team_name 所属チーム名
 	引数2: const std::string& infantry_ID ID
-	引数3: const int16_t init_pos_x 初期位置のx座標
-	引数4: const int16_t init_pos_y 初期位置のy座標
+	引数3: const uint16_t init_pos_x 初期位置のx座標
+	引数4: const uint16_t init_pos_y 初期位置のy座標
 */
-CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_ID, const int16_t init_pos_x, const int16_t init_pos_y)
+CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_ID, const uint16_t init_pos_x, const uint16_t init_pos_y)
 	: m_id(infantry_ID)
 	, m_hp(InitialValue_HP)
 	, m_team_name(team_name)
@@ -56,9 +56,9 @@ std::string CInfantry::get_id() const
 /*
 	兵士のx座標を取得する関数
 	引数なし
-	返り値: int16_t 兵士のx座標
+	返り値: uint16_t 兵士のx座標
 */
-int16_t CInfantry::get_x_position() const
+uint16_t CInfantry::get_x_position() const
 {
 	return m_pos_x;
 }
@@ -66,9 +66,9 @@ int16_t CInfantry::get_x_position() const
 /*
 	兵士のy座標を取得する関数
 	引数なし
-	返り値: int16_t 兵士のy座標
+	返り値: uint16_t 兵士のy座標
 */
-int16_t CInfantry::get_y_position() const
+uint16_t CInfantry::get_y_position() const
 {
 	return m_pos_y;
 }
@@ -76,9 +76,9 @@ int16_t CInfantry::get_y_position() const
 /*
 	兵士の残り行動回数を取得する関数
 	引数なし
-	返り値: int8_t 兵士の残り行動回数
+	返り値: uint8_t 兵士の残り行動回数
 */
-int8_t CInfantry::get_action_remain() const
+uint8_t CInfantry::get_action_remain() const
 {
 	return m_action_remain;
 }
@@ -267,11 +267,11 @@ bool CInfantry::is_self(const CInfantry* infantry) const
 /*
 	フィールドのマスのうち，指定した方向に隣接したマスのx座標を取得する関数
 	引数1: const Direction direction 方向
-	返り値: int16_t x座標
+	返り値: uint16_t x座標
 */
-int16_t CInfantry::get_neighbor_x_pos(const Direction direction) const
+uint16_t CInfantry::get_neighbor_x_pos(const Direction direction) const
 {
-	int16_t dst_x_pos;
+	uint16_t dst_x_pos;
 
 	switch (direction) {
 		case Direction_Left:
@@ -298,11 +298,11 @@ int16_t CInfantry::get_neighbor_x_pos(const Direction direction) const
 /*
 	フィールドのマスのうち，指定した方向に隣接したマスのy座標を取得する関数
 	引数1: const Direction direction 方向
-	返り値: int16_t y座標
+	返り値: uint16_t y座標
 */
-int16_t CInfantry::get_neighbor_y_pos(const Direction direction) const
+uint16_t CInfantry::get_neighbor_y_pos(const Direction direction) const
 {
-	int16_t dst_y_pos;
+	uint16_t dst_y_pos;
 
 	switch (direction) {
 	case Direction_Up:

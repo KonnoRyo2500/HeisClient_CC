@@ -44,9 +44,9 @@ CCommander::~CCommander()
 /*
 	指定したIDを持つ兵士のx座標を取得する関数
 	引数1: (const std::string& id ID
-	返り値: int16_t 兵士のx座標(指定したIDの兵士がいなければ-1)
+	返り値: uint16_t 兵士のx座標(指定したIDの兵士がいなければ-1)
 */
-int16_t CCommander::get_x_position(const std::string& id) const
+uint16_t CCommander::get_x_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
@@ -61,9 +61,9 @@ int16_t CCommander::get_x_position(const std::string& id) const
 /*
 	指定したIDを持つ兵士のy座標を取得する関数
 	引数1: (const std::string& id ID
-	返り値: int16_t 兵士のy座標(指定したIDの兵士がいなければ-1)
+	返り値: uint16_t 兵士のy座標(指定したIDの兵士がいなければ-1)
 */
-int16_t CCommander::get_y_position(const std::string& id) const
+uint16_t CCommander::get_y_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
@@ -78,9 +78,9 @@ int16_t CCommander::get_y_position(const std::string& id) const
 /*
 	指定したIDを持つ兵士の残り行動回数を取得する関数
 	引数1: (const std::string& id ID
-	返り値: int16_t 兵士の残り行動回数(指定したIDの兵士がいなければ-1)
+	返り値: uint8_t 兵士の残り行動回数(指定したIDの兵士がいなければ-1)
 */
-int8_t CCommander::get_action_remain(const std::string& id) const
+uint8_t CCommander::get_action_remain(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
@@ -95,7 +95,7 @@ int8_t CCommander::get_action_remain(const std::string& id) const
 /*
 	指定したIDを持つ兵士のHPを取得する関数
 	引数1: (const std::string& id ID
-	返り値: int16_t 兵士のHP(指定したIDの兵士がいなければ-1)
+	返り値: int8_t 兵士のHP(指定したIDの兵士がいなければ-1)
 */
 int8_t CCommander::get_hp(const std::string& id) const
 {
@@ -239,8 +239,8 @@ void CCommander::positioning_infantries(const int init_area_width, const int ini
 {
 	int num_infantry = 0;
 
-	for (int16_t y = 0; y < init_area_height; y++) {
-		for (int16_t x = 0; x < init_area_width; x++) {
+	for (uint16_t y = 0; y < init_area_height; y++) {
+		for (uint16_t x = 0; x < init_area_width; x++) {
 			if (is_bottom_left) {
 				append_infantry(make_id(m_team_name.substr(0, 2), num_infantry), x, y);
 			}
@@ -270,11 +270,11 @@ void CCommander::clear_infantries()
 /*
 	兵士を自チームに追加する関数
 	引数1: const std::string& id 追加する兵士のID
-	引数2: const int16_t pos_x 追加する兵士のx座標
-	引数3: const int16_t pos_y 追加する兵士のy座標
+	引数2: const uint16_t pos_x 追加する兵士のx座標
+	引数3: const uint16_t pos_y 追加する兵士のy座標
 	返り値なし
 */
-void CCommander::append_infantry(const std::string& id, const int16_t pos_x, const int16_t pos_y)
+void CCommander::append_infantry(const std::string& id, const uint16_t pos_x, const uint16_t pos_y)
 {
 	if (search_infantry_by_id(id) != NULL) {
 		return;
@@ -288,10 +288,10 @@ void CCommander::append_infantry(const std::string& id, const int16_t pos_x, con
 /*
 	兵士のIDを作成する関数
 	引数1: const std::string& prefix 接頭辞(IDの先頭につく2文字のアルファベット)
-	引数2: const int16_t number IDの数字部分
+	引数2: const uint16_t number IDの数字部分
 	返り値: std::string 作成されたID
 */
-std::string CCommander::make_id(const std::string& prefix, const int16_t number)
+std::string CCommander::make_id(const std::string& prefix, const uint16_t number)
 {
 	char id[10];
 
