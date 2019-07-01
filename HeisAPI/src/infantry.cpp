@@ -192,7 +192,7 @@ std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 	返り値なし
 	注意: この関数は，内部処理を行うためのものなので，ユーザAIはこの関数を呼んではいけない
 */
-void CInfantry::update_status()
+void CInfantry::update()
 {
 	CField* field = CField::get_instance();
 	CInfantry* field_infantry = field->get_infantry(m_pos_x, m_pos_y);

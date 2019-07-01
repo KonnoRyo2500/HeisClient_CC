@@ -79,7 +79,7 @@ void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry*
 	引数なし
 	返り値なし
 */
-void CField::update_field()
+void CField::update()
 {
 	
 }

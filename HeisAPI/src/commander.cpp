@@ -213,14 +213,14 @@ void CCommander::show_infantry_ids()
 	引数なし
 	返り値なし
 */
-void CCommander::update_all_infantries()
+void CCommander::update()
 {
 	for (CInfantry* infantry : m_infantries) {
 		if (infantry->get_hp() <= 0) {
 			remove_infantry(infantry->get_id());
 		}
 		else {
-			infantry->update_status();
+			infantry->update();
 		}
 	}
 }

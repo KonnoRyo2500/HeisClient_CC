@@ -65,8 +65,8 @@ void CGameLocal::prepare_to_battle()
 */
 void CGameLocal::turn_entry()
 {
-	m_my_commander->update_all_infantries();
-	m_enemy_commander->update_all_infantries();
+	m_my_commander->update();
+	m_enemy_commander->update();
 }
 
 /*

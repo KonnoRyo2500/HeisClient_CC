@@ -45,7 +45,7 @@ class CInfantry
 		std::vector<NeighborInfantryData> look_around() const;
 
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
-		void update_status();
+		void update();
 
 	private:
 		void attacked();

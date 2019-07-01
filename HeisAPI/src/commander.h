@@ -37,7 +37,7 @@ class CCommander
 		std::vector<std::string> get_all_attackable_infantry_ids() const;
 
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
-		void update_all_infantries();
+		void update();
 
 		// デバッグ用
 		void show_infantry_ids();
