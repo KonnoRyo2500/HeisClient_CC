@@ -3,6 +3,7 @@
 #pragma once
 
 #include "infantry.h"
+#include "JSON_data_packet.h"
 #include <array>
 
 // ユーザAIはこのクラスの関数を呼ばないこと
@@ -23,7 +24,7 @@ class CField
 		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
 	
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
-		void update();
+		void update(const JSONRecvPacket_Field& field_pkt);
 
 		// デバッグ，動作確認用
 		void show();

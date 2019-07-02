@@ -75,11 +75,11 @@ void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry*
 }
 
 /*
-	フィールドの状態を更新する関数
-	引数なし
+	「盤面」パケットの内容から，フィールドの状態を更新する関数
+	引数1: const JSONRecvPacket_Field& field_pkt 「盤面」パケット
 	返り値なし
 */
-void CField::update()
+void CField::update(const JSONRecvPacket_Field& field_pkt)
 {
 	
 }
