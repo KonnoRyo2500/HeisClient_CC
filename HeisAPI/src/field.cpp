@@ -5,6 +5,8 @@
 
 CField* CField::m_instance = NULL;
 
+/* 注) 座標は，最も左上のマスを(0, 0)とする */
+
 /* public関数 */
 
 /*
@@ -46,8 +48,6 @@ void CField::delete_field()
 	引数1: const uint16_t pos_x 取得したい兵士のいるx座標
 	引数2: const uint16_t pos_y 取得したい兵士のいるy座標
 	返り値: CInfantry* 指定された座標にいる兵士(存在しなければNULL)
-	例外: 指定した座標が範囲外のとき
-	備考: 座標は，最も左上のマスを(0, 0)とする
 */
 CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) const
 {
@@ -62,16 +62,33 @@ CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) cons
 	引数1: const uint16_t pos_x 兵士を配置するx座標
 	引数2: const uint16_t pos_y 兵士を配置するy座標
 	引数3: CInfantry* infantry 配置する兵士
+	例外: NULLの兵士を配置しようとしたとき
 	返り値なし
-	例外: 指定した座標が範囲外のとき
-	備考: 座標は，最も左上のマスを(0, 0)とする
 */
 void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry)
 {
 	// 指定された座標が不正でないかどうかチェック
 	validate_position(pos_x, pos_y);
+	// 兵士がNULLの場合は，マスから兵士を削除することになってしまうので不正
+	if (infantry == NULL) {
+		throw CHeisClientException("配置しようとしている兵士がNULLです．remove_infantry関数を呼ぶようにしてください");
+	}
 
 	m_grid[pos_x + (FieldParam_Width * pos_y)] = infantry;
+}
+
+/*
+	指定した座標にいる兵士を削除する関数
+	引数1: const uint16_t pos_x 削除する兵士のいるx座標
+	引数2: const uint16_t pos_y 削除する兵士のいるy座標
+	返り値なし
+*/
+void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
+{
+	// 指定された座標が不正でないかどうかチェック
+	validate_position(pos_x, pos_y);
+
+	m_grid[pos_x + (FieldParam_Width * pos_y)] = NULL;
 }
 
 /*

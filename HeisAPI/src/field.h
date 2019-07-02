@@ -22,6 +22,7 @@ class CField
 		// マス目情報(各マスにいる兵士の情報)の管理
 		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
 		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
+		void remove_infantry(const uint16_t pos_x, const uint16_t pos_y);
 	
 		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
 		void update(const JSONRecvPacket_Field& field_pkt);

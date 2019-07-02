@@ -30,7 +30,7 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_I
 */
 CInfantry::~CInfantry()
 {
-	CField::get_instance()->set_infantry(m_pos_x, m_pos_y, NULL);
+	CField::get_instance()->remove_infantry(m_pos_x, m_pos_y);
 }
 
 /*
@@ -145,7 +145,7 @@ void CInfantry::move(const Direction direction)
 	try {
 		CInfantry* dst_infantry = field->get_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction));
 		if (dst_infantry == NULL) {
-			field->set_infantry(m_pos_x, m_pos_y, NULL);
+			field->remove_infantry(m_pos_x, m_pos_y);
 			field->set_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction), this);
 
 			m_pos_x = get_neighbor_x_pos(direction);
