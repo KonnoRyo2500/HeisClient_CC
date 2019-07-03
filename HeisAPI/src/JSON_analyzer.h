@@ -85,12 +85,9 @@ class CJSONAnalyzer{
 			OptionalVal<T> ret_optional_val;
 
 			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				/*
-					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない
-					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
-					これを防ぐため，const_castで一旦const修飾子を外す
-				*/
-				ret_optional_val.set_val(static_cast<T>(const_cast<picojson::object&>(src_JSON_obj)[key].get<double>()));
+				// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
+				// std::mapの[]演算子は非const関数のため，at関数を用いる
+				ret_optional_val.set_val(static_cast<T>(src_JSON_obj.at(key).get<double>()));
 				ret_optional_val.clear_omit_flag();
 			}
 			else {
@@ -118,12 +115,8 @@ class CJSONAnalyzer{
 			OptionalVal<T> ret_optional_val;
 
 			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				/*
-					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない
-					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
-					これを防ぐため，const_castで一旦const修飾子を外す
-				*/
-				ret_optional_val.set_val(const_cast<picojson::object&>(src_JSON_obj)[key].get<T>());
+				// std::mapの[]演算子は非const関数のため，at関数を用いる
+				ret_optional_val.set_val(src_JSON_obj.at(key).get<T>());
 				ret_optional_val.clear_omit_flag();
 			}
 			else {
@@ -149,14 +142,9 @@ class CJSONAnalyzer{
 		T get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
 		{
 			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				// 指定したキーがある場合のみ，解析したJSONから要素を取得する
 				// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
-				/*
-					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない
-					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
-					これを防ぐため，const_castで一旦const修飾子を外す
-				*/
-				return static_cast<T>(const_cast<picojson::object&>(src_JSON_obj)[key].get<double>());
+				// std::mapの[]演算子は非const関数のため，at関数を用いる
+				return static_cast<T>(src_JSON_obj.at(key).get<double>());
 			}
 			else {
 				// キーに対応する値がない
@@ -175,13 +163,8 @@ class CJSONAnalyzer{
 		T get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
 		{
 			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				// 指定したキーがある場合のみ，解析したJSONから要素を取得する
-				/*
-					std::mapの実装上，[]演算子を用いてobjectからvalueを取り出す場合，objectはconstにできない(constにするとコンパイルエラーになる)
-					しかし，引数のsrc_JSON_objをconstなしにしてしまうと，呼び出し側で不一致が生じる可能性がある(値の変更がない関数なのに引数がconstでないなど)
-					これを防ぐため，const_castで一旦const修飾子を外す
-				*/
-				return const_cast<picojson::object&>(src_JSON_obj)[key].get<T>();
+				// std::mapの[]演算子は非const関数のため，at関数を用いる
+				return src_JSON_obj.at(key).get<T>();
 			}
 			else {
 				// キーに対応する値がない
