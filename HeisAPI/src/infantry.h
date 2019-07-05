@@ -44,9 +44,6 @@ class CInfantry
 		void move(const Direction direction);
 		std::vector<NeighborInfantryData> look_around() const;
 
-		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
-		void update();
-
 	private:
 		void attacked();
 		void reset_action_remain();

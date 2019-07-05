@@ -24,6 +24,10 @@ class CField
 		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
 		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
 		void remove_infantry(const uint16_t pos_x, const uint16_t pos_y);
+
+		// フィールド情報の取得
+		uint16_t get_width();
+		uint16_t get_height();
 	
 		// フィールドの更新
 		void update(const JSONRecvPacket_Field& field_pkt);

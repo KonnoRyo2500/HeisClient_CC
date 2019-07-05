@@ -36,22 +36,13 @@ class CCommander
 		std::vector<std::string> get_all_movable_infantry_ids() const;
 		std::vector<std::string> get_all_attackable_infantry_ids() const;
 
-		// 内部処理用(ユーザAIはこの処理を呼ばないこと)
+		// 兵士の情報を更新
 		void update();
 
 		// デバッグ用
 		void show_infantry_ids();
 
 	private:
-		// インスタンスの生成，削除時の処理
-		void positioning_infantries(const int init_area_width, const int init_area_height, const bool is_bottom_left);
-		void clear_infantries();
-		std::string make_id(const std::string& prefix, const uint16_t number);
-
-		// 兵士の追加，削除
-		void append_infantry(const std::string& id, const uint16_t pos_x, const uint16_t pos_y);
-		void remove_infantry(const std::string& id);
-
 		// 兵士の探索
 		CInfantry* search_infantry_by_id(const std::string& id) const;
 		bool is_actable(const CInfantry* infantry) const;

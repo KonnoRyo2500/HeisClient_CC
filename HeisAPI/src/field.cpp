@@ -107,6 +107,26 @@ void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
 }
 
 /*
+	フィールドの幅を取得する関数
+	引数なし
+	返り値: uint16_t フィールドの幅
+*/
+uint16_t CField::get_width()
+{
+	return m_width;
+}
+
+/*
+	フィールドの高さを取得する関数
+	引数なし
+	返り値: uint16_t フィールドの高さ
+*/
+uint16_t CField::get_height()
+{
+	return m_height;
+}
+
+/*
 	「盤面」パケットの内容から，フィールドの状態を更新する関数
 	引数1: const JSONRecvPacket_Field& field_pkt 「盤面」パケット
 	返り値なし

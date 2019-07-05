@@ -51,8 +51,8 @@ void CGameLocal::prepare_to_battle()
 	CField::create_field();
 
 	// 兵士の初期配置はここで行われる
-	m_my_commander = new CCommander(m_my_team_name, InitAreaParam_Width, InitAreaParam_Height, is_my_team_bottom_left);
-	m_enemy_commander = new CCommander(m_enemy_team_name, InitAreaParam_Width, InitAreaParam_Height, !is_my_team_bottom_left);
+	m_my_commander = new CCommander(m_my_team_name);
+	m_enemy_commander = new CCommander(m_enemy_team_name);
 
 	m_my_AI = new CUserAI(m_my_commander);
 	m_enemy_AI = new CUserAI(m_enemy_commander);

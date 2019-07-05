@@ -186,45 +186,6 @@ std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 	return neighbor_infantries;
 }
 
-/*
-	更新後のフィールドに合わせて，自身のステータスを修正する関数
-	引数なし
-	返り値なし
-	注意: この関数は，内部処理を行うためのものなので，ユーザAIはこの関数を呼んではいけない
-*/
-void CInfantry::update()
-{
-	CField* field = CField::get_instance();
-	CInfantry* field_infantry = field->get_infantry(m_pos_x, m_pos_y);
-
-	// 残り行動回数をリセットする
-	reset_action_remain();
-
-	// メンバ変数で持っている現在位置とフィールド上の位置が一致していたら，即終了
-	if (is_self(field_infantry)) {
-		// HPに関しては修正の可能性があるので修正する
-		m_hp = field_infantry->get_hp();
-		return;
-	}
-
-	// 一致していなければ，フィールドを全探索して兵士を探す
-	for (int y = 0; y < FieldParam_Height; y++) {
-		for (int x = 0; x < FieldParam_Width; x++) {
-			field_infantry = field->get_infantry(x, y);
-
-			if (is_self(field_infantry)) {
-				m_pos_x = x;
-				m_pos_y = y;
-				m_hp = field_infantry->get_hp();
-				return;
-			}
-		}
-	}
-
-	// 探してもいなければ，その兵士は死んだことにする
-	m_hp = 0;
-}
-
 /* private関数 */
 
 /*
