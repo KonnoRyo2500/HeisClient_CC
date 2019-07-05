@@ -323,6 +323,7 @@ void CCommander::remove_infantry(const std::string& id)
 	}
 
 	delete del_infantry;
+	del_infantry = NULL;
 }
 
 /*

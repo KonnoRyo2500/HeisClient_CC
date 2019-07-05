@@ -5,6 +5,8 @@
 
 CField* CField::m_instance = NULL;
 
+const std::string CField::EMPTY_ID = "";
+
 /* 注) 座標は，最も左上のマスを(0, 0)とする */
 
 /* public関数 */
@@ -54,7 +56,11 @@ CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) cons
 	// 指定された座標が不正でないかどうかチェック
 	validate_position(pos_x, pos_y);
 
-	return m_grid[pos_x + (FieldParam_Width * pos_y)];
+	CInfantry* infantry = find_infantry_by_id(m_grid[pos_x + (m_width * pos_y)]);
+	if (infantry != NULL) {
+		return infantry;
+	}
+	return NULL;
 }
 
 /*
@@ -69,18 +75,20 @@ void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry*
 {
 	// 指定された座標が不正でないかどうかチェック
 	validate_position(pos_x, pos_y);
-	// 兵士がNULLの場合は，マスから兵士を削除することになってしまうので不正
+	// 兵士がNULLの場合は，IDを取得できないので不正
 	if (infantry == NULL) {
 		throw CHeisClientException("配置しようとしている兵士がNULLです．remove_infantry関数を呼ぶようにしてください");
 	}
 
-	m_grid[pos_x + (FieldParam_Width * pos_y)] = infantry;
+	add_infantry(infantry);
+	m_grid[pos_x + (m_width * pos_y)] = infantry->get_id();
 }
 
 /*
 	指定した座標にいる兵士を削除する関数
 	引数1: const uint16_t pos_x 削除する兵士のいるx座標
 	引数2: const uint16_t pos_y 削除する兵士のいるy座標
+	例外: 削除しようとした兵士がフィールド上に存在しないとき
 	返り値なし
 */
 void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
@@ -88,7 +96,14 @@ void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
 	// 指定された座標が不正でないかどうかチェック
 	validate_position(pos_x, pos_y);
 
-	m_grid[pos_x + (FieldParam_Width * pos_y)] = NULL;
+	CInfantry* infantry = find_infantry_by_id(m_grid[pos_x + (m_width * pos_y)]);
+	if (infantry != NULL) {
+		m_all_infantries.erase(m_grid[pos_x + (m_width * pos_y)]);
+	}
+	else {
+		throw CHeisClientException("削除しようとした兵士がフィールドに存在しません");
+	}
+	m_grid[pos_x + (m_width * pos_y)] = EMPTY_ID;
 }
 
 /*
@@ -98,7 +113,18 @@ void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
 */
 void CField::update(const JSONRecvPacket_Field& field_pkt)
 {
-	
+	// 最初の「盤面」パケットを受け取ったときに，フィールドのマス目が構成される
+	if (m_width == 0 && m_height == 0) {
+		m_width = field_pkt.width;
+		m_height = field_pkt.height;
+		create_grid(field_pkt.width, field_pkt.height);
+	}
+	validate_size(field_pkt.width, field_pkt.height);
+
+	// フィールドの各兵士の状態を，「盤面」パケットに記載された各兵士の状態と合わせる
+	delete_all_infantries();
+	clear_grid();
+	relocate_all_infantries_from_units_array(field_pkt.units);
 }
 
 /*
@@ -109,8 +135,8 @@ void CField::update(const JSONRecvPacket_Field& field_pkt)
 */
 void CField::show()
 {
-	for (int y = 0; y < FieldParam_Height; y++) {
-		for (int x = 0; x < FieldParam_Width; x++) {
+	for (int y = 0; y < m_height; y++) {
+		for (int x = 0; x < m_width; x++) {
 			CInfantry* infantry = get_infantry(x, y);
 
 			if (infantry == NULL) {
@@ -135,7 +161,81 @@ void CField::show()
 */
 void CField::initalize()
 {
-	m_grid.fill(NULL);
+	m_width = 0;
+	m_height = 0;
+}
+
+/*
+	指定されたサイズで，フィールドのマス目を作成する関数
+	引数1: const uint16_t width 作成するフィールドの幅
+	引数2: const uint16_t height 作成するフィールドの高さ
+	返り値なし
+	備考: 作成される各マス目は空
+*/
+void CField::create_grid(const uint16_t width, const uint16_t height)
+{
+	validate_size(width, height);
+	m_grid.resize(width * height);
+	std::fill(m_grid.begin(), m_grid.end(), EMPTY_ID);
+}
+
+/*
+	フィールドのすべてのマス目を空にする関数
+	引数なし
+	返り値なし
+*/
+void CField::clear_grid()
+{
+	std::fill(m_grid.begin(), m_grid.end(), EMPTY_ID);
+}
+
+/*
+	指定されたIDから，兵士リスト中の兵士を取得する関数
+	引数1: const std::string& infantry_id 対象の兵士のID
+	返り値: CInfantry* 取得した兵士(兵士リスト中に，infantry_idをIDとして持つ兵士がいなければNULL)
+*/
+CInfantry* CField::find_infantry_by_id(const std::string& infantry_id) const
+{
+	auto infantry_it = m_all_infantries.find(infantry_id);
+	return infantry_it != m_all_infantries.end() ? infantry_it->second : NULL;
+}
+
+/*
+	兵士リスト中の兵士をすべて削除する関数
+	引数なし
+	返り値なし
+*/
+void CField::delete_all_infantries()
+{
+	// 兵士のリストをクリア
+	for (auto& it : m_all_infantries) {
+		delete it.second;
+		it.second = NULL;
+	}
+	m_all_infantries.clear();
+}
+
+/*
+	兵士リストに，兵士を追加する関数
+	引数1: CInfantry* new_infantry 追加する兵士
+	返り値なし
+*/
+void CField::add_infantry(CInfantry* new_infantry)
+{
+	m_all_infantries.insert(std::make_pair(new_infantry->get_id(), new_infantry));
+}
+
+/*
+	「盤面」パケットの"units"配列の情報から，兵士を再配置する関数
+	引数1: const std::vector<UnitsArrayElem>& units_array 「盤面」パケットの"units"配列
+	返り値なし
+*/
+void CField::relocate_all_infantries_from_units_array(const std::vector<UnitsArrayElem>& units_array)
+{
+	for (auto& infantry_data : units_array) {
+		CInfantry* infantry = new CInfantry(infantry_data.team, infantry_data.unit_id, infantry_data.locate.x, infantry_data.locate.y);
+		set_infantry(infantry_data.locate.x, infantry_data.locate.y, infantry);
+	}
 }
 
 /*
@@ -147,11 +247,29 @@ void CField::initalize()
 */
 void CField::validate_position(const uint16_t pos_x, const uint16_t pos_y) const
 {
-	// if文で条件判定すると条件文が長くなるのでこのような書き方をした
-	bool is_position_valid = (0 <= pos_x && pos_x < FieldParam_Width);
+	// if文で条件判定すると条件式が長くなるのでこのような書き方をした
+	bool is_position_valid = (0 <= pos_x && pos_x < m_width);
 
-	is_position_valid &= (0 <= pos_y && pos_y < FieldParam_Height);
+	is_position_valid &= (0 <= pos_y && pos_y < m_height);
 	if (!is_position_valid) {
 		throw CHeisClientException("指定された座標(%d, %d)は不正です", pos_x, pos_y);
+	}
+}
+
+/*
+	「盤面」パケットから得られたフィールドのサイズを検証する関数
+	引数1: const uint16_t width フィールドの幅
+	引数2: const uint16_t height フィールドの高さ
+	返り値なし
+	例外1: フィールドの幅もしくは高さが0以下のとき
+	例外2: フィールドの幅もしくは高さが過去に受け取った「盤面」パケットの値と異なるとき
+*/
+void CField::validate_size(const uint16_t width, const uint16_t height) const
+{
+	if (width <= 0 || height <= 0) {
+		throw CHeisClientException("フィールドのサイズが不正です(サイズ: %d * %d)", width, height);
+	}
+	if (width != m_width || height != m_height) {
+		throw CHeisClientException("フィールドのサイズが，過去に受信した「盤面」パケットから得られたサイズと異なります(今回のサイズ: %d * %d, これまでのサイズ: %d * %d)", width, height, m_width, m_height);
 	}
 }
