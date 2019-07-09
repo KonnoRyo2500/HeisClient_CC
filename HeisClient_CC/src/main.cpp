@@ -3,7 +3,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include "JSON_analyzer.h"
+#include "pseudo_server.h"
 #include "game_local.h"
+#include "field.h"
 
 // デバッグ用関数
 static JSONSendPacket_Action create_sample_action_pkt();
@@ -25,14 +27,20 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-#if 0
+#if 1
+		CPseudoServer ps;
 		CJSONAnalyzer json_analyzer;
-		printf("「行動」JSON: %s\n", json_analyzer.create_action_JSON(create_sample_action_pkt()).c_str());
-		printf("「名前」JSON: %s\n", json_analyzer.create_name_JSON(create_sample_name_pkt()).c_str());
-		show_name_decided_pkt(json_analyzer.create_name_decided_pkt(create_sample_name_decided_JSON()));
-		show_message_pkt(json_analyzer.create_message_pkt(create_sample_message_JSON()));
-		show_result_pkt(json_analyzer.create_result_pkt(create_sample_result_JSON()));
-		show_field_pkt(json_analyzer.create_field_pkt(create_sample_field_JSON()));
+
+		printf("最初の「盤面」JSON: %s\n", ps.send_initial_field_json().c_str());
+		printf("「名前決定」JSON: %s\n", ps.send_name_decided_json().c_str());
+		printf("名前要求の「メッセージ」JSON: %s\n", ps.send_name_req_message_json().c_str());
+		printf("「結果」JSON: %s\n", ps.send_result_json().c_str());
+
+		CField::create_field();
+		CField* field = CField::get_instance();
+
+		field->update(json_analyzer.create_field_pkt(ps.send_initial_field_json()));
+		field->show();
 #else
 		CGameLocal game;
 

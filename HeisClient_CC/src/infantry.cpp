@@ -21,7 +21,11 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_I
 	, m_pos_y(init_pos_y)
 	, m_action_remain(InitialValue_ActionRemain)
 {
-	CField::get_instance()->set_infantry(init_pos_x, init_pos_y, this);
+	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから配置するようにする
+	CField* field = CField::get_instance();
+	if (field != NULL && (field->get_width() != 0 && field->get_height() != 0)) {
+		field->set_infantry(init_pos_x, init_pos_y, this);
+	}
 }
 
 /*
@@ -30,7 +34,11 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_I
 */
 CInfantry::~CInfantry()
 {
-	CField::get_instance()->remove_infantry(m_pos_x, m_pos_y);
+	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから削除するようにする
+	CField* field = CField::get_instance();
+	if (field != NULL && (field->get_width() != 0 && field->get_height() != 0)) {
+		field->remove_infantry(m_pos_x, m_pos_y);
+	}
 }
 
 /*
