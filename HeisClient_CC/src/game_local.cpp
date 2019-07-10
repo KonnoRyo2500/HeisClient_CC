@@ -19,16 +19,24 @@ void CGameLocal::play_game()
 	prepare_to_battle();
 
 	// 対戦
-	while ((battle_result = judge_battle_result()) == BattleResult_Remain) {
+
+	bool is_my_turn = false;
+	do {
 		// ターン開始時処理
 		turn_entry();
 
 		// ユーザAIの行動
-		m_my_AI->AI_main();
-		m_enemy_AI->AI_main();
+		if (is_my_turn) {
+			m_my_AI->AI_main();
+			is_my_turn = false;
+		}
+		else {
+			m_enemy_AI->AI_main();
+			is_my_turn = true;
+		}
 
 		CField::get_instance()->show();
-	}
+	} while ((battle_result = judge_battle_result()) == BattleResult_Remain);
 
 	// 対戦終了後処理
 	cleanup_after_battle();
@@ -56,6 +64,10 @@ void CGameLocal::prepare_to_battle()
 
 	m_my_AI = new CUserAI(m_my_commander);
 	m_enemy_AI = new CUserAI(m_enemy_commander);
+
+	m_json_analyzer = new CJSONAnalyzer();
+
+	m_pseudo_server = new CPseudoServer();
 }
 
 /*
@@ -65,8 +77,19 @@ void CGameLocal::prepare_to_battle()
 */
 void CGameLocal::turn_entry()
 {
+	static bool is_first_turn = true;
+
+	if (is_first_turn) {
+		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_initial_field_json()));
+	}
+	else {
+		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json()));
+	}
+
 	m_my_commander->update();
 	m_enemy_commander->update();
+
+	is_first_turn = false;
 }
 
 /*
@@ -80,11 +103,15 @@ void CGameLocal::cleanup_after_battle()
 	delete m_enemy_commander;
 	delete m_my_AI;
 	delete m_enemy_AI;
+	delete m_json_analyzer;
+	delete m_pseudo_server;
 
 	m_my_commander = NULL;
 	m_enemy_commander = NULL;
 	m_my_AI = NULL;
 	m_enemy_AI = NULL;
+	m_json_analyzer = NULL;
+	m_pseudo_server = NULL;
 
 	CField::delete_field();
 }

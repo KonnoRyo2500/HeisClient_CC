@@ -204,6 +204,11 @@ std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 void CInfantry::attacked()
 {
 	m_hp--;
+	// 自身の体力が尽きたら，死ぬ(自身をフィールドから消去する)
+	// TODO: 今のままだとメモリリークが発生するので，修正する
+	if (m_hp <= 0) {
+		CField::get_instance()->remove_infantry(m_pos_x, m_pos_y);
+	}
 }
 
 /*

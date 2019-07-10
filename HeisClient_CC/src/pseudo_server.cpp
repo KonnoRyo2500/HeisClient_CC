@@ -73,7 +73,7 @@ std::string CPseudoServer::send_field_json() const
 	// そのため，以下で設定する値以外には，適当な固定値を入れておく
 	field_json_obj.insert(std::make_pair("width", static_cast<double>(FieldParam_Width)));
 	field_json_obj.insert(std::make_pair("height", static_cast<double>(FieldParam_Height)));
-	// units
+	field_json_obj.insert(std::make_pair("units", make_units_JSON_array()));
 	return serialize_JSON_obj(field_json_obj);
 }
 

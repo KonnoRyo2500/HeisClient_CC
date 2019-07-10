@@ -27,7 +27,7 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-#if 1
+#if 0
 		CPseudoServer ps;
 		CJSONAnalyzer json_analyzer;
 
