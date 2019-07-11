@@ -234,17 +234,18 @@ CInfantry* CField::find_infantry_by_id(const std::string& infantry_id) const
 void CField::delete_all_infantries()
 {
 	// 兵士のリストをクリア
-	// mapだとイテレータを使う関係上すべての要素についてdeleteができないので，一旦兵士の実体をvectorにコピーしてからdeleteする
-	// TODO: 処理を改善する
-	std::vector<CInfantry*> v;
+	/*
+		mapだとイテレータを使う関係上すべての要素についてdeleteができないので，
+		一旦兵士の実体をvectorにコピーしてからdeleteする
+	*/
+	std::vector<CInfantry*> del_infantries;
 	for (auto& it : m_all_infantries) {
-		v.push_back(it.second);
+		del_infantries.push_back(it.second);
 	}
-	for (CInfantry* in : v) {
-		delete in;
-		in = NULL;
+	for (CInfantry* del_infatry : del_infantries) {
+		delete del_infatry;
+		del_infatry = NULL;
 	}
-	v.clear();
 	m_all_infantries.clear();
 }
 
