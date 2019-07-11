@@ -12,6 +12,15 @@ const std::string CField::EMPTY_ID = "";
 /* public関数 */
 
 /*
+	デストラクタ
+	引数なし
+*/
+CField::~CField()
+{
+	delete_all_infantries();
+}
+
+/*
 	フィールドのインスタンスを取得する関数
 	引数なし
 	返り値: CField* フィールドのインスタンス(へのポインタ)
@@ -88,21 +97,18 @@ void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry*
 	指定した座標にいる兵士を削除する関数
 	引数1: const uint16_t pos_x 削除する兵士のいるx座標
 	引数2: const uint16_t pos_y 削除する兵士のいるy座標
-	例外: 削除しようとした兵士がフィールド上に存在しないとき
 	返り値なし
+	備考: 指定された座標に兵士がいない場合でもエラーにはしない
 */
 void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
 {
 	// 指定された座標が不正でないかどうかチェック
 	validate_position(pos_x, pos_y);
 
-	CInfantry* infantry = find_infantry_by_id(m_grid[pos_x + (m_width * pos_y)]);
-	if (infantry != NULL) {
-		m_all_infantries.erase(m_grid[pos_x + (m_width * pos_y)]);
-	}
-	else {
-		throw CHeisClientException("削除しようとした兵士がフィールドに存在しません");
-	}
+	/*
+		実体はリスト(m_all_infantries)に残り続けるが，update関数で呼ばれるdelete_all_infantries関数で
+		リスト中のすべての兵士が削除されるため，この実装でもメモリリークは発生しない
+	*/
 	m_grid[pos_x + (m_width * pos_y)] = EMPTY_ID;
 }
 

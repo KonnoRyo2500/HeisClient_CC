@@ -53,8 +53,6 @@ void CGameLocal::play_game()
 */
 void CGameLocal::prepare_to_battle()
 {
-	const bool is_my_team_bottom_left = true;		// 自軍を左下に配置するか
-
 	// 必要なインスタンスの生成
 	CField::create_field();
 
@@ -77,7 +75,7 @@ void CGameLocal::prepare_to_battle()
 */
 void CGameLocal::turn_entry()
 {
-	static bool is_first_turn = true;
+	bool is_first_turn = (CField::get_instance()->get_width() == 0 || CField::get_instance()->get_height() == 0);
 
 	if (is_first_turn) {
 		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_initial_field_json()));

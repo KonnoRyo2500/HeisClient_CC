@@ -42,9 +42,13 @@ int main()
 		field->update(json_analyzer.create_field_pkt(ps.send_initial_field_json()));
 		field->show();
 #else
-		CGameLocal game;
+		int i = 0;
+		while (i < 100) {
+			CGameLocal game;
 
-		game.play_game();
+			game.play_game();
+			i++;
+		}
 #endif
 	}
 	catch (const std::exception& e) {

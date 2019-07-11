@@ -15,6 +15,9 @@ class CField
 		
 	// メンバ関数
 	public:
+		// デストラクタ
+		~CField();
+
 		// フィールドの取得，作成，削除
 		static CField* get_instance();
 		static void create_field();
