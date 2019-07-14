@@ -16,5 +16,6 @@ class CHeisClientException : public std::runtime_error
 
 	// メンバ変数
 	private:
+		// 例外発生時のエラーメッセージ
 		std::string m_error_message;
 };

@@ -51,6 +51,9 @@ class CCommander
 
 	// メンバ変数
 	private:
-		std::string m_team_name;					// チーム名
-		std::vector<CInfantry*> m_infantries;		// チームの全兵士
+		// 自チーム名
+		std::string m_team_name;
+
+		// 自チームの全兵士
+		std::vector<CInfantry*> m_infantries;		
 };

@@ -30,5 +30,7 @@ class CGameOnline {
 		bool judge_win();
 
 	// メンバ変数
+	private:
+		// 自チーム名
 		std::string m_team_name;
 };

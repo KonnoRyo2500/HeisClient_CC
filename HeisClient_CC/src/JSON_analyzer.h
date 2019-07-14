@@ -176,6 +176,7 @@ class CJSONAnalyzer{
 	private:
 		// 解析したJSONの種類
 		AnalyzedJSONKind m_analyzed_JSON_kind;
+
 		// 解析した結果得られたJSONオブジェクト(最上位のオブジェクト)
 		picojson::object m_analyzed_JSON_root_obj;
 };

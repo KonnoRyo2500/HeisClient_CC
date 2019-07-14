@@ -8,6 +8,7 @@
 class CUserAI {
 	// 構造体，列挙体など
 	private:
+		// 行動の種類(サンプルAI用)
 		enum SampleAction {
 			SampleAction_Move,
 			SampleAction_Attack,
@@ -29,5 +30,6 @@ class CUserAI {
 
 	// メンバ変数
 	private:
+		// 自チームの兵士を操作するための司令官
 		CCommander* m_commander;
 };

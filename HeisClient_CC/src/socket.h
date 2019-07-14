@@ -37,5 +37,6 @@ class CSocket {
 
 	// メンバ変数
 	private:
+		// ソケットの実体
 		int m_sck;
 };

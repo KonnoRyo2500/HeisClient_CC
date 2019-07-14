@@ -58,13 +58,18 @@ class CField
 
 	// メンバ変数
 	private:
-		static const std::string EMPTY_ID;						// マスが空の時に入る文字列
+		// マスが空の時に入る文字列
+		static const std::string EMPTY_ID;
 
-		static CField* m_instance;								// インスタンス
+		// フィールドのインスタンス
+		static CField* m_instance;
 
-		std::vector<std::string> m_grid;						// フィールドの各マス目(ユニットがいればそのID，いなければ空文字列)
-		std::map<std::string, CInfantry*> m_all_infantries;		// フィールドにいる全兵士
+		// フィールドの各マス目(ユニットがいればそのID，いなければ空文字列)
+		std::vector<std::string> m_grid;
+		// フィールドにいる全兵士(findを使用し，ID->兵士の実体へのアクセスを高速化するため，コンテナとしてmapを用いる)
+		std::map<std::string, CInfantry*> m_all_infantries;
 
-		uint16_t m_width;										// フィールドの列数(幅)
-		uint16_t m_height;										// フィールドの行数(高さ)
+		// フィールドのサイズ
+		uint16_t m_width;
+		uint16_t m_height;
 };

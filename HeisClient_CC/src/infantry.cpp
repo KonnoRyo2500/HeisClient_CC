@@ -19,6 +19,8 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_I
 	, m_team_name(team_name)
 	, m_pos_x(init_pos_x)
 	, m_pos_y(init_pos_y)
+	, m_attack_x(m_pos_x)
+	, m_attack_y(m_pos_y)
 	, m_action_remain(InitialValue_ActionRemain)
 {
 	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから配置するようにする

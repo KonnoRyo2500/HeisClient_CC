@@ -54,11 +54,24 @@ class CInfantry
 
 	// メンバ変数
 	private:
+		// 所属チーム名
 		std::string m_team_name;
+
+		// ID
 		std::string m_id;
+
+		// 位置
 		uint16_t m_pos_x;
 		uint16_t m_pos_y;
+
+		// 攻撃先の座標(自身の座標と一致している場合は攻撃を行っていない)
+		uint16_t m_attack_x;
+		uint16_t m_attack_y;
+
+		// 残り行動回数
 		uint8_t m_action_remain;
+
+		// HP
 		// HPについては，値が負になることも考慮して符号付きの値にする(それ以外の値は，負になることはないので符号なしの値にする)
 		int8_t m_hp;
 };
