@@ -212,16 +212,6 @@ void CInfantry::attacked()
 }
 
 /*
-	行動回数をリセットする関数
-	引数なし
-	返り値なし
-*/
-void CInfantry::reset_action_remain()
-{
-	m_action_remain = InitialValue_ActionRemain;
-}
-
-/*
 	与えられた兵士が自分自身なのかを判定する関数
 	引数1: const CInfantry* infantry 兵士
 	返り値: bool 与えられた兵士が自分自身か

@@ -46,7 +46,6 @@ class CInfantry
 
 	private:
 		void attacked();
-		void reset_action_remain();
 
 		bool is_self(const CInfantry* infantry) const;
 
