@@ -45,10 +45,13 @@ class CInfantry
 		std::vector<NeighborInfantryData> look_around() const;
 
 	private:
+		// 攻撃された際の処理
 		void attacked();
 
+		// 与えられた兵士が自分自身かどうかを判定
 		bool is_self(const CInfantry* infantry) const;
 
+		// 隣接したマスの座標を取得
 		uint16_t get_neighbor_x_pos(const Direction direction) const;
 		uint16_t get_neighbor_y_pos(const Direction direction) const;
 
@@ -64,7 +67,7 @@ class CInfantry
 		uint16_t m_pos_x;
 		uint16_t m_pos_y;
 
-		// 攻撃先の座標(自身の座標と一致している場合は攻撃を行っていない)
+		// 攻撃先の座標(まだ攻撃を行っていない場合には，uint16_t型の最大値が入る)
 		uint16_t m_attack_x;
 		uint16_t m_attack_y;
 
