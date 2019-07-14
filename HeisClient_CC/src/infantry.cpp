@@ -127,6 +127,8 @@ void CInfantry::attack(const Direction direction)
 			}
 
 			dst_infantry->attacked();
+			m_attack_x = get_neighbor_x_pos(direction);
+			m_attack_y = get_neighbor_y_pos(direction);
 			m_action_remain--;
 		}
 		else {
