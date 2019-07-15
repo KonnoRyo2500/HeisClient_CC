@@ -3,6 +3,7 @@
 #pragma once
 
 #include "const_val.h"
+#include "JSON_data_packet.h"
 #include <string>
 #include <vector>
 
@@ -43,6 +44,9 @@ class CInfantry
 		void attack(const Direction direction);
 		void move(const Direction direction);
 		std::vector<NeighborInfantryData> look_around() const;
+
+		// 「行動」パケットの"contents"配列の1要素分のデータを作成
+		ContentsArrayElem make_contents_array_elem() const;
 
 	private:
 		// 攻撃された際の処理

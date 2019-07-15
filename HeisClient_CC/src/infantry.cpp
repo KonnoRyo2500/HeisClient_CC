@@ -126,9 +126,13 @@ void CInfantry::attack(const Direction direction)
 				return;
 			}
 
+			// 相手兵士のHPを減少させる
 			dst_infantry->attacked();
+
+			// 攻撃先を更新
 			m_attack_x = get_neighbor_x_pos(direction);
 			m_attack_y = get_neighbor_y_pos(direction);
+
 			m_action_remain--;
 		}
 		else {
@@ -157,9 +161,11 @@ void CInfantry::move(const Direction direction)
 	try {
 		CInfantry* dst_infantry = field->get_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction));
 		if (dst_infantry == NULL) {
+			// フィールド上の座標を更新する
 			field->remove_infantry(m_pos_x, m_pos_y);
 			field->set_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction), this);
 
+			// 自身の位置を更新する
 			m_pos_x = get_neighbor_x_pos(direction);
 			m_pos_y = get_neighbor_y_pos(direction);
 
@@ -198,6 +204,31 @@ std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 	return neighbor_infantries;
 }
 
+/*
+	「行動」パケットの"contents"配列の1要素分のデータを作成する関数
+	引数なし
+	返り値: ContentsArrayElem "contents"配列の要素
+*/
+ContentsArrayElem CInfantry::make_contents_array_elem() const
+{
+	ContentsArrayElem contents_elem;
+
+	contents_elem.unit_id = m_id;
+	contents_elem.to_x = m_pos_x;
+	contents_elem.to_y = m_pos_y;
+	if (m_attack_x != UINT16_MAX && m_attack_y != UINT16_MAX) {
+		// ターン内に攻撃していれば，攻撃先を設定する
+		contents_elem.atk_x = m_attack_x;
+		contents_elem.atk_y = m_attack_y;
+	}
+	else {
+		// 攻撃していなければ，現在位置と同じ座標を設定する
+		contents_elem.atk_x = m_pos_x;
+		contents_elem.atk_y = m_pos_y;
+	}
+	return contents_elem;
+}
+
 /* private関数 */
 
 /*
@@ -209,7 +240,6 @@ void CInfantry::attacked()
 {
 	m_hp--;
 	// 自身の体力が尽きたら，死ぬ(自身をフィールドから消去する)
-	// TODO: 今のままだとメモリリークが発生するので，修正する
 	if (m_hp <= 0) {
 		CField::get_instance()->remove_infantry(m_pos_x, m_pos_y);
 	}
