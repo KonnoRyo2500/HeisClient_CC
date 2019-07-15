@@ -28,15 +28,14 @@ void CGameLocal::play_game()
 		if (turn == CurrentTurn_MyTurn) {
 			m_my_AI->AI_main();
 			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_my_commander->create_action_pkt()));
-			turn = CurrentTurn_EnemyTurn;
 		}
 		else {
 			m_enemy_AI->AI_main();
 			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_enemy_commander->create_action_pkt()));
-			turn = CurrentTurn_MyTurn;
 		}
 
 		CField::get_instance()->show();
+		switch_current_turn(turn);
 	} while ((battle_result = judge_battle_result()) == BattleResult_Remain);
 
 	// 対戦終了後処理
@@ -74,11 +73,12 @@ void CGameLocal::prepare_to_battle()
 	引数なし
 	返り値なし
 */
-void CGameLocal::turn_entry()
+void CGameLocal::turn_entry() const
 {
 	bool is_first_turn = (CField::get_instance()->get_width() == 0 || CField::get_instance()->get_height() == 0);
 	JSONRecvPacket_Field field_pkt;
 
+	// フィールドの更新
 	// 最初のターンは，初期配置を記した「盤面」JSONを受け取る
 	if (is_first_turn) {
 		field_pkt = m_json_analyzer->create_field_pkt(m_pseudo_server->send_initial_field_json());
@@ -89,8 +89,44 @@ void CGameLocal::turn_entry()
 	}
 	CField::get_instance()->update(field_pkt);
 
+	// 各司令官の持つ兵士情報を，最新のフィールド状態に合うよう更新
 	m_my_commander->update();
 	m_enemy_commander->update();
+}
+
+/*
+	ユーザAI行動時の処理を行う関数
+	引数1: const CurrentTurn current_turn 現在のターン
+	返り値なし
+*/
+void CGameLocal::turn_action(const CurrentTurn current_turn) const
+{
+
+}
+
+/*
+	ターン終了時の処理を行う関数
+	引数1: const CurrentTurn current_turn 現在のターン
+	返り値なし
+*/
+void CGameLocal::turn_end(const CurrentTurn current_turn) const
+{
+
+}
+
+/*
+	現在のターンを切り替える関数
+	参照1: CurrentTurn& current_turn 現在のターン
+	返り値なし
+*/
+void CGameLocal::switch_current_turn(CurrentTurn& current_turn) const
+{
+	if (current_turn == CurrentTurn_MyTurn) {
+		current_turn = CurrentTurn_EnemyTurn;
+	}
+	else {
+		current_turn = CurrentTurn_MyTurn;
+	}
 }
 
 /*
@@ -122,7 +158,7 @@ void CGameLocal::cleanup_after_battle()
 	引数なし
 	返り値: BattleResult 対戦結果
 */
-CGameLocal::BattleResult CGameLocal::judge_battle_result()
+CGameLocal::BattleResult CGameLocal::judge_battle_result() const
 {
 	CField* field = CField::get_instance();
 	bool my_team_alive = false;
