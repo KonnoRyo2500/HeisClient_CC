@@ -77,20 +77,20 @@ void CGameLocal::prepare_to_battle()
 void CGameLocal::turn_entry()
 {
 	bool is_first_turn = (CField::get_instance()->get_width() == 0 || CField::get_instance()->get_height() == 0);
-	
+	JSONRecvPacket_Field field_pkt;
+
 	// 最初のターンは，初期配置を記した「盤面」JSONを受け取る
 	if (is_first_turn) {
-		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_initial_field_json()));
+		field_pkt = m_json_analyzer->create_field_pkt(m_pseudo_server->send_initial_field_json());
 	}
 	// それ以降のターンは，フィールドの状態をそのまま反映した「盤面」JSONを受け取る
 	else {
-		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json()));
+		field_pkt = m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json());
 	}
+	CField::get_instance()->update(field_pkt);
 
 	m_my_commander->update();
 	m_enemy_commander->update();
-
-	is_first_turn = false;
 }
 
 /*
