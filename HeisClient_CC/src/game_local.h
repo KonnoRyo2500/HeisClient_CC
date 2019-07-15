@@ -33,8 +33,10 @@ class CGameLocal {
 		// 対戦開始前処理
 		void prepare_to_battle();
 
-		// 対戦中処理(ターン開始)
+		// 対戦中処理
 		void turn_entry();
+		void turn_action();
+		void turn_end();
 
 		// 対戦終了後処理
 		void cleanup_after_battle();

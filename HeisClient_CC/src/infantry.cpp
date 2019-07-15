@@ -209,7 +209,7 @@ std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 	引数なし
 	返り値: ContentsArrayElem "contents"配列の要素
 */
-ContentsArrayElem CInfantry::make_contents_array_elem() const
+ContentsArrayElem CInfantry::create_contents_array_elem() const
 {
 	ContentsArrayElem contents_elem;
 

@@ -16,7 +16,6 @@ class CCommander
 	public:
 		// コンストラクタ
 		explicit CCommander(const std::string& team_name);
-		explicit CCommander(const std::string& team_name, const int init_area_width, const int init_area_height, const bool is_bottom_left); // ローカルモード用
 
 		// デストラクタ
 		~CCommander();
@@ -36,11 +35,14 @@ class CCommander
 		std::vector<std::string> get_all_movable_infantry_ids() const;
 		std::vector<std::string> get_all_attackable_infantry_ids() const;
 
+		// 自チームの全兵士のIDを表示する(デバッグ用)
+		void show_infantry_ids() const;
+
+		// 「行動」パケットを作成
+		JSONSendPacket_Action create_action_pkt() const;
+
 		// 兵士の情報を更新
 		void update();
-
-		// デバッグ用
-		void show_infantry_ids();
 
 	private:
 		// 兵士の探索

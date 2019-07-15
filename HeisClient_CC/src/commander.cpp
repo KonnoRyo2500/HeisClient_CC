@@ -185,13 +185,29 @@ std::vector<std::string> CCommander::get_all_attackable_infantry_ids() const
 	返り値なし
 	備考: 動作確認・デバッグ用
 */
-void CCommander::show_infantry_ids()
+void CCommander::show_infantry_ids() const
 {
 	printf("%s: ", m_team_name.c_str());
 	for (CInfantry* infantry : m_infantries) {
 		printf("%s ", infantry->get_id().c_str());
 	}
 	printf("\n");
+}
+
+/*
+	「行動」パケットを作成する関数
+	引数なし
+	返り値: JSONSendPacket_Action 「行動」パケット
+*/
+JSONSendPacket_Action CCommander::create_action_pkt() const
+{
+	JSONSendPacket_Action action_pkt;
+
+	action_pkt.turn_team = m_team_name;
+	for (CInfantry* infantry : m_infantries) {
+		action_pkt.contents.push_back(infantry->create_contents_array_elem());
+	}
+	return action_pkt;
 }
 
 /*

@@ -28,10 +28,12 @@ void CGameLocal::play_game()
 		// ユーザAIの行動
 		if (is_my_turn) {
 			m_my_AI->AI_main();
+			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_my_commander->create_action_pkt()));
 			is_my_turn = false;
 		}
 		else {
 			m_enemy_AI->AI_main();
+			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_enemy_commander->create_action_pkt()));
 			is_my_turn = true;
 		}
 
@@ -76,10 +78,12 @@ void CGameLocal::prepare_to_battle()
 void CGameLocal::turn_entry()
 {
 	bool is_first_turn = (CField::get_instance()->get_width() == 0 || CField::get_instance()->get_height() == 0);
-
+	
+	// 最初のターンは，初期配置を記した「盤面」JSONを受け取る
 	if (is_first_turn) {
 		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_initial_field_json()));
 	}
+	// それ以降のターンは，フィールドの状態をそのまま反映した「盤面」JSONを受け取る
 	else {
 		CField::get_instance()->update(m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json()));
 	}
