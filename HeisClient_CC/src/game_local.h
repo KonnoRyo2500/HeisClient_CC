@@ -11,10 +11,10 @@
 class CGameLocal {
 	// 構造体，列挙体など
 	private:
-		// 初期化領域(ゲーム開始時，兵士が配置される領域)のサイズ
-		enum InitAreaParam {
-			InitAreaParam_Width = 6,		// 幅
-			InitAreaParam_Height = 4,		// 高さ
+		// 現在のターンに関する情報
+		enum CurrentTurn {
+			CurrentTurn_MyTurn,				// 自チームのターン
+			CurrentTurn_EnemyTurn,				// 敵チームのターン
 		};
 
 		// 対戦結果

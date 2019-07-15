@@ -19,22 +19,21 @@ void CGameLocal::play_game()
 	prepare_to_battle();
 
 	// 対戦
-
-	bool is_my_turn = false;
+	CurrentTurn turn = CurrentTurn_MyTurn;
 	do {
 		// ターン開始時処理
 		turn_entry();
 
 		// ユーザAIの行動
-		if (is_my_turn) {
+		if (turn == CurrentTurn_MyTurn) {
 			m_my_AI->AI_main();
 			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_my_commander->create_action_pkt()));
-			is_my_turn = false;
+			turn = CurrentTurn_EnemyTurn;
 		}
 		else {
 			m_enemy_AI->AI_main();
 			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_enemy_commander->create_action_pkt()));
-			is_my_turn = true;
+			turn = CurrentTurn_MyTurn;
 		}
 
 		CField::get_instance()->show();
