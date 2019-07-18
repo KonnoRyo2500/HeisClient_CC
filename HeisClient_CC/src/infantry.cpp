@@ -111,7 +111,7 @@ int8_t CInfantry::get_hp() const
 */
 void CInfantry::attack(const Direction direction)
 {
-	if (m_action_remain == 0) {
+	if (m_action_remain <= 0) {
 		fprintf(stderr, "行動回数の上限に達しています\n");
 		return;
 	}
@@ -122,6 +122,7 @@ void CInfantry::attack(const Direction direction)
 		CInfantry* dst_infantry = field->get_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction));
 		if (dst_infantry != NULL) {
 			if (dst_infantry->get_team_name() == m_team_name) {
+				// 範囲外の位置に攻撃しようとした場合，自身の座標に攻撃することになるため，ここに処理が移る
 				fprintf(stderr, "味方の兵士を攻撃しようとしています\n");
 				return;
 			}
@@ -133,7 +134,8 @@ void CInfantry::attack(const Direction direction)
 			m_attack_x = get_neighbor_x_pos(direction);
 			m_attack_y = get_neighbor_y_pos(direction);
 
-			m_action_remain--;
+			// 攻撃したら，それ以降兵士は行動不可能
+			m_action_remain = 0;
 		}
 		else {
 			fprintf(stderr, "攻撃しようとした方向に兵士がいません\n");
@@ -151,7 +153,7 @@ void CInfantry::attack(const Direction direction)
 */
 void CInfantry::move(const Direction direction)
 {
-	if (m_action_remain == 0) {
+	if (m_action_remain <= 0) {
 		fprintf(stderr, "行動回数の上限に達しています\n");
 		return;
 	}
