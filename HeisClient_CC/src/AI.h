@@ -24,6 +24,7 @@ class CUserAI {
 
 	private:
 		// サンプルAI用の処理
+		int16_t sample_decide_move_distance() const;
 		std::string sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const;
 		SampleAction sample_decide_action() const;
 		Direction sample_decide_direction() const;

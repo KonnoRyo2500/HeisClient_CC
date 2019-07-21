@@ -113,15 +113,16 @@ void CCommander::attack(const std::string& id, const Direction direction) const
 /*
 	指定したIDの兵士を移動する関数
 	引数1: const std::string& id ID
-	引数2: const Direction direction 移動方向
+	引数2: const int16_t delta_x x方向に何マス移動するか(正の値であれば下方向, 負の値であれば上方向)
+	引数3: const int16_t delta_y y方向に何マス移動するか(正の値であれば右方向, 負の値であれば左方向)
 	返り値なし
 */
-void CCommander::move(const std::string& id, const Direction direction) const
+void CCommander::move(const std::string& id, const int16_t delta_x, const int16_t delta_y) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL) {
-		infantry->move(direction);
+		infantry->move(delta_x, delta_y);
 	}
 }
 

@@ -27,19 +27,19 @@ int main()
 	printf("Hello heis!\n");
 
 	try {
-#if 0
+#if 1
 		CPseudoServer ps;
 		CJSONAnalyzer json_analyzer;
-
-		printf("最初の「盤面」JSON: %s\n", ps.send_initial_field_json().c_str());
-		printf("「名前決定」JSON: %s\n", ps.send_name_decided_json().c_str());
-		printf("名前要求の「メッセージ」JSON: %s\n", ps.send_name_req_message_json().c_str());
-		printf("「結果」JSON: %s\n", ps.send_result_json().c_str());
+		CCommander com("test");
+		CCommander ecom("enemy");
 
 		CField::create_field();
 		CField* field = CField::get_instance();
 
 		field->update(json_analyzer.create_field_pkt(ps.send_initial_field_json()));
+		com.update();
+		ecom.update();
+		com.move("te34", 0, 2);
 		field->show();
 #else
 		int i = 0;

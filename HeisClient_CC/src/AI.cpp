@@ -29,7 +29,7 @@ void CUserAI::AI_main()
 		if (sample_decide_action() == SampleAction_Move) {
 			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids());
 			if (infantry_id.size() > 0) {
-				m_commander->move(infantry_id, sample_decide_direction());
+				m_commander->move(infantry_id, sample_decide_move_distance(), sample_decide_move_distance());
 			}
 		}
 		else {
@@ -42,6 +42,17 @@ void CUserAI::AI_main()
 }
 
 /* private関数 */
+
+/*
+	(サンプルAI用処理)兵士の移動距離を決定する関数
+	引数なし
+	返り値: int16_t 兵士の移動距離(-1 ~ 1)
+*/
+int16_t CUserAI::sample_decide_move_distance() const
+{
+	std::random_device rnd_dev;
+	return (rnd_dev() % 3) - 1;
+}
 
 /*
 	(サンプルAI用処理)次に行動する兵士をランダムに選択する関数
