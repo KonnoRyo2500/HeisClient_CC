@@ -34,7 +34,7 @@ class CPseudoServer
 		picojson::array make_units_JSON_array() const;
 
 		// 兵士のIDを作成
-		std::string make_infantry_id(const std::string& id_prefix, const int infantry_serial_number) const;
+		std::string make_infantry_id(const std::string& team_name, const int infantry_serial_number) const;
 
 	// メンバ変数
 	private:

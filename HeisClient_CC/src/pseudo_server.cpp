@@ -159,8 +159,8 @@ picojson::array CPseudoServer::make_initial_units_JSON_array() const
 
 	for (int x = 0; x < initial_area_width; x++) {
 		for (int y = 0; y < initial_area_height; y++) {
-			CInfantry my_infantry(LOCAL_MY_TEAM_NAME, make_infantry_id("te", infantry_serial_num), x, y);
-			CInfantry enemy_infantry(LOCAL_ENEMY_TEAM_NAME, make_infantry_id("en", infantry_serial_num), LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1);
+			CInfantry my_infantry(LOCAL_MY_TEAM_NAME, make_infantry_id(LOCAL_MY_TEAM_NAME, infantry_serial_num), x, y);
+			CInfantry enemy_infantry(LOCAL_ENEMY_TEAM_NAME, make_infantry_id(LOCAL_ENEMY_TEAM_NAME, infantry_serial_num), LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1);
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&my_infantry)));
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&enemy_infantry)));
 			infantry_serial_num++;
@@ -195,14 +195,16 @@ picojson::array CPseudoServer::make_units_JSON_array() const
 
 /*
 	ローカルモード用の兵士IDを作成する関数
-	引数1: const std::string& id_prefix IDの先頭につける文字列
+	引数1: const std::string& team_name 兵士のチーム名
 	引数2: const int infantry_serial_number IDの数字部分(兵士に付けられる連番)
 	返り値: std::string 兵士のID
+	備考: 兵士のコンストラクタに与えるIDを生成するための関数なので，CInfantry型のオブジェクトは渡せない
 */
-std::string CPseudoServer::make_infantry_id(const std::string& id_prefix, const int infantry_serial_number) const
+std::string CPseudoServer::make_infantry_id(const std::string& team_name, const int infantry_serial_number) const
 {
 	char id[10] = {0};
 
-	snprintf(id, sizeof(id) / sizeof(char), "%s%02d", id_prefix.c_str(), infantry_serial_number);
+	// IDの命名法はオンラインモードの仕様に則り，"(チーム名の先頭2文字)+(通し番号)"とする
+	snprintf(id, sizeof(id) / sizeof(char), "%s%02d", team_name.substr(0, 2).c_str(), infantry_serial_number);
 	return std::string(id);
 }
