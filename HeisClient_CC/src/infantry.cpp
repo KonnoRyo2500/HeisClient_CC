@@ -391,8 +391,8 @@ uint16_t CInfantry::get_neighbor_x_pos(const Direction direction) const
 		dst_x_pos = 0;
 	}
 	// TODO: フィールドの幅を定数ではなく，フィールドから得るようにする
-	else if (FieldParam_Width <= dst_x_pos) {
-		dst_x_pos = FieldParam_Width - 1;
+	else if (LocalFieldSize_Width <= dst_x_pos) {
+		dst_x_pos = LocalFieldSize_Width - 1;
 	}
 
 	return dst_x_pos;
@@ -425,8 +425,8 @@ uint16_t CInfantry::get_neighbor_x_pos(const Direction direction, const uint16_t
 		dst_x_pos = 0;
 	}
 	// TODO: フィールドの幅を定数ではなく，フィールドから得るようにする
-	else if (FieldParam_Width <= dst_x_pos) {
-		dst_x_pos = FieldParam_Width - 1;
+	else if (LocalFieldSize_Width <= dst_x_pos) {
+		dst_x_pos = LocalFieldSize_Width - 1;
 	}
 
 	return dst_x_pos;
@@ -458,8 +458,8 @@ uint16_t CInfantry::get_neighbor_y_pos(const Direction direction) const
 		dst_y_pos = 0;
 	}
 	// TODO: フィールドの高さを定数ではなく，フィールドから得るようにする
-	else if (FieldParam_Height <= dst_y_pos) {
-		dst_y_pos = FieldParam_Height - 1;
+	else if (LocalFieldSize_Height <= dst_y_pos) {
+		dst_y_pos = LocalFieldSize_Height - 1;
 	}
 
 	return dst_y_pos;
@@ -492,8 +492,8 @@ uint16_t CInfantry::get_neighbor_y_pos(const Direction direction, const uint16_t
 		dst_y_pos = 0;
 	}
 	// TODO: フィールドの高さを定数ではなく，フィールドから得るようにする
-	else if (FieldParam_Height <= dst_y_pos) {
-		dst_y_pos = FieldParam_Height - 1;
+	else if (LocalFieldSize_Height <= dst_y_pos) {
+		dst_y_pos = LocalFieldSize_Height - 1;
 	}
 
 	return dst_y_pos;

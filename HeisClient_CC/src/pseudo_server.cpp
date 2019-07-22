@@ -50,8 +50,8 @@ std::string CPseudoServer::send_initial_field_json() const
 	initial_field_json_obj.insert(std::make_pair("count", 0.0));
 	// ローカルモードでは，CGameLocal側でゲームの流れの制御を行うため，以下の値を除き，このJSONからの値を無視する
 	// そのため，以下で設定する値以外には，適当な固定値を入れておく
-	initial_field_json_obj.insert(std::make_pair("width", static_cast<double>(FieldParam_Width)));
-	initial_field_json_obj.insert(std::make_pair("height", static_cast<double>(FieldParam_Height)));
+	initial_field_json_obj.insert(std::make_pair("width", static_cast<double>(LocalFieldSize_Width)));
+	initial_field_json_obj.insert(std::make_pair("height", static_cast<double>(LocalFieldSize_Height)));
 	initial_field_json_obj.insert(std::make_pair("units", make_initial_units_JSON_array()));
 	return serialize_JSON_obj(initial_field_json_obj);
 }
@@ -71,8 +71,8 @@ std::string CPseudoServer::send_field_json() const
 	field_json_obj.insert(std::make_pair("count", 0.0));
 	// ローカルモードでは，CGameLocal側でゲームの流れの制御を行うため，以下の値を除き，このJSONからの値を無視する
 	// そのため，以下で設定する値以外には，適当な固定値を入れておく
-	field_json_obj.insert(std::make_pair("width", static_cast<double>(FieldParam_Width)));
-	field_json_obj.insert(std::make_pair("height", static_cast<double>(FieldParam_Height)));
+	field_json_obj.insert(std::make_pair("width", static_cast<double>(LocalFieldSize_Width)));
+	field_json_obj.insert(std::make_pair("height", static_cast<double>(LocalFieldSize_Height)));
 	field_json_obj.insert(std::make_pair("units", make_units_JSON_array()));
 	return serialize_JSON_obj(field_json_obj);
 }
@@ -160,7 +160,7 @@ picojson::array CPseudoServer::make_initial_units_JSON_array() const
 	for (int x = 0; x < initial_area_width; x++) {
 		for (int y = 0; y < initial_area_height; y++) {
 			CInfantry my_infantry("test", make_infantry_id("te", infantry_serial_num), x, y);
-			CInfantry enemy_infantry("enemy", make_infantry_id("en", infantry_serial_num), FieldParam_Width - x - 1, FieldParam_Height -  y - 1);
+			CInfantry enemy_infantry("enemy", make_infantry_id("en", infantry_serial_num), LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1);
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&my_infantry)));
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&enemy_infantry)));
 			infantry_serial_num++;
