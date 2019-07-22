@@ -2,6 +2,8 @@
 // Author: Ryo Konno
 #pragma once
 
+#include<string>
+
 // プログラム中で共通して使う定数をここに記述する
 
 /* 全モード共通で使用する定数 */
@@ -21,5 +23,10 @@ enum LocalFieldSize {
 	LocalFieldSize_Width = 20,			// 幅
 	LocalFieldSize_Height = 20,			// 高さ
 };
+
+// チーム名
+// 注意: 最初の2文字が被らないような名前にしておくこと(被るとIDが衝突し，動作が未定義になる)
+const std::string LOCAL_MY_TEAM_NAME = "test";			// 自軍
+const std::string LOCAL_ENEMY_TEAM_NAME = "enemy";		// 敵軍
 
 /* オンラインモードで使用する定数 */

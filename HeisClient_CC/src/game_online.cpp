@@ -2,6 +2,7 @@
 // Author: Ryo Konno
 
 #include "game_online.h"
+#include "const_val.h"
 
 /* public関数 */
 
@@ -40,7 +41,7 @@ void CGameOnline::prepare_to_battle()
 	// メッセージ(名前要求)を受信
 	recv_name_request();
 	// 名前を送信
-	name_entry("test");
+	name_entry(LOCAL_MY_TEAM_NAME);
 	// 確定した名前を受信
 	name_register();
 }

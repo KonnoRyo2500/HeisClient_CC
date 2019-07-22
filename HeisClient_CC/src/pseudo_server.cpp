@@ -159,8 +159,8 @@ picojson::array CPseudoServer::make_initial_units_JSON_array() const
 
 	for (int x = 0; x < initial_area_width; x++) {
 		for (int y = 0; y < initial_area_height; y++) {
-			CInfantry my_infantry("test", make_infantry_id("te", infantry_serial_num), x, y);
-			CInfantry enemy_infantry("enemy", make_infantry_id("en", infantry_serial_num), LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1);
+			CInfantry my_infantry(LOCAL_MY_TEAM_NAME, make_infantry_id("te", infantry_serial_num), x, y);
+			CInfantry enemy_infantry(LOCAL_ENEMY_TEAM_NAME, make_infantry_id("en", infantry_serial_num), LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1);
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&my_infantry)));
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&enemy_infantry)));
 			infantry_serial_num++;

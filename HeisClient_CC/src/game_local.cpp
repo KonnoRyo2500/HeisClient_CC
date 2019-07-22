@@ -57,8 +57,8 @@ void CGameLocal::prepare_to_battle()
 	CField::create_field();
 
 	// 兵士の初期配置はここで行われる
-	m_my_commander = new CCommander(m_my_team_name);
-	m_enemy_commander = new CCommander(m_enemy_team_name);
+	m_my_commander = new CCommander(LOCAL_MY_TEAM_NAME);
+	m_enemy_commander = new CCommander(LOCAL_ENEMY_TEAM_NAME);
 
 	m_my_AI = new CUserAI(m_my_commander);
 	m_enemy_AI = new CUserAI(m_enemy_commander);
@@ -170,10 +170,10 @@ CGameLocal::BattleResult CGameLocal::judge_battle_result() const
 			CInfantry* infantry = field->get_infantry(x, y);
 
 			if (infantry != NULL) {
-				if (infantry->get_team_name() == m_my_team_name) {
+				if (infantry->get_team_name() == LOCAL_MY_TEAM_NAME) {
 					my_team_alive = true;
 				}
-				else if (infantry->get_team_name() == m_enemy_team_name) {
+				else if (infantry->get_team_name() == LOCAL_ENEMY_TEAM_NAME) {
 					enemy_team_alive = true;
 				}
 			}

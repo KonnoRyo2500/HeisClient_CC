@@ -47,12 +47,6 @@ class CGameLocal {
 
 	// メンバ変数
 	private:
-
-		// ゲームに参加するチーム名
-		// 注意: 最初の2文字が被らないような名前にしておくこと(被るとIDが衝突し，動作が未定義になる)
-		const std::string m_my_team_name = "test";
-		const std::string m_enemy_team_name = "enemy";
-
 		// 兵士を操作するための司令官
 		CCommander* m_my_commander;
 		CCommander* m_enemy_commander;

@@ -30,8 +30,8 @@ int main()
 #if 1
 		CPseudoServer ps;
 		CJSONAnalyzer json_analyzer;
-		CCommander com("test");
-		CCommander ecom("enemy");
+		CCommander com(LOCAL_MY_TEAM_NAME);
+		CCommander ecom(LOCAL_ENEMY_TEAM_NAME);
 
 		CField::create_field();
 		CField* field = CField::get_instance();
@@ -63,7 +63,7 @@ static JSONSendPacket_Action create_sample_action_pkt()
 {
 	JSONSendPacket_Action sample_action_pkt;
 
-	sample_action_pkt.turn_team = "test";
+	sample_action_pkt.turn_team = LOCAL_MY_TEAM_NAME;
 	for (int i = 1; i <= 5; i++) {
 		ContentsArrayElem content;
 
