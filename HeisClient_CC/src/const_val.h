@@ -8,7 +8,7 @@
 
 /* 全モード共通で使用する定数 */
 
-//
+// 方向
 enum Direction {
 	Direction_Up,					// 上
 	Direction_Down,					// 下
