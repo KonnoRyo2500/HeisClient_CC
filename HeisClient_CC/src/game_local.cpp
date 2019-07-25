@@ -18,28 +18,22 @@ void CGameLocal::play_game()
 	// 対戦開始前の準備
 	prepare_to_battle();
 
-	// 対戦
-	CurrentTurn turn = CurrentTurn_MyTurn;
+	// 対戦開始
+	CurrentTurn current_turn = CurrentTurn_MyTurn;
 	do {
-		// ターン開始時処理
+		// ターン開始
 		turn_entry();
 
 		// ユーザAIの行動
-		if (turn == CurrentTurn_MyTurn) {
-			m_my_AI->AI_main();
-			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_my_commander->create_action_pkt()));
-		}
-		else {
-			m_enemy_AI->AI_main();
-			m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_enemy_commander->create_action_pkt()));
-		}
+		turn_action(current_turn);
 
-		CField::get_instance()->show();
-		switch_current_turn(turn);
+		// ターン終了
+		turn_end(current_turn);
 	} while ((battle_result = judge_battle_result()) == BattleResult_Remain);
 
-	// 対戦終了後処理
+	// 対戦終了
 	cleanup_after_battle();
+
 	// 勝敗を表示
 	printf("%s\n", battle_result == BattleResult_MyTeamWin ? "You win!" : "You lose...");
 }
@@ -101,26 +95,28 @@ void CGameLocal::turn_entry() const
 */
 void CGameLocal::turn_action(const CurrentTurn current_turn) const
 {
-
+	if (current_turn == CurrentTurn_MyTurn) {
+		m_my_AI->AI_main();
+		m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_my_commander->create_action_pkt()));
+	}
+	else {
+		m_enemy_AI->AI_main();
+		m_pseudo_server->recv_action_json(m_json_analyzer->create_action_JSON(m_enemy_commander->create_action_pkt()));
+	}
 }
 
 /*
 	ターン終了時の処理を行う関数
-	引数1: const CurrentTurn current_turn 現在のターン
-	返り値なし
-*/
-void CGameLocal::turn_end(const CurrentTurn current_turn) const
-{
-
-}
-
-/*
-	現在のターンを切り替える関数
 	参照1: CurrentTurn& current_turn 現在のターン
 	返り値なし
+	備考: ターンを切り替える処理があるため，現在ターンは引数ではなく参照となる
 */
-void CGameLocal::switch_current_turn(CurrentTurn& current_turn) const
+void CGameLocal::turn_end(CurrentTurn& current_turn) const
 {
+	// フィールドの表示
+	CField::get_instance()->show();
+
+	// ターンの切り替え
 	if (current_turn == CurrentTurn_MyTurn) {
 		current_turn = CurrentTurn_EnemyTurn;
 	}

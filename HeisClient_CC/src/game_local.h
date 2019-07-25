@@ -36,8 +36,7 @@ class CGameLocal {
 		// 対戦中処理
 		void turn_entry() const;
 		void turn_action(const CurrentTurn current_turn) const;
-		void turn_end(const CurrentTurn current_turn) const;
-		void switch_current_turn(CurrentTurn& current_turn) const;
+		void turn_end(CurrentTurn& current_turn) const;
 
 		// 対戦終了後処理
 		void cleanup_after_battle();
