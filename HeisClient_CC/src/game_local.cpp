@@ -16,7 +16,7 @@ void CGameLocal::play_game()
 	BattleResult battle_result;
 
 	// 対戦開始前の準備
-	prepare_to_battle();
+	initialize_battle();
 
 	// 対戦開始
 	CurrentTurn current_turn = CurrentTurn_MyTurn;
@@ -32,7 +32,7 @@ void CGameLocal::play_game()
 	} while ((battle_result = judge_battle_result()) == BattleResult_Remain);
 
 	// 対戦終了
-	cleanup_after_battle();
+	finalize_battle();
 
 	// 勝敗を表示
 	printf("%s\n", battle_result == BattleResult_MyTeamWin ? "You win!" : "You lose...");
@@ -45,7 +45,7 @@ void CGameLocal::play_game()
 	引数なし
 	返り値なし
 */
-void CGameLocal::prepare_to_battle()
+void CGameLocal::initialize_battle()
 {
 	// 必要なインスタンスの生成
 	CField::create_field();
@@ -130,7 +130,7 @@ void CGameLocal::turn_end(CurrentTurn& current_turn) const
 	引数なし
 	返り値なし
 */
-void CGameLocal::cleanup_after_battle()
+void CGameLocal::finalize_battle()
 {
 	delete m_my_commander;
 	delete m_enemy_commander;

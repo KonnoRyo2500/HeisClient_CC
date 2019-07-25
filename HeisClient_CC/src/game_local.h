@@ -31,7 +31,7 @@ class CGameLocal {
 
 	private:
 		// 対戦開始前処理
-		void prepare_to_battle();
+		void initialize_battle();
 
 		// 対戦中処理
 		void turn_entry() const;
@@ -39,7 +39,7 @@ class CGameLocal {
 		void turn_end(CurrentTurn& current_turn) const;
 
 		// 対戦終了後処理
-		void cleanup_after_battle();
+		void finalize_battle();
 
 		// 対戦結果の判定
 		BattleResult judge_battle_result() const;
