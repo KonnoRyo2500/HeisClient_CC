@@ -74,7 +74,7 @@ void CGameLocal::initialize_battle()
 */
 void CGameLocal::recv_name_request() const
 {
-	m_json_analyzer->create_message_pkt(m_pseudo_server->send_name_req_message_json());
+	JSONRecvPacket_Message msg_pkt = m_json_analyzer->create_message_pkt(m_pseudo_server->send_name_req_message_json());
 }
 
 /*
