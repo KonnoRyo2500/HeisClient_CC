@@ -18,6 +18,11 @@ void CGameLocal::play_game()
 	// 対戦開始前の準備
 	initialize_battle();
 
+	// 名前確定(ただし，名前は既に決まっているので，実際には何も行わない)
+	recv_name_request();
+	name_entry(LOCAL_MY_TEAM_NAME);
+	name_register();
+
 	// 対戦開始
 	CurrentTurn current_turn = CurrentTurn_MyTurn;
 	do {
@@ -60,6 +65,37 @@ void CGameLocal::initialize_battle()
 	m_json_analyzer = new CJSONAnalyzer();
 
 	m_pseudo_server = new CPseudoServer();
+}
+
+/*
+	サーバーから，名前要求を受信する関数
+	引数なし
+	返り値なし
+*/
+void CGameLocal::recv_name_request() const
+{
+	m_json_analyzer->create_message_pkt(m_pseudo_server->send_name_req_message_json());
+}
+
+/*
+	指定された名前をサーバーに送る関数
+	引数1: consbt std::string& name 名前
+	返り値なし
+*/
+void CGameLocal::name_entry(const std::string name) const
+{
+	JSONSendPacket_Name name_pkt = { name };
+	m_pseudo_server->recv_name_json(m_json_analyzer->create_name_JSON(name_pkt));
+}
+
+/*
+	サーバーから受信した名前をチーム名として登録する関数
+	引数なし
+	返り値なし
+*/
+void CGameLocal::name_register() const
+{
+	// 名前の登録が必要ないため，処理なし
 }
 
 /*

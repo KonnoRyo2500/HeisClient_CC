@@ -32,6 +32,9 @@ class CGameLocal {
 	private:
 		// 対戦開始前処理
 		void initialize_battle();
+		void recv_name_request() const;
+		void name_entry(const std::string name) const;
+		void name_register() const;
 
 		// 対戦中処理
 		void turn_entry() const;
