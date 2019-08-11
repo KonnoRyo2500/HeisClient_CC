@@ -27,38 +27,14 @@ CCommander::~CCommander()
 	// 処理なし
 }
 
-/*
-	指定したIDを持つ兵士のx座標を取得する関数
-	引数1: (const std::string& id ID
-	返り値: uint16_t 兵士のx座標(指定したIDの兵士がいなければ-1)
-*/
-uint16_t CCommander::get_x_position(const std::string& id) const
+FieldPosition CCommander::get_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL) {
-		return infantry->get_x_position();
+		return infantry->get_position();
 	}
-	else {
-		return INFANTRY_STATUS_ERROR;
-	}
-}
-
-/*
-	指定したIDを持つ兵士のy座標を取得する関数
-	引数1: (const std::string& id ID
-	返り値: uint16_t 兵士のy座標(指定したIDの兵士がいなければ-1)
-*/
-uint16_t CCommander::get_y_position(const std::string& id) const
-{
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL) {
-		return infantry->get_y_position();
-	}
-	else {
-		return INFANTRY_STATUS_ERROR;
-	}
+	throw CHeisClientException("NULLの兵士の位置を取得しようとしています");
 }
 
 /*
@@ -225,7 +201,7 @@ void CCommander::update()
 	CField* field = CField::get_instance();
 	for (int x = 0; x < field->get_width(); x++) {
 		for (int y = 0; y < field->get_height(); y++) {
-			CInfantry* infantry = field->get_infantry(x, y);
+			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
 			if (infantry != NULL && infantry->get_team_name() == m_team_name) {
 				m_infantries.push_back(infantry);
 			}

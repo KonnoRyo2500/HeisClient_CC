@@ -10,24 +10,21 @@
 /*
 	コンストラクタ
 	引数1: const std::string& team_name 所属チーム名
-	引数2: const std::string& infantry_ID ID
-	引数3: const uint16_t init_pos_x 初期位置のx座標
-	引数4: const uint16_t init_pos_y 初期位置のy座標
+	引数2: const std::string& infantry_id ID
+	引数3: const FieldPosition& init_pos 初期位置
 */
-CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_ID, const uint16_t init_pos_x, const uint16_t init_pos_y)
-	: m_id(infantry_ID)
+CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const FieldPosition& init_pos)
+	: m_id(infantry_id)
 	, m_hp(InitialValue_HP)
 	, m_team_name(team_name)
-	, m_pos_x(init_pos_x)
-	, m_pos_y(init_pos_y)
-	, m_attack_x(UINT16_MAX)
-	, m_attack_y(UINT16_MAX)
+	, m_pos(init_pos)
+	, m_attack_pos({UINT16_MAX, UINT16_MAX})
 	, m_action_remain(InitialValue_ActionRemain)
 {
 	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから配置するようにする
 	CField* field = CField::get_instance();
 	if (field != NULL && (field->get_width() != 0 && field->get_height() != 0)) {
-		field->set_infantry(init_pos_x, init_pos_y, this);
+		field->set_infantry(init_pos, this);
 	}
 }
 
@@ -40,7 +37,7 @@ CInfantry::~CInfantry()
 	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから削除するようにする
 	CField* field = CField::get_instance();
 	if (field != NULL && (field->get_width() != 0 && field->get_height() != 0)) {
-		field->remove_infantry(m_pos_x, m_pos_y);
+		field->remove_infantry(m_pos);
 	}
 }
 
@@ -65,23 +62,13 @@ std::string CInfantry::get_id() const
 }
 
 /*
-	兵士のx座標を取得する関数
+	兵士の座標を取得する関数
 	引数なし
-	返り値: uint16_t 兵士のx座標
+	返り値: FieldPosition 兵士の座標
 */
-uint16_t CInfantry::get_x_position() const
+FieldPosition CInfantry::get_position() const
 {
-	return m_pos_x;
-}
-
-/*
-	兵士のy座標を取得する関数
-	引数なし
-	返り値: uint16_t 兵士のy座標
-*/
-uint16_t CInfantry::get_y_position() const
-{
-	return m_pos_y;
+	return m_pos;
 }
 
 /*
@@ -120,7 +107,7 @@ void CInfantry::attack(const Direction direction)
 	CField* field = CField::get_instance();
 
 	try {
-		CInfantry* dst_infantry = field->get_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction));
+		CInfantry* dst_infantry = field->get_infantry(get_neighbor_pos(direction, m_pos));
 		if (dst_infantry != NULL) {
 			if (dst_infantry->get_team_name() == m_team_name) {
 				// 範囲外の位置に攻撃しようとした場合，自身の座標に攻撃することになるため，ここに処理が移る
@@ -132,8 +119,7 @@ void CInfantry::attack(const Direction direction)
 			dst_infantry->attacked();
 
 			// 攻撃先を更新
-			m_attack_x = get_neighbor_x_pos(direction);
-			m_attack_y = get_neighbor_y_pos(direction);
+			m_attack_pos = get_neighbor_pos(direction, m_pos);
 
 			// 攻撃したら，それ以降兵士は行動不可能
 			m_action_remain = 0;
@@ -161,26 +147,25 @@ void CInfantry::move(const int16_t delta_x, const int16_t delta_y)
 	}
 
 	CField* field = CField::get_instance();
-	uint16_t dst_x = m_pos_x + delta_x, dst_y = m_pos_y + delta_y;
+	FieldPosition dst = { static_cast<uint16_t>(m_pos.x + delta_x), static_cast<uint16_t>(m_pos.y + delta_y) };
 
-	if (calc_L1_distance(m_pos_x, m_pos_y, dst_x, dst_y) > m_action_remain) {
+	if (calc_L1_distance(m_pos, dst) > m_action_remain) {
 		fprintf(stderr, "移動できる歩数の上限を超えて移動しようとしています\n");
 		return;
 	}
 	try {
-		CInfantry* dst_infantry = field->get_infantry(dst_x, dst_y);
+		CInfantry* dst_infantry = field->get_infantry(dst);
 		if (dst_infantry == NULL) {
-			if (exists_path_for_move(dst_x, dst_y)) {
+			if (exists_path_for_move(dst)) {
 				// フィールド上の座標を更新する
-				field->remove_infantry(m_pos_x, m_pos_y);
-				field->set_infantry(dst_x, dst_y, this);
+				field->remove_infantry(m_pos);
+				field->set_infantry(dst, this);
 
 				// 移動した歩数分だけ，行動回数を減らす
-				m_action_remain -= calc_L1_distance(m_pos_x, m_pos_y, dst_x, dst_y);
+				m_action_remain -= calc_L1_distance(m_pos, dst);
 
 				// 自身の位置を更新する
-				m_pos_x = dst_x;
-				m_pos_y = dst_y;
+				m_pos = dst;
 			}
 			else {
 				fprintf(stderr, "移動経路がありません\n");
@@ -206,7 +191,7 @@ std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
 	CField* field = CField::get_instance();
 
 	for (auto direction : {Direction_Up, Direction_Down, Direction_Left, Direction_Right}) {
-		CInfantry* infantry = field->get_infantry(get_neighbor_x_pos(direction), get_neighbor_y_pos(direction));
+		CInfantry* infantry = field->get_infantry(get_neighbor_pos(direction, m_pos));
 
 		// ある方向で，自分のいるマスを参照していたら，その方向にはマスが存在していない
 		if (!is_self(infantry)) {
@@ -229,17 +214,17 @@ ContentsArrayElem CInfantry::create_contents_array_elem() const
 	ContentsArrayElem contents_elem;
 
 	contents_elem.unit_id = m_id;
-	contents_elem.to_x = m_pos_x;
-	contents_elem.to_y = m_pos_y;
-	if (m_attack_x != UINT16_MAX && m_attack_y != UINT16_MAX) {
+	contents_elem.to_x = m_pos.x;
+	contents_elem.to_y = m_pos.y;
+	if (m_attack_pos.x != UINT16_MAX && m_attack_pos.y != UINT16_MAX) {
 		// ターン内に攻撃していれば，攻撃先を設定する
-		contents_elem.atk_x = m_attack_x;
-		contents_elem.atk_y = m_attack_y;
+		contents_elem.atk_x = m_attack_pos.x;
+		contents_elem.atk_y = m_attack_pos.y;
 	}
 	else {
 		// 攻撃していなければ，現在位置と同じ座標を設定する
-		contents_elem.atk_x = m_pos_x;
-		contents_elem.atk_y = m_pos_y;
+		contents_elem.atk_x = m_pos.x;
+		contents_elem.atk_y = m_pos.y;
 	}
 	return contents_elem;
 }
@@ -256,26 +241,24 @@ void CInfantry::attacked()
 	m_hp--;
 	// 自身の体力が尽きたら，死ぬ(自身をフィールドから消去する)
 	if (m_hp <= 0) {
-		CField::get_instance()->remove_infantry(m_pos_x, m_pos_y);
+		CField::get_instance()->remove_infantry(m_pos);
 	}
 }
 
 /*
 	指定されたマスに移動するための経路があるかどうかを判定する関数
-	引数1: const uint16_t dst_x 目的マスのx座標
-	引数2: const uint16_t dst_y 目的マスのy座標
+	引数1: const FieldPosition& dst_pos 目的マスx座標
 	返り値: 目的マスに移動できるか
 	備考: 目的マスに兵士はいないものとする(この関数を呼び出す際，目的マスに兵士がいるかどうかを考慮済みとする)
 */
-bool CInfantry::exists_path_for_move(const uint16_t dst_x, const uint16_t dst_y) const
+bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
 {
 	// 移動可能なマスの一覧
-	std::queue<uint16_t> available_pos_x, available_pos_y;
-	uint16_t current_x, current_y;
+	std::queue<FieldPosition> available_pos;
+	FieldPosition current_pos;
 
-	available_pos_x.push(m_pos_x);
-	available_pos_y.push(m_pos_y);
-	while(available_pos_x.size() > 0 && available_pos_y.size() > 0){
+	available_pos.push(m_pos);
+	while(available_pos.size() > 0){
 		/*
 			探索の手順
 			(1)現在位置から上下左右に隣接しているマスで，目的マスに近づけるマスをすべて見る
@@ -286,22 +269,19 @@ bool CInfantry::exists_path_for_move(const uint16_t dst_x, const uint16_t dst_y)
 			TODO: 移動可能な歩数が4歩以上になると，敵の兵士を迂回して目的マスに移動するルートが発生するので，この手法は使えなくなる．そのときは，探索手法の再検討が必要
 		*/
 		// 現在位置の更新
-		current_x = available_pos_x.front();
-		current_y = available_pos_y.front();
-		available_pos_x.pop();
-		available_pos_y.pop();
+		current_pos = available_pos.front();
+		available_pos.pop();
 		// 移動可能な隣接マスの探索
-		for (Direction dir_to_dst : decide_move_direction(current_x, current_y, dst_x, dst_y)) {
+		for (Direction dir_to_dst : decide_move_direction(current_pos, dst_pos)) {
 			CField* field = CField::get_instance();
-			CInfantry* neighbor_infantry = field->get_infantry(get_neighbor_x_pos(dir_to_dst, current_x), get_neighbor_y_pos(dir_to_dst, current_y));
+			CInfantry* neighbor_infantry = field->get_infantry(get_neighbor_pos(dir_to_dst, current_pos));
 			// 味方の兵士は飛び越して移動できるので，兵士がいたとしても味方ならばそのマスは移動可能とする
 			if (neighbor_infantry == NULL || neighbor_infantry->get_team_name() == m_team_name) {
-				if (get_neighbor_x_pos(dir_to_dst, current_x) == dst_x && get_neighbor_y_pos(dir_to_dst, current_y) == dst_y) {
+				if (get_neighbor_pos(dir_to_dst, current_pos) == dst_pos) {
 					return true;
 				}
 				else {
-					available_pos_x.push(get_neighbor_x_pos(dir_to_dst, current_x));
-					available_pos_y.push(get_neighbor_y_pos(dir_to_dst, current_y));
+					available_pos.push(get_neighbor_pos(dir_to_dst, current_pos));
 				}
 			}
 		}
@@ -311,26 +291,24 @@ bool CInfantry::exists_path_for_move(const uint16_t dst_x, const uint16_t dst_y)
 
 /*
 	目的マスに近づける移動方向を判定する関数
-	引数1: const uint16_t current_x 現在いるマスのx座標
-	引数2: const uint16_t current_y 現在いるマスのy座標
-	引数3: const uint16_t dst_x 目的マスのx座標
-	引数4: const uint16_t dst_y 目的マスのy座標
+	引数1: const FieldPosition& current_pos 現在いるマスの座標
+	引数2: const FieldPosition& dst_pos 目的マスの座標
 	返り値: std::vector<Direction> 現在いるマスから目的マスに近づける移動方向
 */
-std::vector<Direction> CInfantry::decide_move_direction(const uint16_t current_x, const uint16_t current_y, const uint16_t dst_x, const uint16_t dst_y) const
+std::vector<Direction> CInfantry::decide_move_direction(const FieldPosition& current_pos, const FieldPosition& dst_pos) const
 {
 	std::vector<Direction> directions_to_dst;
 
-	if (current_x < dst_x) {
+	if (current_pos.x < dst_pos.x) {
 		directions_to_dst.push_back(Direction_Right);
 	}
-	if (current_x > dst_x) {
+	if (current_pos.x > dst_pos.x) {
 		directions_to_dst.push_back(Direction_Left);
 	}
-	if (current_y < dst_y) {
+	if (current_pos.y < dst_pos.y) {
 		directions_to_dst.push_back(Direction_Down);
 	}
-	if (current_y > dst_y) {
+	if (current_pos.y > dst_pos.y) {
 		directions_to_dst.push_back(Direction_Up);
 	}
 	// 既に目的マスにいれば，directions_to_dstに方向は入らない
@@ -338,14 +316,14 @@ std::vector<Direction> CInfantry::decide_move_direction(const uint16_t current_x
 }
 
 /*
-	与えられた2点(x1, y1), (x2, y2)のL1距離を計算する関数
-	引数1, 2: const uint16_t x1, const uint16_t y1 点(x1, y1)の座標
-	引数3, 4: const uint16_t x2, const uint16_t y2 点(x2, y2)の座標
+	与えられた2点のL1距離を計算する関数
+	引数1: const FieldPosition& src 点1の座標
+	引数2: const FieldPosition dst 点2の座標
 	返り値: uint16_t L1距離
 */
-uint16_t CInfantry::calc_L1_distance(const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2) const
+uint16_t CInfantry::calc_L1_distance(const FieldPosition& src, const FieldPosition dst) const
 {
-	return std::abs(x1 - x2) + std::abs(y1 - y2);
+	return std::abs(src.x - dst.x) + std::abs(src.y - dst.y);
 }
 
 /*
@@ -366,135 +344,55 @@ bool CInfantry::is_self(const CInfantry* infantry) const
 }
 
 /*
-	フィールドのマスのうち，指定した方向に隣接したマスのx座標を取得する関数
+	フィールドのマスのうち，指定した方向に隣接したマスの座標を取得する関数
 	引数1: const Direction direction 方向
-	返り値: uint16_t x座標
-	備考: 現在いるマスのx座標をを基準とする
+	引数2: const FieldPosition& origin 基準となるマスの座標
+	返り値: FieldPosition 隣接したマス
+	備考: 指定した方向に隣接したマスの座標がフィールドの範囲外だった場合，基準となるマスの座標を返す
 */
-uint16_t CInfantry::get_neighbor_x_pos(const Direction direction) const
+FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const FieldPosition& origin) const
 {
-	uint16_t dst_x_pos;
+	FieldPosition dst_pos;
 
-	switch (direction) {
-		case Direction_Left:
-			dst_x_pos = m_pos_x - 1;
-			break;
-		case Direction_Right:
-			dst_x_pos = m_pos_x + 1;
-			break;
-		default:
-			dst_x_pos = m_pos_x;
-			break;
-	}
-
-	if (dst_x_pos < 0) {
-		dst_x_pos = 0;
-	}
-	// TODO: フィールドの幅を定数ではなく，フィールドから得るようにする
-	else if (LocalFieldSize_Width <= dst_x_pos) {
-		dst_x_pos = LocalFieldSize_Width - 1;
-	}
-
-	return dst_x_pos;
-}
-
-/*
-	フィールドのマスのうち，指定した方向に隣接したマスのx座標を取得する関数
-	引数1: const Direction direction 方向
-	引数2: const uint16_t ref_x 基準となるマスのx座標
-	返り値: uint16_t x座標
-	備考: 基準となるマスのx座標を引数で指定できる
-*/
-uint16_t CInfantry::get_neighbor_x_pos(const Direction direction, const uint16_t ref_x) const
-{
-	uint16_t dst_x_pos;
-
+	// x座標を決定
 	switch (direction) {
 	case Direction_Left:
-		dst_x_pos = ref_x - 1;
+		dst_pos.x = origin.x - 1;
 		break;
 	case Direction_Right:
-		dst_x_pos = ref_x + 1;
+		dst_pos.x = origin.x + 1;
 		break;
 	default:
-		dst_x_pos = ref_x;
+		dst_pos.x = origin.x;
 		break;
 	}
-
-	if (dst_x_pos < 0) {
-		dst_x_pos = 0;
+	if (dst_pos.x < 0) {
+		dst_pos.x = 0;
 	}
-	// TODO: フィールドの幅を定数ではなく，フィールドから得るようにする
-	else if (LocalFieldSize_Width <= dst_x_pos) {
-		dst_x_pos = LocalFieldSize_Width - 1;
+	else if (LocalFieldSize_Width <= dst_pos.x) {
+		// TODO: フィールドの幅を定数ではなく，フィールドから得るようにする
+		dst_pos.x = LocalFieldSize_Width - 1;
 	}
 
-	return dst_x_pos;
-}
-
-/*
-	フィールドのマスのうち，指定した方向に隣接したマスのy座標を取得する関数
-	引数1: const Direction direction 方向
-	返り値: uint16_t y座標
-	備考: 現在いるマスのy座標をを基準とする
-*/
-uint16_t CInfantry::get_neighbor_y_pos(const Direction direction) const
-{
-	uint16_t dst_y_pos;
-
+	// y座標を決定
 	switch (direction) {
 	case Direction_Up:
-		dst_y_pos = m_pos_y - 1;
+		dst_pos.y = origin.y - 1;
 		break;
 	case Direction_Down:
-		dst_y_pos = m_pos_y + 1;
+		dst_pos.y = origin.y + 1;
 		break;
 	default:
-		dst_y_pos = m_pos_y;
+		dst_pos.y = origin.y;
 		break;
 	}
-
-	if (dst_y_pos < 0) {
-		dst_y_pos = 0;
+	if (dst_pos.y < 0) {
+		dst_pos.y = 0;
 	}
-	// TODO: フィールドの高さを定数ではなく，フィールドから得るようにする
-	else if (LocalFieldSize_Height <= dst_y_pos) {
-		dst_y_pos = LocalFieldSize_Height - 1;
-	}
-
-	return dst_y_pos;
-}
-
-/*
-	フィールドのマスのうち，指定した方向に隣接したマスのy座標を取得する関数
-	引数1: const Direction direction 方向
-	引数2: const uint16_t ref_y 基準となるマスのy座標
-	返り値: uint16_t y座標
-	備考: 基準となるマスのy座標を引数で指定できる
-*/
-uint16_t CInfantry::get_neighbor_y_pos(const Direction direction, const uint16_t ref_y) const
-{
-	uint16_t dst_y_pos;
-
-	switch (direction) {
-	case Direction_Up:
-		dst_y_pos = ref_y - 1;
-		break;
-	case Direction_Down:
-		dst_y_pos = ref_y + 1;
-		break;
-	default:
-		dst_y_pos = ref_y;
-		break;
+	else if (LocalFieldSize_Height <= dst_pos.y) {
+		// TODO: フィールドの高さを定数ではなく，フィールドから得るようにする
+		dst_pos.y = LocalFieldSize_Height - 1;
 	}
 
-	if (dst_y_pos < 0) {
-		dst_y_pos = 0;
-	}
-	// TODO: フィールドの高さを定数ではなく，フィールドから得るようにする
-	else if (LocalFieldSize_Height <= dst_y_pos) {
-		dst_y_pos = LocalFieldSize_Height - 1;
-	}
-
-	return dst_y_pos;
+	return dst_pos;
 }

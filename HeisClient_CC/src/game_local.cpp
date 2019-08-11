@@ -199,7 +199,7 @@ CGameLocal::BattleResult CGameLocal::judge_battle_result() const
 	// フィールド上のすべての兵士を探索し，少なくとも一方のチームの兵士が全滅していたら終了
 	for (int x = 0; x < LocalFieldSize_Width; x++) {
 		for (int y = 0; y < LocalFieldSize_Height; y++) {
-			CInfantry* infantry = field->get_infantry(x, y);
+			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
 
 			if (infantry != NULL) {
 				if (infantry->get_team_name() == LOCAL_MY_TEAM_NAME) {

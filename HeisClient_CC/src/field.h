@@ -24,9 +24,9 @@ class CField
 		static void delete_field();
 
 		// マス目情報(各マスにいる兵士の情報)の管理
-		CInfantry* get_infantry(const uint16_t pos_x, const uint16_t pos_y) const;
-		void set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry);
-		void remove_infantry(const uint16_t pos_x, const uint16_t pos_y);
+		CInfantry* get_infantry(const FieldPosition& pos) const;
+		void set_infantry(const FieldPosition& pos, CInfantry* infantry);
+		void remove_infantry(const FieldPosition& pos);
 
 		// フィールド情報の取得
 		uint16_t get_width();
@@ -53,7 +53,7 @@ class CField
 		void relocate_all_infantries_from_units_array(const std::vector<UnitsArrayElem>& units_array);
 
 		// 値の検証
-		void validate_position(const uint16_t pos_x, const uint16_t pos_y) const;
+		void validate_position(const FieldPosition& pos) const;
 		void validate_size(const uint16_t width, const uint16_t height) const;
 
 	// メンバ変数

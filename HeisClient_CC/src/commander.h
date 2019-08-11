@@ -21,8 +21,7 @@ class CCommander
 		~CCommander();
 
 		// 指定したIDを持つ兵士のステータス取得
-		uint16_t get_x_position(const std::string& id) const;
-		uint16_t get_y_position(const std::string& id) const;
+		FieldPosition get_position(const std::string& id) const;
 		uint8_t get_action_remain(const std::string& id) const;
 		int8_t get_hp(const std::string& id) const;
 

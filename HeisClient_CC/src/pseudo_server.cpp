@@ -133,8 +133,8 @@ picojson::object CPseudoServer::make_units_elem(const CInfantry* infantry) const
 	picojson::object units_elem_obj;
 	picojson::object locate_obj;
 
-	locate_obj.insert(std::make_pair("x", static_cast<double>(infantry->get_x_position())));
-	locate_obj.insert(std::make_pair("y", static_cast<double>(infantry->get_y_position())));
+	locate_obj.insert(std::make_pair("x", static_cast<double>(infantry->get_position().x)));
+	locate_obj.insert(std::make_pair("y", static_cast<double>(infantry->get_position().y)));
 
 	units_elem_obj.insert(std::make_pair("type", "heizu"));
 	units_elem_obj.insert(std::make_pair("unit_id", infantry->get_id()));
@@ -159,8 +159,8 @@ picojson::array CPseudoServer::make_initial_units_JSON_array() const
 
 	for (int x = 0; x < initial_area_width; x++) {
 		for (int y = 0; y < initial_area_height; y++) {
-			CInfantry my_infantry(LOCAL_MY_TEAM_NAME, make_infantry_id(LOCAL_MY_TEAM_NAME, infantry_serial_num), x, y);
-			CInfantry enemy_infantry(LOCAL_ENEMY_TEAM_NAME, make_infantry_id(LOCAL_ENEMY_TEAM_NAME, infantry_serial_num), LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1);
+			CInfantry my_infantry(LOCAL_MY_TEAM_NAME, make_infantry_id(LOCAL_MY_TEAM_NAME, infantry_serial_num), FieldPosition(x, y));
+			CInfantry enemy_infantry(LOCAL_ENEMY_TEAM_NAME, make_infantry_id(LOCAL_ENEMY_TEAM_NAME, infantry_serial_num), FieldPosition(LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1));
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&my_infantry)));
 			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&enemy_infantry)));
 			infantry_serial_num++;
@@ -183,7 +183,7 @@ picojson::array CPseudoServer::make_units_JSON_array() const
 	// フィールド上にいる全兵士の情報を，そのまま"units"配列に入れる
 	for (int x = 0; x < field->get_width(); x++) {
 		for (int y = 0; y < field->get_height(); y++) {
-			CInfantry* infantry = field->get_infantry(x, y);
+			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
 
 			if (infantry != NULL) {
 				units_JSON_array.push_back(picojson::value(make_units_elem(infantry)));

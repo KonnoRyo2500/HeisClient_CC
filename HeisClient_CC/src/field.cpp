@@ -56,16 +56,15 @@ void CField::delete_field()
 
 /*
 	指定された座標にいる兵士を取得する関数
-	引数1: const uint16_t pos_x 取得したい兵士のいるx座標
-	引数2: const uint16_t pos_y 取得したい兵士のいるy座標
+	引数1: const FieldPosition& pos 取得したい兵士のいる座標
 	返り値: CInfantry* 指定された座標にいる兵士(存在しなければNULL)
 */
-CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) const
+CInfantry* CField::get_infantry(const FieldPosition& pos) const
 {
 	// 指定された座標が不正でないかどうかチェック
-	validate_position(pos_x, pos_y);
+	validate_position(pos);
 
-	CInfantry* infantry = find_infantry_by_id(m_grid[pos_x + (m_width * pos_y)]);
+	CInfantry* infantry = find_infantry_by_id(m_grid[pos.x + (m_width * pos.y)]);
 	if (infantry != NULL) {
 		return infantry;
 	}
@@ -74,42 +73,40 @@ CInfantry* CField::get_infantry(const uint16_t pos_x, const uint16_t pos_y) cons
 
 /*
 	指定した座標に兵士を配置する関数
-	引数1: const uint16_t pos_x 兵士を配置するx座標
-	引数2: const uint16_t pos_y 兵士を配置するy座標
-	引数3: CInfantry* infantry 配置する兵士
+	引数1: const FieldPosition& pos 兵士を配置する座標
+	引数2: CInfantry* infantry 配置する兵士
 	例外: NULLの兵士を配置しようとしたとき
 	返り値なし
 */
-void CField::set_infantry(const uint16_t pos_x, const uint16_t pos_y, CInfantry* infantry)
+void CField::set_infantry(const FieldPosition& pos, CInfantry* infantry)
 {
 	// 指定された座標が不正でないかどうかチェック
-	validate_position(pos_x, pos_y);
+	validate_position(pos);
 	// 兵士がNULLの場合は，IDを取得できないので不正
 	if (infantry == NULL) {
 		throw CHeisClientException("配置しようとしている兵士がNULLです．remove_infantry関数を呼ぶようにしてください");
 	}
 
 	add_infantry(infantry);
-	m_grid[pos_x + (m_width * pos_y)] = infantry->get_id();
+	m_grid[pos.x + (m_width * pos.y)] = infantry->get_id();
 }
 
 /*
 	指定した座標にいる兵士を削除する関数
-	引数1: const uint16_t pos_x 削除する兵士のいるx座標
-	引数2: const uint16_t pos_y 削除する兵士のいるy座標
+	引数1: const FieldPosition& pos 削除する兵士のいる座標
 	返り値なし
 	備考: 指定された座標に兵士がいない場合でもエラーにはしない
 */
-void CField::remove_infantry(const uint16_t pos_x, const uint16_t pos_y)
+void CField::remove_infantry(const FieldPosition& pos)
 {
 	// 指定された座標が不正でないかどうかチェック
-	validate_position(pos_x, pos_y);
+	validate_position(pos);
 
 	/*
 		実体はリスト(m_all_infantries)に残り続けるが，update関数で呼ばれるdelete_all_infantries関数で
 		リスト中のすべての兵士が削除されるため，この実装でもメモリリークは発生しない
 	*/
-	m_grid[pos_x + (m_width * pos_y)] = EMPTY_ID;
+	m_grid[pos.x + (m_width * pos.y)] = EMPTY_ID;
 }
 
 /*
@@ -163,7 +160,7 @@ void CField::show()
 {
 	for (int y = 0; y < m_height; y++) {
 		for (int x = 0; x < m_width; x++) {
-			CInfantry* infantry = get_infantry(x, y);
+			CInfantry* infantry = get_infantry(FieldPosition(x, y));
 
 			if (infantry == NULL) {
 				printf("----");
@@ -267,26 +264,25 @@ void CField::add_infantry(CInfantry* new_infantry)
 void CField::relocate_all_infantries_from_units_array(const std::vector<UnitsArrayElem>& units_array)
 {
 	for (auto& infantry_data : units_array) {
-		CInfantry* infantry = new CInfantry(infantry_data.team, infantry_data.unit_id, infantry_data.locate.x, infantry_data.locate.y);
-		set_infantry(infantry_data.locate.x, infantry_data.locate.y, infantry);
+		CInfantry* infantry = new CInfantry(infantry_data.team, infantry_data.unit_id, FieldPosition(infantry_data.locate.x, infantry_data.locate.y));
+		set_infantry( FieldPosition(infantry_data.locate.x, infantry_data.locate.y), infantry);
 	}
 }
 
 /*
 	座標を検証する関数
-	引数1: const uint16_t pos_x x座標
-	引数2: const uint16_t pos_y y座標
+	引数1: const FieldPosition& pos 検証対象の座標
 	返り値なし
 	例外: 指定した座標が範囲外のとき
 */
-void CField::validate_position(const uint16_t pos_x, const uint16_t pos_y) const
+void CField::validate_position(const FieldPosition& pos) const
 {
 	// if文で条件判定すると条件式が長くなるのでこのような書き方をした
-	bool is_position_valid = (0 <= pos_x && pos_x < m_width);
+	bool is_position_valid = (0 <= pos.x && pos.x < m_width);
 
-	is_position_valid &= (0 <= pos_y && pos_y < m_height);
+	is_position_valid &= (0 <= pos.y && pos.y < m_height);
 	if (!is_position_valid) {
-		throw CHeisClientException("指定された座標(%d, %d)は不正です", pos_x, pos_y);
+		throw CHeisClientException("指定された座標(%d, %d)は不正です", pos.x, pos.y);
 	}
 }
 
