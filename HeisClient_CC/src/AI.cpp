@@ -2,6 +2,7 @@
 // Author: Ryo Konno
 
 #include "AI.h"
+#include "field.h"
 #include <random>
 
 /* public関数 */
@@ -29,7 +30,7 @@ void CUserAI::AI_main()
 		if (sample_decide_action() == SampleAction_Move) {
 			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids());
 			if (infantry_id.size() > 0) {
-				m_commander->move(infantry_id, sample_decide_move_distance(), sample_decide_move_distance());
+				m_commander->move(infantry_id, sample_decide_move_x_distance(infantry_id), sample_decide_move_y_distance(infantry_id));
 			}
 		}
 		else {
@@ -44,14 +45,47 @@ void CUserAI::AI_main()
 /* private関数 */
 
 /*
-	(サンプルAI用処理)兵士の移動距離を決定する関数
-	引数なし
-	返り値: int16_t 兵士の移動距離(-1 ~ 1)
+	(サンプルAI用処理)兵士のx方向の移動距離を決定する関数
+	引数1: const std::string& id 移動対象の兵士のID
+	返り値: int16_t x方向の移動距離
 */
-int16_t CUserAI::sample_decide_move_distance() const
+int16_t CUserAI::sample_decide_move_x_distance(const std::string& id) const
 {
 	std::random_device rnd_dev;
-	return (rnd_dev() % 3) - 1;
+	// -2 ~ 2
+	int16_t move_distance = (rnd_dev() % 5) - 2;
+
+	// 移動後の位置が範囲外になってしまう場合は移動しない
+	if (m_commander->get_position(id).x + move_distance < 0) {
+		move_distance = 0;
+	}
+	else if (CField::get_instance()->get_width() <= m_commander->get_position(id).x + move_distance) {
+		move_distance = 0;
+	}
+
+	return move_distance;
+}
+
+/*
+	(サンプルAI用処理)兵士のy方向の移動距離を決定する関数
+	引数1: const std::string& id 移動対象の兵士のID
+	返り値: int16_t y方向の移動距離
+*/
+int16_t CUserAI::sample_decide_move_y_distance(const std::string& id) const
+{
+	std::random_device rnd_dev;
+	// -2 ~ 2
+	int16_t move_distance = (rnd_dev() % 5) - 2;
+
+	// 移動後の位置が範囲外になってしまう場合は移動しない
+	if (m_commander->get_position(id).y + move_distance < 0) {
+		move_distance = 0;
+	}
+	else if (CField::get_instance()->get_height() <= m_commander->get_position(id).y + move_distance) {
+		move_distance = 0;
+	}
+
+	return move_distance;
 }
 
 /*
