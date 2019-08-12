@@ -369,8 +369,7 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 	if (dst_pos.x < 0) {
 		dst_pos.x = 0;
 	}
-	else if (LocalFieldSize_Width <= dst_pos.x) {
-		// TODO: フィールドの幅を定数ではなく，フィールドから得るようにする
+	else if (CField::get_instance()->get_width() <= dst_pos.x) {
 		dst_pos.x = LocalFieldSize_Width - 1;
 	}
 
@@ -389,8 +388,7 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 	if (dst_pos.y < 0) {
 		dst_pos.y = 0;
 	}
-	else if (LocalFieldSize_Height <= dst_pos.y) {
-		// TODO: フィールドの高さを定数ではなく，フィールドから得るようにする
+	else if (CField::get_instance()->get_height() <= dst_pos.y) {
 		dst_pos.y = LocalFieldSize_Height - 1;
 	}
 
