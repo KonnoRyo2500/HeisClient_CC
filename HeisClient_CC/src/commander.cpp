@@ -74,31 +74,30 @@ int8_t CCommander::get_hp(const std::string& id) const
 /*
 	指定したIDの兵士に攻撃を行わせる関数
 	引数1: const std::string& id ID
-	引数2: const Direction direction 攻撃方向
+	引数2: const FieldPosition dst_pos 攻撃先の座標
 	返り値なし
 */
-void CCommander::attack(const std::string& id, const Direction direction) const
+void CCommander::attack(const std::string& id, const FieldPosition dst_pos) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL) {
-		infantry->attack(direction);
+		infantry->attack(dst_pos);
 	}
 }
 
 /*
 	指定したIDの兵士を移動する関数
 	引数1: const std::string& id ID
-	引数2: const int16_t delta_x x方向に何マス移動するか(正の値であれば下方向, 負の値であれば上方向)
-	引数3: const int16_t delta_y y方向に何マス移動するか(正の値であれば右方向, 負の値であれば左方向)
+	引数2: const FieldPosition dst_pos 移動先の座標
 	返り値なし
 */
-void CCommander::move(const std::string& id, const int16_t delta_x, const int16_t delta_y) const
+void CCommander::move(const std::string& id, const FieldPosition dst_pos) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL) {
-		infantry->move(delta_x, delta_y);
+		infantry->move(dst_pos);
 	}
 }
 

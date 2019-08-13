@@ -25,9 +25,9 @@ class CUserAI {
 	private:
 		// サンプルAI用の処理
 		void sample_random_move(const std::string infantry_id);
+		void sample_random_attack(const std::string infantry_id);
 		std::string sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const;
 		SampleAction sample_decide_action() const;
-		Direction sample_decide_direction() const;
 
 	// メンバ変数
 	private:

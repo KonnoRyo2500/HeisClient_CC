@@ -36,7 +36,7 @@ void CUserAI::AI_main()
 		else {
 			infantry_id = sample_select_next_infantry(m_commander->get_all_attackable_infantry_ids());
 			if (infantry_id.size() > 0) {
-				m_commander->attack(infantry_id, sample_decide_direction());
+				sample_random_attack(infantry_id);
 			}
 		}
 	}
@@ -46,7 +46,7 @@ void CUserAI::AI_main()
 
 /*
 	(サンプルAI用処理)兵士をランダムに移動させる関数
-	引数1: const std::string& id 移動対象の兵士のID
+	引数1: const std::string& id 行動対象の兵士のID
 	返り値なし
 */
 void CUserAI::sample_random_move(const std::string infantry_id)
@@ -56,11 +56,25 @@ void CUserAI::sample_random_move(const std::string infantry_id)
 
 	if (movable_pos.size() > 0) {
 		FieldPosition dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
-		FieldPosition current_pos = m_commander->get_position(infantry_id);
 
-		// TODO: 移動量の指定を，現在の座標からの相対座標ではなく絶対座標にしたい
-		// TODO: 攻撃する座標も，方向指定ではなく絶対座標にしたい
-		m_commander->move(infantry_id, dst_pos.x - current_pos.x, dst_pos.y - current_pos.y);
+		m_commander->move(infantry_id, dst_pos);
+	}
+}
+
+/*
+	(サンプルAI用処理)兵士をランダムな方向に攻撃させる関数
+	引数1: const std::string& id 行動対象の兵士のID
+	返り値なし
+*/
+void CUserAI::sample_random_attack(const std::string infantry_id)
+{
+	std::vector<FieldPosition> attackable_pos = m_commander->find_attackable_position(infantry_id);
+	std::random_device rnd_dev;
+
+	if (attackable_pos.size() > 0) {
+		FieldPosition dst_pos = attackable_pos.at(rnd_dev() % attackable_pos.size());
+
+		m_commander->attack(infantry_id, dst_pos);
 	}
 }
 
@@ -97,16 +111,4 @@ CUserAI::SampleAction CUserAI::sample_decide_action() const
 	else {
 		return SampleAction_Attack;
 	}
-}
-
-/*
-	(サンプルAI用処理)行動の方向を決定する関数
-	引数なし
-	返り値: Direction 方向
-*/
-Direction CUserAI::sample_decide_direction() const
-{
-	std::random_device rnd_dev;
-
-	return static_cast<Direction>(rnd_dev() % 4);
 }

@@ -36,8 +36,8 @@ class CInfantry
 		int8_t get_hp() const;
 
 		// 行動
-		void attack(const Direction direction);
-		void move(const int16_t delta_x, const int16_t delta_y);
+		void attack(const FieldPosition dst_pos);
+		void move(const FieldPosition dst_pos);
 
 		// 周囲の探索
 		std::vector<FieldPosition> find_movable_position() const;

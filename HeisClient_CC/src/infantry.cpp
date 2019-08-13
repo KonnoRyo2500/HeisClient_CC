@@ -94,23 +94,26 @@ int8_t CInfantry::get_hp() const
 
 /*
 	指定した方向に攻撃を行う関数
-	引数1: const Direction direction 攻撃方向
+	引数1: const FieldPosition dst_pos 攻撃先の座標
 	返り値なし
 */
-void CInfantry::attack(const Direction direction)
+void CInfantry::attack(const FieldPosition dst_pos)
 {
 	if (m_action_remain <= 0) {
 		fprintf(stderr, "この兵士は行動できません\n");
+		return;
+	}
+	if (calc_L1_distance(m_pos, dst_pos) != 1) {
+		fprintf(stderr, "攻撃先座標の指定が不正です\n");
 		return;
 	}
 
 	CField* field = CField::get_instance();
 
 	try {
-		CInfantry* dst_infantry = field->get_infantry(get_neighbor_pos(direction, m_pos));
+		CInfantry* dst_infantry = field->get_infantry(dst_pos);
 		if (dst_infantry != NULL) {
 			if (dst_infantry->get_team_name() == m_team_name) {
-				// 範囲外の位置に攻撃しようとした場合，自身の座標に攻撃することになるため，ここに処理が移る
 				fprintf(stderr, "味方の兵士を攻撃しようとしています\n");
 				return;
 			}
@@ -119,7 +122,7 @@ void CInfantry::attack(const Direction direction)
 			dst_infantry->attacked();
 
 			// 攻撃先を更新
-			m_attack_pos = get_neighbor_pos(direction, m_pos);
+			m_attack_pos = dst_pos;
 
 			// 攻撃したら，それ以降兵士は行動不可能
 			m_action_remain = 0;
@@ -135,11 +138,10 @@ void CInfantry::attack(const Direction direction)
 
 /*
 	兵士を移動する関数
-	引数1: const int16_t delta_x x方向に何マス移動するか(正の値であれば下方向, 負の値であれば上方向)
-	引数2: const int16_t delta_y y方向に何マス移動するか(正の値であれば右方向, 負の値であれば左方向)
+	引数1: const FieldPosition dst_pos 移動先の座標
 	返り値なし
 */
-void CInfantry::move(const int16_t delta_x, const int16_t delta_y)
+void CInfantry::move(const FieldPosition dst_pos)
 {
 	if (m_action_remain <= 0) {
 		fprintf(stderr, "この兵士は行動できません\n");
@@ -147,24 +149,23 @@ void CInfantry::move(const int16_t delta_x, const int16_t delta_y)
 	}
 
 	CField* field = CField::get_instance();
-	FieldPosition dst = { static_cast<uint16_t>(m_pos.x + delta_x), static_cast<uint16_t>(m_pos.y + delta_y) };
 
-	if (calc_L1_distance(m_pos, dst) > m_action_remain) {
+	if (calc_L1_distance(m_pos, dst_pos) > m_action_remain) {
 		fprintf(stderr, "移動できる歩数の上限を超えて移動しようとしています\n");
 		return;
 	}
 	try {
-		CInfantry* dst_infantry = field->get_infantry(dst);
-		if (exists_path_for_move(dst)) {
+		CInfantry* dst_infantry = field->get_infantry(dst_pos);
+		if (exists_path_for_move(dst_pos)) {
 			// フィールド上の座標を更新する
 			field->remove_infantry(m_pos);
-			field->set_infantry(dst, this);
+			field->set_infantry(dst_pos, this);
 
 			// 移動した歩数分だけ，行動回数を減らす
-			m_action_remain -= calc_L1_distance(m_pos, dst);
+			m_action_remain -= calc_L1_distance(m_pos, dst_pos);
 
 			// 自身の位置を更新する
-			m_pos = dst;
+			m_pos = dst_pos;
 		}
 		else {
 			fprintf(stderr, "移動経路がありません\n");

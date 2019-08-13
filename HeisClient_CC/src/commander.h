@@ -26,8 +26,8 @@ class CCommander
 		int8_t get_hp(const std::string& id) const;
 
 		// 行動(指定したIDを持つ兵士への命令)
-		void attack(const std::string& id, const Direction direction) const;
-		void move(const std::string& id, const int16_t delta_x, const int16_t delta_y) const;
+		void attack(const std::string& id, const FieldPosition dst_pos) const;
+		void move(const std::string& id, const FieldPosition dst_pos) const;
 		std::vector<FieldPosition> find_movable_position(const std::string& id) const;
 		std::vector<FieldPosition> find_attackable_position(const std::string& id) const;
 
