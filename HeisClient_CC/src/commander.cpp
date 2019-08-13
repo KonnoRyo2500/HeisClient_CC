@@ -103,6 +103,36 @@ void CCommander::move(const std::string& id, const int16_t delta_x, const int16_
 }
 
 /*
+	移動可能なすべてのマスを返す関数
+	引数1: const std::string& id ID
+	返り値: std::vector<FieldPosition> 移動可能なマス
+*/
+std::vector<FieldPosition> CCommander::find_movable_position(const std::string& id) const
+{
+	CInfantry* infantry = search_infantry_by_id(id);
+
+	if (infantry != NULL) {
+		return infantry->find_movable_position();
+	}
+	return std::vector<FieldPosition>();
+}
+
+/*
+	攻撃可能なすべてのマスを返す関数
+	引数1: const std::string& id ID
+	返り値: std::vector<FieldPosition> 攻撃可能なマス
+*/
+std::vector<FieldPosition> CCommander::find_attackable_position(const std::string& id) const
+{
+	CInfantry* infantry = search_infantry_by_id(id);
+
+	if (infantry != NULL) {
+		return infantry->find_attackable_position();
+	}
+	return std::vector<FieldPosition>();
+}
+
+/*
 	行動可能なすべての兵士のIDを取得する関数
 	引数なし
 	返り値: std::vector<std::string&> 行動可能な各兵士のID

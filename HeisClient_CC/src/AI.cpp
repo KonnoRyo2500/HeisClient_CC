@@ -30,7 +30,7 @@ void CUserAI::AI_main()
 		if (sample_decide_action() == SampleAction_Move) {
 			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids());
 			if (infantry_id.size() > 0) {
-				m_commander->move(infantry_id, sample_decide_move_x_distance(infantry_id), sample_decide_move_y_distance(infantry_id));
+				sample_random_move(infantry_id);
 			}
 		}
 		else {
@@ -45,47 +45,23 @@ void CUserAI::AI_main()
 /* private関数 */
 
 /*
-	(サンプルAI用処理)兵士のx方向の移動距離を決定する関数
+	(サンプルAI用処理)兵士をランダムに移動させる関数
 	引数1: const std::string& id 移動対象の兵士のID
-	返り値: int16_t x方向の移動距離
+	返り値なし
 */
-int16_t CUserAI::sample_decide_move_x_distance(const std::string& id) const
+void CUserAI::sample_random_move(const std::string infantry_id)
 {
+	std::vector<FieldPosition> movable_pos = m_commander->find_movable_position(infantry_id);
 	std::random_device rnd_dev;
-	// -2 ~ 2
-	int16_t move_distance = (rnd_dev() % 5) - 2;
 
-	// 移動後の位置が範囲外になってしまう場合は移動しない
-	if (m_commander->get_position(id).x + move_distance < 0) {
-		move_distance = 0;
+	if (movable_pos.size() > 0) {
+		FieldPosition dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
+		FieldPosition current_pos = m_commander->get_position(infantry_id);
+
+		// TODO: 移動量の指定を，現在の座標からの相対座標ではなく絶対座標にしたい
+		// TODO: 攻撃する座標も，方向指定ではなく絶対座標にしたい
+		m_commander->move(infantry_id, dst_pos.x - current_pos.x, dst_pos.y - current_pos.y);
 	}
-	else if (CField::get_instance()->get_width() <= m_commander->get_position(id).x + move_distance) {
-		move_distance = 0;
-	}
-
-	return move_distance;
-}
-
-/*
-	(サンプルAI用処理)兵士のy方向の移動距離を決定する関数
-	引数1: const std::string& id 移動対象の兵士のID
-	返り値: int16_t y方向の移動距離
-*/
-int16_t CUserAI::sample_decide_move_y_distance(const std::string& id) const
-{
-	std::random_device rnd_dev;
-	// -2 ~ 2
-	int16_t move_distance = (rnd_dev() % 5) - 2;
-
-	// 移動後の位置が範囲外になってしまう場合は移動しない
-	if (m_commander->get_position(id).y + move_distance < 0) {
-		move_distance = 0;
-	}
-	else if (CField::get_instance()->get_height() <= m_commander->get_position(id).y + move_distance) {
-		move_distance = 0;
-	}
-
-	return move_distance;
 }
 
 /*

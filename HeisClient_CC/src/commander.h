@@ -28,6 +28,8 @@ class CCommander
 		// 行動(指定したIDを持つ兵士への命令)
 		void attack(const std::string& id, const Direction direction) const;
 		void move(const std::string& id, const int16_t delta_x, const int16_t delta_y) const;
+		std::vector<FieldPosition> find_movable_position(const std::string& id) const;
+		std::vector<FieldPosition> find_attackable_position(const std::string& id) const;
 
 		// 兵士の探索
 		std::vector<std::string> get_all_actable_infantry_ids() const;
