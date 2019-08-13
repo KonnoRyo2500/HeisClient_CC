@@ -39,7 +39,9 @@ int main()
 		field->update(json_analyzer.create_field_pkt(ps.send_initial_field_json()));
 		com.update();
 		ecom.update();
-		com.move("te34", 0, 2);
+		for (FieldPosition p : field->get_infantry(FieldPosition(4, 4))->find_movable_position()) {
+			printf("(%d, %d)\n", p.x, p.y);
+		}
 		field->show();
 #else
 		int i = 0;

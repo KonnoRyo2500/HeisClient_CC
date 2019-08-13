@@ -237,23 +237,16 @@ bool CCommander::is_actable(const CInfantry* infantry) const
 }
 
 /*
-	与えられた兵士が隣接したマスに移動可能かを調べる関数
+	与えられた兵士に移動可能なマスがあるか調べる関数
 	引数1: const CInfantry* infantry 兵士
-	返り値: bool 兵士が移動可能か(true: 移動可能なマスがある, false: 隣接したどのマスにも移動できない)
+	返り値: bool 兵士が移動可能か(true: 移動可能なマスがある, false: 移動可能なマスがない)
 */
 bool CCommander::is_movable(const CInfantry* infantry) const
 {
 	if (infantry->get_action_remain() <= 0) {
 		return false;
 	}
-
-	for (auto look_result : infantry->look_around()) {
-		if (look_result.infantry == NULL) {
-			return true;
-		}
-	}
-
-	return false;
+	return infantry->find_movable_position().size() != 0;
 }
 
 /*
@@ -266,12 +259,5 @@ bool CCommander::is_attackable(const CInfantry* infantry) const
 	if (infantry->get_action_remain() <= 0) {
 		return false;
 	}
-
-	for (auto look_result : infantry->look_around()) {
-		if ((look_result.infantry != NULL) && (look_result.infantry->get_team_name() != m_team_name)) {
-			return true;
-		}
-	}
-
-	return false;
+	return infantry->find_attackable_position().size() != 0;
 }

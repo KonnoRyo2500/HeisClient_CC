@@ -155,24 +155,19 @@ void CInfantry::move(const int16_t delta_x, const int16_t delta_y)
 	}
 	try {
 		CInfantry* dst_infantry = field->get_infantry(dst);
-		if (dst_infantry == NULL) {
-			if (exists_path_for_move(dst)) {
-				// フィールド上の座標を更新する
-				field->remove_infantry(m_pos);
-				field->set_infantry(dst, this);
+		if (exists_path_for_move(dst)) {
+			// フィールド上の座標を更新する
+			field->remove_infantry(m_pos);
+			field->set_infantry(dst, this);
 
-				// 移動した歩数分だけ，行動回数を減らす
-				m_action_remain -= calc_L1_distance(m_pos, dst);
+			// 移動した歩数分だけ，行動回数を減らす
+			m_action_remain -= calc_L1_distance(m_pos, dst);
 
-				// 自身の位置を更新する
-				m_pos = dst;
-			}
-			else {
-				fprintf(stderr, "移動経路がありません\n");
-			}
+			// 自身の位置を更新する
+			m_pos = dst;
 		}
 		else {
-			fprintf(stderr, "移動先に兵士がいます\n");
+			fprintf(stderr, "移動経路がありません\n");
 		}
 	}
 	catch (std::exception & e) {
@@ -181,27 +176,42 @@ void CInfantry::move(const int16_t delta_x, const int16_t delta_y)
 }
 
 /*
-	自分の周囲4マスを探索する関数
+	移動可能なすべてのマスを返す関数
 	引数なし
-	返り値: std::vector<CInfantry::NeighborInfantryData> 周囲のマスにいる兵士の情報(最大4マス)
+	返り値: std::vector<FieldPosition> 移動可能なマス
 */
-std::vector<CInfantry::NeighborInfantryData> CInfantry::look_around() const
+std::vector<FieldPosition> CInfantry::find_movable_position() const
 {
-	std::vector<NeighborInfantryData> neighbor_infantries;
+	std::vector<FieldPosition> movable_pos;
+
+	// 移動可能なマスをすべて探索する
+	for (FieldPosition pos : get_around_position(m_action_remain)) {
+		if (exists_path_for_move(pos)) {
+			movable_pos.push_back(pos);
+		}
+	}
+	
+	return movable_pos;
+}
+
+/*
+	攻撃可能なすべてのマスを返す関数
+	引数なし
+	返り値: std::vector<FieldPosition> 攻撃可能なマス
+*/
+std::vector<FieldPosition> CInfantry::find_attackable_position() const
+{
+	std::vector<FieldPosition> attackable_pos;
 	CField* field = CField::get_instance();
 
-	for (auto direction : {Direction_Up, Direction_Down, Direction_Left, Direction_Right}) {
-		CInfantry* infantry = field->get_infantry(get_neighbor_pos(direction, m_pos));
-
-		// ある方向で，自分のいるマスを参照していたら，その方向にはマスが存在していない
-		if (!is_self(infantry)) {
-			NeighborInfantryData infantry_data = {direction, infantry};
-
-			neighbor_infantries.push_back(infantry_data);
+	// 攻撃は自分に隣接したマスにしかできないので，自分の上下左右のマス(自身からのL1距離が1のマス)のみを探索すればよい
+	for (FieldPosition pos : get_around_position(1)) {
+		if (field->get_infantry(pos) != NULL && field->get_infantry(pos)->get_team_name() != m_team_name) {
+			attackable_pos.push_back(pos);
 		}
 	}
 
-	return neighbor_infantries;
+	return attackable_pos;
 }
 
 /*
@@ -249,10 +259,14 @@ void CInfantry::attacked()
 	指定されたマスに移動するための経路があるかどうかを判定する関数
 	引数1: const FieldPosition& dst_pos 目的マスx座標
 	返り値: 目的マスに移動できるか
-	備考: 目的マスに兵士はいないものとする(この関数を呼び出す際，目的マスに兵士がいるかどうかを考慮済みとする)
 */
 bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
 {
+	// 目的マスに兵士がいれば，その時点で移動経路がないことがわかる
+	if (CField::get_instance()->get_infantry(dst_pos) != NULL) {
+		return false;
+	}
+
 	// 移動可能なマスの一覧
 	std::queue<FieldPosition> available_pos;
 	FieldPosition current_pos;
@@ -324,6 +338,34 @@ std::vector<Direction> CInfantry::decide_move_direction(const FieldPosition& cur
 uint16_t CInfantry::calc_L1_distance(const FieldPosition& src, const FieldPosition dst) const
 {
 	return std::abs(src.x - dst.x) + std::abs(src.y - dst.y);
+}
+
+/*
+	自分の周囲のマスのうち，指定したL1距離以内にあるマスを取得する関数
+	引数1: const uint16_t search_distance 探索範囲のL1距離の上限
+	返り値: std::vector<FieldPosition> 取得したすべてのマス
+*/
+std::vector<FieldPosition> CInfantry::get_around_position(const uint16_t search_distance) const
+{
+	std::vector<FieldPosition> around_positions;
+	CField* field = CField::get_instance();
+	// for文の初期化式および条件式が長くなるのを防ぐため，x, yの境界値は変数に入れる
+	// フィールドの範囲チェック付きで，現在地からのL1距離がsearch_distance以内のすべてのマスを探索できるようになっている
+	uint16_t x_begin = (search_distance <= m_pos.x ? m_pos.x - search_distance : 0);
+	uint16_t x_end = (m_pos.x + search_distance < field->get_width() ? m_pos.x + search_distance : field->get_width() - 1);
+
+	for (uint16_t x = x_begin; x <= x_end; x++) {
+		uint16_t y_begin = ((search_distance - std::abs(m_pos.x - x)) <= m_pos.y ? m_pos.y - (search_distance - std::abs(m_pos.x - x)) : 0);
+		uint16_t y_end = (m_pos.y + (search_distance - std::abs(m_pos.x - x)) < field->get_height() ? m_pos.y + (search_distance - std::abs(m_pos.x - x)) : field->get_height() - 1);
+		for (uint16_t y = y_begin; y <= y_end; y++) {
+			// 自身のいるマスは簡単にわかるので，自分のいるマスについては探索対象としない
+			if (FieldPosition(x, y) != m_pos) {
+				around_positions.push_back(FieldPosition(x, y));
+			}
+		}
+	}
+
+	return around_positions;
 }
 
 /*

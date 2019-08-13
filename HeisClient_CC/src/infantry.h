@@ -12,11 +12,6 @@ class CInfantry
 {
 	// 構造体，列挙体など
 	public:
-		// 自分の周囲のマスにいる兵士の情報
-		struct NeighborInfantryData {
-			Direction direction;
-			CInfantry* infantry;
-		};
 
 	private:
 		// 初期値
@@ -43,7 +38,10 @@ class CInfantry
 		// 行動
 		void attack(const Direction direction);
 		void move(const int16_t delta_x, const int16_t delta_y);
-		std::vector<NeighborInfantryData> look_around() const;
+
+		// 周囲の探索
+		std::vector<FieldPosition> find_movable_position() const;
+		std::vector<FieldPosition> find_attackable_position() const;
 
 		// 「行動」パケットの"contents"配列の1要素分のデータを作成
 		ContentsArrayElem create_contents_array_elem() const;
@@ -58,6 +56,9 @@ class CInfantry
 
 		// L1距離を計算(移動の際の歩数計算用)
 		uint16_t calc_L1_distance(const FieldPosition& src, const FieldPosition dst) const;
+
+		// 自分の周囲のマスを取得
+		std::vector<FieldPosition> get_around_position(const uint16_t search_distance) const;
 
 		// 与えられた兵士が自分自身かどうかを判定
 		bool is_self(const CInfantry* infantry) const;
