@@ -5,6 +5,7 @@
 #include "JSON_analyzer.h"
 #include "pseudo_server.h"
 #include "game_local.h"
+#include "game_online.h"
 #include "field.h"
 
 // デバッグ用関数
@@ -44,13 +45,19 @@ int main()
 		}
 		field->show();
 #else
+	#if 0
 		int i = 0;
-		while (i < 100) {
+		while (i < 10) {
 			CGameLocal game;
 
 			game.play_game();
 			i++;
 		}
+	#else
+		CGameOnline game;
+
+		game.play_game();
+	#endif
 #endif
 	}
 	catch (const std::exception& e) {

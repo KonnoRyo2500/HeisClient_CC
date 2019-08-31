@@ -3,6 +3,7 @@
 
 #include "game_online.h"
 #include "const_val.h"
+#include "field.h"
 
 /* public関数 */
 
@@ -16,7 +17,14 @@ void CGameOnline::play_game()
 	bool battle_result;
 
 	// 対戦開始前の準備
-	prepare_to_battle();
+	initialize_battle();
+	// メッセージ(名前要求)を受信
+	recv_name_request();
+	// 名前を送信
+	// TODO: サーバに送信する名前を，設定ファイルから取得できるようにする
+	name_entry(LOCAL_MY_TEAM_NAME);
+	// 確定した名前を受信
+	name_register();
 
 	// 対戦
 	while (!is_battle_end()) {
@@ -25,6 +33,8 @@ void CGameOnline::play_game()
 
 	// 勝敗判定
 	battle_result = judge_win();
+	// 対戦終了後処理
+	finalize_battle();
 	// 勝敗を表示
 	printf("%s\n", battle_result ? "You win!" : "You lose...");
 }
@@ -35,15 +45,19 @@ void CGameOnline::play_game()
 	対戦を開始する前の準備を行う関数
 	引数なし
 	返り値なし
+	備考: この関数では，名前確定前に生成できるインスタンスを生成する
 */
-void CGameOnline::prepare_to_battle()
+void CGameOnline::initialize_battle()
 {
-	// メッセージ(名前要求)を受信
-	recv_name_request();
-	// 名前を送信
-	name_entry(LOCAL_MY_TEAM_NAME);
-	// 確定した名前を受信
-	name_register();
+	// 必要なインスタンスの生成
+	CField::create_field();
+
+	// 兵士の初期配置はここで行われる
+	// m_commanderの生成については，名前確定後に行う必要があるため，name_register関数で行う
+	m_ai = new CUserAI(m_commander);
+	m_json_analyzer = new CJSONAnalyzer();
+	// TODO: 設定ファイルから接続先IPアドレス，ポート番号を決定できるようにする
+	m_sck = new CSocket("192.168.1.1", 50000);
 }
 
 /*
@@ -53,7 +67,8 @@ void CGameOnline::prepare_to_battle()
 */
 void CGameOnline::recv_name_request()
 {
-	// TODO: サーバーからメッセージを受け取り，名前要求かどうか判定する
+	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(m_sck->recv_from());
+	printf("名前要求: %s\n", name_req_msg_pkt.message.c_str());
 	// 名前要求でなければエラー
 }
 
@@ -64,8 +79,8 @@ void CGameOnline::recv_name_request()
 */
 void CGameOnline::name_entry(const std::string& name)
 {
-	m_team_name = name;
-	// TODO: m_team_nameをサーバーに送信
+	JSONSendPacket_Name name_pkt = {name};
+	m_sck->send_to(m_json_analyzer->create_name_JSON(name_pkt));
 }
 
 /*
@@ -75,7 +90,9 @@ void CGameOnline::name_entry(const std::string& name)
 */
 void CGameOnline::name_register()
 {
-	// TODO: サーバーから名前を受信し，それをm_team_nameに入れる
+	JSONRecvPacket_NameDecided name_decided_pkt = m_json_analyzer->create_name_decided_pkt(m_sck->recv_from());
+	m_team_name = name_decided_pkt.your_team;
+	m_commander = new CCommander(m_team_name);
 }
 
 /*
@@ -87,6 +104,26 @@ bool CGameOnline::is_battle_end()
 {
 	// TODO: サーバーから受信したJSONの"finished"フィールドを返す
 	return true;
+}
+
+/*
+	対戦終了後の後処理を行う関数
+	引数なし
+	返り値なし
+*/
+void CGameOnline::finalize_battle()
+{
+	delete m_commander;
+	delete m_ai;
+	delete m_json_analyzer;
+	delete m_sck;
+
+	m_commander = NULL;
+	m_ai = NULL;
+	m_json_analyzer = NULL;
+	m_sck = NULL;
+
+	CField::delete_field();
 }
 
 /*

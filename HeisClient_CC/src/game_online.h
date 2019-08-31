@@ -2,6 +2,10 @@
 // Author: Ryo Konno
 #pragma once
 
+#include "commander.h"
+#include "AI.h"
+#include "JSON_analyzer.h"
+#include "socket.h"
 #include <string>
 #include <vector>
 
@@ -16,15 +20,16 @@ class CGameOnline {
 		
 	private:
 		// 対戦開始前処理
-		void prepare_to_battle();
-
-		// 対戦開始前処理の実行関数
+		void initialize_battle();
 		void recv_name_request();
 		void name_entry(const std::string& name);
 		void name_register();
 
 		// 対戦の終了判定
 		bool is_battle_end();
+
+		// 対戦終了後処理
+		void finalize_battle();
 
 		// 対戦後の勝敗判定
 		bool judge_win();
@@ -33,4 +38,16 @@ class CGameOnline {
 	private:
 		// 自チーム名
 		std::string m_team_name;
+
+		// 司令官
+		CCommander* m_commander;
+
+		// ユーザAI
+		CUserAI* m_ai;
+		
+		// JSON解析器
+		CJSONAnalyzer* m_json_analyzer;
+
+		// TCPソケット
+		CSocket* m_sck;
 };
