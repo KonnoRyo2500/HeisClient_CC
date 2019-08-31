@@ -37,7 +37,7 @@ CHeisClientException::CHeisClientException(const char* format, ...)
 	引数なし
 	返り値: const char* 例外の内容
 */
-const char* CHeisClientException::what() const
+const char* CHeisClientException::what() const noexcept
 {
 	return m_error_message.c_str();
 }

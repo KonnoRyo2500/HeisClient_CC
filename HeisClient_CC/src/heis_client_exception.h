@@ -12,7 +12,7 @@ class CHeisClientException : public std::runtime_error
 		explicit CHeisClientException(const char* format, ...);
 
 		// 内容を表示
-		const char* what() const override;
+		const char* what() const noexcept override;
 
 	// メンバ変数
 	private:
