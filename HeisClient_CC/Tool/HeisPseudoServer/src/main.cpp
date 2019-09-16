@@ -1,10 +1,10 @@
-// heisƒNƒ‰ƒCƒAƒ“ƒg—p‹^—ƒT[ƒo ƒƒCƒ“ˆ—
+ï»¿// heisã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç”¨ç–‘ä¼¼ã‚µãƒ¼ãƒ ãƒ¡ã‚¤ãƒ³å‡¦ç†
 // Author: Ryo Konno
 
 #include <stdlib.h>
 
 /*
-	ƒƒCƒ“ŠÖ”
+	ãƒ¡ã‚¤ãƒ³é–¢æ•°
 */
 int main(int argc, char **argv)
 {

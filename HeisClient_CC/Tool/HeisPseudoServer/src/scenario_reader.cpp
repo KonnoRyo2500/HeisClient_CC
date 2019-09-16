@@ -1,26 +1,26 @@
-// heisƒNƒ‰ƒCƒAƒ“ƒg—pJSON‘—óM¡‹ï ƒVƒiƒŠƒI“Ç‚İ‚İƒNƒ‰ƒX
+ï»¿// heisã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç”¨JSONé€å—ä¿¡æ²»å…· ã‚·ãƒŠãƒªã‚ªèª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 
 #include "scenario_reader.h"
 #include "heis_client_exception.h"
 
 /*
-	ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	ˆø”1: const std::string& scenario_file_name ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹–¼
-	—áŠO: ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“‚É¸”s‚µ‚½‚Æ‚«
+	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	å¼•æ•°1: const std::string& scenario_file_name ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«å
+	ä¾‹å¤–: ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ã«å¤±æ•—ã—ãŸã¨ã
 */
 CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
 	: m_next_action_type(ActionType_AllActionDone)
 {
 	m_scenatio_file = fopen(scenario_file_name.c_str(), "r");
 	if(!m_scenatio_file){
-		throw CHeisClientException("ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“‚É¸”s‚µ‚Ü‚µ‚½(ƒtƒ@ƒCƒ‹–¼: %s)", scenario_file_name.c_str());
+		throw CHeisClientException("ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ã«å¤±æ•—ã—ã¾ã—ãŸ(ãƒ•ã‚¡ã‚¤ãƒ«å: %s)", scenario_file_name.c_str());
 	}
 }
 
 /*
-	ƒfƒXƒgƒ‰ƒNƒ^
-	ˆø”‚È‚µ
+	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	å¼•æ•°ãªã—
 */
 CScenarioReader::~CScenarioReader()
 {

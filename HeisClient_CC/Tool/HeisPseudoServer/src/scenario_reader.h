@@ -1,44 +1,44 @@
-// heisƒNƒ‰ƒCƒAƒ“ƒg—pJSON‘—ŽóMŽ¡‹ï ƒVƒiƒŠƒI“Ç‚Ýž‚ÝƒNƒ‰ƒX
+ï»¿// heisã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç”¨JSONé€å—ä¿¡æ²»å…· ã‚·ãƒŠãƒªã‚ªèª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 
 #include <string>
 
 class CScenarioReader
 {
-	// \‘¢‘ÌE—ñ‹“‘Ì‚È‚Ç
+	// æ§‹é€ ä½“ãƒ»åˆ—æŒ™ä½“ãªã©
 	public:
-		// ƒAƒNƒVƒ‡ƒ“‚ÌŽí—Þ
+		// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ç¨®é¡ž
 		enum ActionType {
-			// ŽóM: ƒNƒ‰ƒCƒAƒ“ƒg‚©‚çƒƒbƒZ[ƒW‚ðŽóM‚·‚é
+			// å—ä¿¡: ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‹ã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å—ä¿¡ã™ã‚‹
 			ActionType_Receive,
-			// ƒƒbƒZ[ƒW‘—M: ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚É‹LÚ‚³‚ê‚½ƒƒbƒZ[ƒW‚ðƒNƒ‰ƒCƒAƒ“ƒg‚É‘—M‚·‚é
+			// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡: ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã«è¨˜è¼‰ã•ã‚ŒãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«é€ä¿¡ã™ã‚‹
 			ActionType_SendMessage,
-			// ƒtƒ@ƒCƒ‹‘—M: ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚ÅŽw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì“à—e‚ðƒNƒ‰ƒCƒAƒ“ƒg‚É‘—M‚·‚é
+			// ãƒ•ã‚¡ã‚¤ãƒ«é€ä¿¡: ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«é€ä¿¡ã™ã‚‹
 			ActionType_SendFileContents,
-			// ‘SƒAƒNƒVƒ‡ƒ“ŽÀsŠ®—¹: ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚É‹LÚ‚³‚ê‚½ƒAƒNƒVƒ‡ƒ“‚ð‚·‚×‚ÄŽÀs‚µ‚½
+			// å…¨ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œå®Œäº†: ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã«è¨˜è¼‰ã•ã‚ŒãŸã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’ã™ã¹ã¦å®Ÿè¡Œã—ãŸ
 			ActionType_AllActionDone,
 		};
 
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 	public:
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		explicit CScenarioReader(const std::string& scenario_file_name);
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~CScenarioReader();
 
-		// ŽŸ‚ÌƒAƒNƒVƒ‡ƒ“‚ÌŽí—Þ‚ðŽæ“¾
+		// æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ç¨®é¡žã‚’å–å¾—
 		ActionType get_next_aciton_type();
 
-		// ‘—M‚·‚éƒƒbƒZ[ƒW‚âƒtƒ@ƒCƒ‹–¼‚ðŽæ“¾
+		// é€ä¿¡ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚„ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 		std::string get_message_to_send();
 		std::string get_filename_to_send();
 
 	private:
 
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	private:
-		// ŽŸ‚ÌƒAƒNƒVƒ‡ƒ“
+		// æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
 		ActionType m_next_action_type;
-		// ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹
+		// ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«
 		FILE* m_scenatio_file;
 };
