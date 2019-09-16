@@ -1,6 +1,8 @@
 // heisクライアント用JSON送受信治具 シナリオ読み込みクラス
 // Author: Ryo Konno
 
+#include <string>
+
 class CScenarioReader
 {
 	// 構造体・列挙体など
@@ -32,7 +34,6 @@ class CScenarioReader
 		std::string get_filename_to_send();
 
 	private:
-		
 
 	// メンバ変数
 	private:
