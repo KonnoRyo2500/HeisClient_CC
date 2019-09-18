@@ -2,6 +2,8 @@
 // Author: Ryo Konno
 
 #include <string>
+#include <vector>
+#include <fstream>
 
 class CScenarioReader
 {
@@ -34,11 +36,13 @@ class CScenarioReader
 		std::string get_filename_to_send();
 
 	private:
+		// トークン作成
+		std::vector<std::string> split_action_message(const std::string& action_msg);
 
 	// メンバ変数
 	private:
 		// 次のアクション
 		ActionType m_next_action_type;
 		// シナリオファイル
-		FILE* m_scenatio_file;
+		std::ifstream m_scenatio_file;
 };
