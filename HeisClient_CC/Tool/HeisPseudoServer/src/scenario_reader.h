@@ -36,13 +36,16 @@ class CScenarioReader
 		std::string get_filename_to_send();
 
 	private:
+
 		// トークン作成
 		std::vector<std::string> split_action_message(const std::string& action_msg);
+		void delete_front_space(std::string& src_str);
+		std::string cut_front_token(std::string& src_str);
 
 	// メンバ変数
 	private:
 		// 次のアクション
 		ActionType m_next_action_type;
 		// シナリオファイル
-		std::ifstream m_scenatio_file;
+		std::ifstream m_scenario_file;
 };
