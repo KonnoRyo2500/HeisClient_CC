@@ -77,21 +77,25 @@ std::vector<std::string> CScenarioReader::split_action_message(const std::string
 */
 void CScenarioReader::delete_front_space(std::string& src_str)
 {
-	if(src_str.find_first_not_of(SPACE_AND_TAB) == std::string::npos){
+	// 次に出現するトークンの先頭位置
+	size_t next_token_pos = src_str.find_first_not_of(SPACE_AND_TAB);
+
+	if(next_token_pos == std::string::npos){
 		src_str = "";
 		return;
 	}
-	src_str = src_str.substr(src_str.find_first_not_of(SPACE_AND_TAB));
+	src_str = src_str.substr(next_token_pos);
 }
 
 /*
-	与えられた文字列の先頭にある文字列を空白まで切り取る関数
+	与えられた文字列の先頭にある文字列を空白が出現するまで切り取る関数
 	参照1: std::string& src_str 文字列
 	返り値: std::string 切り取った文字列
 	備考: 与えられた文字列に空白がない場合，元の文字列をそのまま返し，文字列を空文字列にする
 */
 std::string CScenarioReader::cut_front_token(std::string& src_str)
 {
+	// 次に出現する空白の先頭位置
 	size_t next_spaces_pos = src_str.find_first_of(SPACE_AND_TAB);
 	
 	if(next_spaces_pos == std::string::npos){
