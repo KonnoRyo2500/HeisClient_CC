@@ -10,7 +10,10 @@ int main(int argc, char **argv)
 {
 	try{
 		CScenarioReader sr("scenario_sample.txt");
-		sr.get_next_aciton_type();
+		CScenarioReader::ActionType act_type;
+		while((act_type = sr.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
+			printf("type: %d\n", act_type);
+		}
 	}
 	catch(std::exception& e){
 		printf("exception: %s\n", e.what());

@@ -19,6 +19,8 @@ class CScenarioReader
 			ActionType_SendFileContents,
 			// 全アクション実行完了: シナリオファイルに記載されたアクションをすべて実行した
 			ActionType_AllActionDone,
+			// 不正: アクションの種類を特定できない
+			ActionType_Invalid = 999,
 		};
 
 	// メンバ関数
@@ -36,13 +38,14 @@ class CScenarioReader
 		std::string get_filename_to_send();
 
 	private:
-		// トークン作成
-		std::vector<std::string> split_action_message(const std::string& action_msg);
-		void delete_front_space(std::string& src_str);
+		// アクションのトークン作成
+		std::vector<std::string> split_action_string(const std::string& action_str);
+		void erase_front_space(std::string& src_str);
 		std::string cut_front_token(std::string& src_str);
+		std::string build_no_control_letter_string(const std::string& src_str);
 
 		// アクション解析
-		
+		bool is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command);
 
 	// メンバ変数
 	private:

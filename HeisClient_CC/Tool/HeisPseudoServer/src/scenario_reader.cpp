@@ -3,6 +3,7 @@
 
 #include "scenario_reader.h"
 #include "heis_client_exception.h"
+#include <map>
 
 #define SPACE_AND_TAB " \t"
 
@@ -39,29 +40,43 @@ CScenarioReader::~CScenarioReader()
 */
 CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 {
-	std::string action_msg;
-	while(getline(m_scenario_file, action_msg)){
-		std::vector<std::string> action_tokens = split_action_message(action_msg);
-		printf("action: %s\n", action_tokens[0].c_str());
+	std::string action_str;
+	// コマンドとアクションの種類の対応表
+	const std::map<std::vector<std::string>, ActionType> command_actiontype_map = {
+		{{"recv"},				ActionType_Receive			},
+		{{"send", "msg"},		ActionType_SendMessage		},
+		{{"send", "file"},		ActionType_SendFileContents	},
+	};
+
+	if(m_scenario_file.eof()){
+		return ActionType_AllActionDone;
 	}
+	getline(m_scenario_file, action_str);
+	std::vector<std::string> action = split_action_string(action_str);
+	for(auto& cmd_actiontype : command_actiontype_map){
+		if(is_match_command_part(action, cmd_actiontype.first)){
+			return cmd_actiontype.second;
+		}
+	}
+	return ActionType_Invalid;
 }
 
 /* private関数 */
 
 /*
 	アクションを記述した文字列を空白で区切り，トークンに分解する関数
-	引数1: const std::string& action_msg アクションを記述した文字列
+	引数1: const std::string& action_str アクションを記述した文字列
 	返り値: std::vector<std::string> 分割の結果得られたトークン
 */
-std::vector<std::string> CScenarioReader::split_action_message(const std::string& action_msg)
+std::vector<std::string> CScenarioReader::split_action_string(const std::string& action_str)
 {
-	std::string action_msg_work(action_msg);
+	std::string action_str_work(action_str);
 	std::vector<std::string> tokens;
 	
-	while(action_msg_work.size() > 0){
+	while(action_str_work.size() > 0){
 		std::string token;
-		delete_front_space(action_msg_work);
-		token = cut_front_token(action_msg_work);
+		erase_front_space(action_str_work);
+		token = cut_front_token(action_str_work);
 		if(token.size() > 0){
 			tokens.push_back(token);
 		}
@@ -75,7 +90,7 @@ std::vector<std::string> CScenarioReader::split_action_message(const std::string
 	返り値なし
 	備考: 文字列がすべて空白で構成されていた場合，文字列を空文字列にする
 */
-void CScenarioReader::delete_front_space(std::string& src_str)
+void CScenarioReader::erase_front_space(std::string& src_str)
 {
 	// 次に出現するトークンの先頭位置
 	size_t next_token_pos = src_str.find_first_not_of(SPACE_AND_TAB);
@@ -101,7 +116,45 @@ std::string CScenarioReader::cut_front_token(std::string& src_str)
 	if(next_spaces_pos == std::string::npos){
 		next_spaces_pos = src_str.size();
 	}
-	std::string token = src_str.substr(0, next_spaces_pos);
+	std::string token = build_no_control_letter_string(src_str.substr(0, next_spaces_pos));
 	src_str = src_str.substr(next_spaces_pos);
 	return token;
+}
+
+/*
+	与えられた文字列から制御文字を取り除いた文字列を作成する関数
+	引数1: const std::string& src_str 文字列
+	返り値なし
+	備考: 文字列は英数字のみで構成されているものとする
+*/
+std::string CScenarioReader::build_no_control_letter_string(const std::string& src_str)
+{
+	std::string no_ctl_letter_str;
+	for(auto& ch : src_str){
+		if(isalnum(ch)){
+			no_ctl_letter_str += ch;
+		}
+	}
+	return no_ctl_letter_str;
+}
+
+/*
+	与えられたアクションのコマンド部分が，与えられたコマンドに一致しているかを判定する関数
+	引数1: const std::vector<std::string> action アクション
+	引数2: const std::vector<std::string> command コマンド
+	返り値: actionのコマンド部分が，commandと一致しているか(一致: true, 不一致: false)
+*/
+bool CScenarioReader::is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command)
+{
+	if(action.size() < command.size()){
+		return false;
+	}
+	int i = 0;
+	for(auto& token : command){
+		if(token != action[i]){
+			return false;
+		}
+		i++;
+	}
+	return true;
 }
