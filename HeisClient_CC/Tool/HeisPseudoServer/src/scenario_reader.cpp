@@ -75,7 +75,7 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 	引数1: const std::string& action_str アクションを記述した文字列
 	返り値: std::vector<std::string> 分割の結果得られたトークン
 */
-std::vector<std::string> CScenarioReader::split_action_string(const std::string& action_str)
+std::vector<std::string> CScenarioReader::split_action_string(const std::string& action_str) const
 {
 	std::string action_str_work(action_str);
 	std::vector<std::string> tokens;
@@ -97,7 +97,7 @@ std::vector<std::string> CScenarioReader::split_action_string(const std::string&
 	返り値なし
 	備考: 文字列がすべて空白で構成されていた場合，文字列を空文字列にする
 */
-void CScenarioReader::erase_front_space(std::string& src_str)
+void CScenarioReader::erase_front_space(std::string& src_str) const
 {
 	// 次に出現するトークンの先頭位置
 	size_t next_token_pos = src_str.find_first_not_of(SPACE_AND_TAB);
@@ -115,7 +115,7 @@ void CScenarioReader::erase_front_space(std::string& src_str)
 	返り値: std::string 切り取った文字列
 	備考: 与えられた文字列に空白がない場合，元の文字列をそのまま返し，文字列を空文字列にする
 */
-std::string CScenarioReader::cut_front_token(std::string& src_str)
+std::string CScenarioReader::cut_front_token(std::string& src_str) const
 {
 	// 次に出現する空白の先頭位置
 	size_t next_spaces_pos = src_str.find_first_of(SPACE_AND_TAB);
@@ -135,7 +135,7 @@ std::string CScenarioReader::cut_front_token(std::string& src_str)
 	返り値: std::string src_strから制御文字を取り除いた文字列
 	備考: 本関数は，シナリオファイルから取り出したアクションに余計な制御文字が含まれてしまうことを防ぐための関数である
 */
-std::string CScenarioReader::build_no_control_code_string(const std::string& src_str)
+std::string CScenarioReader::build_no_control_code_string(const std::string& src_str) const
 {
 	// 削除する制御文字一覧
 	const std::vector<std::string> ctl_codes = {
@@ -164,7 +164,7 @@ std::string CScenarioReader::build_no_control_code_string(const std::string& src
 	引数1: const std::string& erase_str 削除する文字列
 	返り値なし
 */
-void CScenarioReader::erase_substring(std::string& dst_str, const std::string& erase_str)
+void CScenarioReader::erase_substring(std::string& dst_str, const std::string& erase_str) const
 {
 	size_t substr_pos = dst_str.find(erase_str);
 	while(substr_pos != std::string::npos){
@@ -179,7 +179,7 @@ void CScenarioReader::erase_substring(std::string& dst_str, const std::string& e
 	引数2: const std::vector<std::string> command コマンド
 	返り値: bool actionのコマンド部分が，commandと一致しているか(一致: true, 不一致: false)
 */
-bool CScenarioReader::is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command)
+bool CScenarioReader::is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command) const
 {
 	if(action.size() < command.size()){
 		return false;
@@ -200,7 +200,7 @@ bool CScenarioReader::is_match_command_part(const std::vector<std::string> actio
 	返り値: bool action_strが空行か(true: 空行, false: 空行ではない)
 	備考: 「空行」とは空白類(スペースもしくはタブ)で構成された行のことを指す
 */
-bool CScenarioReader::is_empty_line(const std::string& action_str)
+bool CScenarioReader::is_empty_line(const std::string& action_str) const
 {
 	return action_str.find_first_not_of(SPACE_AND_TAB) == std::string::npos;
 }
