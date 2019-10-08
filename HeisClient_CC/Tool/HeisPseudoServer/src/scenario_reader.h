@@ -17,9 +17,11 @@ class CScenarioReader
 			ActionType_SendMessage,
 			// ファイル送信: シナリオファイルで指定されたファイルの内容をクライアントに送信する
 			ActionType_SendFileContents,
+			// アクションなし: アクションが記載されていない
+			ActionType_None,
 			// 全アクション実行完了: シナリオファイルに記載されたアクションをすべて実行した
 			ActionType_AllActionDone,
-			// 不正: アクションの種類を特定できない
+			// 不正: 未定義のアクションが記載されている
 			ActionType_Invalid = 999,
 		};
 
@@ -42,10 +44,14 @@ class CScenarioReader
 		std::vector<std::string> split_action_string(const std::string& action_str);
 		void erase_front_space(std::string& src_str);
 		std::string cut_front_token(std::string& src_str);
-		std::string build_no_control_letter_string(const std::string& src_str);
+
+		// 文字列の整形(不要文字削除)
+		std::string build_no_control_code_string(const std::string& src_str);
+		void erase_substring(std::string& dst_str, const std::string& erase_str);
 
 		// アクション解析
 		bool is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command);
+		bool is_empty_line(const std::string& action_str);
 
 	// メンバ変数
 	private:

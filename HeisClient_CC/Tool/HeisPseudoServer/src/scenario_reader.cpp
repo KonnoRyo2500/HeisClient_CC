@@ -5,7 +5,7 @@
 #include "heis_client_exception.h"
 #include <map>
 
-#define SPACE_AND_TAB " \t"
+#define SPACE_AND_TAB " 　\t"
 
 /* public関数 */
 
@@ -51,8 +51,16 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 	if(m_scenario_file.eof()){
 		return ActionType_AllActionDone;
 	}
+	
+	// シナリオファイルから読み出し，トークンに分割
 	getline(m_scenario_file, action_str);
+	action_str = build_no_control_code_string(action_str);
 	std::vector<std::string> action = split_action_string(action_str);
+
+	// アクションの種類を判定
+	if(is_empty_line(action_str)){
+		return ActionType_None;
+	}
 	for(auto& cmd_actiontype : command_actiontype_map){
 		if(is_match_command_part(action, cmd_actiontype.first)){
 			return cmd_actiontype.second;
@@ -116,33 +124,61 @@ std::string CScenarioReader::cut_front_token(std::string& src_str)
 	if(next_spaces_pos == std::string::npos){
 		next_spaces_pos = src_str.size();
 	}
-	std::string token = build_no_control_letter_string(src_str.substr(0, next_spaces_pos));
+	//std::string token = erase_BOM_and_CR(src_str.substr(0, next_spaces_pos));
+	std::string token = src_str.substr(0, next_spaces_pos);
 	src_str = src_str.substr(next_spaces_pos);
 	return token;
 }
 
 /*
-	与えられた文字列から制御文字を取り除いた文字列を作成する関数
-	引数1: const std::string& src_str 文字列
-	返り値なし
-	備考: 文字列は英数字のみで構成されているものとする
+	与えられた文字列から不要な制御文字を取り除いた文字列を作成する関数
+	引数1: std::string& src_str 文字列
+	返り値: std::string src_strから制御文字を取り除いた文字列
+	備考: 本関数は，シナリオファイルから取り出したアクションに余計な制御文字が含まれてしまうことを防ぐための関数である
 */
-std::string CScenarioReader::build_no_control_letter_string(const std::string& src_str)
+std::string CScenarioReader::build_no_control_code_string(const std::string& src_str)
 {
-	std::string no_ctl_letter_str;
-	for(auto& ch : src_str){
-		if(isalnum(ch)){
-			no_ctl_letter_str += ch;
-		}
+	// 削除する制御文字一覧
+	const std::vector<std::string> ctl_codes = {
+		// BOM(UTF-8)
+		/*
+		  この処理により，SJISで「*ｻｿ」(*は2バイト目が0xEFの文字)を含む文字列は不正な文字列になるが，
+		  そのような文字列を含むアクションはユーザが運用によりシナリオファイルに記述しないものとする．
+		*/
+		"\xEF\xBB\xBF",
+		// CR
+		"\r",
+		// LF
+		"\n",
+	};
+	std::string no_control_code_str = src_str;
+
+	for(auto ctl_code : ctl_codes){
+		erase_substring(no_control_code_str, ctl_code);
 	}
-	return no_ctl_letter_str;
+	return no_control_code_str;
+}
+
+/*
+	指定された文字列を，文字列中から削除する関数
+	参照1: std::string& dst_str 加工対象の文字列
+	引数1: const std::string& erase_str 削除する文字列
+	返り値なし
+*/
+void CScenarioReader::erase_substring(std::string& dst_str, const std::string& erase_str)
+{
+	size_t substr_pos = dst_str.find(erase_str);
+	while(substr_pos != std::string::npos){
+		dst_str.erase(substr_pos, erase_str.size());
+		substr_pos = dst_str.find(erase_str);
+	}
 }
 
 /*
 	与えられたアクションのコマンド部分が，与えられたコマンドに一致しているかを判定する関数
 	引数1: const std::vector<std::string> action アクション
 	引数2: const std::vector<std::string> command コマンド
-	返り値: actionのコマンド部分が，commandと一致しているか(一致: true, 不一致: false)
+	返り値: bool actionのコマンド部分が，commandと一致しているか(一致: true, 不一致: false)
 */
 bool CScenarioReader::is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command)
 {
@@ -157,4 +193,15 @@ bool CScenarioReader::is_match_command_part(const std::vector<std::string> actio
 		i++;
 	}
 	return true;
+}
+
+/*
+	与えられた行(アクション)が空行かどうかを判定する関数
+	引数1: const std::string& action_str アクション
+	返り値: bool action_strが空行か(true: 空行, false: 空行ではない)
+	備考: 「空行」とは空白類(スペースもしくはタブ)で構成された行のことを指す
+*/
+bool CScenarioReader::is_empty_line(const std::string& action_str)
+{
+	return action_str.find_first_not_of(SPACE_AND_TAB) == std::string::npos;
 }
