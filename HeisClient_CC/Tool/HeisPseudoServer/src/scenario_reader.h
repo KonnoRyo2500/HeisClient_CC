@@ -55,8 +55,6 @@ class CScenarioReader
 
 	// メンバ変数
 	private:
-		// 次のアクション
-		ActionType m_next_action_type;
 		// シナリオファイル
 		std::ifstream m_scenario_file;
 };

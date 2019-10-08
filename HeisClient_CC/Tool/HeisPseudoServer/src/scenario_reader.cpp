@@ -15,8 +15,7 @@
 	例外: シナリオファイルのオープンに失敗したとき
 */
 CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
-	: m_next_action_type(ActionType_AllActionDone)
-	, m_scenario_file(scenario_file_name)
+	: m_scenario_file(scenario_file_name)
 {
 	if(m_scenario_file.fail()){
 		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", scenario_file_name.c_str());
