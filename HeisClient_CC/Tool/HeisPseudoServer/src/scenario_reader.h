@@ -57,4 +57,6 @@ class CScenarioReader
 	private:
 		// シナリオファイル
 		std::ifstream m_scenario_file;
+		// 直前に読んだアクション
+		std::vector<std::string> m_latest_action;
 };

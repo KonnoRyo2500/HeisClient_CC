@@ -55,6 +55,7 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 	getline(m_scenario_file, action_str);
 	action_str = build_no_control_code_string(action_str);
 	std::vector<std::string> action = split_action_string(action_str);
+	m_latest_action = action;
 
 	// アクションの種類を判定
 	if(is_empty_line(action_str)){
@@ -66,6 +67,35 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 		}
 	}
 	return ActionType_Invalid;
+}
+
+/*
+	"send msg"アクションで送信するメッセージを取得する関数
+	引数なし
+	返り値: std::string 送信するメッセージ
+	例外: メッセージを取得できないとき
+*/
+std::string CScenarioReader::get_message_to_send() const
+{
+	// TODO: 空白を含むメッセージにも対応できるようにする
+	if(m_latest_action.size() >= 3){
+		return m_latest_action[2];
+	}
+	throw CHeisClientException("メッセージが指定されていない，もしくはアクションが異なります");
+}
+
+/*
+	"send file"アクションで送信するメッセージが記載されているファイル名を取得する関数
+	引数なし
+	返り値: std::string 送信するメッセージが記載されているファイル名
+	例外: ファイル名を取得できないとき
+*/
+std::string CScenarioReader::get_filename_to_send() const
+{
+	if(m_latest_action.size() >= 3){
+		return m_latest_action[2];
+	}
+	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
 }
 
 /* private関数 */
