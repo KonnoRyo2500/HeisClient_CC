@@ -1,6 +1,8 @@
 ﻿// heisクライアント用JSON送受信治具 トークン処理クラス
 // Author: Ryo Konno
 
+#include <stdexcept>
+
 #include "token_manager.h"
 
 /* public関数 */
@@ -8,11 +10,32 @@
 /*
 	文字列をトークン列に分割する関数
 	引数1: const std::string& str 分割元の文字列
+	引数2: const std::string& delim 区切り文字
 	返り値: std::vector<std::string> トークン列
 */
-std::vector<std::string> split_string(const std::string& str) const
+std::vector<std::string> CTokenManager::split_string(const std::string& str, const std::string& delim) const
 {
+	// 元の文字列は残しておきたいため，文字列の複製をここで作っておく
+	std::string str_work(str);
+	std::vector<std::string> tokens;
 	
+	erase_control_letter(str_work);
+	while(str_work.size() > 0){
+		std::string token;
+		
+		// 区切り文字を削除する
+		erase_first_delimiters(str_work, delim);
+
+		// トークンを1つ切り出す
+		token = get_first_token(str_work, delim);
+		erase_first_token(str_work, delim);
+
+		// トークン列に追加
+		if(token.size() > 0){
+			tokens.push_back(token);
+		}
+	}
+	return tokens;
 }
 
 /*
@@ -20,10 +43,11 @@ std::vector<std::string> split_string(const std::string& str) const
 	引数1: const std::vector<std::string>& tokens トークン列
 	引数2: const int index インデックス
 	返り値: std::string トークン
+	例外: インデックスが0～tokens.size()-1の範囲外のとき
 */
-std::string get_single_token(const std::vector<std::string>& tokens, const int index) const
+std::string CTokenManager::get_single_token(const std::vector<std::string>& tokens, const int index) const
 {
-	
+	return tokens.at(index);
 }
 
 /*
@@ -32,10 +56,23 @@ std::string get_single_token(const std::vector<std::string>& tokens, const int i
 	引数2: const size_t begin_pos 取得範囲の始端
 	引数3: const size_t end_pos 取得範囲の終端
 	返り値: std::vector<std::string> トークン列
+	例外1: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
+	例外2: begin_pos > end_posであるとき
 */
-std::vector<std::string> get_token_range(const std::vector<std::string>& tokens, const size_t begin_pos, const size_t end_pos) const
+std::vector<std::string> CTokenManager::get_token_range(const std::vector<std::string>& tokens, const size_t begin_pos, const size_t end_pos) const
 {
-	
+	if(begin_pos > end_pos){
+		// heis固有のソースではなく，今後の共通ソースにしたいため，CHeisClientExceptionは投げない
+		throw std::runtime_error("取得範囲が不正です．");
+	}
+
+	std::vector<std::string> sub_tokens;
+
+	for(int i = begin_pos; i <= end_pos; i++){
+		sub_tokens.push_back(get_single_token(tokens, i));
+	}
+
+	return sub_tokens;
 }
 
 /*
@@ -44,10 +81,18 @@ std::vector<std::string> get_token_range(const std::vector<std::string>& tokens,
 	引数2: const size_t begin_pos 取得範囲の始端
 	引数3: const size_t end_pos 取得範囲の終端
 	返り値: std::string トークンを連結した文字列
+	例外: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
 */
-std::string get_catnated_tokens(const std::vector<std::string>& tokens, const size_t begin_pos, const size_t end_pos) const
+std::string CTokenManager::get_catnated_tokens(const std::vector<std::string>& tokens, const size_t begin_pos, const size_t end_pos) const
 {
-	
+	std::vector<std::string> sub_tokens = get_token_range(tokens, begin_pos, end_pos);
+	std::string cat_str;
+
+	for(auto& tk : sub_tokens){
+		cat_str += tk;
+	}
+
+	return cat_str;
 }
 
 /* private関数 */
@@ -59,7 +104,23 @@ std::string get_catnated_tokens(const std::vector<std::string>& tokens, const si
 */
 void CTokenManager::erase_control_letter(std::string& str) const
 {
-	
+	// 削除する制御文字一覧
+	const std::vector<std::string> ctl_code_list = {
+		// BOM(UTF-8)
+		/*
+		  この処理により，SJISで「*ｻｿ」(*は2バイト目が0xEFの文字)を含む文字列は不正な文字列になるが，
+		  そのような文字列を含むアクションはユーザが運用によりシナリオファイルに記述しないものとする．
+		*/
+		"\xEF\xBB\xBF",
+		// CR
+		"\r",
+		// LF
+		"\n",
+	};
+
+	for(auto& ctl_code : ctl_code_list){
+		erase_substring(str, ctl_code);
+	}
 }
 
 /*
@@ -95,6 +156,7 @@ void CTokenManager::erase_first_token(std::string& str, const std::string& delim
 	if(next_delims_pos == std::string::npos){
 		// トークンの後ろに区切り文字列がなければ，そのトークンを削除し分割終了
 		str.clear();
+		return;
 	}
 	str = str.substr(next_delims_pos);
 }
@@ -115,4 +177,19 @@ std::string CTokenManager::get_first_token(const std::string& str, const std::st
 		return str;
 	}
 	return str.substr(0, next_delims_pos);
+}
+
+/*
+	指定された文字列を，文字列中から削除する関数
+	参照1: std::string& str 加工対象の文字列
+	引数1: const std::string& erase_str 削除する文字列
+	返り値なし
+*/
+void CTokenManager::erase_substring(std::string& str, const std::string& erase_str) const
+{
+	size_t substr_pos = str.find(erase_str);
+	while(substr_pos != std::string::npos){
+		str.erase(substr_pos, erase_str.size());
+		substr_pos = str.find(erase_str);
+	}
 }
