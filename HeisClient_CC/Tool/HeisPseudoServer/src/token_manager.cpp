@@ -11,13 +11,13 @@
 	文字列をトークン列に分割する関数
 	引数1: const std::string& str 分割元の文字列
 	引数2: const std::string& delim 区切り文字
-	返り値: std::vector<std::string> トークン列
+	返り値: token_array_t トークン列
 */
-std::vector<std::string> CTokenManager::split_string(const std::string& str, const std::string& delim) const
+token_array_t CTokenManager::split_string(const std::string& str, const std::string& delim) const
 {
 	// 元の文字列は残しておきたいため，文字列の複製をここで作っておく
 	std::string str_work(str);
-	std::vector<std::string> tokens;
+	token_array_t tokens;
 	
 	erase_control_letter(str_work);
 	while(str_work.size() > 0){
@@ -40,33 +40,33 @@ std::vector<std::string> CTokenManager::split_string(const std::string& str, con
 
 /*
 	トークン列から，指定したインデックスのトークンを1つ取得する関数
-	引数1: const std::vector<std::string>& tokens トークン列
+	引数1: const token_array_t& tokens トークン列
 	引数2: const int index インデックス
-	返り値: std::string トークン
+	返り値: token_t トークン
 	例外: インデックスが0～tokens.size()-1の範囲外のとき
 */
-std::string CTokenManager::get_single_token(const std::vector<std::string>& tokens, const int index) const
+token_t CTokenManager::get_single_token(const token_array_t& tokens, const int index) const
 {
 	return tokens.at(index);
 }
 
 /*
 	トークン列から，指定した範囲の各トークンをトークン列として取得する関数
-	引数1: const std::vector<std::string>& tokens トークン列
+	引数1: const token_array_t& tokens トークン列
 	引数2: const size_t begin_pos 取得範囲の始端
 	引数3: const size_t end_pos 取得範囲の終端
-	返り値: std::vector<std::string> トークン列
+	返り値: token_array_t トークン列
 	例外1: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
 	例外2: begin_pos > end_posであるとき
 */
-std::vector<std::string> CTokenManager::get_token_range(const std::vector<std::string>& tokens, const size_t begin_pos, const size_t end_pos) const
+token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const
 {
 	if(begin_pos > end_pos){
 		// heis固有のソースではなく，今後の共通ソースにしたいため，CHeisClientExceptionは投げない
 		throw std::runtime_error("取得範囲が不正です．");
 	}
 
-	std::vector<std::string> sub_tokens;
+	token_array_t sub_tokens;
 
 	for(int i = begin_pos; i <= end_pos; i++){
 		sub_tokens.push_back(get_single_token(tokens, i));
@@ -77,15 +77,15 @@ std::vector<std::string> CTokenManager::get_token_range(const std::vector<std::s
 
 /*
 	トークン列から，指定した範囲の各トークンを1つの文字列に連結して取得する関数
-	引数1: const std::vector<std::string>& tokens トークン列
+	引数1: const token_array_t& tokens トークン列
 	引数2: const size_t begin_pos 取得範囲の始端
 	引数3: const size_t end_pos 取得範囲の終端
 	返り値: std::string トークンを連結した文字列
 	例外: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
 */
-std::string CTokenManager::get_catnated_tokens(const std::vector<std::string>& tokens, const size_t begin_pos, const size_t end_pos) const
+std::string CTokenManager::get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const
 {
-	std::vector<std::string> sub_tokens = get_token_range(tokens, begin_pos, end_pos);
+	token_array_t sub_tokens = get_token_range(tokens, begin_pos, end_pos);
 	std::string cat_str;
 
 	for(auto& tk : sub_tokens){
@@ -165,9 +165,9 @@ void CTokenManager::erase_first_token(std::string& str, const std::string& delim
 	文字列の先頭にあるトークンを取得する関数
 	参照1: std::string& str トークンを削除する対象の文字列
 	引数1: const std::string& delim 区切り文字
-	返り値: std::string 取得したトークン
+	返り値: token_t 取得したトークン
 */
-std::string CTokenManager::get_first_token(const std::string& str, const std::string& delim) const
+token_t CTokenManager::get_first_token(const std::string& str, const std::string& delim) const
 {
 	// 次に出現する区切り文字列の先頭位置
 	size_t next_delims_pos = str.find_first_of(delim);
