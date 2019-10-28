@@ -5,6 +5,8 @@
 #include <vector>
 #include <fstream>
 
+#include "token_manager.h"
+
 class CScenarioReader
 {
 	// 構造体・列挙体など
@@ -40,17 +42,8 @@ class CScenarioReader
 		std::string get_filename_to_send() const;
 
 	private:
-		// アクションのトークン作成
-		std::vector<std::string> split_action_string(const std::string& action_str) const;
-		void erase_front_space(std::string& src_str) const;
-		std::string cut_front_token(std::string& src_str) const;
-
-		// 文字列の整形(不要文字削除)
-		std::string build_no_control_code_string(const std::string& src_str) const;
-		void erase_substring(std::string& dst_str, const std::string& erase_str) const;
-
 		// アクション解析
-		bool is_match_command_part(const std::vector<std::string> action, const std::vector<std::string> command) const;
+		bool is_match_command_part(const token_array_t action, const token_array_t command) const;
 		bool is_empty_line(const std::string& action_str) const;
 
 	// メンバ変数
@@ -58,5 +51,5 @@ class CScenarioReader
 		// シナリオファイル
 		std::ifstream m_scenario_file;
 		// 直前に読んだアクション
-		std::vector<std::string> m_latest_action;
+		token_array_t m_latest_action;
 };
