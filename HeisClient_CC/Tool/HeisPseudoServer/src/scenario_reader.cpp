@@ -43,7 +43,8 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 	std::string action_str;
 	// コマンドとアクションの種類の対応表
 	const std::map<token_array_t, ActionType> command_actiontype_map = {
-		{{"recv"},				ActionType_Receive			},
+		{{"recv", "print"},		ActionType_PrintRecvMessage	},
+		{{"recv", "write"},		ActionType_WriteRecvMessage	},
 		{{"send", "msg"},		ActionType_SendMessage		},
 		{{"send", "file"},		ActionType_SendFileContents	},
 	};
@@ -94,6 +95,21 @@ std::string CScenarioReader::get_message_to_send() const
 	例外: ファイル名を取得できないとき
 */
 std::string CScenarioReader::get_filename_to_send() const
+{
+	if(m_latest_action.size() >= 3){
+		CTokenManager tm;
+		return tm.get_single_token(m_latest_action, 2);
+	}
+	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
+}
+
+/*
+	"recv write"アクションで受信したメッセージを書き出すファイル名を取得する関数
+	引数なし
+	返り値: std::string 受信したメッセージを書き出すファイル名
+	例外: ファイル名を取得できないとき
+*/
+std::string CScenarioReader::get_filename_to_write_recv_msg() const
 {
 	if(m_latest_action.size() >= 3){
 		CTokenManager tm;

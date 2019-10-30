@@ -13,8 +13,10 @@ class CScenarioReader
 	public:
 		// アクションの種類
 		enum ActionType {
-			// 受信: クライアントからメッセージを受信する
-			ActionType_Receive,
+			// 受信して表示: クライアントからメッセージを受信して標準出力に表示する
+			ActionType_PrintRecvMessage,
+			// 受信して書き込み: クライアントからメッセージを受信して指定ファイルに書き出す
+			ActionType_WriteRecvMessage,
 			// メッセージ送信: シナリオファイルに記載されたメッセージをクライアントに送信する
 			ActionType_SendMessage,
 			// ファイル送信: シナリオファイルで指定されたファイルの内容をクライアントに送信する
@@ -37,9 +39,10 @@ class CScenarioReader
 		// 次のアクションの種類を取得
 		ActionType get_next_aciton_type();
 
-		// 送信するメッセージやファイル名を取得
+		// アクションの引数に指定された情報を取得
 		std::string get_message_to_send() const;
 		std::string get_filename_to_send() const;
+		std::string get_filename_to_write_recv_msg() const;
 
 	private:
 		// アクション解析

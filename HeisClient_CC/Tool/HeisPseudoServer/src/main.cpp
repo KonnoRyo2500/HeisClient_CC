@@ -14,8 +14,11 @@ int main(int argc, char **argv)
 		while((act_type = sr.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
 			printf("type: %d\n", act_type);
 			switch(act_type){
-				case CScenarioReader::ActionType_Receive:
-					printf("Receive\n");
+				case CScenarioReader::ActionType_PrintRecvMessage:
+					printf("Receive Print\n");
+					break;
+				case CScenarioReader::ActionType_WriteRecvMessage:
+					printf("Receive Write\n");
 					break;
 				case CScenarioReader::ActionType_SendMessage:
 					printf("message: %s\n", sr.get_message_to_send().c_str());
