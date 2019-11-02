@@ -24,18 +24,18 @@ class CSocket {
 		void sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
 
 		// 送受信
-		void send_to(const std::string& msg) const;
-		std::string recv_from() const;
+		void sck_send(const std::string& msg) const;
+		std::string sck_recv() const;
 
 	private:
 		// 初期化，終了処理
-		void initialize_TCP_socket() const;
-		void make_TCP_socket();
-		void finalize_TCP_socket() const;
+		void initialize_socket() const;
+		void sck_socket();
+		void finalize_socket() const;
 
 		// プラットフォーム別の受信処理
-		std::string recv_from_core_win() const;			// Windows用
-		std::string recv_from_core_linux() const;		// Linux用
+		std::string sck_recv_core_win() const;			// Windows用
+		std::string sck_recv_core_linux() const;		// Linux用
 
 	// メンバ変数
 	private:

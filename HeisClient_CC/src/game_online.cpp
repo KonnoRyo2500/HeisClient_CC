@@ -68,7 +68,7 @@ void CGameOnline::initialize_battle()
 */
 void CGameOnline::recv_name_request()
 {
-	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(m_sck->recv_from());
+	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(m_sck->sck_recv());
 	printf("名前要求: %s\n", name_req_msg_pkt.message.c_str());
 	// 名前要求でなければエラー
 }
@@ -81,7 +81,7 @@ void CGameOnline::recv_name_request()
 void CGameOnline::name_entry(const std::string& name)
 {
 	JSONSendPacket_Name name_pkt = {name};
-	m_sck->send_to(m_json_analyzer->create_name_JSON(name_pkt));
+	m_sck->sck_send(m_json_analyzer->create_name_JSON(name_pkt));
 }
 
 /*
@@ -91,7 +91,7 @@ void CGameOnline::name_entry(const std::string& name)
 */
 void CGameOnline::name_register()
 {
-	JSONRecvPacket_NameDecided name_decided_pkt = m_json_analyzer->create_name_decided_pkt(m_sck->recv_from());
+	JSONRecvPacket_NameDecided name_decided_pkt = m_json_analyzer->create_name_decided_pkt(m_sck->sck_recv());
 	m_team_name = name_decided_pkt.your_team;
 	m_commander = new CCommander(m_team_name);
 }

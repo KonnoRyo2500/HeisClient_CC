@@ -24,8 +24,8 @@ CSocket::CSocket()
 	: m_sck(0)
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
-	initialize_TCP_socket();
-	make_TCP_socket();
+	initialize_socket();
+	sck_socket();
 }
 
 /*
@@ -34,8 +34,7 @@ CSocket::CSocket()
 */
 CSocket::~CSocket()
 {
-	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その終了処理を行う
-	finalize_TCP_socket();
+	finalize_socket();
 }
 
 /*
@@ -68,7 +67,7 @@ void CSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t dst_por
 	返り値なし
 	例外: 送信エラーが発生したとき
 */
-void CSocket::send_to(const std::string& msg) const
+void CSocket::sck_send(const std::string& msg) const
 {
 	// メッセージを確実にNULL終端させるため，size + 1文字送信する
 	int send_size = send(m_sck, msg.c_str(), msg.size() + 1, 0);
@@ -87,12 +86,12 @@ void CSocket::send_to(const std::string& msg) const
 	返り値: std::string サーバから受信したメッセージ
 	例外: 受信エラーが発生したとき
 */
-std::string CSocket::recv_from() const
+std::string CSocket::sck_recv() const
 {
 #ifdef WIN32
-	return recv_from_core_win();
+	return sck_recv_core_win();
 #else
-	return recv_from_core_linux();
+	return sck_recv_core_linux();
 #endif
 }
 
@@ -104,7 +103,7 @@ std::string CSocket::recv_from() const
 	返り値なし
 	例外: ソケットの初期化に失敗したとき
 */
-void CSocket::initialize_TCP_socket() const
+void CSocket::initialize_socket() const
 {
 #ifdef WIN32
 	WSADATA wsaData;
@@ -125,7 +124,7 @@ void CSocket::initialize_TCP_socket() const
 	返り値なし
 	例外: ソケットの作成に失敗したとき
 */
-void CSocket::make_TCP_socket()
+void CSocket::sck_socket()
 {
 	m_sck = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_sck < 0) {
@@ -139,7 +138,7 @@ void CSocket::make_TCP_socket()
 	返り値なし
 	備考: この関数は，windows環境以外の環境では何もしない
 */
-void CSocket::finalize_TCP_socket() const
+void CSocket::finalize_socket() const
 {
 #ifdef WIN32
 	WSACleanup();
@@ -157,7 +156,7 @@ void CSocket::finalize_TCP_socket() const
 	返り値: std::string 受信したメッセージ
 	例外: 受信エラーが発生したとき
 */
-std::string CSocket::recv_from_core_win() const
+std::string CSocket::sck_recv_core_win() const
 {
 #ifdef WIN32
 	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
@@ -210,7 +209,7 @@ std::string CSocket::recv_from_core_win() const
 	返り値: std::string 受信したメッセージ
 	例外: 受信エラーが発生したとき
 */
-std::string CSocket::recv_from_core_linux() const
+std::string CSocket::sck_recv_core_linux() const
 {
 #ifndef WIN32
 	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
