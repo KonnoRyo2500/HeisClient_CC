@@ -15,12 +15,12 @@ class CSocket {
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CSocket(const std::string& dst_ip_addr, const uint16_t dst_port_no);
+		explicit CSocket();
 
 		// デストラクタ
 		~CSocket();
 
-		// 接続
+		// サーバと接続
 		void sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
 
 		// 送受信

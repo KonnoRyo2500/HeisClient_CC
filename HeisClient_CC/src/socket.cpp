@@ -18,16 +18,14 @@
 
 /*
 	コンストラクタ
-	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
-	引数2: const uint16_t dst_port_no 通信相手のポート番号
+	引数なし
 */
-CSocket::CSocket(const std::string& dst_ip_addr, const uint16_t dst_port_no)
+CSocket::CSocket()
 	: m_sck(0)
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
 	initialize_TCP_socket();
 	make_TCP_socket();
-	sck_connect(dst_ip_addr, dst_port_no);
 }
 
 /*
