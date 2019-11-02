@@ -49,5 +49,5 @@ class CGameOnline {
 		CJSONAnalyzer* m_json_analyzer;
 
 		// TCPソケット
-		CSocket* m_sck;
+		CClientSocket* m_sck;
 };

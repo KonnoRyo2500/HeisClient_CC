@@ -57,7 +57,7 @@ void CGameOnline::initialize_battle()
 	m_ai = new CUserAI(m_commander);
 	m_json_analyzer = new CJSONAnalyzer();
 	// TODO: 設定ファイルから接続先IPアドレス，ポート番号を決定できるようにする
-	m_sck = new CSocket();
+	m_sck = new CClientSocket();
 	m_sck->sck_connect("192.168.1.1", 50000);
 }
 

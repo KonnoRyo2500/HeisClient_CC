@@ -1,10 +1,11 @@
-﻿// heis TCP/IP通信用ソケットクラス
+﻿// heis TCP/IP通信用ソケットクラス(クライアント用)
 // Author: Ryo Konno
 #pragma once
 
 #include <string>
 
-class CSocket {
+// TODO: このクラスを共通ソースに移動させる
+class CClientSocket {
 	// 構造体，列挙体など
 	private:
 		// ソケットに関する諸定数
@@ -15,10 +16,10 @@ class CSocket {
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CSocket();
+		explicit CClientSocket();
 
 		// デストラクタ
-		~CSocket();
+		~CClientSocket();
 
 		// サーバと接続
 		void sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
