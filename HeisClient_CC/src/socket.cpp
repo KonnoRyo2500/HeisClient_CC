@@ -27,7 +27,7 @@ CSocket::CSocket(const std::string& dst_ip_addr, const uint16_t dst_port_no)
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
 	initialize_TCP_socket();
 	make_TCP_socket();
-	connect_TCP_socket(dst_ip_addr, dst_port_no);
+	sck_connect(dst_ip_addr, dst_port_no);
 }
 
 /*
@@ -38,6 +38,30 @@ CSocket::~CSocket()
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その終了処理を行う
 	finalize_TCP_socket();
+}
+
+/*
+	TCP通信用ソケットを相手に接続する関数
+	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
+	引数2: const uint16_t dst_port_no 通信相手のポート番号
+	返り値なし
+*/
+void CSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const
+{
+	sockaddr_in sa = { 0 };
+	int ercd;
+
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(dst_port_no);
+	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
+	if (ercd <= 0) {
+		throw CHeisClientException("IPアドレス\"%s\"は不正です", dst_ip_addr.c_str());
+	}
+
+	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
+	if (ercd < 0) {
+		throw CHeisClientException("サーバとの接続に失敗しました(エラーコード: %d)", errno);
+	}
 }
 
 /*
@@ -108,30 +132,6 @@ void CSocket::make_TCP_socket()
 	m_sck = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_sck < 0) {
 		throw CHeisClientException("ソケットの作成に失敗しました(エラーコード: %d)", errno);
-	}
-}
-
-/*
-	TCP通信用ソケットを相手に接続する関数
-	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
-	引数2: const uint16_t dst_port_no 通信相手のポート番号
-	返り値なし
-*/
-void CSocket::connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const
-{
-	sockaddr_in sa = { 0 };
-	int ercd;
-
-	sa.sin_family = AF_INET;
-	sa.sin_port = htons(dst_port_no);
-	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
-	if (ercd <= 0) {
-		throw CHeisClientException("IPアドレス\"%s\"は不正です", dst_ip_addr.c_str());
-	}
-
-	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
-	if (ercd < 0) {
-		throw CHeisClientException("サーバとの接続に失敗しました(エラーコード: %d)", errno);
 	}
 }
 

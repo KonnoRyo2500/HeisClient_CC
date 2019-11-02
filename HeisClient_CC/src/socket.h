@@ -20,6 +20,9 @@ class CSocket {
 		// デストラクタ
 		~CSocket();
 
+		// 接続
+		void sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
+
 		// 送受信
 		void send_to(const std::string& msg) const;
 		std::string recv_from() const;
@@ -28,7 +31,6 @@ class CSocket {
 		// 初期化，終了処理
 		void initialize_TCP_socket() const;
 		void make_TCP_socket();
-		void connect_TCP_socket(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
 		void finalize_TCP_socket() const;
 
 		// プラットフォーム別の受信処理
