@@ -1,6 +1,6 @@
 ﻿// heis TCP/IP通信用ソケットクラス
 // Author: Ryo Konno
-#include "socket.h"
+#include "client_socket.h"
 #include "heis_client_exception.h"
 #ifdef WIN32
 #include <winsock2.h>

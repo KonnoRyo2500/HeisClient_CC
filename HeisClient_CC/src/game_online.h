@@ -5,7 +5,7 @@
 #include "commander.h"
 #include "AI.h"
 #include "JSON_analyzer.h"
-#include "socket.h"
+#include "client_socket.h"
 #include <string>
 #include <vector>
 
