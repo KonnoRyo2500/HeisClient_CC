@@ -1,4 +1,4 @@
-﻿// heis TCP/IP通信用ソケットクラス
+﻿// heis TCP/IP通信用ソケットクラス(クライアント用)
 // Author: Ryo Konno
 #include "client_socket.h"
 #include "heis_client_exception.h"
