@@ -23,7 +23,6 @@
 CClientSocket::CClientSocket()
 	: m_sck(0)
 {
-	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
 	initialize_socket();
 	sck_socket();
 }
