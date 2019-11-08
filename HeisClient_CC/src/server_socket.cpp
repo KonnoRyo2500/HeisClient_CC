@@ -95,6 +95,7 @@ void CServerSocket::sck_accept()
 	client_port_no = client_addr_info.sin_port;
 
 	m_client_info.push_back(std::make_pair(std::string(client_ip_addr), client_port_no));
+	m_sck_com.push_back(new_sck);
 }
 
 /* private関数 */
@@ -120,7 +121,17 @@ void CServerSocket::sck_socket()
 */
 void CServerSocket::sck_close() const
 {
-
+#ifdef WIN32
+	closesocket(m_sck_accept);
+	for (auto& sck_com : m_sck_com) {
+		closesocket(sck_com);
+	}
+#else
+	close(m_sck_accept);
+	for (auto& sck_com : m_sck_com) {
+		close(sck_com);
+	}
+#endif // WIN32
 }
 
 /*
