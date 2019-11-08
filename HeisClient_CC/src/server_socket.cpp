@@ -118,7 +118,6 @@ void CServerSocket::initialize_socket() const
 	winsockの終了処理を行う関数
 	引数なし
 	返り値なし
-	備考: この関数は，windows環境以外の環境では何もしない
 */
 void CServerSocket::finalize_socket() const
 {

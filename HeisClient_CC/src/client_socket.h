@@ -32,8 +32,10 @@ class CClientSocket {
 	private:
 		// 初期化，終了処理
 		void initialize_socket() const;
-		void sck_socket();
 		void finalize_socket() const;
+
+		// ソケット生成
+		void sck_socket();
 
 		// プラットフォーム別の受信処理
 		std::string sck_recv_core_win() const;			// Windows用

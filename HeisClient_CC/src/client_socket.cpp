@@ -118,6 +118,21 @@ void CClientSocket::initialize_socket() const
 }
 
 /*
+	winsockの終了処理を行う関数
+	引数なし
+	返り値なし
+*/
+void CClientSocket::finalize_socket() const
+{
+#ifdef WIN32
+	WSACleanup();
+	closesocket(m_sck);
+#else
+	close(m_sck);
+#endif // WIN32
+}
+
+/*
 	TCP通信用ソケットを作成する関数
 	引数なし
 	返り値なし
@@ -129,22 +144,6 @@ void CClientSocket::sck_socket()
 	if (m_sck < 0) {
 		throw CHeisClientException("ソケットの作成に失敗しました(エラーコード: %d)", errno);
 	}
-}
-
-/*
-	winsockの終了処理を行う関数
-	引数なし
-	返り値なし
-	備考: この関数は，windows環境以外の環境では何もしない
-*/
-void CClientSocket::finalize_socket() const
-{
-#ifdef WIN32
-	WSACleanup();
-	closesocket(m_sck);
-#else
-	close(m_sck);
-#endif // WIN32
 }
 
 // 受信処理に関しては、#ifdefが関数中に入り乱れるのを防ぐため、プラットフォーム別に関数を分ける
