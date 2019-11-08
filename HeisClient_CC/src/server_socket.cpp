@@ -5,7 +5,6 @@
 #include "heis_client_exception.h"
 
 #ifdef WIN32
-#include <winsock2.h>
 #include <WS2tcpip.h>
 #else
 #endif
@@ -77,9 +76,25 @@ void CServerSocket::sck_listen() const
 	引数なし
 	返り値なし
 */
-void CServerSocket::sck_accept() const
+void CServerSocket::sck_accept()
 {
+	sockaddr_in client_addr_info = { 0 };
+	int new_sck;
+	int addr_info_len = sizeof(sockaddr_in);
+	char client_ip_addr[INET_ADDRSTRLEN] = { 0 };
+	uint16_t client_port_no;
+	
+	// 通信用ソケット作成
+	new_sck = accept(m_sck_accept, reinterpret_cast<sockaddr*>(&client_addr_info), &addr_info_len);
+	if (new_sck < 0) {
+		throw CHeisClientException("クライアントとの接続に失敗しました(エラーコード: %d)", errno);
+	}
 
+	// クライアントの情報を取得
+	inet_ntop(AF_INET, &client_addr_info.sin_addr, client_ip_addr, INET_ADDRSTRLEN);
+	client_port_no = client_addr_info.sin_port;
+
+	m_client_info.push_back(std::make_pair(std::string(client_ip_addr), client_port_no));
 }
 
 /* private関数 */

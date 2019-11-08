@@ -29,7 +29,7 @@ class CServerSocket {
 
 		// クライアントからの接続待ち
 		void sck_listen() const;
-		void sck_accept() const;
+		void sck_accept();
 
 		// 送受信
 		void sck_send(const std::string& msg) const;
@@ -52,4 +52,6 @@ class CServerSocket {
 		int m_sck_accept;
 		// ソケットの実体(クライアントとの通信用)
 		std::vector<int> m_sck_com;
+		// 接続しているクライアントの情報(IPアドレスとポート番号)
+		std::vector<std::pair<std::string, uint16_t>> m_client_info;
 };

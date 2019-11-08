@@ -3,7 +3,6 @@
 #include "client_socket.h"
 #include "heis_client_exception.h"
 #ifdef WIN32
-#include <winsock2.h>
 #include <WS2tcpip.h>
 #else
 #include <sys/socket.h>
@@ -12,7 +11,6 @@
 #include <unistd.h>
 #include <cstring>
 #endif // WIN32
-#include <stdexcept>
 
 /* public関数 */
 
