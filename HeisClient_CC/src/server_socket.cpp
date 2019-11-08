@@ -53,7 +53,22 @@ void CServerSocket::sck_bind(const uint16_t svr_port_no, const std::string clt_i
 
 	ercd = bind(m_sck_accept, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 	if (ercd < 0) {
-		throw CHeisClientException("ソケットのバインドに失敗しました");
+		throw CHeisClientException("ソケットのバインドに失敗しました(エラーコード: %d)", errno);
+	}
+}
+
+/*
+	ソケットを接続待ち受け可能にする関数
+	引数なし
+	返り値なし
+*/
+void CServerSocket::sck_listen() const
+{
+	int ercd;
+
+	ercd = listen(m_sck_accept, SocketConstVal_ConnectReqQueueLen);
+	if (ercd < 0) {
+		throw CHeisClientException("接続待ちに失敗しました(エラーコード: %d)", errno);
 	}
 }
 
@@ -62,7 +77,7 @@ void CServerSocket::sck_bind(const uint16_t svr_port_no, const std::string clt_i
 	引数なし
 	返り値なし
 */
-void CServerSocket::sck_listen() const
+void CServerSocket::sck_accept() const
 {
 
 }
