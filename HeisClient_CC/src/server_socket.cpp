@@ -16,7 +16,7 @@
 */
 CServerSocket::CServerSocket()
 	: m_sck_accept(0)
-	, m_sck_com()
+	, m_dest_info()
 {
 	// Windows環境で動作させる場合，ソケット通信にwinsockを使うので，その初期化を行う(windows環境以外ならば何もしない)
 	initialize_socket();
@@ -35,10 +35,10 @@ CServerSocket::~CServerSocket()
 /*
 	サーバ自身のアドレス情報をソケットに紐づけする関数
 	引数1: const uint16_t svr_port_no サーバのポート番号
-	引数2: const std::string clt_ip_addr = "0.0.0.0" 接続を許可するクライアントのIPアドレス(未指定の場合は任意のIPアドレスからの接続を受け付ける)
+	引数2: const std::string& clt_ip_addr& = "0.0.0.0" 接続を許可するクライアントのIPアドレス(未指定の場合は任意のIPアドレスからの接続を受け付ける)
 	返り値なし
 */
-void CServerSocket::sck_bind(const uint16_t svr_port_no, const std::string clt_ip_addr) const
+void CServerSocket::sck_bind(const uint16_t svr_port_no, const std::string& clt_ip_addr) const
 {
 	sockaddr_in addr = { 0 };
 	int ercd;
@@ -94,8 +94,49 @@ void CServerSocket::sck_accept()
 	inet_ntop(AF_INET, &client_addr_info.sin_addr, client_ip_addr, INET_ADDRSTRLEN);
 	client_port_no = client_addr_info.sin_port;
 
-	m_client_info.push_back(std::make_pair(std::string(client_ip_addr), client_port_no));
-	m_sck_com.push_back(new_sck);
+	// クライアントの情報と，そのクライアントと通信するソケットを紐づける
+	m_dest_info[std::make_pair(std::string(client_ip_addr), client_port_no)] = new_sck;
+}
+
+/*
+	クライアントにメッセージを送信する関数
+	引数1: const std::string& msg 送信するメッセージ
+	引数2: const std::string& clt_ip_addr = "" 送信先のIPアドレス(指定がない場合は最初に接続したクライアントのIPアドレス)
+	引数3: const uint16_t clt_port_no = 0 送信先のポート番号(指定がない場合は最初に接続したクライアントのポート番号)
+*/
+void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip_addr, const uint16_t clt_port_no) const
+{
+	int com_sck = client_info_to_socket(clt_ip_addr, clt_port_no);
+
+	// 通信用ソケットを決定
+	if (com_sck < 0) {
+		if (clt_ip_addr.size() <= 0) {
+			com_sck = m_dest_info.begin()->second;
+		}
+		else {
+			throw CHeisClientException("指定されたクライアント(IP: %s, ポート番号: %d)は未接続です．", clt_ip_addr.c_str(), clt_port_no);
+		}
+	}
+
+	// メッセージを送信
+	// メッセージを確実にNULL終端させるため，size + 1文字送信する
+	size_t send_size = send(com_sck, msg.c_str(), msg.size() + 1, 0);
+	if (send_size < msg.size()) {
+		if (send_size < 0) {
+			throw CHeisClientException("送信でエラーが発生しました(エラーコード: %d)", errno);
+		}
+		fprintf(stderr, "警告: 不完全なメッセージが送信されました(%d文字中%d文字が送信されました)\n", msg.size(), send_size);
+	}
+}
+
+/*
+	クライアントからメッセージを受信する関数
+	引数1: const std::string& clt_ip_addr = "" 受信元のIPアドレス(指定がない場合は最初に接続したクライアントのIPアドレス)
+	引数2: const uint16_t clt_port_no = 0 受信元のポート番号(指定がない場合は最初に接続したクライアントのポート番号)
+*/
+std::string CServerSocket::sck_recvfrom(const std::string& clt_ip_addr, const uint16_t clt_port_no) const
+{
+	return "";
 }
 
 /* private関数 */
@@ -123,13 +164,13 @@ void CServerSocket::sck_close() const
 {
 #ifdef WIN32
 	closesocket(m_sck_accept);
-	for (auto& sck_com : m_sck_com) {
-		closesocket(sck_com);
+	for (auto& it : m_dest_info) {
+		closesocket(it.second);
 	}
 #else
 	close(m_sck_accept);
-	for (auto& sck_com : m_sck_com) {
-		close(sck_com);
+	for (auto& it : m_dest_info) {
+		close(it.second);
 	}
 #endif // WIN32
 }
@@ -166,4 +207,22 @@ void CServerSocket::finalize_socket() const
 	WSACleanup();
 #endif // WIN32
 	sck_close();
+}
+
+/*
+	クライアントのIPアドレスとポート番号から，そのクライアントと通信するためのソケットを取得する関数
+	引数1: const std::string& clt_ip_addr クライアントのIPアドレス
+	引数2: const uint16_t clt_port_no クライアントのポート番号
+	返り値: int クライアントとの通信用ソケット(IPとポート番号に対応するソケットが見つからなければ-1)
+*/
+int CServerSocket::client_info_to_socket(const std::string& clt_ip_addr, const uint16_t clt_port_no) const
+{
+	int com_sck = -1;
+	auto it = m_dest_info.find(std::make_pair(clt_ip_addr, clt_port_no));
+
+	if (it != m_dest_info.end()) {
+		com_sck = it->second;
+	}
+
+	return com_sck;
 }

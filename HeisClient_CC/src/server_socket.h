@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 // TODO: このクラスを共通ソースに移動させる
 // TODO: ソケットの基本クラスを作成し，それを継承するようにする
@@ -25,15 +26,15 @@ class CServerSocket {
 		~CServerSocket();
 
 		// 自身のアドレスとポート番号をソケットに紐づけ
-		void sck_bind(const uint16_t svr_port_no, const std::string clt_ip_addr = "0.0.0.0") const;
+		void sck_bind(const uint16_t svr_port_no, const std::string& clt_ip_addr = "0.0.0.0") const;
 
 		// クライアントからの接続待ち
 		void sck_listen() const;
 		void sck_accept();
 
-		// 送受信
-		void sck_send(const std::string& msg) const;
-		std::string sck_recv() const;
+		// 送受信(送信先指定あり)
+		void sck_sendto(const std::string& msg, const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
+		std::string sck_recvfrom(const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
 
 	private:
 		// ソケット生成
@@ -46,12 +47,16 @@ class CServerSocket {
 		void initialize_socket() const;
 		void finalize_socket() const;
 
+		// 送受信処理
+		std::string sck_send_core(const std::string& clt_ip_addr, const uint16_t clt_port_no) const;
+
+		// クライアントのIPアドレスとポート番号 -> 通信用ソケットの変換
+		int client_info_to_socket(const std::string& clt_ip_addr, const uint16_t clt_port_no) const;
+
 	// メンバ変数
 	private:
 		// ソケットの実体(接続受け付け用)
 		int m_sck_accept;
-		// ソケットの実体(クライアントとの通信用)
-		std::vector<int> m_sck_com;
-		// 接続しているクライアントの情報(IPアドレスとポート番号)
-		std::vector<std::pair<std::string, uint16_t>> m_client_info;
+		// 接続先の情報(IPアドレスとポート番号 -> 通信用ソケット)
+		std::map<std::pair<std::string, uint16_t>, int> m_dest_info;
 };
