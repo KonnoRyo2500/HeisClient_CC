@@ -67,9 +67,9 @@ void CClientSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t d
 void CClientSocket::sck_send(const std::string& msg) const
 {
 	// メッセージを確実にNULL終端させるため，size + 1文字送信する
-	int send_size = send(m_sck, msg.c_str(), msg.size() + 1, 0);
+	size_t send_size = send(m_sck, msg.c_str(), msg.size() + 1, 0);
 
-	if (static_cast<size_t>(send_size) < msg.size()) {
+	if (send_size < msg.size()) {
 		if (send_size < 0) {
 			throw CHeisClientException("送信でエラーが発生しました(エラーコード: %d)", errno);
 		}
