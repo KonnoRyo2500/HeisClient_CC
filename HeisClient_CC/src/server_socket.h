@@ -48,7 +48,8 @@ class CServerSocket {
 		void finalize_socket() const;
 
 		// 送受信処理
-		std::string sck_send_core(const std::string& clt_ip_addr, const uint16_t clt_port_no) const;
+		std::string sck_recv_core_win(const int sck_com) const;
+		std::string sck_recv_core_linux(const int sck_com) const;
 
 		// クライアントのIPアドレスとポート番号 -> 通信用ソケットの変換
 		int client_info_to_socket(const std::string& clt_ip_addr, const uint16_t clt_port_no) const;

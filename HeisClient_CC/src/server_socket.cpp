@@ -110,7 +110,7 @@ void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip
 
 	// 通信用ソケットを決定
 	if (com_sck < 0) {
-		if (clt_ip_addr.size() <= 0) {
+		if (clt_ip_addr.size() <= 0 && 0 < m_dest_info.size()) {
 			com_sck = m_dest_info.begin()->second;
 		}
 		else {
@@ -136,7 +136,24 @@ void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip
 */
 std::string CServerSocket::sck_recvfrom(const std::string& clt_ip_addr, const uint16_t clt_port_no) const
 {
-	return "";
+	int com_sck = client_info_to_socket(clt_ip_addr, clt_port_no);
+
+	// 通信用ソケットを決定
+	if (com_sck < 0) {
+		if (clt_ip_addr.size() <= 0 && 0 < m_dest_info.size()) {
+			com_sck = m_dest_info.begin()->second;
+		}
+		else {
+			throw CHeisClientException("指定されたクライアント(IP: %s, ポート番号: %d)は未接続です．", clt_ip_addr.c_str(), clt_port_no);
+		}
+	}
+
+	// メッセージを受信
+#ifdef WIN32
+	return sck_recv_core_win(com_sck);
+#else
+	return sck_recv_core_linux(com_sck);
+#endif
 }
 
 /* private関数 */
@@ -207,6 +224,105 @@ void CServerSocket::finalize_socket() const
 	WSACleanup();
 #endif // WIN32
 	sck_close();
+}
+
+// 受信処理に関しては、#ifdefが関数中に入り乱れるのを防ぐため、プラットフォーム別に関数を分ける
+// TODO: プラットフォームに依らない受信処理の実装
+/*
+	受信処理(Windows向け)
+	引数1: const int sck_com クライアントとの通信用ソケット
+	返り値: std::string 受信したメッセージ
+	例外: 受信エラーが発生したとき
+*/
+std::string CServerSocket::sck_recv_core_win(const int sck_com) const
+{
+#ifdef WIN32
+	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
+	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
+	int recv_size;
+	std::string recv_message;
+
+	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
+	recv_size = recv(sck_com, buf, sizeof(buf) - 1, 0);
+	if (recv_size < 0) {
+		throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+	}
+	recv_message += std::string(buf);
+
+	// 入力キューにデータが残っていれば，それらもすべて受信する
+	{
+		// 受信データがないときに無限待ちにならないよう，一旦ソケットをノンブロッキングにする
+		unsigned long nonblocking_enable = 1;
+		ioctlsocket(sck_com, FIONBIO, &nonblocking_enable);
+	}
+	do {
+		memset(buf, 0, sizeof(buf));
+		recv_size = recv(sck_com, buf, sizeof(buf) - 1, 0);
+		if (recv_size < 0) {
+			if (WSAGetLastError() == WSAEWOULDBLOCK) {
+				// すべて受信できたので，受信終了
+				break;
+			}
+			else {
+				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+			}
+		}
+		recv_message += std::string(buf);
+	} while (recv_size > 0);
+	{
+		// 次の呼び出しでの最初の受信をブロッキングにするため，ソケットをブロッキングに戻す
+		unsigned long nonblocking_disable = 0;
+		ioctlsocket(sck_com, FIONBIO, &nonblocking_disable);
+}
+
+	return recv_message;
+#else
+	return "";
+#endif // WIN32
+}
+
+/*
+	受信処理(Linux向け)
+	引数1: const int sck_com クライアントとの通信用ソケット
+	返り値: std::string 受信したメッセージ
+	例外: 受信エラーが発生したとき
+*/
+std::string CServerSocket::sck_recv_core_linux(const int sck_com) const
+{
+#ifndef WIN32
+	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
+	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
+	int recv_size;
+	std::string recv_message;
+
+	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
+	recv_size = recv(sck_com, buf, sizeof(buf) - 1, 0);
+	if (recv_size < 0) {
+		throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+	}
+	recv_message += std::string(buf);
+
+	// 入力キューにデータが残っていれば，それらもすべて受信する
+	do {
+		memset(buf, 0, sizeof(buf));
+		// 受信データがないときに無限待ちにならないよう，ノンブロッキングで受信する
+		recv_size = recv(sck_com, buf, sizeof(buf) - 1, MSG_DONTWAIT);
+		if (recv_size < 0) {
+			if (errno == EAGAIN) {
+				// すべて受信できたので，受信終了
+				break;
+			}
+			else {
+				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+			}
+		}
+		recv_message += std::string(buf);
+	} while (recv_size > 0);
+
+	return recv_message;
+#else
+	return "";
+#endif // WIN32
 }
 
 /*
