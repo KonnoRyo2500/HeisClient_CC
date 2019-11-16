@@ -2,6 +2,14 @@
 // Author: Ryo Konno
 
 #include "scenario_reader.h"
+#include "JSON_sender.h"
+#include "server_socket.h"
+
+#define IP_SELF "127.0.0.1"
+
+/* グローバル変数 */
+// CCとの通信用ソケット
+CServerSocket g_sck;
 
 /*
 	メイン関数
@@ -11,6 +19,15 @@ int main(int argc, char **argv)
 	try{
 		CScenarioReader sr("scenario_sample.txt");
 		CScenarioReader::ActionType act_type;
+		CJsonSender js;
+		
+		// ソケットの初期化
+		// クライアントは1人しか接続してこない想定
+		// TODO: ポート番号を設定ファイルから取得できるようにする
+		g_sck.sck_bind(20000, IP_SELF);
+		g_sck.sck_listen();
+		g_sck.sck_accept();
+		
 		while((act_type = sr.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
 			printf("type: %d\n", act_type);
 			switch(act_type){
@@ -22,9 +39,11 @@ int main(int argc, char **argv)
 					break;
 				case CScenarioReader::ActionType_SendMessage:
 					printf("message: %s\n", sr.get_message_to_send().c_str());
+					js.send_JSON(sr.get_message_to_send());
 					break;
 				case CScenarioReader::ActionType_SendFileContents:
 					printf("filename: %s\n", sr.get_filename_to_send().c_str());
+					js.send_JSON_from_file(sr.get_filename_to_send());
 					break;
 				case CScenarioReader::ActionType_None:
 					break;
