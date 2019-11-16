@@ -7,6 +7,11 @@
 #ifdef WIN32
 #include <WS2tcpip.h>
 #else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <cstring>
 #endif
 /* public関数 */
 
