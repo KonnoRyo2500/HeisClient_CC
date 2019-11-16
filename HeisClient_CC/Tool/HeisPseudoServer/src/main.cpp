@@ -3,6 +3,7 @@
 
 #include "scenario_reader.h"
 #include "JSON_sender.h"
+#include "JSON_receiver.h"
 #include "server_socket.h"
 
 #define IP_SELF "127.0.0.1"
@@ -20,6 +21,7 @@ int main(int argc, char **argv)
 		CScenarioReader sr("scenario_sample.txt");
 		CScenarioReader::ActionType act_type;
 		CJsonSender js;
+		CJsonReceiver jr;
 		
 		// ソケットの初期化
 		// クライアントは1人しか接続してこない想定
@@ -33,9 +35,11 @@ int main(int argc, char **argv)
 			switch(act_type){
 				case CScenarioReader::ActionType_PrintRecvMessage:
 					printf("Receive Print\n");
+					jr.recv_JSON_and_print();
 					break;
 				case CScenarioReader::ActionType_WriteRecvMessage:
 					printf("Receive Write\n");
+					jr.recv_JSON_and_write_file(sr.get_filename_to_write_recv_msg());
 					break;
 				case CScenarioReader::ActionType_SendMessage:
 					printf("message: %s\n", sr.get_message_to_send().c_str());
