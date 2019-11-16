@@ -15,6 +15,7 @@ class CServerSocket {
 		enum SocketConstVal {
 			SocketConstVal_RecvBufSize = 10,		// 受信バッファサイズ
 			SocketConstVal_ConnectReqQueueLen = 5,	// 同時接続要求の最大待ち受け数
+			SocketConstVal_SendIntervalTimeMs = 50,	// 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
 		};
 
 	// メンバ関数

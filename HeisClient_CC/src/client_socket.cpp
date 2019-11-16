@@ -2,6 +2,7 @@
 // Author: Ryo Konno
 #include "client_socket.h"
 #include "heis_client_exception.h"
+
 #ifdef WIN32
 #include <WS2tcpip.h>
 #else
@@ -66,6 +67,13 @@ void CClientSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t d
 */
 void CClientSocket::sck_send(const std::string& msg) const
 {
+	// サーバが前回送信されたメッセージを受信中に再度送信することを防ぐため，少しだけ待ちを入れる
+#ifdef WIN32
+	Sleep(SocketConstVal_SendIntervalTimeMs);
+#else
+	usleep(SocketConstVal_SendIntervalTimeMs * 1000);
+#endif
+
 	// メッセージを確実にNULL終端させるため，size + 1文字送信する
 	size_t send_size = send(m_sck, msg.c_str(), msg.size() + 1, 0);
 
@@ -173,24 +181,21 @@ std::string CClientSocket::sck_recv_core_win() const
 		unsigned long nonblocking_enable = 1;
 		ioctlsocket(m_sck, FIONBIO, &nonblocking_enable);
 	}
-	do {
+	while (recv_size == sizeof(buf) - 1) {
 		memset(buf, 0, sizeof(buf));
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
-		if (recv_size < 0) {
-			if (WSAGetLastError() == WSAEWOULDBLOCK) {
-				// すべて受信できたので，受信終了
-				break;
-			}
-			else {
-				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
-			}
-		}
 		recv_message += std::string(buf);
-	} while (recv_size > 0);
+	}
+	// 次の呼び出しでの最初の受信をブロッキングにするため，ソケットをブロッキングに戻す
 	{
-		// 次の呼び出しでの最初の受信をブロッキングにするため，ソケットをブロッキングに戻す
 		unsigned long nonblocking_disable = 0;
 		ioctlsocket(m_sck, FIONBIO, &nonblocking_disable);
+	}
+
+	if (recv_size < 0) {
+		if (WSAGetLastError() != WSAEWOULDBLOCK) {
+			throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+		}
 	}
 
 	return recv_message;
@@ -221,21 +226,18 @@ std::string CClientSocket::sck_recv_core_linux() const
 	recv_message += std::string(buf);
 
 	// 入力キューにデータが残っていれば，それらもすべて受信する
-	do {
+	while (recv_size == sizeof(buf) - 1) {
 		memset(buf, 0, sizeof(buf));
 		// 受信データがないときに無限待ちにならないよう，ノンブロッキングで受信する
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, MSG_DONTWAIT);
-		if (recv_size < 0) {
-			if (errno == EAGAIN) {
-				// すべて受信できたので，受信終了
-				break;
-			}
-			else {
-				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
-			}
-		}
 		recv_message += std::string(buf);
-	} while (recv_size > 0);
+	};
+
+	if (recv_size < 0) {
+		if (errno != EAGAIN) {
+			throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+		}
+	}
 
 	return recv_message;
 #else
