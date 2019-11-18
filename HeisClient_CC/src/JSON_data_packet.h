@@ -56,8 +56,10 @@ struct OptionalVal {
 		}
 
 	private:
-		T m_val;				// 値本体
-		bool m_omit_flag;		// 省略フラグ(JSONで対応するキーが省略されていればtrue, あればfalse)
+		// 値本体
+		T m_val;
+		// 省略フラグ(JSONで対応するキーが省略されていればtrue, あればfalse)
+		bool m_omit_flag;
 };
 
 /* 以下のパケットの構造は，ファイル「兵ズ通信仕様.ods」で定義されているJSONの仕様に基づく */
@@ -66,71 +68,98 @@ struct OptionalVal {
 
 // 「行動」パケット -> contents(配列)の要素
 struct ContentsArrayElem {
-	std::string unit_id;		// "unit_id"フィールドの値
-	uint16_t to_x;				// "to"."x"フィールドの値
-	uint16_t to_y;				// "to"."y"フィールドの値
-	uint16_t atk_x;				// "atk"."x"フィールドの値
-	uint16_t atk_y;				// "atk"."y"フィールドの値
+	// "unit_id"フィールドの値
+	std::string unit_id;
+	// "to"."x"フィールドの値
+	uint16_t to_x;
+	// "to"."y"フィールドの値
+	uint16_t to_y;
+	// "atk"."x"フィールドの値
+	uint16_t atk_x;
+	// "atk"."y"フィールドの値
+	uint16_t atk_y;	
 };
 
 // 「盤面」パケット -> units -> locate(オブジェクト)のデータ
 struct LocateObjData {
-	uint16_t x;		// "x"(フィールド)
-	uint16_t y;		// "y"(フィールド)
+	// "x"(フィールド)
+	uint16_t x;
+	// "y"(フィールド)
+	uint16_t y;
 };
 
 // 「盤面」パケット -> unitsの要素
 struct UnitsArrayElem {
-	std::string type;				// "type"(フィールド)
-	std::string unit_id;			// "unit_id"(フィールド)
-	LocateObjData locate;	// "locate"(オブジェクト)
-	int8_t hp;						// "hp"(フィールド)
-	std::string team;				// "team"(フィールド)
+	// "type"(フィールド)
+	std::string type;
+	// "unit_id"(フィールド)
+	std::string unit_id;
+	// "locate"(オブジェクト)
+	LocateObjData locate;
+	// "hp"(フィールド)
+	int8_t hp;
+	// "team"(フィールド)
+	std::string team;
 };
 
 // 「結果」パケット -> resultの要素
 struct ResultArrayElem {
-	OptionalVal<std::string> unit_id;		// "unit_id"(フィールド, 省略可能)
-	std::string error;						// "error"(フィールド)
+	// "unit_id"(フィールド, 省略可能)
+	OptionalVal<std::string> unit_id;
+	// "error"(フィールド)
+	std::string error;
 };
 
 /* サーバに送信するJSONを作成するためのパケット */
 
 // 「名前」パケット
 struct JSONSendPacket_Name {
-	std::string team_name;		// "team_name"(フィールド)
+	// "team_name"(フィールド)
+	std::string team_name;
 };
 
 // 「行動」パケット
 struct JSONSendPacket_Action {
-	std::string turn_team;						// "turn_team"(フィールド)
-	std::vector<ContentsArrayElem> contents;	// "contents"(配列)
+	// "turn_team"(フィールド)
+	std::string turn_team;
+	// "contents"(配列)
+	std::vector<ContentsArrayElem> contents;
 };
 
 /* サーバから受信したJSONのデータを格納するパケット */
 
 // 「盤面」パケット
 struct JSONRecvPacket_Field {
-	uint16_t width;								// "width"(フィールド)
-	uint16_t height;								// "height"(フィールド)
-	std::string turn_team;						// "turn_team"(フィールド)
-	std::vector<std::string> players;			// "players"(配列)
-	bool finished;								// "finished"(フィールド)
-	uint32_t count;								// "count"(フィールド)
-	std::vector<UnitsArrayElem> units;	// "units"(配列)
+	// "width"(フィールド)
+	uint16_t width;
+	// "height"(フィールド)
+	uint16_t height;
+	// "turn_team"(フィールド)
+	std::string turn_team;
+	// "players"(配列)
+	std::vector<std::string> players;
+	// "finished"(フィールド)
+	bool finished;
+	// "count"(フィールド)
+	uint32_t count;
+	// "units"(配列)
+	std::vector<UnitsArrayElem> units;
 };
 
 // 「名前確定」パケット
 struct JSONRecvPacket_NameDecided {
-	std::string your_team;		// "your_team"(フィールド)
+	// "your_team"(フィールド)
+	std::string your_team;
 };
 
 // 「結果」パケット
 struct JSONRecvPacket_Result {
-	std::vector<ResultArrayElem> result;	// "result"(配列)
+	// "result"(配列)
+	std::vector<ResultArrayElem> result;
 };
 
 // 「メッセージ」パケット
 struct JSONRecvPacket_Message {
-	std::string message;		// "message"(フィールド)
+	// "message"(フィールド)
+	std::string message;
 };

@@ -10,7 +10,6 @@
 /*
 	コンストラクタ
 	引数1: const std::string& team_name チーム名
-	備考: こちらはオンラインモードの処理で呼ぶ
 */
 CCommander::CCommander(const std::string& team_name)
 	: m_team_name(team_name)

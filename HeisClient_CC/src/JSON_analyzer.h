@@ -77,7 +77,6 @@ class CJSONAnalyzer{
 			引数1: const std::string& key キー名
 			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
 			返り値: T 取得した値
-			例外: 指定されたキーに対する必須の値が存在しないとき
 		*/
 		template <typename T>
 		OptionalVal<T> get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -107,7 +106,6 @@ class CJSONAnalyzer{
 			引数1: const std::string& key キー名
 			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
 			返り値: T 取得した値
-			例外: 指定されたキーに対する必須の値が存在しないとき
 		*/
 		template <typename T>
 		OptionalVal<T> get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const

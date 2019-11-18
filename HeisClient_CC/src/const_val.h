@@ -26,6 +26,7 @@ enum LocalFieldSize {
 
 // チーム名
 // 注意: 最初の2文字が被らないような名前にしておくこと(被るとIDが衝突し，動作が未定義になる)
+// TODO: チーム名を設定ファイルで決められるようにする
 const std::string LOCAL_MY_TEAM_NAME = "test";			// 自軍
 const std::string LOCAL_ENEMY_TEAM_NAME = "enemy";		// 敵軍
 
