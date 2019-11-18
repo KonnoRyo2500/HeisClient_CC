@@ -258,7 +258,7 @@ void CInfantry::attacked()
 
 /*
 	指定されたマスに移動するための経路があるかどうかを判定する関数
-	引数1: const FieldPosition& dst_pos 目的マスx座標
+	引数1: const FieldPosition& dst_pos 行先のマス
 	返り値: 目的マスに移動できるか
 */
 bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
