@@ -68,9 +68,12 @@ void CGameOnline::initialize_battle()
 */
 void CGameOnline::recv_name_request()
 {
-	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(m_sck->sck_recv());
-	printf("名前要求: %s\n", name_req_msg_pkt.message.c_str());
-	// 名前要求でなければエラー
+	std::string received_JSON = m_sck->sck_recv();
+	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(received_JSON);
+
+	if (m_json_analyzer->get_analyzed_JSON_kind() != CJSONAnalyzer::AnalyzedJSONKind_Message) {
+		throw CHeisClientException("「名前要求」JSONではない不正なJSONを受信しました．サーバの管理者にお問い合わせください．(JSON: %s)", received_JSON.c_str());
+	}
 }
 
 /*
@@ -91,7 +94,12 @@ void CGameOnline::name_entry(const std::string& name)
 */
 void CGameOnline::name_register()
 {
-	JSONRecvPacket_NameDecided name_decided_pkt = m_json_analyzer->create_name_decided_pkt(m_sck->sck_recv());
+	std::string received_JSON = m_sck->sck_recv();
+	JSONRecvPacket_NameDecided name_decided_pkt = m_json_analyzer->create_name_decided_pkt(received_JSON);
+
+	if (m_json_analyzer->get_analyzed_JSON_kind() != CJSONAnalyzer::AnalyzedJSONKind_NameDecided) {
+		throw CHeisClientException("「名前決定」JSONではない不正なJSONを受信しました．サーバの管理者にお問い合わせください．(JSON: %s)", received_JSON.c_str());
+	}
 	m_team_name = name_decided_pkt.your_team;
 	m_commander = new CCommander(m_team_name);
 }
