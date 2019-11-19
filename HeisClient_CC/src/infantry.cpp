@@ -413,7 +413,7 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 		dst_pos.x = 0;
 	}
 	else if (CField::get_instance()->get_width() <= dst_pos.x) {
-		dst_pos.x = LocalFieldSize_Width - 1;
+		dst_pos.x = CField::get_instance()->get_width() - 1;
 	}
 
 	// y座標を決定
@@ -432,7 +432,7 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 		dst_pos.y = 0;
 	}
 	else if (CField::get_instance()->get_height() <= dst_pos.y) {
-		dst_pos.y = LocalFieldSize_Height - 1;
+		dst_pos.y = CField::get_instance()->get_height() - 1;
 	}
 
 	return dst_pos;
