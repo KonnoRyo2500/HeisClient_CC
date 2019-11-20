@@ -185,18 +185,20 @@ std::string CClientSocket::sck_recv_core_win() const
 	while (recv_size == sizeof(buf) - 1) {
 		memset(buf, 0, sizeof(buf));
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
+		if (recv_size < 0) {
+			if (WSAGetLastError() != WSAEWOULDBLOCK) {
+				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", WSAGetLastError());
+			}
+			else {
+				break;
+			}
+		}
 		recv_message += std::string(buf);
 	}
 	// 次の呼び出しでの最初の受信をブロッキングにするため，ソケットをブロッキングに戻す
 	{
 		unsigned long nonblocking_disable = 0;
 		ioctlsocket(m_sck, FIONBIO, &nonblocking_disable);
-	}
-
-	if (recv_size < 0) {
-		if (WSAGetLastError() != WSAEWOULDBLOCK) {
-			throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
-		}
 	}
 
 	return recv_message;
@@ -231,14 +233,16 @@ std::string CClientSocket::sck_recv_core_linux() const
 		memset(buf, 0, sizeof(buf));
 		// 受信データがないときに無限待ちにならないよう，ノンブロッキングで受信する
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, MSG_DONTWAIT);
+		if (recv_size < 0) {
+			if (errno != EAGAIN) {
+				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+			}
+			else {
+				break;
+			}
+		}
 		recv_message += std::string(buf);
 	};
-
-	if (recv_size < 0) {
-		if (errno != EAGAIN) {
-			throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
-		}
-	}
 
 	return recv_message;
 #else
