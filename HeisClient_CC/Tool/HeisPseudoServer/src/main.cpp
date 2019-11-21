@@ -50,6 +50,7 @@ int main(int argc, char **argv)
 					js.send_JSON_from_file(sr.get_filename_to_send());
 					break;
 				case CScenarioReader::ActionType_None:
+					printf("Empty Line\n");
 					break;
 				default:
 					printf("Invalid action\n");
