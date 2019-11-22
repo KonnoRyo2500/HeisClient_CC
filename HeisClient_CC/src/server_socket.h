@@ -37,6 +37,9 @@ class CServerSocket {
 		void sck_sendto(const std::string& msg, const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
 		std::string sck_recvfrom(const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
 
+		// クライアントの情報取得
+		std::vector<std::pair<std::string, uint16_t>> get_connected_client_info() const;
+
 	private:
 		// ソケット生成
 		void sck_socket();

@@ -168,6 +168,21 @@ std::string CServerSocket::sck_recvfrom(const std::string& clt_ip_addr, const ui
 #endif
 }
 
+/*
+	接続してきたクライアントの情報を取得する関数
+	引数なし
+	返り値: std::vector<std::pair<std::string, uint16_t>> 現在接続中のクライアントのIPアドレスとポート番号の一覧
+*/
+std::vector<std::pair<std::string, uint16_t>> CServerSocket::get_connected_client_info() const
+{
+	std::vector<std::pair<std::string, uint16_t>> client_info;
+
+	for (auto& dest_info : m_dest_info) {
+		client_info.push_back(dest_info.first);
+	}
+	return client_info;
+}
+
 /* private関数 */
 
 /*
