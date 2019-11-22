@@ -16,25 +16,53 @@ void CGameOnline::play_game()
 {
 	bool battle_result;
 
-	// 対戦開始前の準備
+	// 対戦の準備
 	initialize_battle();
-	// メッセージ(名前要求)を受信
+
 	recv_name_request();
-	// 名前を送信
 	// TODO: サーバに送信する名前を，設定ファイルから取得できるようにする
 	name_entry(LOCAL_MY_TEAM_NAME);
-	// 確定した名前を受信
 	name_register();
 
 	// 対戦
-	while (!is_battle_end()) {
+	while (true) {
+		// サーバから受信するJSONから生成するパケット(「盤面」パケットはここで生成できる)
+		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_sck->sck_recv());
+		JSONRecvPacket_Result result_pkt;
+
+		// 「盤面」パケットは一旦変数に持っておきたいため，while文の条件部で対戦終了の判定をしない
+		if (field_pkt.finished) {
+			break;
+		}
+		// 自分のターンでなければ，次の「盤面」JSON受信まで待つ
+		if (field_pkt.turn_team != m_team_name) {
+			continue;
+		}
+
+		// 自分のターン
+		// 受信した「盤面」JSONの内容に合うよう，内部のフィールドを更新
+		CField::get_instance()->update(field_pkt);
+		m_commander->update();
+
 		// ユーザAIの行動
+		m_ai->AI_main();
+
+		// 「行動」パケットを作成して送信
+		m_sck->sck_send(m_json_analyzer->create_action_JSON(m_commander->create_action_pkt()));
+
+		// 「結果」パケットを受信
+		result_pkt = m_json_analyzer->create_result_pkt(m_sck->sck_recv());
+		// 「結果」パケットの内容を表示
+		// TODO: 「結果」パケットの内容を，ログファイルに記録できるようにする
+		for (const auto& result_elem : result_pkt.result) {
+			printf("エラー内容: %s, 対象兵士ID: %s\n", result_elem.error.c_str(), result_elem.unit_id.is_omitted() ? "なし" : result_elem.unit_id.get().c_str());
+		}
 	}
 
-	// 勝敗判定
+	// 対戦終了
 	battle_result = judge_win();
-	// 対戦終了後処理
 	finalize_battle();
+
 	// 勝敗を表示
 	printf("%s\n", battle_result ? "You win!" : "You lose...");
 }
@@ -52,13 +80,11 @@ void CGameOnline::initialize_battle()
 	// 必要なインスタンスの生成
 	CField::create_field();
 
-	// 兵士の初期配置はここで行われる
-	// m_commanderの生成については，名前確定後に行う必要があるため，name_register関数で行う
-	m_ai = new CUserAI(m_commander);
+	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_json_analyzer = new CJSONAnalyzer();
 	// TODO: 設定ファイルから接続先IPアドレス，ポート番号を決定できるようにする
 	m_sck = new CClientSocket();
-	m_sck->sck_connect("192.168.1.1", 50000);
+	m_sck->sck_connect("127.0.0.1", 50000);
 }
 
 /*
@@ -66,7 +92,7 @@ void CGameOnline::initialize_battle()
 	引数なし
 	返り値なし
 */
-void CGameOnline::recv_name_request()
+void CGameOnline::recv_name_request() const
 {
 	std::string received_JSON = m_sck->sck_recv();
 	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(received_JSON);
@@ -95,17 +121,7 @@ void CGameOnline::name_register()
 
 	m_team_name = name_decided_pkt.your_team;
 	m_commander = new CCommander(m_team_name);
-}
-
-/*
-	対戦が終了したか判定する関数
-	引数なし
-	返り値: bool 対戦が終了しているか
-*/
-bool CGameOnline::is_battle_end()
-{
-	// TODO: サーバーから受信したJSONの"finished"フィールドを返す
-	return true;
+	m_ai = new CUserAI(m_commander);
 }
 
 /*

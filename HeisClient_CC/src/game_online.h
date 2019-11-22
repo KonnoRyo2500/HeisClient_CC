@@ -21,12 +21,9 @@ class CGameOnline {
 	private:
 		// 対戦開始前処理
 		void initialize_battle();
-		void recv_name_request();
+		void recv_name_request() const;
 		void name_entry(const std::string& name);
 		void name_register();
-
-		// 対戦の終了判定
-		bool is_battle_end();
 
 		// 対戦終了後処理
 		void finalize_battle();
