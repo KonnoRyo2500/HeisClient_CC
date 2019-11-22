@@ -59,6 +59,16 @@ class CJSONAnalyzer{
 		// 解析したJSONの種類を判定
 		AnalyzedJSONKind distinguish_analyzed_JSON_kind() const;
 
+		// 値の取り出し
+		template <typename T>
+		OptionalVal<T> get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
+		template <typename T>
+		OptionalVal<T> get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
+		template <typename T>
+		T get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
+		template <typename T>
+		T get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
+
 		// JSON種類判定処理
 		AnalyzedJSONKind check_whether_name_decided_JSON() const;
 		AnalyzedJSONKind check_whether_result_JSON() const;
@@ -71,105 +81,6 @@ class CJSONAnalyzer{
 		// 解析したJSONと要求するJSONの種類が一致しているか
 		void validate_JSON_kind(const AnalyzedJSONKind req_JSON_kind) const;
 
-		// テンプレート関数
-		/*
-			直近に解析したJSONから，キーを指定して必須でない数値を取得する関数
-			引数1: const std::string& key キー名
-			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-			返り値: T 取得した値
-		*/
-		template <typename T>
-		OptionalVal<T> get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
-		{
-			OptionalVal<T> ret_optional_val;
-
-			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
-				// std::mapの[]演算子は非const関数のため，at関数を用いる
-				ret_optional_val.set_val(static_cast<T>(src_JSON_obj.at(key).get<double>()));
-				ret_optional_val.clear_omit_flag();
-			}
-			else {
-				// キーに対応する値がなければ，デフォルト値を返す
-				// デフォルト値の生成には，std::mapの[]演算子で得られるデフォルト値を返す
-				std::map<std::string, T> dummy_map;
-
-				ret_optional_val.set_val(dummy_map[key]);
-				ret_optional_val.set_omit_flag();
-			}
-
-			return ret_optional_val;
-		}
-
-		/*
-			直近に解析したJSONから，キーを指定して必須でない非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
-			引数1: const std::string& key キー名
-			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-			返り値: T 取得した値
-		*/
-		template <typename T>
-		OptionalVal<T> get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
-		{
-			OptionalVal<T> ret_optional_val;
-
-			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				// std::mapの[]演算子は非const関数のため，at関数を用いる
-				ret_optional_val.set_val(src_JSON_obj.at(key).get<T>());
-				ret_optional_val.clear_omit_flag();
-			}
-			else {
-				// キーに対応する値がなければ，デフォルト値を返す
-				// デフォルト値の生成には，std::mapの[]演算子で得られるデフォルト値を返す
-				std::map<std::string, T> dummy_map;
-				
-				ret_optional_val.set_val(dummy_map[key]);
-				ret_optional_val.set_omit_flag();
-			}
-
-			return ret_optional_val;
-		}
-
-		/*
-			直近に解析したJSONから，キーを指定して必須の数値を取得する関数
-			引数1: const std::string& key キー名
-			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-			返り値: T 取得した値
-			例外: 指定されたキーに対応する値が存在しないとき
-		*/
-		template <typename T>
-		T get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
-		{
-			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
-				// std::mapの[]演算子は非const関数のため，at関数を用いる
-				return static_cast<T>(src_JSON_obj.at(key).get<double>());
-			}
-			else {
-				// キーに対応する値がない
-				throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
-			}
-		}
-
-		/*
-			直近に解析したJSONから，キーを指定して必須の非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
-			引数1: const std::string& key キー名
-			引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-			返り値: T 取得した値
-			例外: 指定されたキーに対応する値が存在しないとき
-		*/
-		template <typename T>
-		T get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
-		{
-			if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
-				// std::mapの[]演算子は非const関数のため，at関数を用いる
-				return src_JSON_obj.at(key).get<T>();
-			}
-			else {
-				// キーに対応する値がない
-				throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
-			}
-		}
-
 	// メンバ変数
 	private:
 		// 解析したJSONの種類
@@ -178,3 +89,102 @@ class CJSONAnalyzer{
 		// 解析した結果得られたJSONオブジェクト(最上位のオブジェクト)
 		picojson::object m_analyzed_JSON_root_obj;
 };
+
+// テンプレート関数
+/*
+	直近に解析したJSONから，キーを指定して必須でない数値を取得する関数
+	引数1: const std::string& key キー名
+	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+	返り値: T 取得した値
+*/
+template <typename T>
+OptionalVal<T> CJSONAnalyzer::get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	OptionalVal<T> ret_optional_val;
+
+	if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+		// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
+		// std::mapの[]演算子は非const関数のため，at関数を用いる
+		ret_optional_val.set_val(static_cast<T>(src_JSON_obj.at(key).get<double>()));
+		ret_optional_val.clear_omit_flag();
+	}
+	else {
+		// キーに対応する値がなければ，デフォルト値を返す
+		// デフォルト値の生成には，std::mapの[]演算子で得られるデフォルト値を返す
+		std::map<std::string, T> dummy_map;
+
+		ret_optional_val.set_val(dummy_map[key]);
+		ret_optional_val.set_omit_flag();
+	}
+
+	return ret_optional_val;
+}
+
+/*
+	直近に解析したJSONから，キーを指定して必須でない非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
+	引数1: const std::string& key キー名
+	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+	返り値: T 取得した値
+*/
+template <typename T>
+OptionalVal<T> CJSONAnalyzer::get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	OptionalVal<T> ret_optional_val;
+
+	if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+		// std::mapの[]演算子は非const関数のため，at関数を用いる
+		ret_optional_val.set_val(src_JSON_obj.at(key).get<T>());
+		ret_optional_val.clear_omit_flag();
+	}
+	else {
+		// キーに対応する値がなければ，デフォルト値を返す
+		// デフォルト値の生成には，std::mapの[]演算子で得られるデフォルト値を返す
+		std::map<std::string, T> dummy_map;
+
+		ret_optional_val.set_val(dummy_map[key]);
+		ret_optional_val.set_omit_flag();
+	}
+
+	return ret_optional_val;
+}
+
+/*
+	直近に解析したJSONから，キーを指定して必須の数値を取得する関数
+	引数1: const std::string& key キー名
+	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+	返り値: T 取得した値
+	例外: 指定されたキーに対応する値が存在しないとき
+*/
+template <typename T>
+T CJSONAnalyzer::get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+		// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
+		// std::mapの[]演算子は非const関数のため，at関数を用いる
+		return static_cast<T>(src_JSON_obj.at(key).get<double>());
+	}
+	else {
+		// キーに対応する値がない
+		throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
+	}
+}
+
+/*
+	直近に解析したJSONから，キーを指定して必須の非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
+	引数1: const std::string& key キー名
+	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
+	返り値: T 取得した値
+	例外: 指定されたキーに対応する値が存在しないとき
+*/
+template <typename T>
+T CJSONAnalyzer::get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
+		// std::mapの[]演算子は非const関数のため，at関数を用いる
+		return src_JSON_obj.at(key).get<T>();
+	}
+	else {
+		// キーに対応する値がない
+		throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
+	}
+}
