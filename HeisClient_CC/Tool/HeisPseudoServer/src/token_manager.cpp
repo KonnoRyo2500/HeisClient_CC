@@ -68,7 +68,7 @@ token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const 
 
 	token_array_t sub_tokens;
 
-	for(int i = begin_pos; i <= end_pos; i++){
+	for(size_t i = begin_pos; i <= end_pos; i++){
 		sub_tokens.push_back(get_single_token(tokens, i));
 	}
 
