@@ -1,5 +1,6 @@
 ﻿// heisクライアント用JSON送受信治具 トークン処理クラス
 // Author: Ryo Konno
+#pragma once
 
 #include <string>
 #include <vector>
