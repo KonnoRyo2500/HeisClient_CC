@@ -30,17 +30,11 @@ class CCsvSettingFileReader {
 		template <typename T>
 		std::vector<T> get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index);
 
-		// 値の取得(特定の型に対する処理)
-		template<>
-		std::string get_single_value<std::string>(const std::string& key, const size_t index);
-		template<>
-		std::vector<std::string> get_all_value<std::string>(const std::string& key);
-		template<>
-		std::vector<std::string> get_ranged_value<std::string>(const std::string& key, const size_t begin_index, const size_t end_index);
-
 	private:
 		// 値の読み込み
 		token_array_t read_all_value(const std::string& key);
+		//不要文字の削除
+		void remove_space_around_comma(token_array_t& key_value) const;
 
 	// メンバ変数
 	private:
@@ -111,6 +105,8 @@ std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, c
 	return ret_value;
 }
 
+// テンプレート関数特殊化
+
 /*
 	単一の値を取得する関数(返す値の型が文字列の場合の処理)
 	引数1: const std::string& key キー名
@@ -119,7 +115,7 @@ std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, c
 	例外: インデックスが範囲外の場合
 */
 template<>
-std::string CCsvSettingFileReader::get_single_value<std::string>(const std::string& key, const size_t index)
+inline std::string CCsvSettingFileReader::get_single_value<std::string>(const std::string& key, const size_t index)
 {
 	token_array_t value = read_all_value(key);
 	if (index < value.size()) {
@@ -135,7 +131,7 @@ std::string CCsvSettingFileReader::get_single_value<std::string>(const std::stri
 	返り値: std::vector<std::string> 値
 */
 template<>
-std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key)
+inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key)
 {
 	return read_all_value(key);
 }
@@ -150,7 +146,7 @@ std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string&
 	例外2: インデックスが範囲外の場合
 */
 template<>
-std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index)
+inline std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index)
 {
 	std::vector<std::string> all_value = read_all_value(key);
 	std::vector<std::string> ret_value;

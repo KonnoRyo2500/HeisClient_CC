@@ -3,6 +3,8 @@
 
 #include "csv_setting_file_reader.h"
 
+#include <regex>
+
 /* public関数 */
 /*
 	コンストラクタ
@@ -42,6 +44,7 @@ token_array_t CCsvSettingFileReader::read_all_value(const std::string& key)
 	// キーを検索
 	while (std::getline(m_file, str)) {
 		key_value = tm.split_string(str, ",");
+		remove_space_around_comma(key_value);
 		if (key_value.size() > 0 && key_value[0] == key) {
 			key_value.erase(key_value.begin());
 			// 次回この関数を呼び出したときにファイルを先頭から読み込めるよう，読み出し位置を戻す
@@ -55,4 +58,18 @@ token_array_t CCsvSettingFileReader::read_all_value(const std::string& key)
 	// 次回この関数を呼び出したときにファイルを先頭から読み込めるよう，読み出し位置を戻す
 	m_file.seekg(0, std::ios_base::beg);
 	throw CHeisClientException("キーが見つかりませんでした(キー名: %s)", key.c_str());
+}
+
+/*
+	カンマの前後にある空白類文字を削除する関数
+	参照1: token_array_t& key_value キーと値全体(カンマによってトークンに分割済み)
+	返り値なし
+*/
+void CCsvSettingFileReader::remove_space_around_comma(token_array_t& key_value) const
+{
+	for (auto& token : key_value) {
+		// 単語の先頭と末尾についている空白を削除する
+		token = std::regex_replace(token, std::regex("(^\\s+)|(\\s+$)"), "");
+		printf("token: %s\n", token.c_str());
+	}
 }
