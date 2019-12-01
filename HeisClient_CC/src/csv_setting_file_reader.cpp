@@ -70,6 +70,5 @@ void CCsvSettingFileReader::remove_space_around_comma(token_array_t& key_value) 
 	for (auto& token : key_value) {
 		// 単語の先頭と末尾についている空白を削除する
 		token = std::regex_replace(token, std::regex("(^\\s+)|(\\s+$)"), "");
-		printf("token: %s\n", token.c_str());
 	}
 }
