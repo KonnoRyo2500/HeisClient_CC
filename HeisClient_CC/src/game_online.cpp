@@ -4,6 +4,9 @@
 #include "game_online.h"
 #include "const_val.h"
 #include "field.h"
+#include "setting_keys.h"
+
+#define ONLINE_SETTING_FILE_NAME "online_setting.csv"
 
 /* public関数 */
 
@@ -20,8 +23,7 @@ void CGameOnline::play_game()
 	initialize_battle();
 
 	recv_name_request();
-	// TODO: サーバに送信する名前を，設定ファイルから取得できるようにする
-	name_entry(LOCAL_MY_TEAM_NAME);
+	name_entry(m_setting_file->get_single_value<std::string>(ONLINE_SETTING_KEY_TEAM_NAME, 0));
 	name_register();
 
 	// 対戦
@@ -80,11 +82,12 @@ void CGameOnline::initialize_battle()
 	// 必要なインスタンスの生成
 	CField::create_field();
 
+	m_setting_file = new CCsvSettingFileReader(ONLINE_SETTING_FILE_NAME);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_json_analyzer = new CJSONAnalyzer();
-	// TODO: 設定ファイルから接続先IPアドレス，ポート番号を決定できるようにする
 	m_sck = new CClientSocket();
-	m_sck->sck_connect("127.0.0.1", 50000);
+	m_sck->sck_connect(m_setting_file->get_single_value<std::string>(ONLINE_SETTING_KEY_SVR_ADDR, 0), 
+					   m_setting_file->get_single_value<uint16_t>(ONLINE_SETTING_KEY_SVR_PORT, 0));
 }
 
 /*
@@ -135,11 +138,13 @@ void CGameOnline::finalize_battle()
 	delete m_ai;
 	delete m_json_analyzer;
 	delete m_sck;
+	delete m_setting_file;
 
 	m_commander = NULL;
 	m_ai = NULL;
 	m_json_analyzer = NULL;
 	m_sck = NULL;
+	m_setting_file = NULL;
 
 	CField::delete_field();
 }

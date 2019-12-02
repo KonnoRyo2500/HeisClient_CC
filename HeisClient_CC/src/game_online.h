@@ -6,6 +6,7 @@
 #include "AI.h"
 #include "JSON_analyzer.h"
 #include "client_socket.h"
+#include "csv_setting_file_reader.h"
 #include <string>
 #include <vector>
 
@@ -47,4 +48,7 @@ class CGameOnline {
 
 		// TCPソケット
 		CClientSocket* m_sck;
+
+		// 設定ファイル
+		CCsvSettingFileReader* m_setting_file;
 };
