@@ -18,10 +18,10 @@ CServerSocket g_sck;
 int main(int argc, char **argv)
 {
 	try{
-		CScenarioReader sr("scenario_sample.txt");
+		CScenarioReader scenario_reader("scenario_sample.txt");
 		CScenarioReader::ActionType act_type;
-		CJsonSender js;
-		CJsonReceiver jr;
+		CJsonSender json_sender;
+		CJsonReceiver json_reader;
 		
 		// ソケットの初期化
 		// クライアントは1人しか接続してこない想定
@@ -30,24 +30,24 @@ int main(int argc, char **argv)
 		g_sck.sck_listen();
 		g_sck.sck_accept();
 		
-		while((act_type = sr.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
+		while((act_type = scenario_reader.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
 			printf("type: %d\n", act_type);
 			switch(act_type){
 				case CScenarioReader::ActionType_PrintRecvMessage:
 					printf("Receive Print\n");
-					jr.recv_JSON_and_print();
+					json_reader.recv_JSON_and_print();
 					break;
 				case CScenarioReader::ActionType_WriteRecvMessage:
 					printf("Receive Write\n");
-					jr.recv_JSON_and_write_file(sr.get_filename_to_write_recv_msg());
+					json_reader.recv_JSON_and_write_file(scenario_reader.get_filename_to_write_recv_msg());
 					break;
 				case CScenarioReader::ActionType_SendMessage:
-					printf("message: %s\n", sr.get_message_to_send().c_str());
-					js.send_JSON(sr.get_message_to_send());
+					printf("message: %s\n", scenario_reader.get_message_to_send().c_str());
+					json_sender.send_JSON(scenario_reader.get_message_to_send());
 					break;
 				case CScenarioReader::ActionType_SendFileContents:
-					printf("filename: %s\n", sr.get_filename_to_send().c_str());
-					js.send_JSON_from_file(sr.get_filename_to_send());
+					printf("filename: %s\n", scenario_reader.get_filename_to_send().c_str());
+					json_sender.send_JSON_from_file(scenario_reader.get_filename_to_send());
 					break;
 				case CScenarioReader::ActionType_None:
 					printf("Empty Line\n");
