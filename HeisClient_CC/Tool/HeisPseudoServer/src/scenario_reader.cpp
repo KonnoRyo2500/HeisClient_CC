@@ -118,6 +118,31 @@ std::string CScenarioReader::get_filename_to_write_recv_msg() const
 	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
 }
 
+/*
+	最後に取得したアクションの対象プレイヤーのターン順序(先攻or後攻)を取得する
+	引数なし
+	返り値: ターン順序
+*/
+CScenarioReader::TurnOrder CScenarioReader::get_turn_order() const
+{
+	if(m_latest_action.size() > 0){
+		CTokenManager tm;
+		std::string last_token = tm.get_single_token(m_latest_action, m_latest_action.size() - 1);
+		// 最後のトークンと，対象プレイヤーのターン順序との対応表
+		const std::map<std::string, CScenarioReader::TurnOrder> turn_order_map = {
+			{"first",	CScenarioReader::TurnOrder_First},
+			{"second",	CScenarioReader::TurnOrder_Second},
+		};
+		auto it = turn_order_map.find(last_token);
+		
+		if(it != turn_order_map.end()){
+			return it->second;
+		}
+		throw CHeisClientException("アクション対象のプレイヤーのターン順序が取得できません");
+	}
+	return CScenarioReader::TurnOrder_None;
+}
+
 /* private関数 */
 /*
 	与えられたアクションのコマンド部分が，与えられたコマンドに一致しているかを判定する関数

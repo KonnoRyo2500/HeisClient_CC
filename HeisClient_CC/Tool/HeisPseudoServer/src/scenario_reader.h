@@ -29,6 +29,16 @@ class CScenarioReader
 			ActionType_Invalid = 999,
 		};
 
+		// ターン順序
+		enum TurnOrder {
+			// 先攻
+			TurnOrder_First,
+			// 後攻
+			TurnOrder_Second,
+			// アクションなし
+			TurnOrder_None,
+		};
+
 	// メンバ関数
 	public:
 		// コンストラクタ
@@ -43,6 +53,9 @@ class CScenarioReader
 		std::string get_message_to_send() const;
 		std::string get_filename_to_send() const;
 		std::string get_filename_to_write_recv_msg() const;
+
+		// アクション対象のプレイヤーが先攻か後攻か判定
+		TurnOrder get_turn_order() const;
 
 	private:
 		// アクション解析
