@@ -5,13 +5,11 @@
 
 #include "server_socket.h"
 
-extern CServerSocket g_sck;
-
 class CJsonSender {
 	// メンバ関数
 	public:
-		void send_JSON(const std::string& JSON) const;
-		void send_JSON_from_file(const std::string& JSON_file_name) const;
+		void send_JSON(const CServerSocket& sck, const std::string& JSON) const;
+		void send_JSON_from_file(const CServerSocket& sck, const std::string& JSON_file_name) const;
 
 	private:
 

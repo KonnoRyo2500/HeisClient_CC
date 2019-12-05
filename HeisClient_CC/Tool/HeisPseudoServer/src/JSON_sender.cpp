@@ -10,20 +10,22 @@
 
 /*
 	与えられたJSONを送信する関数
-	引数1: const std::string& JSON 送信するJSON
+	引数1: const CServerSocket& sck 通信用ソケット
+	引数2: const std::string& JSON 送信するJSON
 	返り値なし
 */
-void CJsonSender::send_JSON(const std::string& JSON) const
+void CJsonSender::send_JSON(const CServerSocket& sck, const std::string& JSON) const
 {
-	g_sck.sck_sendto(JSON);
+	sck.sck_sendto(JSON);
 }
 
 /*
 	JSONをファイルから読み込み，送信する関数
-	引数1: const std::string& JSON_file_name JSONが記載されたファイル名
+	引数1: const CServerSocket& sck 通信用ソケット
+	引数2: const std::string& JSON_file_name JSONが記載されたファイル名
 	返り値なし
 */
-void CJsonSender::send_JSON_from_file(const std::string& JSON_file_name) const
+void CJsonSender::send_JSON_from_file(const CServerSocket& sck, const std::string& JSON_file_name) const
 {
 	std::ifstream JSON_file(JSON_file_name);
 	std::string JSON_buff;
@@ -35,7 +37,7 @@ void CJsonSender::send_JSON_from_file(const std::string& JSON_file_name) const
 	while(std::getline(JSON_file, JSON_buff)){
 		JSON += JSON_buff;
 	}
-	g_sck.sck_sendto(JSON);
+	sck.sck_sendto(JSON);
 }
 
 /* private関数 */

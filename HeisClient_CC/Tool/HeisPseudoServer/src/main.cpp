@@ -39,19 +39,19 @@ int main(int argc, char **argv)
 			switch(act_type){
 				case CScenarioReader::ActionType_PrintRecvMessage:
 					printf("Receive Print\n");
-					json_reader.recv_JSON_and_print();
+					json_reader.recv_JSON_and_print(g_sck);
 					break;
 				case CScenarioReader::ActionType_WriteRecvMessage:
 					printf("Receive Write\n");
-					json_reader.recv_JSON_and_write_file(scenario_reader.get_filename_to_write_recv_msg());
+					json_reader.recv_JSON_and_write_file(g_sck, scenario_reader.get_filename_to_write_recv_msg());
 					break;
 				case CScenarioReader::ActionType_SendMessage:
 					printf("message: %s\n", scenario_reader.get_message_to_send().c_str());
-					json_sender.send_JSON(scenario_reader.get_message_to_send());
+					json_sender.send_JSON(g_sck, scenario_reader.get_message_to_send());
 					break;
 				case CScenarioReader::ActionType_SendFileContents:
 					printf("filename: %s\n", scenario_reader.get_filename_to_send().c_str());
-					json_sender.send_JSON_from_file(scenario_reader.get_filename_to_send());
+					json_sender.send_JSON_from_file(g_sck, scenario_reader.get_filename_to_send());
 					break;
 				case CScenarioReader::ActionType_None:
 					printf("Empty Line\n");

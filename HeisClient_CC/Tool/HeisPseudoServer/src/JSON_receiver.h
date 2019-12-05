@@ -3,13 +3,11 @@
 
 #include "server_socket.h"
 
-extern CServerSocket g_sck;
-
 class CJsonReceiver {
 	// メンバ関数
 	public:
-		void recv_JSON_and_print() const;
-		void recv_JSON_and_write_file(const std::string& JSON_file_name) const;
+		void recv_JSON_and_print(const CServerSocket& sck) const;
+		void recv_JSON_and_write_file(const CServerSocket& sck, const std::string& JSON_file_name) const;
 
 	private:
 		
