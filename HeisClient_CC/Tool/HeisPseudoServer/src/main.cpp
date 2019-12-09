@@ -10,48 +10,50 @@
 
 #define SETTING_FILE_NAME "heis_ps_setting.csv"
 
-/* グローバル変数 */
-// CCとの通信用ソケット
-CServerSocket g_sck;
-
 /*
 	メイン関数
 */
 int main(int argc, char **argv)
 {
 	try{
-		CScenarioReader scenario_reader("scenario_sample.txt");
+		CScenarioReader scenario_reader;
 		CScenarioReader::ActionType act_type;
 		CJsonSender json_sender;
 		CJsonReceiver json_reader;
 		CCsvSettingFileReader setting_reader(SETTING_FILE_NAME);
+		CServerSocket next_com_sck;
+		CServerSocket com_sck_to_first, com_sck_to_second;
 		
 		// ソケットの初期化
-		// クライアントは1人しか接続してこない想定
-		// TODO: ポート番号を設定ファイルから取得できるようにする
-		g_sck.sck_bind(setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 0),
-					   setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 0));
-		g_sck.sck_listen();
-		g_sck.sck_accept();
+		com_sck_to_first.sck_bind(setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 0),
+								  setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 0));
+		com_sck_to_first.sck_listen();
+		com_sck_to_first.sck_accept();
+		
+		com_sck_to_second.sck_bind(setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 1),
+								   setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 1));
+		com_sck_to_second.sck_listen();
+		com_sck_to_second.sck_accept();
 		
 		while((act_type = scenario_reader.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
 			printf("type: %d\n", act_type);
+			next_com_sck = (scenario_reader.get_turn_order() == CScenarioReader::TurnOrder_First ? com_sck_to_first : com_sck_to_second);
 			switch(act_type){
 				case CScenarioReader::ActionType_PrintRecvMessage:
 					printf("Receive Print\n");
-					json_reader.recv_JSON_and_print(g_sck);
+					json_reader.recv_JSON_and_print(next_com_sck);
 					break;
 				case CScenarioReader::ActionType_WriteRecvMessage:
 					printf("Receive Write\n");
-					json_reader.recv_JSON_and_write_file(g_sck, scenario_reader.get_filename_to_write_recv_msg());
+					json_reader.recv_JSON_and_write_file(next_com_sck, scenario_reader.get_filename_to_write_recv_msg());
 					break;
 				case CScenarioReader::ActionType_SendMessage:
 					printf("message: %s\n", scenario_reader.get_message_to_send().c_str());
-					json_sender.send_JSON(g_sck, scenario_reader.get_message_to_send());
+					json_sender.send_JSON(next_com_sck, scenario_reader.get_message_to_send());
 					break;
 				case CScenarioReader::ActionType_SendFileContents:
 					printf("filename: %s\n", scenario_reader.get_filename_to_send().c_str());
-					json_sender.send_JSON_from_file(g_sck, scenario_reader.get_filename_to_send());
+					json_sender.send_JSON_from_file(next_com_sck, scenario_reader.get_filename_to_send());
 					break;
 				case CScenarioReader::ActionType_None:
 					printf("Empty Line\n");

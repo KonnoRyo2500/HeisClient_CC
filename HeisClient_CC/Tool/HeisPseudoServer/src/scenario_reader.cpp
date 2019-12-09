@@ -6,20 +6,25 @@
 #include "scenario_reader.h"
 #include "heis_client_exception.h"
 
+#include <limits.h>
+#include <unistd.h>
+
+#define SCENARIO_FILE_NAME "scenario_sample.txt"
+
 #define SPACE_AND_TAB " 　\t"
 
 /* public関数 */
 
 /*
 	コンストラクタ
-	引数1: const std::string& scenario_file_name シナリオファイル名
+	引数なし
 	例外: シナリオファイルのオープンに失敗したとき
 */
-CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
-	: m_scenario_file(scenario_file_name)
+CScenarioReader::CScenarioReader()
+	: m_scenario_file(get_scenario_file_path() + SCENARIO_FILE_NAME)
 {
 	if(m_scenario_file.fail()){
-		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", scenario_file_name.c_str());
+		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", (get_scenario_file_path() + SCENARIO_FILE_NAME).c_str());
 	}
 }
 
@@ -144,6 +149,24 @@ CScenarioReader::TurnOrder CScenarioReader::get_turn_order() const
 }
 
 /* private関数 */
+/*
+	シナリオファイルのパスを取得する関数
+	引数なし
+	返り値: std::string シナリオファイルのパス(絶対パス, ファイル名自体は含まれない)
+*/
+std::string CScenarioReader::get_scenario_file_path() const
+{
+	char path_buf[PATH_MAX] = {0};
+
+	if(readlink("/proc/self/exe", path_buf, sizeof(path_buf) - 1) > 0){
+		std::string path = std::string(path_buf).substr(0, std::string(path_buf).find_last_of("/"));
+		return path + "/";
+	}
+	else{
+		throw CHeisClientException("シナリオファイルのパス取得に失敗しました");
+	}
+}
+
 /*
 	与えられたアクションのコマンド部分が，与えられたコマンドに一致しているかを判定する関数
 	引数1: const token_array_t action アクション
