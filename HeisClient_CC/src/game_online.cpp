@@ -32,6 +32,9 @@ void CGameOnline::play_game()
 		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_sck->sck_recv());
 		JSONRecvPacket_Result result_pkt;
 
+		// 盤面を表示
+		CField::get_instance()->show();
+
 		// 「盤面」パケットは一旦変数に持っておきたいため，while文の条件部で対戦終了の判定をしない
 		if (field_pkt.finished) {
 			break;
