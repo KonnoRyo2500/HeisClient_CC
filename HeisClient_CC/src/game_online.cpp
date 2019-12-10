@@ -32,6 +32,10 @@ void CGameOnline::play_game()
 		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_sck->sck_recv());
 		JSONRecvPacket_Result result_pkt;
 
+		// 受信した「盤面」JSONの内容に合うよう，内部のフィールドを更新
+		CField::get_instance()->update(field_pkt);
+		m_commander->update();
+
 		// 盤面を表示
 		CField::get_instance()->show();
 
@@ -45,9 +49,6 @@ void CGameOnline::play_game()
 		}
 
 		// 自分のターン
-		// 受信した「盤面」JSONの内容に合うよう，内部のフィールドを更新
-		CField::get_instance()->update(field_pkt);
-		m_commander->update();
 
 		// ユーザAIの行動
 		m_ai->AI_main();
