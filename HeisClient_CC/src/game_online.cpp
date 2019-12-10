@@ -160,6 +160,6 @@ void CGameOnline::finalize_battle()
 */
 bool CGameOnline::judge_win()
 {
-	// TODO: フィールドを参照し，自チームの兵士が一人でもいたらtrue, 一人もいなかったらfalseを返す
-	return true;
+	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
+	return m_commander->get_all_actable_infantry_ids().size() > 0;
 }
