@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "token_manager.h"
+#include "heis_client_exception.h"
 
 /* public関数 */
 
@@ -47,7 +48,13 @@ token_array_t CTokenManager::split_string(const std::string& str, const std::str
 */
 token_t CTokenManager::get_single_token(const token_array_t& tokens, const int index) const
 {
-	return tokens.at(index);
+	try {
+		return tokens.at(index);
+	}
+	catch (std::out_of_range&) {
+		throw CHeisClientException("インデックスが範囲外です(インデックスの上限: %d, 指定されたインデックス: %d)", tokens.size() - 1, index);
+	}
+	
 }
 
 /*
@@ -62,17 +69,19 @@ token_t CTokenManager::get_single_token(const token_array_t& tokens, const int i
 token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const
 {
 	if(begin_pos > end_pos){
-		// heis固有のソースではなく，今後の共通ソースにしたいため，CHeisClientExceptionは投げない
-		throw std::runtime_error("取得範囲が不正です．");
+		throw CHeisClientException("開始インデックスが終了インデックスよりも後ろにあります(開始: %d, 終了: %d)", begin_pos, end_pos);
 	}
 
-	token_array_t sub_tokens;
-
-	for(size_t i = begin_pos; i <= end_pos; i++){
-		sub_tokens.push_back(get_single_token(tokens, i));
+	try {
+		token_array_t sub_tokens;
+		for (size_t i = begin_pos; i <= end_pos; i++) {
+			sub_tokens.push_back(tokens.at(i));
+		}
+		return sub_tokens;
 	}
-
-	return sub_tokens;
+	catch (std::out_of_range&) {
+		throw CHeisClientException("インデックスが範囲外です(値の個数: %d, 開始: %d, 終了: %d)", tokens.size(), begin_pos, end_pos);
+	}
 }
 
 /*

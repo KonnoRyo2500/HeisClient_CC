@@ -2,8 +2,7 @@
 // Author: Ryo Konno
 #pragma once
 
-#include <fstream>
-#include <vector>
+#include <map>
 
 #include "token_manager.h"
 #include "heis_client_exception.h"
@@ -31,15 +30,19 @@ class CCsvSettingFileReader {
 		std::vector<T> get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index);
 
 	private:
-		// 値の読み込み
-		token_array_t read_all_value(const std::string& key);
+		// 値の取得
+		void load_all_value(const std::string& file_name);
+
+		// 値の検索
+		token_array_t search_value(const std::string& key);
+
 		//不要文字の削除
 		void remove_space_around_comma(token_array_t& key_value) const;
 
 	// メンバ変数
 	private:
-		// CSV設定ファイル
-		std::ifstream m_file;
+		// 設定ファイルから取得したキーと値の組
+		std::map<std::string, token_array_t> m_key_value;
 };
 
 // テンプレート関数
@@ -75,7 +78,7 @@ T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t i
 template <typename T>
 std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key)
 {
-	std::vector<std::string> value_str = read_all_value(key);
+	std::vector<std::string> value_str = search_value(key);
 	std::vector<T> ret_value;
 
 	for (auto& v : value_str) {
@@ -117,12 +120,13 @@ std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, c
 template<>
 inline std::string CCsvSettingFileReader::get_single_value<std::string>(const std::string& key, const size_t index)
 {
-	token_array_t value = read_all_value(key);
-	if (index < value.size()) {
-		return value[index];
+	token_array_t value = search_value(key);
+	try {
+		return value.at(index);
 	}
-
-	throw CHeisClientException("インデックスが範囲外です(インデックスの上限: %d, 指定されたインデックス: %d)", value.size() - 1, index);
+	catch (std::out_of_range&) {
+		throw CHeisClientException("インデックスが範囲外です(インデックスの上限: %d, 指定されたインデックス: %d)", value.size() - 1, index);
+	}
 }
 
 /*
@@ -133,7 +137,7 @@ inline std::string CCsvSettingFileReader::get_single_value<std::string>(const st
 template<>
 inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key)
 {
-	return read_all_value(key);
+	return search_value(key);
 }
 
 /*
@@ -148,22 +152,19 @@ inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::
 template<>
 inline std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index)
 {
-	std::vector<std::string> all_value = read_all_value(key);
+	std::vector<std::string> all_value = search_value(key);
 	std::vector<std::string> ret_value;
 
 	if (begin_index > end_index) {
 		throw CHeisClientException("開始インデックスが終了インデックスよりも後ろにあります(開始: %d, 終了: %d)", begin_index, end_index);
 	}
-	if (begin_index >= all_value.size()) {
+	try {
+		for (size_t i = begin_index; i <= end_index; i++) {
+			ret_value.push_back(all_value.at(i));
+		}
+		return ret_value;
+	}
+	catch (std::out_of_range&) {
 		throw CHeisClientException("インデックスが範囲外です(値の個数: %d, 開始: %d, 終了: %d)", all_value.size(), begin_index, end_index);
 	}
-
-	for (size_t i = begin_index; i <= end_index; i++) {
-		if (i == all_value.size()) {
-			break;
-		}
-		ret_value.push_back(all_value[i]);
-	}
-
-	return ret_value;
 }
