@@ -1,7 +1,7 @@
 ﻿// heis ユーザAIクラス
 // Author: Ryo Konno
 
-#include "AI.h"
+#include "user_AI.h"
 #include "field.h"
 #include <random>
 

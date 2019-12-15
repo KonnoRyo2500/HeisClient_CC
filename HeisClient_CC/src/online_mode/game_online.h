@@ -3,7 +3,7 @@
 #pragma once
 
 #include "commander.h"
-#include "AI.h"
+#include "user_AI.h"
 #include "JSON_analyzer.h"
 #include "client_socket.h"
 #include "csv_setting_file_reader.h"
