@@ -4,6 +4,7 @@
 
 #include "commander.h"
 #include "user_AI.h"
+#include "opponent_AI.h"
 #include "JSON_analyzer.h"
 #include "pseudo_server.h"
 #include <string>
@@ -53,9 +54,9 @@ class CGameLocal {
 		CCommander* m_my_commander;
 		CCommander* m_enemy_commander;
 
-		// ユーザAI
+		// AI
 		CUserAI* m_my_AI;
-		CUserAI* m_enemy_AI;
+		COpponentAI* m_enemy_AI;
 
 		// JSON解析器
 		CJSONAnalyzer* m_json_analyzer;

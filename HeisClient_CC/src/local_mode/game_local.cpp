@@ -60,7 +60,7 @@ void CGameLocal::initialize_battle()
 	m_enemy_commander = new CCommander(LOCAL_ENEMY_TEAM_NAME);
 
 	m_my_AI = new CUserAI(m_my_commander);
-	m_enemy_AI = new CUserAI(m_enemy_commander);
+	m_enemy_AI = new COpponentAI(m_enemy_commander);
 
 	m_json_analyzer = new CJSONAnalyzer();
 
