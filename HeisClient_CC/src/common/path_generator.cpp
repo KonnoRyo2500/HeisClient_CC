@@ -23,7 +23,7 @@ std::string CPathGenerator::get_exe_path()
 #ifdef WIN32
 	char path_buf[MAX_PATH] = { 0 };
 
-	GetModuleFileNameA(NULL, path_buf, sizeof(path_buf));
+	GetModuleFileName(NULL, path_buf, sizeof(path_buf));
 	std::string path = std::string(path_buf).substr(0, std::string(path_buf).find_last_of("\\"));
 	return path + "\\";
 #else

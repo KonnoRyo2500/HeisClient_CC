@@ -4,6 +4,7 @@
 
 #include <string>
 
+// TODO: このクラスを共通ソースに移動させる
 class CPathGenerator {
 	// 構造体，列挙体など
 	public:
