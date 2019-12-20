@@ -8,6 +8,7 @@
 #include "JSON_analyzer.h"
 #include "pseudo_server.h"
 #include "local_setting.h"
+#include "csv_setting_file_reader.h"
 
 #include <string>
 
@@ -33,6 +34,10 @@ class CGameLocal {
 		void play_game();
 
 	private:
+		// 設定を取得する
+		void load_local_mode_setting();
+		std::vector<FieldPosition> get_initial_position(const CCsvSettingFileReader& local_setting_file, const std::string& key);
+
 		// 対戦開始前処理
 		void initialize_battle();
 		void recv_name_request() const;

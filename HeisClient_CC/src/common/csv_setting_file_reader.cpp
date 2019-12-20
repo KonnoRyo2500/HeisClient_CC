@@ -66,7 +66,7 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 	返り値: token_array_t 値を表すトークンの集合
 	例外: 指定したキーがファイルになかったとき
 */
-token_array_t CCsvSettingFileReader::search_value(const std::string& key)
+token_array_t CCsvSettingFileReader::search_value(const std::string& key) const
 {
 	auto it = m_key_value.find(key);
 	if (it == m_key_value.end()) {

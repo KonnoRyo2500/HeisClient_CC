@@ -23,18 +23,18 @@ class CCsvSettingFileReader {
 		// 値の取得
 		// TODO: 処理を見直す(よりきれいな処理にできないか?)
 		template <typename T>
-		T get_single_value(const std::string& key, const size_t index);
+		T get_single_value(const std::string& key, const size_t index) const;
 		template <typename T>
-		std::vector<T> get_all_value(const std::string& key);
+		std::vector<T> get_all_value(const std::string& key) const;
 		template <typename T>
-		std::vector<T> get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index);
+		std::vector<T> get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const;
 
 	private:
 		// 値の取得
 		void load_all_value(const std::string& file_name);
 
 		// 値の検索
-		token_array_t search_value(const std::string& key);
+		token_array_t search_value(const std::string& key) const;
 
 		//不要文字の削除
 		void remove_space_around_comma(token_array_t& key_value) const;
@@ -56,7 +56,7 @@ class CCsvSettingFileReader {
 	備考: 値を文字列として返す場合は別途処理を定義しているため，この処理は数値を返すことを想定している
 */
 template <typename T>
-T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index)
+T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
 {	
 	// std::string型のデータを返すget_single_valueは自身を呼び出さない別処理なので，再帰呼び出しにはならない(以下同様)
 	std::string value_str = get_single_value<std::string>(key, index);
@@ -76,7 +76,7 @@ T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t i
 	返り値: std::vector<T> 値
 */
 template <typename T>
-std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key)
+std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) const
 {
 	std::vector<std::string> value_str = search_value(key);
 	std::vector<T> ret_value;
@@ -96,7 +96,7 @@ std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key)
 	返り値: std::vector<T> 値
 */
 template <typename T>
-std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index)
+std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const
 {
 	std::vector<std::string> value_str = get_ranged_value<std::string>(key, begin_index, end_index);
 	std::vector<T> ret_value;
@@ -118,7 +118,7 @@ std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, c
 	例外: インデックスが範囲外の場合
 */
 template<>
-inline std::string CCsvSettingFileReader::get_single_value<std::string>(const std::string& key, const size_t index)
+inline std::string CCsvSettingFileReader::get_single_value<std::string>(const std::string& key, const size_t index) const
 {
 	token_array_t value = search_value(key);
 	try {
@@ -135,7 +135,7 @@ inline std::string CCsvSettingFileReader::get_single_value<std::string>(const st
 	返り値: std::vector<std::string> 値
 */
 template<>
-inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key)
+inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key) const
 {
 	return search_value(key);
 }
@@ -150,7 +150,7 @@ inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::
 	例外2: インデックスが範囲外の場合
 */
 template<>
-inline std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index)
+inline std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const
 {
 	std::vector<std::string> all_value = search_value(key);
 	std::vector<std::string> ret_value;
