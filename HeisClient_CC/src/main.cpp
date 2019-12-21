@@ -54,7 +54,7 @@ int main()
 			i++;
 		}
 	#else
-		CGameOnline game;
+		CGameLocal game;
 
 		game.play_game();
 	#endif
@@ -72,7 +72,7 @@ static JSONSendPacket_Action create_sample_action_pkt()
 {
 	JSONSendPacket_Action sample_action_pkt;
 
-	sample_action_pkt.turn_team = LOCAL_MY_TEAM_NAME;
+	sample_action_pkt.turn_team = "XXX";
 	for (int i = 1; i <= 5; i++) {
 		ContentsArrayElem content;
 

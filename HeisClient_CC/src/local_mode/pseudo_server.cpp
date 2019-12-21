@@ -8,106 +8,15 @@
 /* public関数 */
 
 /*
-	名前要求を行う「メッセージ」JSONを作成する関数
-	引数なし
-	返り値: std::string 名前要求を行う「メッセージ」JSON
-*/
-std::string CPseudoServer::send_name_req_message_json() const
-{
-	picojson::object message_json_obj;
-
-	// TODO: 名前要求の際に入る正確なメッセージが判明したら，それを入れるようにする
-	message_json_obj.insert(std::make_pair("message", "name request"));
-	return serialize_JSON_obj(message_json_obj);
-}
-
-/*
-	「名前確定」JSONを作成する関数
-	引数なし
-	返り値: std::string 「名前確定」JSON
-*/
-std::string CPseudoServer::send_name_decided_json() const
-{
-	picojson::object name_decide_json_obj;
-
-	// 具体的なチーム名はCGameLocalで定義されているので，ここではチーム名を考慮する必要はない
-	name_decide_json_obj.insert(std::make_pair("your_team", "XXX"));
-	return serialize_JSON_obj(name_decide_json_obj);
-}
-
-/*
-	最初に送信される「盤面」JSONを作成する関数
-	引数なし
-	返り値: std::string 最初に送信される「盤面」JSON
-*/
-std::string CPseudoServer::send_initial_field_json() const
-{
-	picojson::object initial_field_json_obj;
-
-	initial_field_json_obj.insert(std::make_pair("turn_team", "XXX"));
-	initial_field_json_obj.insert(std::make_pair("players", picojson::array()));
-	initial_field_json_obj.insert(std::make_pair("finished", false));
-	initial_field_json_obj.insert(std::make_pair("count", 0.0));
-	// ローカルモードでは，CGameLocal側でゲームの流れの制御を行うため，以下の値を除き，このJSONからの値を無視する
-	// そのため，以下で設定する値以外には，適当な固定値を入れておく
-	initial_field_json_obj.insert(std::make_pair("width", static_cast<double>(LocalFieldSize_Width)));
-	initial_field_json_obj.insert(std::make_pair("height", static_cast<double>(LocalFieldSize_Height)));
-	initial_field_json_obj.insert(std::make_pair("units", make_initial_units_JSON_array()));
-	return serialize_JSON_obj(initial_field_json_obj);
-}
-
-/*
 	「盤面」JSONを作成する関数
-	引数なし
+	引数1: const LocalSetting& setting ローカルモード設定
 	返り値: std::string 「盤面」JSON
 */
-std::string CPseudoServer::send_field_json() const
+std::string CPseudoServer::send_field_json(const LocalSetting& setting) const
 {
 	picojson::object field_json_obj;
-
-	field_json_obj.insert(std::make_pair("turn_team", "XXX"));
-	field_json_obj.insert(std::make_pair("players", picojson::array()));
-	field_json_obj.insert(std::make_pair("finished", false));
-	field_json_obj.insert(std::make_pair("count", 0.0));
-	// ローカルモードでは，CGameLocal側でゲームの流れの制御を行うため，以下の値を除き，このJSONからの値を無視する
-	// そのため，以下で設定する値以外には，適当な固定値を入れておく
-	field_json_obj.insert(std::make_pair("width", static_cast<double>(LocalFieldSize_Width)));
-	field_json_obj.insert(std::make_pair("height", static_cast<double>(LocalFieldSize_Height)));
-	field_json_obj.insert(std::make_pair("units", make_units_JSON_array()));
+	
 	return serialize_JSON_obj(field_json_obj);
-}
-
-/*
-	「結果」JSONを作成する関数
-	引数なし
-	返り値: std::string 「結果」JSON
-*/
-std::string CPseudoServer::send_result_json() const
-{
-	picojson::object result_json_obj;
-
-	result_json_obj.insert(std::make_pair("result", picojson::array()));
-	return serialize_JSON_obj(result_json_obj);
-}
-
-/*
-	「名前」JSONを受け取る関数
-	引数1: const std::string& name_json 「名前」JSON
-	返り値なし
-*/
-void CPseudoServer::recv_name_json(const std::string& name_json) const
-{
-	// 処理なし(受け取ったJSONは捨てる)
-}
-
-/*
-	「行動」JSONを受け取る関数
-	引数1: const std::string& name_json 「行動」JSON
-	返り値なし
-*/
-void CPseudoServer::recv_action_json(const std::string& action_json) const
-{
-	// 処理なし(受け取ったJSONは捨てる)
 }
 
 /* private関数 */
@@ -142,32 +51,6 @@ picojson::object CPseudoServer::make_units_elem(const CInfantry* infantry) const
 	units_elem_obj.insert(std::make_pair("hp", static_cast<double>(infantry->get_hp())));
 	units_elem_obj.insert(std::make_pair("team", infantry->get_team_name()));
 	return units_elem_obj;
-}
-
-/*
-	最初に送信される「盤面」JSONの"units"配列を作成する関数
-	引数なし
-	返り値: picojson::array 最初に送信される「盤面」JSONの"units"配列
-*/
-picojson::array CPseudoServer::make_initial_units_JSON_array() const
-{
-	picojson::array initial_units_JSON_array;
-	// 兵士を初期配置する領域のサイズ
-	const int initial_area_width = 6;
-	const int initial_area_height = 6;
-	int infantry_serial_num = 0;
-
-	for (int x = 0; x < initial_area_width; x++) {
-		for (int y = 0; y < initial_area_height; y++) {
-			CInfantry my_infantry(LOCAL_MY_TEAM_NAME, make_infantry_id(LOCAL_MY_TEAM_NAME, infantry_serial_num), FieldPosition(x, y));
-			CInfantry enemy_infantry(LOCAL_ENEMY_TEAM_NAME, make_infantry_id(LOCAL_ENEMY_TEAM_NAME, infantry_serial_num), FieldPosition(LocalFieldSize_Width - x - 1, LocalFieldSize_Height -  y - 1));
-			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&my_infantry)));
-			initial_units_JSON_array.push_back(picojson::value(make_units_elem(&enemy_infantry)));
-			infantry_serial_num++;
-		}
-	}
-
-	return initial_units_JSON_array;
 }
 
 /*
