@@ -16,10 +16,67 @@
 */
 void CGameLocal::play_game()
 {
-	
+	// 対戦の初期化
+	initialize_battle();
+
+	// 対戦終了処理
+	finalize_battle();
+
 }
 
 /* private関数 */
+
+/*
+	対戦を開始する前の準備を行う関数
+	引数なし
+	返り値なし
+*/
+void CGameLocal::initialize_battle()
+{
+	// 設定ファイルの読み込み
+	load_local_mode_setting();
+
+	// フィールドの生成
+	CField::create_field();
+
+	// 各インスタンスの生成
+	m_my_commander = new CCommander(m_setting.my_team_name);
+	m_enemy_commander = new CCommander(m_setting.enemy_team_name);
+
+	m_my_AI = new CUserAI(m_my_commander);
+	m_enemy_AI = new COpponentAI(m_enemy_commander);
+
+	m_pseudo_server = new CPseudoServer();
+
+	m_json_analyzer = new CJSONAnalyzer();
+}
+
+/*
+	対戦終了後の後処理を行う関数
+	引数なし
+	返り値なし
+*/
+void CGameLocal::finalize_battle()
+{
+	// フィールドを削除
+	CField::delete_field();
+
+	// メンバ変数のメモリ解放
+	delete m_my_commander;
+	delete m_enemy_commander;
+	delete m_my_AI;
+	delete m_enemy_AI;
+	delete m_pseudo_server;
+	delete m_json_analyzer;
+	// m_settingについては実体を保持しているため，明示的なメモリ解放は必要ない
+
+	m_my_commander = NULL;
+	m_enemy_commander = NULL;
+	m_my_AI = NULL;
+	m_enemy_AI = NULL;
+	m_pseudo_server = NULL;
+	m_json_analyzer = NULL;
+}
 
 /*
 	ローカルモード設定ファイルから，設定を取得する関数

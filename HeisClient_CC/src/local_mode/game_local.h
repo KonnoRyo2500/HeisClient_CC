@@ -25,8 +25,28 @@ class CGameLocal {
 		void load_local_mode_setting();
 		std::vector<FieldPosition> get_initial_position(const CCsvSettingFileReader& local_setting_file, const std::string& key);	
 
+		// 対戦の初期化
+		void initialize_battle();
+
+		// 対戦の終了処理
+		void finalize_battle();
+
 	// メンバ変数
 	private:
+
+		// 司令官
+		CCommander* m_my_commander;
+		CCommander* m_enemy_commander;
+
+		// AI
+		CUserAI* m_my_AI;
+		COpponentAI* m_enemy_AI;
+
+		// 疑似サーバ
+		CPseudoServer* m_pseudo_server;
+
+		// JSON解析
+		CJSONAnalyzer* m_json_analyzer;
 		
 		// 設定
 		LocalSetting m_setting;
