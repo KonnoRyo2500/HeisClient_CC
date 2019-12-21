@@ -31,6 +31,9 @@ class CGameLocal {
 		// 対戦の終了処理
 		void finalize_battle();
 
+		// 対戦後の勝敗判定
+		bool judge_win();
+
 	// メンバ変数
 	private:
 

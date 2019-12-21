@@ -16,12 +16,48 @@
 */
 void CGameLocal::play_game()
 {
+	bool battle_result;
+
 	// 対戦の初期化
 	initialize_battle();
 
+	// 対戦
+	while (true) {
+		// オンラインモードと同様に，疑似サーバから受け取った「盤面」JSONを基に盤面を更新してから行動する
+		// しかし，「結果」JSONの送信など，不要な処理は行わない
+		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json(m_setting));
+
+		if (field_pkt.finished) {
+			break;
+		}
+
+		// フィールド更新
+		CField::get_instance()->update(field_pkt);
+
+		if (field_pkt.turn_team == m_setting.my_team_name) {
+			// 自チームのターン
+			m_my_commander->update();
+			m_my_AI->AI_main();
+		}
+		else if(field_pkt.turn_team == m_setting.enemy_team_name) {
+			// 敵チームのターン
+			m_my_commander->update();
+			m_enemy_AI->AI_main();
+		}
+		else {
+			throw CHeisClientException("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
+				,field_pkt.turn_team.c_str());
+		}
+	}
+
+	// 勝敗を判定
+	battle_result = judge_win();
+
+	// 勝敗を表示
+	printf("%s\n", battle_result ? "You win!" : "You lose...");
+
 	// 対戦終了処理
 	finalize_battle();
-
 }
 
 /* private関数 */
@@ -124,4 +160,15 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 	}
 
 	return init_pos;
+}
+
+/*
+	対戦の決着がついた後，勝敗を決定する関数
+	引数なし
+	返り値: bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
+*/
+bool CGameLocal::judge_win()
+{
+	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
+	return m_my_commander->get_all_actable_infantry_ids().size() > 0;
 }
