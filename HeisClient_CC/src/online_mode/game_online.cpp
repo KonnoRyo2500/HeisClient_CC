@@ -164,6 +164,8 @@ void CGameOnline::finalize_battle()
 */
 bool CGameOnline::judge_win()
 {
+	// 最終状態のフィールドを司令官インスタンスに反映する
+	m_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
 	return m_commander->get_all_actable_infantry_ids().size() > 0;
 }

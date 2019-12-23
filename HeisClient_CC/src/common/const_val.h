@@ -15,3 +15,6 @@ enum Direction {
 	Direction_Left,					// 左
 	Direction_Right,				// 右
 };
+
+// 兵士の初期HP
+#define INFANTRY_INITIAL_HP (2)

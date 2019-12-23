@@ -27,12 +27,15 @@ void CGameLocal::play_game()
 		// しかし，「結果」JSONの送信など，不要な処理は行わない
 		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json(m_setting));
 
+		// フィールド更新
+		CField::get_instance()->update(field_pkt);
+
+		// 盤面を表示
+		CField::get_instance()->show();
+
 		if (field_pkt.finished) {
 			break;
 		}
-
-		// フィールド更新
-		CField::get_instance()->update(field_pkt);
 
 		if (field_pkt.turn_team == m_setting.my_team_name) {
 			// 自チームのターン
@@ -41,7 +44,7 @@ void CGameLocal::play_game()
 		}
 		else if(field_pkt.turn_team == m_setting.enemy_team_name) {
 			// 敵チームのターン
-			m_my_commander->update();
+			m_enemy_commander->update();
 			m_enemy_AI->AI_main();
 		}
 		else {
@@ -169,6 +172,8 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 */
 bool CGameLocal::judge_win()
 {
+	// 最終状態のフィールドを司令官インスタンスに反映する
+	m_my_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
 	return m_my_commander->get_all_actable_infantry_ids().size() > 0;
 }
