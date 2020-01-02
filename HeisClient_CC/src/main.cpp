@@ -38,11 +38,11 @@ static GameMode ask_game_mode()
 		{1, GameMode_Local},
 		{2, GameMode_Online},
 	};
-	std::string user_input_buf;
 	auto it = selected_value_to_mode.end();
 
 	while (it == selected_value_to_mode.end()) {
 		try {
+			std::string user_input_buf;
 			printf("ゲームモードを入力して下さい(1: ローカルモード, 2: オンラインモード)\n");
 			std::cin >> user_input_buf;
 			it = selected_value_to_mode.find(stoi(user_input_buf));
