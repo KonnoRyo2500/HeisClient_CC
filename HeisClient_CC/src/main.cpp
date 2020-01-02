@@ -3,12 +3,19 @@
 #include "game_local.h"
 #include "game_online.h"
 
+// ゲームモード
 enum GameMode {
+	// ローカルモード
 	GameMode_Local,
+	// オンラインモード
 	GameMode_Online,
 };
 
+/* static関数 */
+
+// ゲームモードを選択する
 static GameMode ask_game_mode();
+// ゲームを開始する
 static void start_game(const GameMode mode);
 
 int main()
@@ -41,6 +48,7 @@ static GameMode ask_game_mode()
 	auto it = selected_value_to_mode.end();
 
 	while (it == selected_value_to_mode.end()) {
+		// ゲームモードが確定するまで選択を続行する
 		try {
 			std::string user_input_buf;
 			printf("ゲームモードを入力して下さい(1: ローカルモード, 2: オンラインモード)\n");
