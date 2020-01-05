@@ -4,6 +4,7 @@
 #include "game_local.h"
 #include "field.h"
 #include "setting_keys.h"
+#include "path_generator.h"
 
 #define LOCAL_SETTING_FILE_NAME "local_setting.csv"
 
@@ -124,7 +125,8 @@ void CGameLocal::finalize_battle()
 */
 void CGameLocal::load_local_mode_setting()
 {
-	CCsvSettingFileReader local_setting_file(LOCAL_SETTING_FILE_NAME);
+	CPathGenerator pg;
+	CCsvSettingFileReader local_setting_file(pg.get_exe_path() + LOCAL_SETTING_FILE_NAME);
 
 	m_setting.field_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_WIDTH, 0);
 	m_setting.field_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_HEIGHT, 0);
