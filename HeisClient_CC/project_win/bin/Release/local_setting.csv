@@ -1,0 +1,7 @@
+field_width,10
+field_height,10
+my_team_name,Asterism
+enemy_team_name,Triedge
+my_infantries_init_position,0 0,1 0,2 0
+enemy_infantries_init_position,9 9,8 9,7 9
+first_turn_team,Asterism
