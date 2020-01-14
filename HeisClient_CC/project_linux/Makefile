@@ -17,6 +17,7 @@ OBJECTS = $(addprefix $(OBJROOT), $(subst $(SRCROOT), , $(SOURCES:.cpp=.o)))
 DEPENDS = $(OBJECTS:.o=.d)
 
 $(TARGETS): $(OBJECTS)
+	@if [ ! -e $(TARGETDIR) ]; then mkdir -p $(TARGETDIR); fi
 	$(COMPILER) -o $(TARGETDIR)/$@ $^
 
 $(OBJROOT)/%.o: $(SRCROOT)/%.cpp
