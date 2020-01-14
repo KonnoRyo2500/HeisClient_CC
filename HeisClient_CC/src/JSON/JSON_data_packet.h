@@ -14,8 +14,8 @@ struct OptionalVal {
 	public:
 		// コンストラクタ
 		OptionalVal()
-			: m_omit_flag(true)
-			, m_val()	// 警告抑止(この記述に特に意味はない)
+			: m_val()	// 警告抑止(この記述に特に意味はない)
+			, m_omit_flag(true)
 		{
 			// 処理なし
 		}

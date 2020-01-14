@@ -14,12 +14,12 @@
 	引数3: const FieldPosition& init_pos 初期位置
 */
 CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const FieldPosition& init_pos)
-	: m_id(infantry_id)
-	, m_hp(InitialValue_HP)
-	, m_team_name(team_name)
+	: m_team_name(team_name)
+	, m_id(infantry_id)
 	, m_pos(init_pos)
-	, m_attack_pos({UINT16_MAX, UINT16_MAX})
+	, m_attack_pos({ UINT16_MAX, UINT16_MAX })
 	, m_action_remain(InitialValue_ActionRemain)
+	, m_hp(InitialValue_HP)
 {
 	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから配置するようにする
 	CField* field = CField::get_instance();
@@ -155,7 +155,6 @@ void CInfantry::move(const FieldPosition dst_pos)
 		return;
 	}
 	try {
-		CInfantry* dst_infantry = field->get_infantry(dst_pos);
 		if (exists_path_for_move(dst_pos)) {
 			// フィールド上の座標を更新する
 			field->remove_infantry(m_pos);

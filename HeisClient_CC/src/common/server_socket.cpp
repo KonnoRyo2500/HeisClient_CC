@@ -137,7 +137,7 @@ void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip
 		if (send_size < 0) {
 			throw CHeisClientException("送信でエラーが発生しました(エラーコード: %d)", errno);
 		}
-		fprintf(stderr, "警告: 不完全なメッセージが送信されました(%d文字中%d文字が送信されました)\n", msg.size(), send_size);
+		fprintf(stderr, "警告: 不完全なメッセージが送信されました(%zu文字中%zu文字が送信されました)\n", msg.size(), send_size);
 	}
 }
 
