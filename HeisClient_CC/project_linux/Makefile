@@ -5,7 +5,7 @@
 # ‰ü‘P‚Å‚«‚é•”•ª‚ª‘½‚»‚¤DC³E‰ü‘PŠó–]D
 
 COMPILER = g++
-CXXFLAGS = -g -Wall -O2
+CXXFLAGS = -g -Wall -O2 -MMD -MP
 INCLUDE = -I../src/AI -I../src/common -I../src/field -I../src/JSON -I../src/local_mode -I../src/online_mode -I../src/picojson-master/picojson-master -I../src/unit
 TARGETS = HeisClient_CC.exe
 TARGETDIR = bin
