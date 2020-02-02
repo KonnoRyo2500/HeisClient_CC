@@ -20,7 +20,7 @@ class COpponentAI {
 		explicit COpponentAI(CCommander* commander);
 
 		// メイン処理
-		void AI_main();
+		void AI_main(const JSONRecvPacket_Field& field_pkt);
 
 	private:
 		// サンプルAI用の処理

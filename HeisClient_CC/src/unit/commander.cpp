@@ -26,6 +26,12 @@ CCommander::~CCommander()
 	// 処理なし
 }
 
+/*
+	指定したIDを持つ兵士の位置を取得する関数
+	引数1: (const std::string& id ID
+	返り値: FieldPosition 位置
+	例外: 指定したIDの兵士がいない場合
+*/
 FieldPosition CCommander::get_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
@@ -80,7 +86,7 @@ void CCommander::attack(const std::string& id, const FieldPosition dst_pos) cons
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
-	if (infantry != NULL) {
+	if (infantry != NULL && infantry->get_team_name() == m_team_name) {
 		infantry->attack(dst_pos);
 	}
 }
@@ -95,7 +101,7 @@ void CCommander::move(const std::string& id, const FieldPosition dst_pos) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
-	if (infantry != NULL) {
+	if (infantry != NULL && infantry->get_team_name() == m_team_name) {
 		infantry->move(dst_pos);
 	}
 }
@@ -132,16 +138,16 @@ std::vector<FieldPosition> CCommander::find_attackable_position(const std::strin
 
 /*
 	行動可能なすべての兵士のIDを取得する関数
-	引数なし
+	引数1: const std::string& team_name 取得対象のチーム名
 	返り値: std::vector<std::string&> 行動可能な各兵士のID
 */
-std::vector<std::string> CCommander::get_all_actable_infantry_ids() const
+std::vector<std::string> CCommander::get_all_actable_infantry_ids(const std::string& team_name) const
 {
 	std::vector<std::string> actable_infantry_ids;
 
-	for (CInfantry* my_team_infantry : m_infantries) {
-		if (is_actable(my_team_infantry)) {
-			actable_infantry_ids.push_back(my_team_infantry->get_id());
+	for (CInfantry* infantry : m_infantries) {
+		if (is_actable(infantry) && infantry->get_team_name() == team_name) {
+			actable_infantry_ids.push_back(infantry->get_id());
 		}
 	}
 
@@ -150,16 +156,16 @@ std::vector<std::string> CCommander::get_all_actable_infantry_ids() const
 
 /*
 	移動可能なすべての兵士のIDを取得する関数
-	引数なし
+	引数1: const std::string& team_name 取得対象のチーム名
 	返り値: std::vector<std::string&> 移動可能な各兵士のID
 */
-std::vector<std::string> CCommander::get_all_movable_infantry_ids() const
+std::vector<std::string> CCommander::get_all_movable_infantry_ids(const std::string& team_name) const
 {
 	std::vector<std::string> movable_infantry_ids;
 
-	for (CInfantry* my_team_infantry : m_infantries) {
-		if (is_movable(my_team_infantry)) {
-			movable_infantry_ids.push_back(my_team_infantry->get_id());
+	for (CInfantry* infantry : m_infantries) {
+		if (is_movable(infantry) && infantry->get_team_name() == team_name) {
+			movable_infantry_ids.push_back(infantry->get_id());
 		}
 	}
 
@@ -168,16 +174,16 @@ std::vector<std::string> CCommander::get_all_movable_infantry_ids() const
 
 /*
 	攻撃可能なすべての兵士のIDを取得する関数
-	引数なし
+	引数1: const std::string& team_name 取得対象のチーム名
 	返り値: std::vector<std::string&> 攻撃可能な各兵士のID
 */
-std::vector<std::string> CCommander::get_all_attackable_infantry_ids() const
+std::vector<std::string> CCommander::get_all_attackable_infantry_ids(const std::string& team_name) const
 {
 	std::vector<std::string> attackable_infantry_ids;
 
-	for (CInfantry* my_team_infantry : m_infantries) {
-		if (is_attackable(my_team_infantry)) {
-			attackable_infantry_ids.push_back(my_team_infantry->get_id());
+	for (CInfantry* infantry : m_infantries) {
+		if (is_attackable(infantry) && infantry->get_team_name() == team_name) {
+			attackable_infantry_ids.push_back(infantry->get_id());
 		}
 	}
 
@@ -225,12 +231,12 @@ void CCommander::update()
 	// 古い兵士リストを全削除
 	m_infantries.clear();
 
-	// フィールドにいる自チームの兵士をすべて兵士リストに加える
+	// フィールドにいる兵士をすべて兵士リストに加える
 	CField* field = CField::get_instance();
 	for (int x = 0; x < field->get_width(); x++) {
 		for (int y = 0; y < field->get_height(); y++) {
 			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
-			if (infantry != NULL && infantry->get_team_name() == m_team_name) {
+			if (infantry != NULL) {
 				m_infantries.push_back(infantry);
 			}
 		}

@@ -52,7 +52,7 @@ void CGameOnline::play_game()
 		// 自分のターン
 
 		// ユーザAIの行動
-		m_ai->AI_main();
+		m_ai->AI_main(field_pkt);
 
 		// 「行動」パケットを作成して送信
 		m_sck->sck_send(m_json_analyzer->create_action_JSON(m_commander->create_action_pkt()));
@@ -167,5 +167,5 @@ bool CGameOnline::judge_win()
 	// 最終状態のフィールドを司令官インスタンスに反映する
 	m_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
-	return m_commander->get_all_actable_infantry_ids().size() > 0;
+	return m_commander->get_all_actable_infantry_ids(m_team_name).size() > 0;
 }

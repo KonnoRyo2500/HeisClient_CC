@@ -32,11 +32,11 @@ class CCommander
 		std::vector<FieldPosition> find_attackable_position(const std::string& id) const;
 
 		// 兵士の探索
-		std::vector<std::string> get_all_actable_infantry_ids() const;
-		std::vector<std::string> get_all_movable_infantry_ids() const;
-		std::vector<std::string> get_all_attackable_infantry_ids() const;
+		std::vector<std::string> get_all_actable_infantry_ids(const std::string& team_name) const;
+		std::vector<std::string> get_all_movable_infantry_ids(const std::string& team_name) const;
+		std::vector<std::string> get_all_attackable_infantry_ids(const std::string& team_name) const;
 
-		// 自チームの全兵士のIDを表示する(デバッグ用)
+		// フィールドにいる全兵士のIDを表示する(デバッグ用)
 		void show_infantry_ids() const;
 
 		// 「行動」パケットを作成
@@ -57,6 +57,6 @@ class CCommander
 		// 自チーム名
 		std::string m_team_name;
 
-		// 自チームの全兵士
+		// フィールドにいる全兵士
 		std::vector<CInfantry*> m_infantries;		
 };

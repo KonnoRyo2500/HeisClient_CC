@@ -18,23 +18,25 @@ CUserAI::CUserAI(CCommander* commander)
 
 /*
 	ユーザAI メイン処理
-	引数なし
+	引数1: const JSONRecvPacket_Field& field_pkt 「盤面」 パケット
 	返り値なし
 */
-void CUserAI::AI_main()
+void CUserAI::AI_main(const JSONRecvPacket_Field& field_pkt)
 {
 	/* この関数内に，ユーザAIの動作を記述すること */
-	while (m_commander->get_all_actable_infantry_ids().size() != 0) {
+	std::string my_team_name = field_pkt.turn_team;
+
+	while (m_commander->get_all_actable_infantry_ids(my_team_name).size() != 0) {
 		std::string infantry_id;
 
 		if (sample_decide_action() == SampleAction_Move) {
-			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids());
+			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids(my_team_name));
 			if (infantry_id.size() > 0) {
 				sample_random_move(infantry_id);
 			}
 		}
 		else {
-			infantry_id = sample_select_next_infantry(m_commander->get_all_attackable_infantry_ids());
+			infantry_id = sample_select_next_infantry(m_commander->get_all_attackable_infantry_ids(my_team_name));
 			if (infantry_id.size() > 0) {
 				sample_random_attack(infantry_id);
 			}

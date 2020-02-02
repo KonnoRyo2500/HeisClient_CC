@@ -41,12 +41,12 @@ void CGameLocal::play_game()
 		if (field_pkt.turn_team == m_setting.my_team_name) {
 			// 自チームのターン
 			m_my_commander->update();
-			m_my_AI->AI_main();
+			m_my_AI->AI_main(field_pkt);
 		}
 		else if(field_pkt.turn_team == m_setting.enemy_team_name) {
 			// 敵チームのターン
 			m_enemy_commander->update();
-			m_enemy_AI->AI_main();
+			m_enemy_AI->AI_main(field_pkt);
 		}
 		else {
 			throw CHeisClientException("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
@@ -177,5 +177,5 @@ bool CGameLocal::judge_win()
 	// 最終状態のフィールドを司令官インスタンスに反映する
 	m_my_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
-	return m_my_commander->get_all_actable_infantry_ids().size() > 0;
+	return m_my_commander->get_all_actable_infantry_ids(m_setting.my_team_name).size() > 0;
 }
