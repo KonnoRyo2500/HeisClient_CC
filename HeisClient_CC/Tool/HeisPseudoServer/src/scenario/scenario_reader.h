@@ -42,7 +42,7 @@ class CScenarioReader
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CScenarioReader();
+		explicit CScenarioReader(const std::string& scenario_file_name);
 		// デストラクタ
 		~CScenarioReader();
 
@@ -58,8 +58,8 @@ class CScenarioReader
 		TurnOrder get_turn_order() const;
 
 	private:
-		// シナリオファイルのパス取得
-		std::string get_scenario_file_path() const;
+		// 実行ファイルのパス取得
+		std::string get_exe_file_dir() const;
 
 		// アクション解析
 		bool is_match_command_part(const token_array_t action, const token_array_t command) const;

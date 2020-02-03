@@ -16,11 +16,12 @@
 int main(int argc, char **argv)
 {
 	try{
-		CScenarioReader scenario_reader;
+		CCsvSettingFileReader setting_reader(SETTING_FILE_NAME);
+		const std::string scenario_file_name = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_SCENARIO_NAME, 0);
+		CScenarioReader scenario_reader(scenario_file_name);
 		CScenarioReader::ActionType act_type;
 		CJsonSender json_sender;
 		CJsonReceiver json_reader;
-		CCsvSettingFileReader setting_reader(SETTING_FILE_NAME);
 		CServerSocket next_com_sck;
 		CServerSocket com_sck_to_first, com_sck_to_second;
 		
