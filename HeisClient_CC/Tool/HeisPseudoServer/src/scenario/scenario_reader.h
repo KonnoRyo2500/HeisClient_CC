@@ -58,9 +58,6 @@ class CScenarioReader
 		TurnOrder get_turn_order() const;
 
 	private:
-		// 実行ファイルのパス取得
-		std::string get_exe_file_dir() const;
-
 		// アクション解析
 		bool is_match_command_part(const token_array_t action, const token_array_t command) const;
 		bool is_empty_line(const std::string& action_str) const;

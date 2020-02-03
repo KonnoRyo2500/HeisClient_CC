@@ -7,6 +7,7 @@
 #include "server_socket.h"
 #include "csv_setting_file_reader.h"
 #include "ps_setting_keys.h"
+#include "path_generator.h"
 
 #define SETTING_FILE_NAME "heis_ps_setting.csv"
 
@@ -16,7 +17,8 @@
 int main(int argc, char **argv)
 {
 	try{
-		CCsvSettingFileReader setting_reader(SETTING_FILE_NAME);
+		CPathGenerator pg;
+		CCsvSettingFileReader setting_reader(pg.get_exe_path() + SETTING_FILE_NAME);
 		const std::string scenario_file_name = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_SCENARIO_NAME, 0);
 		CScenarioReader scenario_reader(scenario_file_name);
 		CScenarioReader::ActionType act_type;

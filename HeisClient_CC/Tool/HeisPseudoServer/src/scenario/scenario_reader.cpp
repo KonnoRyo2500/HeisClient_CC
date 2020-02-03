@@ -5,6 +5,7 @@
 
 #include "scenario_reader.h"
 #include "heis_client_exception.h"
+#include "path_generator.h"
 
 #include <limits.h>
 #include <unistd.h>
@@ -19,10 +20,11 @@
 	例外: シナリオファイルのオープンに失敗したとき
 */
 CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
-	: m_scenario_file(get_exe_file_dir() + scenario_file_name)
 {
+	CPathGenerator pg;
+	m_scenario_file = std::ifstream(pg.get_exe_path() + scenario_file_name);
 	if(m_scenario_file.fail()){
-		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", (get_exe_file_dir() + scenario_file_name).c_str());
+		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", (pg.get_exe_path() + scenario_file_name).c_str());
 	}
 }
 
@@ -147,24 +149,6 @@ CScenarioReader::TurnOrder CScenarioReader::get_turn_order() const
 }
 
 /* private関数 */
-/*
-	実行ファイルのあるディレクトリを取得する関数
-	引数なし
-	返り値: std::string 実行ファイルのディレクトリ(絶対パス)
-*/
-std::string CScenarioReader::get_exe_file_dir() const
-{
-	char path_buf[PATH_MAX] = {0};
-
-	if(readlink("/proc/self/exe", path_buf, sizeof(path_buf) - 1) > 0){
-		std::string path = std::string(path_buf).substr(0, std::string(path_buf).find_last_of("/"));
-		return path + "/";
-	}
-	else{
-		throw CHeisClientException("シナリオファイルのパス取得に失敗しました");
-	}
-}
-
 /*
 	与えられたアクションのコマンド部分が，与えられたコマンドに一致しているかを判定する関数
 	引数1: const token_array_t action アクション
