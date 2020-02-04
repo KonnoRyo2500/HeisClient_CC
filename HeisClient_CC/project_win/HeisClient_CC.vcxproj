@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\picojson-master\picojson-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -111,7 +111,7 @@
       <Optimization>Custom</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\picojson-master\picojson-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -128,7 +128,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\picojson-master\picojson-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -147,7 +147,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\picojson-master\picojson-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
