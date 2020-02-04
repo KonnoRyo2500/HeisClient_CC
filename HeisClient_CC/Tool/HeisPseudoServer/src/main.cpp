@@ -39,7 +39,6 @@ int main(int argc, char **argv)
 		com_sck_to_second.sck_accept();
 		
 		while((act_type = scenario_reader.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
-			printf("type: %d\n", act_type);
 			next_com_sck = (scenario_reader.get_turn_order() == CScenarioReader::TurnOrder_First ? com_sck_to_first : com_sck_to_second);
 			switch(act_type){
 				case CScenarioReader::ActionType_PrintRecvMessage:
