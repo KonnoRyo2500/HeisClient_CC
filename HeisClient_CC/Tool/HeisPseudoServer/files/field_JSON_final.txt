@@ -1,0 +1,30 @@
+{
+	"width":20,
+	"height":20,
+	"turn_team":"Asterism",
+	"count":3,
+	"finished":true,
+	"players":["Asterism","Triedge"],
+	"units":[
+		{
+			"type":"heizu",
+			"unit_id":"Akari",
+			"locate":{
+				"x":5,
+				"y":5
+			},
+			"hp":2,
+			"team":"Asterism"
+		},
+		{
+			"type":"heizu",
+			"unit_id":"Yuzu",
+			"locate":{
+				"x":5,
+				"y":8
+			},
+			"hp":2,
+			"team":"Asterism"
+		}
+	]
+}

@@ -1,0 +1,16 @@
+send file name_req_JSON.txt first
+send file name_req_JSON.txt second
+recv print first
+recv print second
+send file name_decided_JSON_first.txt first
+send file name_decided_JSON_second.txt second
+send file field_JSON_1.txt first
+send file field_JSON_1.txt second
+recv print first
+send file result_JSON_1.txt first
+send file field_JSON_2.txt first
+send file field_JSON_2.txt second
+recv print second
+send file result_JSON_2.txt second
+send file field_JSON_final.txt first
+send file field_JSON_final.txt second
