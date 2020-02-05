@@ -12,6 +12,9 @@
 
 #define SPACE_AND_TAB " 　\t"
 
+// 実行ファイルディレクトリからファイル格納ディレクトリまでの相対パス
+#define EXE_DIR_TO_FILE_DIR "../files/"
+
 /* public関数 */
 
 /*
@@ -22,7 +25,7 @@
 CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
 {
 	CPathGenerator pg;
-	m_scenario_file = std::ifstream(pg.get_exe_path() + scenario_file_name);
+	m_scenario_file = std::ifstream(pg.get_exe_path() + EXE_DIR_TO_FILE_DIR + scenario_file_name);
 	if(m_scenario_file.fail()){
 		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", (pg.get_exe_path() + scenario_file_name).c_str());
 	}
@@ -103,7 +106,8 @@ std::string CScenarioReader::get_filename_to_send() const
 {
 	if(m_latest_action.size() >= 3){
 		CTokenManager tm;
-		return tm.get_single_token(m_latest_action, 2);
+		CPathGenerator pg;
+		return pg.get_exe_path() + EXE_DIR_TO_FILE_DIR + tm.get_single_token(m_latest_action, 2);
 	}
 	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
 }
