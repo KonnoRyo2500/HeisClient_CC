@@ -1,50 +1,50 @@
 {
 	"width":20,
 	"height":20,
-	"turn_team":"Triedge",
+	"turn_team":"Enemy team",
 	"count":2,
 	"finished":false,
-	"players":["Asterism","Triedge"],
+	"players":["My team","Enemy team"],
 	"units":[
 		{
 			"type":"heizu",
-			"unit_id":"Akari",
+			"unit_id":"MY01",
 			"locate":{
 				"x":5,
 				"y":6
 			},
 			"hp":2,
-			"team":"Asterism"
+			"team":"My team"
 		},
 		{
 			"type":"heizu",
-			"unit_id":"Yuzu",
+			"unit_id":"MY02",
 			"locate":{
 				"x":5,
 				"y":7
 			},
 			"hp":2,
-			"team":"Asterism"
+			"team":"My team"
 		},
 		{
 			"type":"heizu",
-			"unit_id":"Rio",
+			"unit_id":"EN01",
 			"locate":{
 				"x":14,
 				"y":15
 			},
 			"hp":2,
-			"team":"Triedge"
+			"team":"Enemy team"
 		},
 		{
 			"type":"heizu",
-			"unit_id":"Tsubaki",
+			"unit_id":"EN02",
 			"locate":{
 				"x":15,
 				"y":15
 			},
 			"hp":2,
-			"team":"Triedge"
+			"team":"Enemy team"
 		}
 	]
 }

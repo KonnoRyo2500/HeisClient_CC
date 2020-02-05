@@ -1,1 +1,1 @@
-{"your_team": "Triedge"}
+{"your_team": "Enemy team"}

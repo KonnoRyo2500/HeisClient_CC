@@ -1,1 +1,1 @@
-{"your_team": "Asterism"}
+{"your_team": "My team"}
