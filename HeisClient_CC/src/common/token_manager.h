@@ -19,27 +19,31 @@ typedef std::string token_t;
 /* トークン列型 */
 typedef std::vector<token_t> token_array_t;
 
+// このクラスはインスタンス化不要のため，staticクラスとする
 class CTokenManager
 {
 	// メンバ関数
 	public:
 		// 文字列からトークン列生成
-		token_array_t split_string(const std::string& str, const std::string& delim) const;
+		static token_array_t split_string(const std::string& str, const std::string& delim);
 
 		// トークン列からトークン取得
-		token_t get_single_token(const token_array_t& tokens, const int index) const;
-		token_array_t get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const;
-		std::string get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const;
+		static token_t get_single_token(const token_array_t& tokens, const int index);
+		static token_array_t get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos);
+		static std::string get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos);
 
 	private:
+		// コンストラクタ
+		CTokenManager();
+
 		// トークン列生成補助関数
-		void erase_control_letter(std::string& str) const;
-		void erase_first_delimiters(std::string& str, const std::string& delim) const;
-		void erase_first_token(std::string& str, const std::string& delim) const;
-		token_t get_first_token(const std::string& str, const std::string& delim) const;
+		static void erase_control_letter(std::string& str);
+		static void erase_first_delimiters(std::string& str, const std::string& delim);
+		static void erase_first_token(std::string& str, const std::string& delim);
+		static token_t get_first_token(const std::string& str, const std::string& delim);
 
 		// 部分文字列削除
-		void erase_substring(std::string& str, const std::string& erase_str) const;
+		static void erase_substring(std::string& str, const std::string& erase_str);
 
 	// メンバ変数
 	private:

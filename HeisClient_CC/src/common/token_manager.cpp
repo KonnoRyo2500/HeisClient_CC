@@ -14,7 +14,7 @@
 	引数2: const std::string& delim 区切り文字
 	返り値: token_array_t トークン列
 */
-token_array_t CTokenManager::split_string(const std::string& str, const std::string& delim) const
+token_array_t CTokenManager::split_string(const std::string& str, const std::string& delim)
 {
 	// 元の文字列は残しておきたいため，文字列の複製をここで作っておく
 	std::string str_work(str);
@@ -46,7 +46,7 @@ token_array_t CTokenManager::split_string(const std::string& str, const std::str
 	返り値: token_t トークン
 	例外: インデックスが0～tokens.size()-1の範囲外のとき
 */
-token_t CTokenManager::get_single_token(const token_array_t& tokens, const int index) const
+token_t CTokenManager::get_single_token(const token_array_t& tokens, const int index)
 {
 	try {
 		return tokens.at(index);
@@ -66,7 +66,7 @@ token_t CTokenManager::get_single_token(const token_array_t& tokens, const int i
 	例外1: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
 	例外2: begin_pos > end_posであるとき
 */
-token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const
+token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos)
 {
 	if(begin_pos > end_pos){
 		throw CHeisClientException("開始インデックスが終了インデックスよりも後ろにあります(開始: %d, 終了: %d)", begin_pos, end_pos);
@@ -92,7 +92,7 @@ token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const 
 	返り値: std::string トークンを連結した文字列
 	例外: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
 */
-std::string CTokenManager::get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos) const
+std::string CTokenManager::get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos)
 {
 	token_array_t sub_tokens = get_token_range(tokens, begin_pos, end_pos);
 	std::string cat_str;
@@ -111,7 +111,7 @@ std::string CTokenManager::get_catnated_tokens(const token_array_t& tokens, cons
 	参照1: std::string& str 制御文字を削除する対象の文字列
 	返り値なし
 */
-void CTokenManager::erase_control_letter(std::string& str) const
+void CTokenManager::erase_control_letter(std::string& str)
 {
 	// 削除する制御文字一覧
 	const std::vector<std::string> ctl_code_list = {
@@ -138,7 +138,7 @@ void CTokenManager::erase_control_letter(std::string& str) const
 	引数1: const std::string& delim 区切り文字
 	返り値なし
 */
-void CTokenManager::erase_first_delimiters(std::string& str, const std::string& delim) const
+void CTokenManager::erase_first_delimiters(std::string& str, const std::string& delim)
 {
 	// 次に出現するトークンの先頭位置
 	size_t next_token_pos = str.find_first_not_of(delim);
@@ -157,7 +157,7 @@ void CTokenManager::erase_first_delimiters(std::string& str, const std::string& 
 	引数1: const std::string& delim 区切り文字
 	返り値なし
 */
-void CTokenManager::erase_first_token(std::string& str, const std::string& delim) const
+void CTokenManager::erase_first_token(std::string& str, const std::string& delim)
 {
 	// 次に出現する区切り文字列の先頭位置
 	size_t next_delims_pos = str.find_first_of(delim);
@@ -176,7 +176,7 @@ void CTokenManager::erase_first_token(std::string& str, const std::string& delim
 	引数1: const std::string& delim 区切り文字
 	返り値: token_t 取得したトークン
 */
-token_t CTokenManager::get_first_token(const std::string& str, const std::string& delim) const
+token_t CTokenManager::get_first_token(const std::string& str, const std::string& delim)
 {
 	// 次に出現する区切り文字列の先頭位置
 	size_t next_delims_pos = str.find_first_of(delim);
@@ -194,7 +194,7 @@ token_t CTokenManager::get_first_token(const std::string& str, const std::string
 	引数1: const std::string& erase_str 削除する文字列
 	返り値なし
 */
-void CTokenManager::erase_substring(std::string& str, const std::string& erase_str) const
+void CTokenManager::erase_substring(std::string& str, const std::string& erase_str)
 {
 	size_t substr_pos = str.find(erase_str);
 	while(substr_pos != std::string::npos){

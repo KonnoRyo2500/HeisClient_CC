@@ -87,10 +87,7 @@ void CGameOnline::initialize_battle()
 	// 必要なインスタンスの生成
 	CField::create_field();
 
-	{
-		CPathGenerator pg;
-		m_setting_file = new CCsvSettingFileReader(pg.get_exe_path() + ONLINE_SETTING_FILE_NAME);
-	}
+	m_setting_file = new CCsvSettingFileReader(CPathGenerator::get_exe_path() + ONLINE_SETTING_FILE_NAME);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_json_analyzer = new CJSONAnalyzer();
 	m_sck = new CClientSocket();

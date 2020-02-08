@@ -125,8 +125,7 @@ void CGameLocal::finalize_battle()
 */
 void CGameLocal::load_local_mode_setting()
 {
-	CPathGenerator pg;
-	CCsvSettingFileReader local_setting_file(pg.get_exe_path() + LOCAL_SETTING_FILE_NAME);
+	CCsvSettingFileReader local_setting_file(CPathGenerator::get_exe_path() + LOCAL_SETTING_FILE_NAME);
 
 	m_setting.field_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_WIDTH, 0);
 	m_setting.field_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_HEIGHT, 0);
@@ -151,16 +150,15 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 	std::vector<FieldPosition> init_pos;
 
 	for (auto& pos_str : all_init_pos_str) {
-		CTokenManager tm;
 		FieldPosition pos;
 		token_array_t pos_token;
 
-		pos_token = tm.split_string(pos_str, " ");
+		pos_token = CTokenManager::split_string(pos_str, " ");
 		if (pos_token.size() != 2) {
 			throw CHeisClientException("兵士の初期位置の指定が不正です");
 		}
-		pos.x = stoi(tm.get_single_token(pos_token, 0));
-		pos.y = stoi(tm.get_single_token(pos_token, 1));
+		pos.x = stoi(CTokenManager::get_single_token(pos_token, 0));
+		pos.y = stoi(CTokenManager::get_single_token(pos_token, 1));
 		init_pos.push_back(pos);
 	}
 
