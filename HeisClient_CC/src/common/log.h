@@ -27,11 +27,11 @@ class CLog
 		~CLog();
 
 		// ƒƒO‚É‘‚«‚Ş
-		void write_log(const LogType log_type, const std::string& message);
+		void write_log(const LogType log_type, const std::string& message) const;
 
 	private:
 		// Œ»İ“ú‚ğ•\‚·•¶š—ñ‚ğæ“¾
-		std::string get_current_datetime_str(const std::string& format);
+		std::string get_current_datetime_str(const std::string& format) const;
 
 	// ƒƒ“ƒo•Ï”
 	private:

@@ -42,7 +42,8 @@ CLog::CLog(const std::string& log_name, const bool add_datetime_to_name)
 */
 CLog::~CLog()
 {
-	// 処理なし
+	delete m_logfile;
+	m_logfile = NULL;
 }
 
 /*
@@ -51,7 +52,7 @@ CLog::~CLog()
 	引数2: const std::string& message 書き込むメッセージ
 	返り値なし
 */
-void CLog::write_log(const LogType log_type, const std::string& message)
+void CLog::write_log(const LogType log_type, const std::string& message) const
 {
 	*m_logfile << message << std::endl;
 }
@@ -63,7 +64,7 @@ void CLog::write_log(const LogType log_type, const std::string& message)
 	引数1: const std::string& format 日時を指定するフォーマット文字列(strftime形式)
 	返り値: std::string 現在日時を表す文字列
 */
-std::string CLog::get_current_datetime_str(const std::string& format)
+std::string CLog::get_current_datetime_str(const std::string& format) const
 {
 	char datetime[200] = { 0 };
 	std::time_t currnt_time = std::time(nullptr);
