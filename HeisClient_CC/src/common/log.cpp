@@ -7,6 +7,7 @@
 #include <ctime>
 #include <locale>
 #include <iostream>
+#include <map>
 
 /* public関数 */
 
@@ -27,7 +28,7 @@ CLog::CLog(const std::string& log_name, const bool add_datetime_to_name)
 #endif // WIN32
 
 	if (add_datetime_to_name) {
-		actual_log_name += get_current_datetime_str("%Y_%m_%d_%H_%M_%S");
+		actual_log_name += make_current_datetime_str("%Y_%m_%d_%H_%M_%S");
 	}
 
 	m_logfile = new std::ofstream(actual_log_name);
@@ -54,7 +55,11 @@ CLog::~CLog()
 */
 void CLog::write_log(const LogType log_type, const std::string& message) const
 {
-	*m_logfile << message << std::endl;
+	*m_logfile <<
+		make_current_datetime_str("%Y/%m/%d %H:%M:%S ") <<
+		"[" + make_log_type_str(log_type) + "] " <<
+		message <<
+		std::endl;
 }
 
 /* private関数 */
@@ -64,7 +69,7 @@ void CLog::write_log(const LogType log_type, const std::string& message) const
 	引数1: const std::string& format 日時を指定するフォーマット文字列(strftime形式)
 	返り値: std::string 現在日時を表す文字列
 */
-std::string CLog::get_current_datetime_str(const std::string& format) const
+std::string CLog::make_current_datetime_str(const std::string& format) const
 {
 	char datetime[200] = { 0 };
 	std::time_t currnt_time = std::time(nullptr);
@@ -73,4 +78,26 @@ std::string CLog::get_current_datetime_str(const std::string& format) const
 		throw CHeisClientException("ログ用の現在日時の取得に失敗しました");
 	}
 	return std::string(datetime);
+}
+
+/*
+	ログの種類を表す文字列を作成する関数
+	引数1: const LogType type ログの種類
+	返り値: std::string ログの種類を表す文字列
+*/
+std::string CLog::make_log_type_str(const LogType type) const
+{
+	// ログの種類 -> 文字列の対応表
+	const std::map<LogType, std::string> log_type_map = {
+		{LogType_Infomation,	"情報"},
+		{LogType_Warning,		"警告"},
+		{LogType_Error,			"エラー"},
+	};
+
+	auto it = log_type_map.find(type);
+	if (it != log_type_map.end()) {
+		return it->second;
+	}
+
+	return "未定義のログ";
 }

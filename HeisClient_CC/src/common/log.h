@@ -31,7 +31,10 @@ class CLog
 
 	private:
 		// 現在日時を表す文字列を取得
-		std::string get_current_datetime_str(const std::string& format) const;
+		std::string make_current_datetime_str(const std::string& format) const;
+
+		// ログの種類を表す文字列を作成する
+		std::string make_log_type_str(const LogType type) const;
 
 	// メンバ変数
 	private:
