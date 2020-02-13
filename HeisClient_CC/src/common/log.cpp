@@ -15,6 +15,7 @@
 	コンストラクタ
 	引数1: const std::string& log_name ログファイル名
 	引数2: const bool add_datetime_to_name ログファイル名の末尾に現在日時をつけるか(デフォルトはtrue)
+	備考: ログファイル名は"[log_name]_(日付).log"もしくは"[log_name].log"となる
 */
 CLog::CLog(const std::string& log_name, const bool add_datetime_to_name)
 {
@@ -28,7 +29,7 @@ CLog::CLog(const std::string& log_name, const bool add_datetime_to_name)
 #endif // WIN32
 
 	if (add_datetime_to_name) {
-		actual_log_name += make_current_datetime_str("%Y_%m_%d_%H_%M_%S");
+		actual_log_name += make_current_datetime_str("_%Y_%m_%d_%H_%M_%S");
 	}
 	actual_log_name += ".log";
 
