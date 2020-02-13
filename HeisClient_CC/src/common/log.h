@@ -1,4 +1,4 @@
-// heis ƒƒOo—ÍƒNƒ‰ƒX
+ï»¿// heis ãƒ­ã‚°å‡ºåŠ›ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #pragma once
 
@@ -7,36 +7,36 @@
 
 class CLog
 {
-	// \‘¢‘ÌC—ñ‹“‘Ì‚È‚Ç
+	// æ§‹é€ ä½“ï¼Œåˆ—æŒ™ä½“ãªã©
 	public:
-		// ƒƒO‚Ìí—Ş
+		// ãƒ­ã‚°ã®ç¨®é¡
 		enum LogType {
-			// î•ñ
+			// æƒ…å ±
 			LogType_Infomation,
-			// Œx
+			// è­¦å‘Š
 			LogType_Warning,
-			// ƒGƒ‰[
+			// ã‚¨ãƒ©ãƒ¼
 			LogType_Error,
 		};
 
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 	public:
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		CLog(const std::string& log_name, const bool add_datetime_to_name = true);
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~CLog();
 
-		// ƒƒO‚É‘‚«‚Ş
+		// ãƒ­ã‚°ã«æ›¸ãè¾¼ã‚€
 		void write_log(const LogType log_type, const std::string& message) const;
 
 	private:
-		// Œ»İ“ú‚ğ•\‚·•¶š—ñ‚ğæ“¾
+		// ç¾åœ¨æ—¥æ™‚ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’å–å¾—
 		std::string make_current_datetime_str(const std::string& format) const;
 
-		// ƒƒO‚Ìí—Ş‚ğ•\‚·•¶š—ñ‚ğì¬‚·‚é
+		// ãƒ­ã‚°ã®ç¨®é¡ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹
 		std::string make_log_type_str(const LogType type) const;
 
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	private:
 		std::ofstream* m_logfile;
 };

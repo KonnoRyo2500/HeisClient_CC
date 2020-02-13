@@ -1,4 +1,4 @@
-// heis ƒƒOo—ÍƒNƒ‰ƒX
+ï»¿// heis ãƒ­ã‚°å‡ºåŠ›ã‚¯ãƒ©ã‚¹
 // Author: Ryo Konno
 #include "log.h"
 #include "heis_client_exception.h"
@@ -9,19 +9,19 @@
 #include <iostream>
 #include <map>
 
-/* publicŠÖ” */
+/* publicé–¢æ•° */
 
 /*
-	ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	ˆø”1: const std::string& log_name ƒƒOƒtƒ@ƒCƒ‹–¼
-	ˆø”2: const bool add_datetime_to_name ƒƒOƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚ÉŒ»İ“ú‚ğ‚Â‚¯‚é‚©(ƒfƒtƒHƒ‹ƒg‚Ítrue)
-	”õl: ƒƒOƒtƒ@ƒCƒ‹–¼‚Í"[log_name]_(“ú•t).log"‚à‚µ‚­‚Í"[log_name].log"‚Æ‚È‚é
+	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	å¼•æ•°1: const std::string& log_name ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«å
+	å¼•æ•°2: const bool add_datetime_to_name ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ«å°¾ã«ç¾åœ¨æ—¥æ™‚ã‚’ã¤ã‘ã‚‹ã‹(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯true)
+	å‚™è€ƒ: ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«åã¯"[log_name]_(æ—¥ä»˜).log"ã‚‚ã—ãã¯"[log_name].log"ã¨ãªã‚‹
 */
 CLog::CLog(const std::string& log_name, const bool add_datetime_to_name)
 {
-	// "bin"ƒfƒBƒŒƒNƒgƒŠ‚Æ“¯—ñ‚Ì"log"ƒfƒBƒŒƒNƒgƒŠ‚ÉƒƒO‚ğo—Í‚·‚é
-	// Windows‚ÆLinux‚ÅƒvƒƒWƒFƒNƒgƒfƒBƒŒƒNƒgƒŠ‚Ì\‘¢‚ªˆÙ‚È‚é‚Ì‚ÅC‚»‚ê‚É‡‚í‚¹‚ÄƒƒOo—Íæ‚Ì
-	// ƒpƒX‚à•Ï‚¦‚é
+	// "bin"ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¨åŒåˆ—ã®"log"ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹
+	// Windowsã¨Linuxã§ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ§‹é€ ãŒç•°ãªã‚‹ã®ã§ï¼Œãã‚Œã«åˆã‚ã›ã¦ãƒ­ã‚°å‡ºåŠ›å…ˆã®
+	// ãƒ‘ã‚¹ã‚‚å¤‰ãˆã‚‹
 #ifdef WIN32
 	std::string actual_log_name = CPathGenerator::get_exe_path() + "..\\..\\log\\" + log_name;
 #else
@@ -35,13 +35,13 @@ CLog::CLog(const std::string& log_name, const bool add_datetime_to_name)
 
 	m_logfile = new std::ofstream(actual_log_name);
 	if (m_logfile->fail()) {
-		throw CHeisClientException("ƒƒOƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“‚É¸”s‚µ‚Ü‚µ‚½(ƒtƒ@ƒCƒ‹–¼: %s)", actual_log_name.c_str());
+		throw CHeisClientException("ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ã«å¤±æ•—ã—ã¾ã—ãŸ(ãƒ•ã‚¡ã‚¤ãƒ«å: %s)", actual_log_name.c_str());
 	}
 }
 
 /*
-	ƒfƒXƒgƒ‰ƒNƒ^
-	ˆø”‚È‚µ
+	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	å¼•æ•°ãªã—
 */
 CLog::~CLog()
 {
@@ -50,10 +50,10 @@ CLog::~CLog()
 }
 
 /*
-	ƒƒO‚ÉƒƒbƒZ[ƒW‚ğ‘‚«‚ŞŠÖ”
-	ˆø”1: const LogType log_type ƒƒO‚Ìí—Ş
-	ˆø”2: const std::string& message ‘‚«‚ŞƒƒbƒZ[ƒW
-	•Ô‚è’l‚È‚µ
+	ãƒ­ã‚°ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ›¸ãè¾¼ã‚€é–¢æ•°
+	å¼•æ•°1: const LogType log_type ãƒ­ã‚°ã®ç¨®é¡
+	å¼•æ•°2: const std::string& message æ›¸ãè¾¼ã‚€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	è¿”ã‚Šå€¤ãªã—
 */
 void CLog::write_log(const LogType log_type, const std::string& message) const
 {
@@ -64,12 +64,12 @@ void CLog::write_log(const LogType log_type, const std::string& message) const
 		std::endl;
 }
 
-/* privateŠÖ” */
+/* privateé–¢æ•° */
 
 /*
-	Œ»İ“ú‚ğ•\‚·•¶š—ñ‚ğ•Ô‚·ŠÖ”
-	ˆø”1: const std::string& format “ú‚ğw’è‚·‚éƒtƒH[ƒ}ƒbƒg•¶š—ñ(strftimeŒ`®)
-	•Ô‚è’l: std::string Œ»İ“ú‚ğ•\‚·•¶š—ñ
+	ç¾åœ¨æ—¥æ™‚ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’è¿”ã™é–¢æ•°
+	å¼•æ•°1: const std::string& format æ—¥æ™‚ã‚’æŒ‡å®šã™ã‚‹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæ–‡å­—åˆ—(strftimeå½¢å¼)
+	è¿”ã‚Šå€¤: std::string ç¾åœ¨æ—¥æ™‚ã‚’è¡¨ã™æ–‡å­—åˆ—
 */
 std::string CLog::make_current_datetime_str(const std::string& format) const
 {
@@ -77,23 +77,23 @@ std::string CLog::make_current_datetime_str(const std::string& format) const
 	std::time_t currnt_time = std::time(nullptr);
 
 	if (strftime(datetime, sizeof(datetime), format.c_str(), std::localtime(&currnt_time)) == 0) {
-		throw CHeisClientException("ƒƒO—p‚ÌŒ»İ“ú‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½");
+		throw CHeisClientException("ãƒ­ã‚°ç”¨ã®ç¾åœ¨æ—¥æ™‚ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 	return std::string(datetime);
 }
 
 /*
-	ƒƒO‚Ìí—Ş‚ğ•\‚·•¶š—ñ‚ğì¬‚·‚éŠÖ”
-	ˆø”1: const LogType type ƒƒO‚Ìí—Ş
-	•Ô‚è’l: std::string ƒƒO‚Ìí—Ş‚ğ•\‚·•¶š—ñ
+	ãƒ­ã‚°ã®ç¨®é¡ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹é–¢æ•°
+	å¼•æ•°1: const LogType type ãƒ­ã‚°ã®ç¨®é¡
+	è¿”ã‚Šå€¤: std::string ãƒ­ã‚°ã®ç¨®é¡ã‚’è¡¨ã™æ–‡å­—åˆ—
 */
 std::string CLog::make_log_type_str(const LogType type) const
 {
-	// ƒƒO‚Ìí—Ş -> •¶š—ñ‚Ì‘Î‰•\
+	// ãƒ­ã‚°ã®ç¨®é¡ -> æ–‡å­—åˆ—ã®å¯¾å¿œè¡¨
 	const std::map<LogType, std::string> log_type_map = {
-		{LogType_Infomation,	"î•ñ"},
-		{LogType_Warning,		"Œx"},
-		{LogType_Error,			"ƒGƒ‰["},
+		{LogType_Infomation,	"æƒ…å ±"},
+		{LogType_Warning,		"è­¦å‘Š"},
+		{LogType_Error,			"ã‚¨ãƒ©ãƒ¼"},
 	};
 
 	auto it = log_type_map.find(type);
@@ -101,5 +101,5 @@ std::string CLog::make_log_type_str(const LogType type) const
 		return it->second;
 	}
 
-	return "–¢’è‹`‚ÌƒƒO";
+	return "æœªå®šç¾©ã®ãƒ­ã‚°";
 }
