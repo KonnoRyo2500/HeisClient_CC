@@ -8,6 +8,8 @@
 #include <locale>
 #include <iostream>
 #include <map>
+#include <cstdarg>
+#include <vector>
 
 /* public関数 */
 
@@ -52,11 +54,24 @@ CLog::~CLog()
 /*
 	ログにメッセージを書き込む関数
 	引数1: const LogType log_type ログの種類
-	引数2: const std::string& message 書き込むメッセージ
+	引数2: const char* format 書き込むメッセージ(フォーマット文字列可)
+	可変長引数: ... フォーマット文字列の引数
 	返り値なし
 */
-void CLog::write_log(const LogType log_type, const std::string& message) const
+void CLog::write_log(const LogType log_type, const char* format, ...) const
 {
+	va_list args;
+
+	// TODO: 同じような処理がCHeisClientExceptionクラスにもあるので，共通化したい
+	va_start(args, format);
+	int message_len = vsnprintf(NULL, 0, format, args);
+
+	std::vector<char> message_buf(message_len + 1);
+	vsnprintf(&message_buf[0], message_len + 1, format, args);
+	va_end(args);
+
+	std::string message = std::string(message_buf.data());
+
 	*m_logfile <<
 		make_current_datetime_str("%Y/%m/%d %H:%M:%S ") <<
 		"[" + make_log_type_str(log_type) + "] " <<
