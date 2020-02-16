@@ -2,6 +2,21 @@
 // Author: Ryo Konno
 #include "game_local.h"
 #include "game_online.h"
+#include "log.h"
+
+/* グローバル変数 */
+
+/* 各種ログ */
+// ログファイル格納先のディレクトリは存在している前提
+// Gitにコミットされているので，通常使用する際はディレクトリが存在しているはず
+
+// フィールドログ
+CLog g_field_log("field_log");
+// 対戦ログ
+CLog g_battle_log("battle_log");
+// システムログ
+CLog g_system_log("system_log");
+
 
 // ゲームモード
 enum GameMode {
