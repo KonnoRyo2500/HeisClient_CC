@@ -54,11 +54,12 @@ CLog::~CLog()
 /*
 	ログにメッセージを書き込む関数
 	引数1: const LogType log_type ログの種類
-	引数2: const char* format 書き込むメッセージ(フォーマット文字列可)
+	引数2: const bool visible ログと同じ文字列を，コンソールにも表示するか
+	引数3: const char* format 書き込むメッセージ(フォーマット文字列可)
 	可変長引数: ... フォーマット文字列の引数
 	返り値なし
 */
-void CLog::write_log(const LogType log_type, const char* format, ...) const
+void CLog::write_log(const LogType log_type, const bool visible, const char* format, ...) const
 {
 	va_list args;
 
@@ -70,13 +71,16 @@ void CLog::write_log(const LogType log_type, const char* format, ...) const
 	vsnprintf(&message_buf[0], message_len + 1, format, args);
 	va_end(args);
 
-	std::string message = std::string(message_buf.data());
+	const std::string log_content = make_current_datetime_str("%Y/%m/%d %H:%M:%S ")
+		+ "["
+		+ make_log_type_str(log_type)
+		+ "] "
+		+ std::string(message_buf.data());
 
-	*m_logfile <<
-		make_current_datetime_str("%Y/%m/%d %H:%M:%S ") <<
-		"[" + make_log_type_str(log_type) + "] " <<
-		message <<
-		std::endl;
+	*m_logfile << log_content << std::endl;
+	if (visible) {
+		printf("%s\n", log_content.c_str());
+	}
 }
 
 /* private関数 */

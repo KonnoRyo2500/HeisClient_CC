@@ -27,7 +27,7 @@ class CLog
 		~CLog();
 
 		// ログに書き込む
-		void write_log(const LogType log_type, const char* format, ...) const;
+		void write_log(const LogType log_type, const bool visible, const char* format, ...) const;
 
 	private:
 		// 現在日時を表す文字列を取得
