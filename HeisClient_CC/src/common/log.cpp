@@ -79,7 +79,7 @@ void CLog::write_log(const LogType log_type, const bool visible, const char* for
 
 	*m_logfile << log_content << std::endl;
 	if (visible) {
-		printf("%s\n", log_content.c_str());
+		printf("%s\n", message_buf.data());
 	}
 }
 
