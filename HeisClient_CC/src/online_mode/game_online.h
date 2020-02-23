@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 
+extern CLog g_system_log;
+extern CLog g_battle_log;
+
 class CGameOnline {
 	// 構造体，列挙体など
 	public:

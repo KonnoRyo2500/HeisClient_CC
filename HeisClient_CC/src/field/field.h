@@ -4,8 +4,11 @@
 
 #include "infantry.h"
 #include "JSON_data_packet.h"
+#include "log.h"
 #include <vector>
 #include <map>
+
+extern CLog g_field_log;
 
 // ユーザAIはこのクラスの関数を呼ばないこと
 class CField

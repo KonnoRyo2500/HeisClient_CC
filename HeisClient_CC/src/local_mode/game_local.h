@@ -9,8 +9,12 @@
 #include "pseudo_server.h"
 #include "local_setting.h"
 #include "csv_setting_file_reader.h"
+#include "log.h"
 
 #include <string>
+
+extern CLog g_system_log;
+extern CLog g_battle_log;
 
 class CGameLocal {
 	// 構造体，列挙体など

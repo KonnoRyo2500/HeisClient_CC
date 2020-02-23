@@ -36,13 +36,14 @@ static void start_game(const GameMode mode);
 int main()
 {
 	int exit_code = EXIT_SUCCESS;
-	printf("Hello heis!\n");
 
 	try {
+		g_system_log.write_log(CLog::LogType_Infomation, false, "CCの実行が開始されました");
 		start_game(ask_game_mode());
+		g_system_log.write_log(CLog::LogType_Infomation, false, "CCの実行が正常に完了しました");
 	}
 	catch (const std::exception& e) {
-		fprintf(stderr, "heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
+		g_system_log.write_log(CLog::LogType_Error, true, "heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
 		exit_code = EXIT_FAILURE;
 	}
 	return exit_code;

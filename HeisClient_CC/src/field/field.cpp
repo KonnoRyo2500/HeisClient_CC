@@ -154,25 +154,29 @@ void CField::update(const JSONRecvPacket_Field& field_pkt)
 	フィールドを画面に表示する関数
 	引数なし
 	返り値なし
-	備考: 動作確認・デバッグ用
 */
 void CField::show()
 {
+	std::string show_str = "";
+
 	for (int y = 0; y < m_height; y++) {
 		for (int x = 0; x < m_width; x++) {
 			CInfantry* infantry = get_infantry(FieldPosition(x, y));
 
 			if (infantry == NULL) {
-				printf("----");
+				show_str += "----";
 			}
 			else {
-				printf("%s", infantry->get_id().c_str());
+				show_str += infantry->get_id().c_str();
 			}
-			printf(" ");
+			show_str += " ";
 		}
-		printf("\n");
+		show_str += "\n";
 	}
-	printf("\n");
+	show_str += "\n";
+
+	// ログの先頭情報により，盤面が崩れて見えるのを防ぐため，先頭に改行を入れておく
+	g_field_log.write_log(CLog::LogType_Infomation, true, "\n%s", show_str.c_str());
 }
 
 /* private関数 */

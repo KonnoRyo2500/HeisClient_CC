@@ -30,7 +30,11 @@ std::string CPseudoServer::send_field_json(const LocalSetting& setting) const
 	turn_count++;
 	toggle_turn_team(setting, turn_team);
 
-	return serialize_JSON_obj(field_json_obj);
+	const std::string field_json = serialize_JSON_obj(field_json_obj);
+	g_system_log.write_log(CLog::LogType_Infomation, false, "疑似サーバが「盤面」JSONを送信しました: %s", 
+		field_json.c_str());
+
+	return field_json;
 }
 
 /* private関数 */
