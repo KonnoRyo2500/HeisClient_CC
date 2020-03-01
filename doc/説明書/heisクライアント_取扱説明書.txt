@@ -1,0 +1,125 @@
+!! Hon bunsho ga mojibake suru baai wa, TEXT-EDITOR no moji ENCODING o SHIFT-JIS ni henko shite kudasai. !!
+
+heis総合クライアントCompreheisive Client 取扱説明書
+Author: Ryo Konno
+
+1. 概要
+	本文書は，heis総合クライアントCompreheisive Client(以下，"CC")の取扱説明書です．
+
+2. 動作環境
+	CCは，Windows OSおよびLinux OS上で動作します．
+
+3. CCの作成背景と目的
+	これまでのheisクライアント作成(in 西野研プログラミングゼミ)では，フィールドやユニットの表現，TCP通信の制御など，
+	AIの思考ルーチン以外にも作成するべきものが多く，それらはプログラミングが不得意な学生にとっては障壁となっていました．
+	CCは，そのような障壁を取り除き，heis対戦用AIを容易に作成するための基盤プラットフォームとして作成されました．
+	すべての西野研の学生が，プログラミングゼミにおいてAIの思考ルーチン考案・作成に尽力できるようになることを
+	究極の目標としています．
+
+4. インストール・ビルド手順
+	CCのソースコードをBitbucketよりダウンロードし，ビルドするまでの手順を説明します．
+	なお，実行にあたりGit, Visual Studio(Windowsのみ)，CMake(Linuxのみ)のインストールが事前に必要となります．
+	(1) Bitbucketからリポジトリをクローンする．
+		$ cd (適当なディレクトリ名)
+		$ git clone https://Konno_Ryo@bitbucket.org/Konno_Ryo/heisclient_cc.git
+		※クローン先のディレクトリを空にしておくことを推奨します．
+		※TortoiseGitを使用している場合は"Git クローン(複製)"から上記URLを指定してクローンを行ってください．
+		※以下，記載するパスはここでクローンしたディレクトリを起点とします．
+
+	(2) ビルドする．
+		(Windows) 
+			a) "heisclient_cc\HeisClient_CC\project_win"ディレクトリ内にある
+			   "HeisClient_CC.sln"をクリックする．
+			b) Visual Studioが開くので，ビルド構成は"Release"，プラットフォーム構成は"x86"でビルドする．
+
+		(Linux) 
+			a) CMakeを用いてビルドする．
+			   $ cd heisclient_cc/HeisClient_CC/project_linux
+			   $ cmake .
+			   $ make
+
+5. モード
+	CCは以下の2つのモードでheisのゲームをプレイできます．
+	(1)ローカルモード
+		本モードは，サーバーに接続せずオフライン環境でheisをプレイできます．
+		対戦相手のAIもユーザが実装でき，対戦条件も柔軟に変更できます．
+		自分の作成したAIのシミュレーションにお使いください．
+
+	(2)オンラインモード
+		本モードは，サーバーに接続して実際にheisの対戦を行います．
+		対戦本番時にはこちらのモードでプレイしてください．
+
+6. 設定変更
+	CCの設定変更は，モードごとに用意される設定ファイルを書き換えることで行います．
+	設定ファイルはCSVファイルであるため，表計算ソフトで編集することをお勧めします．
+	各設定ファイルは，実行ファイルと同じディレクトリに置いてください．
+
+(1)ローカルモード
+	"setting_local.csv"というファイルを変更します．
+	設定できる項目を以下に示します．
+
+	[ローカルモードの設定項目]
+		・"field_width": フィールドの横幅(1以上)
+		・"field_height": フィールドの高さ(1以上)
+		・"my_team_name": 自チームのチーム名(*1)
+		・"enemy_team_name": 敵チームのチーム名(*1)
+		・"my_infantries_init_position": 自チーム兵士の初期位置(*2)
+		・"enemy_infantries_init_position": 敵チーム兵士の初期位置(*2)
+		・"first_turn_team": 先攻になるチームのチーム名(*3)
+
+		(*1): 最初の2文字が被らないような名前を設定してください．
+		ex) my_team_name = "Team X", enemy_team_name = "Team Y" => NG
+			my_team_name = "Asterism", enemy_team_name = "TRiEDGE" => OK
+		(*2): 各要素は"X Y"の形式で指定してください．
+		ex) my_infantries_init_position = "0 1,0 2,1 1"
+		(*3): my_team_name, enemy_team_nameで指定した名前のどちらでもない場合，敵チームが先攻になります．
+
+(2)オンラインモード
+	"setting_online.csv"というファイルを変更します．
+	設定できる項目を以下に示します．
+
+	[オンラインモードの設定項目]
+		・"server_ip_addr": サーバのIPアドレス(IPv4)．
+		・"server_port_num": サーバのポート番号(0-65535)．
+		・"team_name": チーム名(*4)．
+
+		(*4): 場合によっては，実際にゲームで使用されるチーム名はここで設定したチーム名と
+			  異なる名前になる可能性があります．
+
+7. 実行
+	コマンドラインから，引数なしで実行できます．
+	実行後，モードを選択すれば選択したモードでゲームが開始できます．
+	[実行ファイルの場所]
+		(Windows) heisclient_cc\HeisClient_CC\project_win\bin\Release
+		(Linux) heisclient_cc/HeisClient_CC/project_linux/bin
+
+8. ログ
+	実行時，各種情報がログファイルに出力されます．
+	対戦結果の確認や，デバッグなどご自由にお使いください．
+	出力されるログは以下の3種類です．
+	★はAI開発時や戦略構想時に，○はCC自体のデバッグ時に確認することを推奨するログです．
+	[ログの種類]
+		★フィールドログ(field_log_(作成日時).log): 各ターンでの盤面の状態を記録したログです．
+		★対戦ログ(battle_log_(作成日時).log): 対戦の進行状況や対戦内でのアクションを記録したログです．
+		○システムログ(system_log_(作成日時).log): CCのシステム上で発生したイベントを記録したログです．
+
+	[ログファイルの場所]
+		(Windows) heisclient_cc\HeisClient_CC\project_win\log
+		(Linux) heisclient_cc/HeisClient_CC/project_linux/log
+
+9. 本ソフトの取り扱いルール
+	・CC(補助ソフトウェアやコメントを含む)および関連ドキュメントの
+	  改造・新規作成・配布・レビューなどに関する活動は，以下に示す行為を除きすべて自由とし，
+	  初版製作者(Ryo Konno)の許可なく行うことができます．
+	  以下に違反する行為を行った場合，初版製作者はその責任を負いません．
+		a) CCを，悪意を持ったソフトウェアに改造すること．
+		b) 本来の目的(heis用AI作成)でない目的のために，CCおよびドキュメントを利用・改造すること．
+		c) CCおよびドキュメントを，商用利用すること．
+		d) CCおよびドキュメントを，有償で販売すること(オンライン・オフラインを問いません)．
+		e) CCおよびドキュメントに以下の内容を記載すること．
+			i) 個人情報．
+			ii) 機密情報．
+			iii) 特定の個人もしくは団体を傷つける・脅迫する内容．
+			iv) わいせつな内容など，公序良俗や法律に反する内容．
+	・ソースコードの改造を行った場合は，Bitbucketの"HeisClient_CC"リポジトリにコミットしていただけるとありがたいです．
+	・CCに関する質問・バグ報告などは，西野研OB用slack, LINE，もしくは口頭でお願いします．

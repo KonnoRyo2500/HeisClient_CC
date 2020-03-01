@@ -3,8 +3,6 @@ bin
 obj
 HeisClient_CC.vcxproj.user
 x64
-doc
-*.txt
 cmake_install.cmake
 CMakeCache.txt
 HeisClient_CC.exe
@@ -12,3 +10,4 @@ CMakeFiles
 Makefile
 /HeisClient_CC/project_win/log/*.log
 /HeisClient_CC/project_linux/log/*.log
+メモ
