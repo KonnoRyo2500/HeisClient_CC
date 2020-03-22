@@ -1,5 +1,9 @@
-﻿// heis 司令官クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		commander.h
+*	@brief		heis 司令官クラス
+*	@author		Ryo Konno
+*	@details	チームの兵士を一元管理し，操作や状態取得を行う．
+*/
 #pragma once
 
 #include "infantry.h"
@@ -10,6 +14,9 @@
 
 extern CLog g_battle_log;
 
+/**
+*	@brief	司令官クラス
+*/
 class CCommander
 {
 	// 構造体，列挙体など
@@ -57,9 +64,9 @@ class CCommander
 
 	// メンバ変数
 	private:
-		// 自チーム名
+		//! 自チーム名
 		std::string m_team_name;
 
-		// フィールドにいる全兵士
+		//! フィールドにいる全兵士
 		std::vector<CInfantry*> m_infantries;		
 };

@@ -1,9 +1,16 @@
-﻿// heis 例外クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		heis_client_exception.h
+*	@brief		heis 例外クラス
+*	@author		Ryo Konno
+*	@details	CC内で投げる例外を定義する．
+*/
 #pragma once
 
 #include <stdexcept>
 
+/**
+*	@brief	CC例外クラス
+*/
 class CHeisClientException : public std::runtime_error
 {
 	// メンバ関数
@@ -16,6 +23,6 @@ class CHeisClientException : public std::runtime_error
 
 	// メンバ変数
 	private:
-		// 例外発生時のエラーメッセージ
+		//! 例外発生時のエラーメッセージ
 		std::string m_error_message;
 };

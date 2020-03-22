@@ -1,5 +1,9 @@
-﻿// CSV設定ファイルクラス
-// Author: Ryo Konno
+﻿/**
+*	@file		csv_setting_file_reader.h
+*	@brief		CSV設定ファイルクラス
+*	@author		Ryo Konno
+*	@details	CSVファイルとして実現された設定ファイルから設定値を読み出す．
+*/
 #pragma once
 
 #include <map>
@@ -8,6 +12,9 @@
 #include "heis_client_exception.h"
 
 // TODO: このクラスを共通ソースに移動させる
+/**
+*	@brief	設定値読み出しクラス
+*/
 class CCsvSettingFileReader {
 	// 構造体，列挙体など
 	public:
@@ -41,19 +48,19 @@ class CCsvSettingFileReader {
 
 	// メンバ変数
 	private:
-		// 設定ファイルから取得したキーと値の組
+		//! 設定ファイルから取得したキーと値の組
 		std::map<std::string, token_array_t> m_key_value;
 };
 
 // テンプレート関数
 /* public関数 */
 
-/*
-	単一の値を取得する関数
-	引数1: const std::string& key キー名
-	引数2: const size_t index 値のインデックス
-	返り値: T 値
-	備考: 値を文字列として返す場合は別途処理を定義しているため，この処理は数値を返すことを想定している
+/**
+*	@brief 単一の値を取得する関数
+*	@param[in] key キー名
+*	@param[in] index 値のインデックス
+*	@return T 値
+*	@remark 値を文字列として返す場合は別途処理を定義しているため，この処理は数値を返すことを想定している
 */
 template <typename T>
 T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
@@ -70,10 +77,10 @@ T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t i
 	return value;
 }
 
-/*
-	すべての値を取得する関数
-	引数1: const std::string& key キー名
-	返り値: std::vector<T> 値
+/**
+*	@brief すべての値を取得する関数
+*	@param[in] key キー名
+*	@return std::vector<T> 値
 */
 template <typename T>
 std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) const
@@ -88,12 +95,12 @@ std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) cons
 	return ret_value;
 }
 
-/*
-	指定した範囲のインデックスを持つ値を取得する関数
-	引数1: const std::string& key キー名
-	引数2: const size_t begin_index 範囲の開始インデックス
-	引数3: const size_t end_index 範囲の終了インデックス
-	返り値: std::vector<T> 値
+/**
+*	@brief 指定した範囲のインデックスを持つ値を取得する関数
+*	@param[in] key キー名
+*	@param[in] begin_index 範囲の開始インデックス
+*	@param[in] end_index 範囲の終了インデックス
+*	@return std::vector<T> 値
 */
 template <typename T>
 std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const
@@ -110,15 +117,15 @@ std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, c
 
 // テンプレート関数特殊化
 
-/*
-	単一の値を取得する関数(返す値の型が文字列の場合の処理)
-	引数1: const std::string& key キー名
-	引数2: const size_t index 値のインデックス
-	返り値: std::string 値
-	例外: インデックスが範囲外の場合
+/**
+*	@brief 単一の値を取得する関数(返す値の型が文字列の場合の処理)
+*	@param[in] key キー名
+*	@param[in] index 値のインデックス
+*	@return std::string 値
+*	@throws CHeisClientException インデックスが範囲外の場合
 */
 template<>
-inline std::string CCsvSettingFileReader::get_single_value<std::string>(const std::string& key, const size_t index) const
+inline std::string CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
 {
 	token_array_t value = search_value(key);
 	try {
@@ -129,10 +136,10 @@ inline std::string CCsvSettingFileReader::get_single_value<std::string>(const st
 	}
 }
 
-/*
-	すべての値を取得する関数(返す値の型が文字列の場合の処理)
-	引数1: const std::string& key キー名
-	返り値: std::vector<std::string> 値
+/**
+*	@brief すべての値を取得する関数(返す値の型が文字列の場合の処理)
+*	@param[in] key キー名
+*	@return std::vector<std::string> 値
 */
 template<>
 inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key) const
@@ -140,14 +147,14 @@ inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::
 	return search_value(key);
 }
 
-/*
-	指定した範囲のインデックスを持つ値を取得する関数(返す値の型が文字列の場合の処理)
-	引数1: const std::string& key キー名
-	引数2: const size_t begin_index 範囲の開始インデックス
-	引数3: const size_t end_index 範囲の終了インデックス
-	返り値: std::vector<std::string> 値
-	例外1: 開始インデックス > 終了インデックスの場合
-	例外2: インデックスが範囲外の場合
+/**
+*	@brief 指定した範囲のインデックスを持つ値を取得する関数(返す値の型が文字列の場合の処理)
+*	@param[in] key キー名
+*	@param[in] begin_index 範囲の開始インデックス
+*	@param[in] end_index 範囲の終了インデックス
+*	@return std::vector<std::string> 値
+*	@throws CHeisClientException 開始インデックス > 終了インデックスの場合
+*	@throws CHeisClientException インデックスが範囲外の場合
 */
 template<>
 inline std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const

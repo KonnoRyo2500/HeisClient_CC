@@ -1,22 +1,38 @@
-﻿// heis JSON解析クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		JSON_analyzer.h
+*	@brief		heis JSON解析クラス
+*	@author		Ryo Konno
+*	@details	サーバとやり取りするJSONをパースし，JSONに対応するパケットを作成する．
+*/
 #pragma once
 
 #include "JSON_data_packet.h"
 #include "picojson.h"
 #include "heis_client_exception.h"
 
+/**
+*	@brief	JSON解析クラス
+*/
 class CJSONAnalyzer{
 	// 構造体，列挙体など
 	public:
-		// 解析したJSONの種別
+		/** 
+		*	@enum AnalyzedJSONKind
+		*	直近に解析したJSONの種別
+		*/
 		enum AnalyzedJSONKind {
-			AnalyzedJSONKind_Field,				// 「盤面」JSON
-			AnalyzedJSONKind_Result,			// 「結果」JSON
-			AnalyzedJSONKind_NameDecided,		// 「名前確定」JSON
-			AnalyzedJSONKind_Message,			// 「メッセージ」JSON
-			AnalyzedJSONKind_UnknownJSON,		// 未定義のJSON
-			AnalyzedJSONKind_NoJSONAnalyzed,	// まだJSONを解析していない
+			//! 「盤面」JSON
+			AnalyzedJSONKind_Field,
+			//! 「結果」JSON
+			AnalyzedJSONKind_Result,
+			//! 「名前確定」JSON
+			AnalyzedJSONKind_NameDecided,
+			//! 「メッセージ」JSON
+			AnalyzedJSONKind_Message,
+			//! 未定義のJSON
+			AnalyzedJSONKind_UnknownJSON,
+			//! まだJSONを解析していない
+			AnalyzedJSONKind_NoJSONAnalyzed,
 		};
 
 	private:
@@ -83,19 +99,19 @@ class CJSONAnalyzer{
 
 	// メンバ変数
 	private:
-		// 解析したJSONの種類
+		//! 解析したJSONの種類
 		AnalyzedJSONKind m_analyzed_JSON_kind;
 
-		// 解析した結果得られたJSONオブジェクト(最上位のオブジェクト)
+		//! 解析した結果得られたJSONオブジェクト(最上位のオブジェクト)
 		picojson::object m_analyzed_JSON_root_obj;
 };
 
 // テンプレート関数
-/*
-	直近に解析したJSONから，キーを指定して必須でない数値を取得する関数
-	引数1: const std::string& key キー名
-	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-	返り値: T 取得した値
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須でない数値を取得する関数
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return T 取得した値
 */
 template <typename T>
 OptionalVal<T> CJSONAnalyzer::get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -120,11 +136,11 @@ OptionalVal<T> CJSONAnalyzer::get_optional_number_val(const std::string& key, co
 	return ret_optional_val;
 }
 
-/*
-	直近に解析したJSONから，キーを指定して必須でない非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
-	引数1: const std::string& key キー名
-	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-	返り値: T 取得した値
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須でない非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return T 取得した値
 */
 template <typename T>
 OptionalVal<T> CJSONAnalyzer::get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -148,12 +164,12 @@ OptionalVal<T> CJSONAnalyzer::get_optional_not_number_val(const std::string& key
 	return ret_optional_val;
 }
 
-/*
-	直近に解析したJSONから，キーを指定して必須の数値を取得する関数
-	引数1: const std::string& key キー名
-	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-	返り値: T 取得した値
-	例外: 指定されたキーに対応する値が存在しないとき
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須の数値を取得する関数
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return T 取得した値
+*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
 */
 template <typename T>
 T CJSONAnalyzer::get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -169,12 +185,12 @@ T CJSONAnalyzer::get_obligatory_number_val(const std::string& key, const picojso
 	}
 }
 
-/*
-	直近に解析したJSONから，キーを指定して必須の非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
-	引数1: const std::string& key キー名
-	引数2: const picojson::object& src_JSON_obj 値の取得元となるJSONオブジェクト
-	返り値: T 取得した値
-	例外: 指定されたキーに対応する値が存在しないとき
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須の非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return T 取得した値
+*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
 */
 template <typename T>
 T CJSONAnalyzer::get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const

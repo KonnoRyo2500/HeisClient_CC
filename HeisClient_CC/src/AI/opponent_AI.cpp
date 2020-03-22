@@ -1,25 +1,27 @@
-﻿// heis ローカルモード用対戦相手AIクラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		opponent_AI.cpp
+*	@brief		heis ローカルモード用対戦相手AIクラス
+*	@author		Ryo Konno
+*	@details	ローカルモードの対戦相手となるAIの思考ルーチンを定義する．
+*/
 #include "opponent_AI.h"
 #include "field.h"
 #include <random>
 
 /* public関数 */
 
-/*
-	コンストラクタ
-	引数1: const CCommander* commander 司令官インスタンス
+/**
+*	@brief コンストラクタ
+*	@param[in] commander 司令官インスタンス
 */
 COpponentAI::COpponentAI(CCommander* commander)
 {
 	m_commander = commander;
 }
 
-/*
-	対戦相手AI メイン処理
-	引数1: const JSONRecvPacket_Field& field_pkt 「盤面」 パケット
-	返り値なし
+/**
+*	@brief 対戦相手AI メイン処理
+*	@param[in] field_pkt 「盤面」パケット
 */
 void COpponentAI::AI_main(const JSONRecvPacket_Field& field_pkt)
 {
@@ -46,10 +48,9 @@ void COpponentAI::AI_main(const JSONRecvPacket_Field& field_pkt)
 
 /* private関数 */
 
-/*
-	(サンプルAI用処理)兵士をランダムに移動させる関数
-	引数1: const std::string& id 行動対象の兵士のID
-	返り値なし
+/**
+*	@brief (サンプルAI用処理)兵士をランダムに移動させる関数
+*	@param[in] id 行動対象の兵士のID
 */
 void COpponentAI::sample_random_move(const std::string infantry_id)
 {
@@ -63,10 +64,9 @@ void COpponentAI::sample_random_move(const std::string infantry_id)
 	}
 }
 
-/*
-	(サンプルAI用処理)兵士をランダムな方向に攻撃させる関数
-	引数1: const std::string& id 行動対象の兵士のID
-	返り値なし
+/**
+*	@brief (サンプルAI用処理)兵士をランダムな方向に攻撃させる関数
+*	@param[in] id 行動対象の兵士のID
 */
 void COpponentAI::sample_random_attack(const std::string infantry_id)
 {
@@ -80,10 +80,10 @@ void COpponentAI::sample_random_attack(const std::string infantry_id)
 	}
 }
 
-/*
-	(サンプルAI用処理)次に行動する兵士をランダムに選択する関数
-	引数1: const std::vector<std::string>& infantry_ids 行動可能なすべての兵士のID
-	返り値: std::string 次に行動する兵士のID
+/**
+*	@brief (サンプルAI用処理)次に行動する兵士をランダムに選択する関数
+*	@param[in] infantry_ids 行動可能なすべての兵士のID
+*	@return std::string 次に行動する兵士のID
 */
 std::string COpponentAI::sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const
 {
@@ -97,10 +97,9 @@ std::string COpponentAI::sample_select_next_infantry(const std::vector<std::stri
 	return infantry_ids[infantry_idx];
 }
 
-/*
-	(サンプルAI用処理)兵士に対して命令する行動を決定する関数
-	引数なし
-	返り値: COpponentAI::SampleAction 次の行動
+/**
+*	@brief (サンプルAI用処理)兵士に対して命令する行動を決定する関数
+*	@return COpponentAI::SampleAction 次の行動
 */
 COpponentAI::SampleAction COpponentAI::sample_decide_action() const
 {

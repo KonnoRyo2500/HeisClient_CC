@@ -1,6 +1,9 @@
-﻿// heisクライアント用JSON送受信治具 トークン処理クラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		token_manager.cpp
+*	@brief		heis トークン処理クラス
+*	@author		Ryo Konno
+*	@details	文字列中のトークンを処理するための操作を提供する．
+*/
 #include <stdexcept>
 
 #include "token_manager.h"
@@ -8,11 +11,11 @@
 
 /* public関数 */
 
-/*
-	文字列をトークン列に分割する関数
-	引数1: const std::string& str 分割元の文字列
-	引数2: const std::string& delim 区切り文字
-	返り値: token_array_t トークン列
+/**
+*	@brief 文字列をトークン列に分割する関数
+*	@param[in] str 分割元の文字列
+*	@param[in] delim 区切り文字
+*	@return token_array_t トークン列
 */
 token_array_t CTokenManager::split_string(const std::string& str, const std::string& delim)
 {
@@ -39,12 +42,12 @@ token_array_t CTokenManager::split_string(const std::string& str, const std::str
 	return tokens;
 }
 
-/*
-	トークン列から，指定したインデックスのトークンを1つ取得する関数
-	引数1: const token_array_t& tokens トークン列
-	引数2: const int index インデックス
-	返り値: token_t トークン
-	例外: インデックスが0～tokens.size()-1の範囲外のとき
+/**
+*	@brief トークン列から，指定したインデックスのトークンを1つ取得する関数
+*	@param[in] tokens トークン列
+*	@param[in] index インデックス
+*	@return token_t トークン
+*	@throws CHeisClientException インデックスが0～tokens.size() - 1の範囲外のとき
 */
 token_t CTokenManager::get_single_token(const token_array_t& tokens, const int index)
 {
@@ -57,14 +60,14 @@ token_t CTokenManager::get_single_token(const token_array_t& tokens, const int i
 	
 }
 
-/*
-	トークン列から，指定した範囲の各トークンをトークン列として取得する関数
-	引数1: const token_array_t& tokens トークン列
-	引数2: const size_t begin_pos 取得範囲の始端
-	引数3: const size_t end_pos 取得範囲の終端
-	返り値: token_array_t トークン列
-	例外1: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
-	例外2: begin_pos > end_posであるとき
+/**
+*	@brief トークン列から，指定した範囲の各トークンをトークン列として取得する関数
+*	@param[in] tokens トークン列
+*	@param[in] begin_pos 取得範囲の始端
+*	@param[in] end_pos 取得範囲の終端
+*	@return token_array_t トークン列
+*	@throws CHeisClientException 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
+*	@throws CHeisClientException begin_pos > end_posであるとき
 */
 token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos)
 {
@@ -84,13 +87,13 @@ token_array_t CTokenManager::get_token_range(const token_array_t& tokens, const 
 	}
 }
 
-/*
-	トークン列から，指定した範囲の各トークンを1つの文字列に連結して取得する関数
-	引数1: const token_array_t& tokens トークン列
-	引数2: const size_t begin_pos 取得範囲の始端
-	引数3: const size_t end_pos 取得範囲の終端
-	返り値: std::string トークンを連結した文字列
-	例外: 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
+/**
+*	@brief トークン列から，指定した範囲の各トークンを1つの文字列に連結して取得する関数
+*	@param[in] const token_array_t& tokens トークン列
+*	@param[in] const size_t begin_pos 取得範囲の始端
+*	@param[in] const size_t end_pos 取得範囲の終端
+*	@return std::string トークンを連結した文字列
+*	@throws CHeisClientException 取得範囲が0～tokens.size()-1の範囲外にはみ出しているとき
 */
 std::string CTokenManager::get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos)
 {
@@ -106,10 +109,9 @@ std::string CTokenManager::get_catnated_tokens(const token_array_t& tokens, cons
 
 /* private関数 */
 
-/*
-	文字列中の制御文字を削除する関数
-	参照1: std::string& str 制御文字を削除する対象の文字列
-	返り値なし
+/**
+*	@brief 文字列中の制御文字を削除する関数
+*	@param[out] std::string& str 制御文字を削除する対象の文字列
 */
 void CTokenManager::erase_control_letter(std::string& str)
 {
@@ -132,11 +134,10 @@ void CTokenManager::erase_control_letter(std::string& str)
 	}
 }
 
-/*
-	文字列の先頭にある区切り文字列を削除する関数
-	参照1: std::string& str 区切り文字列を削除する対象の文字列
-	引数1: const std::string& delim 区切り文字
-	返り値なし
+/**
+*	@brief 文字列の先頭にある区切り文字列を削除する関数
+*	@param[out] 区切り文字列を削除する対象の文字列
+*	@param[in] delim 区切り文字
 */
 void CTokenManager::erase_first_delimiters(std::string& str, const std::string& delim)
 {
@@ -151,11 +152,10 @@ void CTokenManager::erase_first_delimiters(std::string& str, const std::string& 
 	str = str.substr(next_token_pos);
 }
 
-/*
-	文字列の先頭にあるトークンを削除する関数
-	参照1: std::string& str トークンを削除する対象の文字列
-	引数1: const std::string& delim 区切り文字
-	返り値なし
+/**
+*	@brief 文字列の先頭にあるトークンを削除する関数
+*	@param[out] トークンを削除する対象の文字列
+*	@param[in] delim 区切り文字
 */
 void CTokenManager::erase_first_token(std::string& str, const std::string& delim)
 {
@@ -170,11 +170,11 @@ void CTokenManager::erase_first_token(std::string& str, const std::string& delim
 	str = str.substr(next_delims_pos);
 }
 
-/*
-	文字列の先頭にあるトークンを取得する関数
-	参照1: std::string& str トークンを削除する対象の文字列
-	引数1: const std::string& delim 区切り文字
-	返り値: token_t 取得したトークン
+/**
+*	@brief 文字列の先頭にあるトークンを取得する関数
+*	@param[out] str トークンを削除する対象の文字列
+*	@param[in] delim 区切り文字
+*	@return token_t 取得したトークン
 */
 token_t CTokenManager::get_first_token(const std::string& str, const std::string& delim)
 {
@@ -188,14 +188,14 @@ token_t CTokenManager::get_first_token(const std::string& str, const std::string
 	return str.substr(0, next_delims_pos);
 }
 
-/*
-	指定された文字列を，文字列中から削除する関数
-	参照1: std::string& str 加工対象の文字列
-	引数1: const std::string& erase_str 削除する文字列
-	返り値なし
+/**
+*	@brief 指定された文字列を，文字列中から削除する関数
+*	@param[out] str 加工対象の文字列
+*	@param[in] erase_str 削除する文字列
 */
 void CTokenManager::erase_substring(std::string& str, const std::string& erase_str)
 {
+	// TODO: replaceを使えれば，この関数は不要になるかも?
 	size_t substr_pos = str.find(erase_str);
 	while(substr_pos != std::string::npos){
 		str.erase(substr_pos, erase_str.size());

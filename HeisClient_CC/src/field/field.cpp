@@ -1,5 +1,9 @@
-﻿// heis フィールドクラス
-// Author: Ryo Konno
+﻿/**
+*	@file		field.cpp
+*	@brief		heis フィールドクラス
+*	@author		Ryo Konno
+*	@details	heisの各種ユニットが配置されるフィールドの定義およびそれに対する操作を提供する．
+*/
 #include "field.h"
 #include "heis_client_exception.h"
 
@@ -11,29 +15,25 @@ const std::string CField::EMPTY_ID = "";
 
 /* public関数 */
 
-/*
-	デストラクタ
-	引数なし
+/**
+*	@brief デストラクタ
 */
 CField::~CField()
 {
 	delete_all_infantries();
 }
 
-/*
-	フィールドのインスタンスを取得する関数
-	引数なし
-	返り値: CField* フィールドのインスタンス(へのポインタ)
+/**
+*	@brief フィールドのインスタンスを取得する関数
+*	@return CField* フィールドのインスタンス(へのポインタ)
 */
 CField* CField::get_instance()
 {
 	return m_instance;
 }
 
-/*
-	フィールドを作成する関数
-	引数なし
-	返り値なし
+/**
+*	@brief フィールドを作成する関数
 */
 void CField::create_field()
 {
@@ -43,10 +43,8 @@ void CField::create_field()
 	}
 }
 
-/*
-	フィールドを削除する関数
-	引数なし
-	返り値なし
+/**
+*	@brief フィールドを削除する関数
 */
 void CField::delete_field()
 {
@@ -54,10 +52,10 @@ void CField::delete_field()
 	m_instance = NULL;
 }
 
-/*
-	指定された座標にいる兵士を取得する関数
-	引数1: const FieldPosition& pos 取得したい兵士のいる座標
-	返り値: CInfantry* 指定された座標にいる兵士(存在しなければNULL)
+/**
+*	@brief 指定された座標にいる兵士を取得する関数
+*	@param[in] pos 取得したい兵士のいる座標
+*	@return CInfantry* 指定された座標にいる兵士(存在しなければNULL)
 */
 CInfantry* CField::get_infantry(const FieldPosition& pos) const
 {
@@ -71,12 +69,11 @@ CInfantry* CField::get_infantry(const FieldPosition& pos) const
 	return NULL;
 }
 
-/*
-	指定した座標に兵士を配置する関数
-	引数1: const FieldPosition& pos 兵士を配置する座標
-	引数2: CInfantry* infantry 配置する兵士
-	例外: NULLの兵士を配置しようとしたとき
-	返り値なし
+/**
+*	@brief 指定した座標に兵士を配置する関数
+*	@param[in] pos 兵士を配置する座標
+*	@param[in] CInfantry* infantry 配置する兵士
+*	@throws CHeisClientException NULLの兵士を配置しようとしたとき
 */
 void CField::set_infantry(const FieldPosition& pos, CInfantry* infantry)
 {
@@ -91,11 +88,10 @@ void CField::set_infantry(const FieldPosition& pos, CInfantry* infantry)
 	m_grid[pos.x + (m_width * pos.y)] = infantry->get_id();
 }
 
-/*
-	指定した座標にいる兵士を削除する関数
-	引数1: const FieldPosition& pos 削除する兵士のいる座標
-	返り値なし
-	備考: 指定された座標に兵士がいない場合でもエラーにはしない
+/**
+*	@brief 指定した座標にいる兵士を削除する関数
+*	@param[in] pos 削除する兵士のいる座標
+*	@remark 指定された座標に兵士がいない場合でもエラーにはしない
 */
 void CField::remove_infantry(const FieldPosition& pos)
 {
@@ -109,30 +105,27 @@ void CField::remove_infantry(const FieldPosition& pos)
 	m_grid[pos.x + (m_width * pos.y)] = EMPTY_ID;
 }
 
-/*
-	フィールドの幅を取得する関数
-	引数なし
-	返り値: uint16_t フィールドの幅
+/**
+*	@brief フィールドの幅を取得する関数
+*	@return uint16_t フィールドの幅
 */
 uint16_t CField::get_width()
 {
 	return m_width;
 }
 
-/*
-	フィールドの高さを取得する関数
-	引数なし
-	返り値: uint16_t フィールドの高さ
+/**
+*	@brief フィールドの高さを取得する関数
+*	@return uint16_t フィールドの高さ
 */
 uint16_t CField::get_height()
 {
 	return m_height;
 }
 
-/*
-	「盤面」パケットの内容から，フィールドの状態を更新する関数
-	引数1: const JSONRecvPacket_Field& field_pkt 「盤面」パケット
-	返り値なし
+/**
+*	@brief 「盤面」パケットの内容から，フィールドの状態を更新する関数
+*	@param[in] field_pkt 「盤面」パケット
 */
 void CField::update(const JSONRecvPacket_Field& field_pkt)
 {
@@ -150,10 +143,8 @@ void CField::update(const JSONRecvPacket_Field& field_pkt)
 	relocate_all_infantries_from_units_array(field_pkt.units);
 }
 
-/*
-	フィールドを画面に表示する関数
-	引数なし
-	返り値なし
+/**
+*	@brief フィールドを画面に表示する関数
 */
 void CField::show()
 {
@@ -181,10 +172,8 @@ void CField::show()
 
 /* private関数 */
 
-/*
-	フィールドを初期化する関数
-	引数なし
-	返り値なし
+/**
+*	@brief フィールドを初期化する関数
 */
 void CField::initalize()
 {
@@ -192,12 +181,11 @@ void CField::initalize()
 	m_height = 0;
 }
 
-/*
-	指定されたサイズで，フィールドのマス目を作成する関数
-	引数1: const uint16_t width 作成するフィールドの幅
-	引数2: const uint16_t height 作成するフィールドの高さ
-	返り値なし
-	備考: 作成される各マス目は空
+/**
+*	@brief 指定されたサイズで，フィールドのマス目を作成する関数
+*	@param[in] width 作成するフィールドの幅
+*	@param[in] height 作成するフィールドの高さ
+*	@remark 作成される各マス目は空
 */
 void CField::create_grid(const uint16_t width, const uint16_t height)
 {
@@ -206,20 +194,18 @@ void CField::create_grid(const uint16_t width, const uint16_t height)
 	std::fill(m_grid.begin(), m_grid.end(), EMPTY_ID);
 }
 
-/*
-	フィールドのすべてのマス目を空にする関数
-	引数なし
-	返り値なし
+/**
+*	@brief フィールドのすべてのマス目を空にする関数
 */
 void CField::clear_grid()
 {
 	std::fill(m_grid.begin(), m_grid.end(), EMPTY_ID);
 }
 
-/*
-	指定されたIDから，兵士リスト中の兵士を取得する関数
-	引数1: const std::string& infantry_id 対象の兵士のID
-	返り値: CInfantry* 取得した兵士(兵士リスト中に，infantry_idをIDとして持つ兵士がいなければNULL)
+/**
+*	@brief 指定されたIDから，兵士リスト中の兵士を取得する関数
+*	@param[in] infantry_id 対象の兵士のID
+*	@return CInfantry* 取得した兵士(兵士リスト中に，infantry_idをIDとして持つ兵士がいなければNULL)
 */
 CInfantry* CField::find_infantry_by_id(const std::string& infantry_id) const
 {
@@ -227,10 +213,8 @@ CInfantry* CField::find_infantry_by_id(const std::string& infantry_id) const
 	return infantry_it != m_all_infantries.end() ? infantry_it->second : NULL;
 }
 
-/*
-	兵士リスト中の兵士をすべて削除する関数
-	引数なし
-	返り値なし
+/**
+*	@brief 兵士リスト中の兵士をすべて削除する関数
 */
 void CField::delete_all_infantries()
 {
@@ -250,20 +234,18 @@ void CField::delete_all_infantries()
 	m_all_infantries.clear();
 }
 
-/*
-	兵士リストに，兵士を追加する関数
-	引数1: CInfantry* new_infantry 追加する兵士
-	返り値なし
+/**
+*	@brief 兵士リストに，兵士を追加する関数
+*	@param[in] new_infantry 追加する兵士
 */
 void CField::add_infantry(CInfantry* new_infantry)
 {
 	m_all_infantries.insert(std::make_pair(new_infantry->get_id(), new_infantry));
 }
 
-/*
-	「盤面」パケットの"units"配列の情報から，兵士を再配置する関数
-	引数1: const std::vector<UnitsArrayElem>& units_array 「盤面」パケットの"units"配列
-	返り値なし
+/**
+*	@brief 「盤面」パケットの"units"配列の情報から，兵士を再配置する関数
+*	@param[in] units_array 「盤面」パケットの"units"配列
 */
 void CField::relocate_all_infantries_from_units_array(const std::vector<UnitsArrayElem>& units_array)
 {
@@ -273,11 +255,10 @@ void CField::relocate_all_infantries_from_units_array(const std::vector<UnitsArr
 	}
 }
 
-/*
-	座標を検証する関数
-	引数1: const FieldPosition& pos 検証対象の座標
-	返り値なし
-	例外: 指定した座標が範囲外のとき
+/**
+*	@brief 座標を検証する関数
+*	@param[in] pos 検証対象の座標
+*	@throws CHeisClientException 指定した座標が範囲外のとき
 */
 void CField::validate_position(const FieldPosition& pos) const
 {
@@ -290,13 +271,12 @@ void CField::validate_position(const FieldPosition& pos) const
 	}
 }
 
-/*
-	「盤面」パケットから得られたフィールドのサイズを検証する関数
-	引数1: const uint16_t width フィールドの幅
-	引数2: const uint16_t height フィールドの高さ
-	返り値なし
-	例外1: フィールドの幅もしくは高さが0以下のとき
-	例外2: フィールドの幅もしくは高さが過去に受け取った「盤面」パケットの値と異なるとき
+/**
+*	@brief 「盤面」パケットから得られたフィールドのサイズを検証する関数
+*	@param[in] width フィールドの幅
+*	@param[in] height フィールドの高さ
+*	@throws CHeisClientException フィールドの幅もしくは高さが0以下のとき
+*	@throws CHeisClientException フィールドの幅もしくは高さが過去に受け取った「盤面」パケットの値と異なるとき
 */
 void CField::validate_size(const uint16_t width, const uint16_t height) const
 {

@@ -1,5 +1,9 @@
-﻿// heis ゲーム(オンラインモード)進行管理クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		game_online.h
+*	@brief		heis ゲーム(オンラインモード)進行管理クラス
+*	@author		Ryo Konno
+*	@details	オンラインモードでheisのゲームを実行する．
+*/
 #pragma once
 
 #include "commander.h"
@@ -13,6 +17,9 @@
 extern CLog g_system_log;
 extern CLog g_battle_log;
 
+/**
+*	@brief	オンラインモード実行クラス
+*/
 class CGameOnline {
 	// 構造体，列挙体など
 	public:
@@ -37,21 +44,21 @@ class CGameOnline {
 
 	// メンバ変数
 	private:
-		// 自チーム名
+		//! 自チーム名
 		std::string m_team_name;
 
-		// 司令官
+		//! 司令官
 		CCommander* m_commander;
 
-		// ユーザAI
+		//! ユーザAI
 		CUserAI* m_ai;
 		
-		// JSON解析器
+		//! JSON解析器
 		CJSONAnalyzer* m_json_analyzer;
 
-		// TCPソケット
+		//! TCPソケット
 		CClientSocket* m_sck;
 
-		// 設定ファイル
+		//! オンラインモード設定ファイル
 		CCsvSettingFileReader* m_setting_file;
 };

@@ -1,5 +1,9 @@
-﻿// heisクライアント用JSON送受信治具 トークン処理クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		token_manager.h
+*	@brief		heis トークン処理クラス
+*	@author		Ryo Konno
+*	@details	文字列中のトークンを処理するための操作を提供する．
+*/
 #pragma once
 
 #include <string>
@@ -14,12 +18,21 @@
 */
 
 /* 型定義 */
-/* トークン型 */
+/**
+*	@typedef token_t
+*	@brief トークン型
+*/
 typedef std::string token_t;
-/* トークン列型 */
+/**
+*	@typedef token_array_t
+*	@brief トークン列型
+*/
 typedef std::vector<token_t> token_array_t;
 
-// このクラスはインスタンス化不要のため，staticクラスとする
+/**
+*	@brief トークン処理クラス
+*	@remark このクラスはインスタンス化不要のため，staticクラスとする
+*/
 class CTokenManager
 {
 	// メンバ関数

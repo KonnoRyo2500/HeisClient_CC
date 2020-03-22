@@ -1,6 +1,9 @@
-﻿// heis TCP/IP通信用ソケットクラス(サーバ用)
-// Author: Ryo Konno
-
+﻿/**
+*	@file		server_socket.cpp
+*	@brief		heis TCP/IP通信用ソケットクラス(サーバ用)
+*	@author		Ryo Konno
+*	@details	TCP/IPソケットの操作をより抽象化したインターフェイスを提供する(サーバ用)．
+*/
 #include "server_socket.h"
 #include "heis_client_exception.h"
 
@@ -12,12 +15,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cstring>
-#endif
+#endif // WIN32
 /* public関数 */
 
-/*
-	コンストラクタ
-	引数なし
+/**
+*	@brief コンストラクタ
 */
 CServerSocket::CServerSocket()
 	: m_sck_accept(0)
@@ -28,20 +30,18 @@ CServerSocket::CServerSocket()
 	sck_socket();
 }
 
-/*
-	デストラクタ
-	引数なし
+/**
+*	@brief デストラクタ
 */
 CServerSocket::~CServerSocket()
 {
 	finalize_socket();
 }
 
-/*
-	サーバ自身のアドレス情報をソケットに紐づけする関数
-	引数1: const uint16_t svr_port_no サーバのポート番号
-	引数2: const std::string& clt_ip_addr& = "0.0.0.0" 接続を許可するクライアントのIPアドレス(未指定の場合は任意のIPアドレスからの接続を受け付ける)
-	返り値なし
+/**
+*	@brief サーバ自身のアドレス情報をソケットに紐づけする関数
+*	@param[in] svr_port_no サーバのポート番号
+*	@param[in] clt_ip_addr = "0.0.0.0" 接続を許可するクライアントのIPアドレス(未指定の場合は任意のIPアドレスからの接続を受け付ける)
 */
 void CServerSocket::sck_bind(const uint16_t svr_port_no, const std::string& clt_ip_addr) const
 {
@@ -61,10 +61,8 @@ void CServerSocket::sck_bind(const uint16_t svr_port_no, const std::string& clt_
 	}
 }
 
-/*
-	ソケットを接続待ち受け可能にする関数
-	引数なし
-	返り値なし
+/**
+*	@brief ソケットを接続待ち受け可能にする関数
 */
 void CServerSocket::sck_listen() const
 {
@@ -76,10 +74,8 @@ void CServerSocket::sck_listen() const
 	}
 }
 
-/*
-	クライアントからの接続を待ち受ける関数
-	引数なし
-	返り値なし
+/**
+*	@brief クライアントからの接続を待ち受ける関数
 */
 void CServerSocket::sck_accept()
 {
@@ -103,11 +99,11 @@ void CServerSocket::sck_accept()
 	m_dest_info[std::make_pair(std::string(client_ip_addr), client_port_no)] = new_sck;
 }
 
-/*
-	クライアントにメッセージを送信する関数
-	引数1: const std::string& msg 送信するメッセージ
-	引数2: const std::string& clt_ip_addr = "" 送信先のIPアドレス(指定がない場合は最初に接続したクライアントのIPアドレス)
-	引数3: const uint16_t clt_port_no = 0 送信先のポート番号(指定がない場合は最初に接続したクライアントのポート番号)
+/**
+*	@brief クライアントにメッセージを送信する関数
+*	@param[in] msg 送信するメッセージ
+*	@param[in] clt_ip_addr = "" 送信先のIPアドレス(指定がない場合は最初に接続したクライアントのIPアドレス)
+*	@param[in] clt_port_no = 0 送信先のポート番号(指定がない場合は最初に接続したクライアントのポート番号)
 */
 void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip_addr, const uint16_t clt_port_no) const
 {
@@ -116,7 +112,7 @@ void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip
 	Sleep(SocketConstVal_SendIntervalTimeMs);
 #else
 	usleep(SocketConstVal_SendIntervalTimeMs * 1000);
-#endif
+#endif // WIN32
 
 	int com_sck = client_info_to_socket(clt_ip_addr, clt_port_no);
 
@@ -141,10 +137,10 @@ void CServerSocket::sck_sendto(const std::string& msg, const std::string& clt_ip
 	}
 }
 
-/*
-	クライアントからメッセージを受信する関数
-	引数1: const std::string& clt_ip_addr = "" 受信元のIPアドレス(指定がない場合は最初に接続したクライアントのIPアドレス)
-	引数2: const uint16_t clt_port_no = 0 受信元のポート番号(指定がない場合は最初に接続したクライアントのポート番号)
+/**
+*	@brief クライアントからメッセージを受信する関数
+*	@param[in] clt_ip_addr = "" 受信元のIPアドレス(指定がない場合は最初に接続したクライアントのIPアドレス)
+*	@param[in] clt_port_no = 0 受信元のポート番号(指定がない場合は最初に接続したクライアントのポート番号)
 */
 std::string CServerSocket::sck_recvfrom(const std::string& clt_ip_addr, const uint16_t clt_port_no) const
 {
@@ -168,10 +164,9 @@ std::string CServerSocket::sck_recvfrom(const std::string& clt_ip_addr, const ui
 #endif
 }
 
-/*
-	接続してきたクライアントの情報を取得する関数
-	引数なし
-	返り値: std::vector<std::pair<std::string, uint16_t>> 現在接続中のクライアントのIPアドレスとポート番号の一覧
+/**
+*	@brief 接続してきたクライアントの情報を取得する関数
+*	@return std::vector<std::pair<std::string, uint16_t>> 現在接続中のクライアントのIPアドレスとポート番号の一覧
 */
 std::vector<std::pair<std::string, uint16_t>> CServerSocket::get_connected_client_info() const
 {
@@ -185,11 +180,9 @@ std::vector<std::pair<std::string, uint16_t>> CServerSocket::get_connected_clien
 
 /* private関数 */
 
-/*
-	TCP通信用ソケットを作成する関数
-	引数なし
-	返り値なし
-	例外: ソケットの作成に失敗したとき
+/**
+*	@brief TCP通信用ソケットを作成する関数
+*	@throws CHeisClientException ソケットの作成に失敗したとき
 */
 void CServerSocket::sck_socket()
 {
@@ -199,10 +192,8 @@ void CServerSocket::sck_socket()
 	}
 }
 
-/*
-	メンバ変数として保持しているすべてのソケットを閉じる関数
-	引数なし
-	返り値なし
+/**
+*	@brief メンバ変数として保持しているすべてのソケットを閉じる関数
 */
 void CServerSocket::sck_close() const
 {
@@ -219,11 +210,9 @@ void CServerSocket::sck_close() const
 #endif // WIN32
 }
 
-/*
-	ソケットを初期化する関数
-	引数なし
-	返り値なし
-	例外: ソケットの初期化に失敗したとき
+/**
+*	@brief ソケットを初期化する関数
+*	@throws CHeisClientException ソケットの初期化に失敗したとき
 */
 void CServerSocket::initialize_socket() const
 {
@@ -240,10 +229,8 @@ void CServerSocket::initialize_socket() const
 #endif // WIN32
 }
 
-/*
-	winsockの終了処理を行う関数
-	引数なし
-	返り値なし
+/**
+*	@brief winsockの終了処理を行う関数
 */
 void CServerSocket::finalize_socket() const
 {
@@ -256,11 +243,11 @@ void CServerSocket::finalize_socket() const
 // 受信処理に関しては、#ifdefが関数中に入り乱れるのを防ぐため、プラットフォーム別に関数を分ける
 // TODO: プラットフォームに依らない受信処理の実装
 // TODO: 受信中に相手が新たに送信してきても，新たに送信されたメッセージをまとめて受信しないようにする
-/*
-	受信処理(Windows向け)
-	引数1: const int sck_com クライアントとの通信用ソケット
-	返り値: std::string 受信したメッセージ
-	例外: 受信エラーが発生したとき
+/**
+*	@brief 受信処理(Windows向け)
+*	@param[in] sck_com クライアントとの通信用ソケット
+*	@return std::string 受信したメッセージ
+*	@throws CHeisClientException 受信エラーが発生したとき
 */
 std::string CServerSocket::sck_recv_core_win(const int sck_com) const
 {
@@ -308,11 +295,11 @@ std::string CServerSocket::sck_recv_core_win(const int sck_com) const
 #endif // WIN32
 }
 
-/*
-	受信処理(Linux向け)
-	引数1: const int sck_com クライアントとの通信用ソケット
-	返り値: std::string 受信したメッセージ
-	例外: 受信エラーが発生したとき
+/**
+*	@brief 受信処理(Linux向け)
+*	@param[in] sck_com クライアントとの通信用ソケット
+*	@return std::string 受信したメッセージ
+*	@throws CHeisClientException 受信エラーが発生したとき
 */
 std::string CServerSocket::sck_recv_core_linux(const int sck_com) const
 {
@@ -351,11 +338,11 @@ std::string CServerSocket::sck_recv_core_linux(const int sck_com) const
 #endif // WIN32
 }
 
-/*
-	クライアントのIPアドレスとポート番号から，そのクライアントと通信するためのソケットを取得する関数
-	引数1: const std::string& clt_ip_addr クライアントのIPアドレス
-	引数2: const uint16_t clt_port_no クライアントのポート番号
-	返り値: int クライアントとの通信用ソケット(IPとポート番号に対応するソケットが見つからなければ-1)
+/**
+*	@brief クライアントのIPアドレスとポート番号から，そのクライアントと通信するためのソケットを取得する関数
+*	@param[in] clt_ip_addr クライアントのIPアドレス
+*	@param[in] const uint16_t clt_port_no クライアントのポート番号
+*	@return int クライアントとの通信用ソケット(IPとポート番号に対応するソケットが見つからなければ-1)
 */
 int CServerSocket::client_info_to_socket(const std::string& clt_ip_addr, const uint16_t clt_port_no) const
 {

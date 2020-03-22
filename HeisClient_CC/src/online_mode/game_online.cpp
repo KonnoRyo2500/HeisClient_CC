@@ -1,6 +1,9 @@
-﻿// heis ゲーム(オンラインモード)進行管理クラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		game_online.cpp
+*	@brief		heis ゲーム(オンラインモード)進行管理クラス
+*	@author		Ryo Konno
+*	@details	オンラインモードでheisのゲームを実行する．
+*/
 #include "game_online.h"
 #include "const_val.h"
 #include "field.h"
@@ -11,10 +14,8 @@
 
 /* public関数 */
 
-/*
-	heis ゲーム実行メイン処理
-	引数なし
-	返り値なし
+/**
+*	@brief heis ゲーム実行メイン処理
 */
 void CGameOnline::play_game()
 {
@@ -79,11 +80,9 @@ void CGameOnline::play_game()
 
 /* private関数 */
 
-/*
-	対戦を開始する前の準備を行う関数
-	引数なし
-	返り値なし
-	備考: この関数では，名前確定前に生成できるインスタンスを生成する
+/**
+*	@brief 対戦を開始する前の準備を行う関数
+*	@remark この関数では，名前確定前に生成できるインスタンスを生成する
 */
 void CGameOnline::initialize_battle()
 {
@@ -108,10 +107,8 @@ void CGameOnline::initialize_battle()
 	g_system_log.write_log(CLog::LogType_Infomation, false, "インスタンスの生成が完了しました");
 }
 
-/*
-	サーバーから，名前要求を受信する関数
-	引数なし
-	返り値なし
+/**
+*	@brief サーバーから，名前要求を受信する関数
 */
 void CGameOnline::recv_name_request() const
 {
@@ -119,10 +116,9 @@ void CGameOnline::recv_name_request() const
 	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(received_JSON);
 }
 
-/*
-	指定された名前をサーバーに送る関数
-	引数1: const std::string& name 名前
-	返り値なし
+/**
+*	@brief 指定された名前をサーバーに送る関数
+*	@param[in] name 名前
 */
 void CGameOnline::name_entry(const std::string& name)
 {
@@ -132,10 +128,8 @@ void CGameOnline::name_entry(const std::string& name)
 		name.c_str());
 }
 
-/*
-	サーバーから受信した名前をチーム名として登録する関数
-	引数なし
-	返り値なし
+/**
+*	@brief サーバーから受信した名前をチーム名として登録する関数
 */
 void CGameOnline::name_register()
 {
@@ -150,10 +144,8 @@ void CGameOnline::name_register()
 		m_team_name.c_str());
 }
 
-/*
-	対戦終了後の後処理を行う関数
-	引数なし
-	返り値なし
+/**
+*	@brief 対戦終了後の後処理を行う関数
 */
 void CGameOnline::finalize_battle()
 {
@@ -174,10 +166,9 @@ void CGameOnline::finalize_battle()
 	g_system_log.write_log(CLog::LogType_Infomation, false, "インスタンスの削除が完了しました");
 }
 
-/*
-	対戦の決着がついた後，フィールドの状態から勝敗を決定する関数
-	引数なし
-	返り値: bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
+/**
+*	@brief 対戦の決着がついた後，フィールドの状態から勝敗を決定する関数
+*	@return bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
 */
 bool CGameOnline::judge_win()
 {

@@ -1,20 +1,33 @@
 ﻿// heis 各種定数
 // Author: Ryo Konno
+/**
+*	@file		const_val.h
+*	@brief		heis 各種定数
+*	@author		Ryo Konno
+*	@details	プログラム中で共通して使う定数を定義する．
+*/
 #pragma once
 
 #include<string>
 
-// プログラム中で共通して使う定数をここに記述する
-
 /* 全モード共通で使用する定数 */
 
-// 方向
+/**
+*	@enum Direction
+*	方向(上下左右)
+*/
 enum Direction {
-	Direction_Up,					// 上
-	Direction_Down,					// 下
-	Direction_Left,					// 左
-	Direction_Right,				// 右
+	//! 上
+	Direction_Up,
+	//! 下
+	Direction_Down,
+	//! 左
+	Direction_Left,
+	//! 右
+	Direction_Right,
 };
 
-// 兵士の初期HP
+/**
+*	@def 兵士の初期HP
+*/
 #define INFANTRY_INITIAL_HP (2)

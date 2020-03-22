@@ -1,28 +1,38 @@
-﻿// heis ログ出力クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		log.h
+*	@brief		heis ログ出力クラス
+*	@author		Ryo Konno
+*	@details	ログを出力するための操作を提供する．
+*/
 #pragma once
 
 #include <string>
 #include <fstream>
 
+/**
+*	@brief	ログ出力クラス
+*/
 class CLog
 {
 	// 構造体，列挙体など
 	public:
-		// ログの種類
+		/**
+		*	@enum LogType
+		*	ログの種類
+		*/
 		enum LogType {
-			// 情報
+			//! 情報
 			LogType_Infomation,
-			// 警告
+			//! 警告
 			LogType_Warning,
-			// エラー
+			//! エラー
 			LogType_Error,
 		};
 
 	// メンバ関数
 	public:
 		// コンストラクタ
-		CLog(const std::string& log_name, const bool add_datetime_to_name = true);
+		CLog(const std::string& log_title, const bool add_datetime_to_name = true);
 		// デストラクタ
 		~CLog();
 
@@ -38,5 +48,6 @@ class CLog
 
 	// メンバ変数
 	private:
+		//! ログファイルの実体
 		std::ofstream* m_logfile;
 };

@@ -1,5 +1,9 @@
-﻿// heis フィールドクラス
-// Author: Ryo Konno
+﻿/**
+*	@file		field.h
+*	@brief		heis フィールドクラス
+*	@author		Ryo Konno
+*	@details	heisの各種ユニットが配置されるフィールドの定義およびそれに対する操作を提供する．
+*/
 #pragma once
 
 #include "infantry.h"
@@ -10,7 +14,9 @@
 
 extern CLog g_field_log;
 
-// ユーザAIはこのクラスの関数を呼ばないこと
+/**
+*	@brief	フィールドクラス
+*/
 class CField
 {
 	// 構造体，列挙体など
@@ -61,18 +67,18 @@ class CField
 
 	// メンバ変数
 	private:
-		// マスが空の時に入る文字列
+		//! マスが空の時に入る文字列
 		static const std::string EMPTY_ID;
 
-		// フィールドのインスタンス
+		//! フィールドのインスタンス
 		static CField* m_instance;
 
-		// フィールドの各マス目(ユニットがいればそのID，いなければ空文字列)
+		//! フィールドの各マス目(ユニットがいればそのID，いなければ空文字列)
 		std::vector<std::string> m_grid;
-		// フィールドにいる全兵士(findを使用し，ID->兵士の実体へのアクセスを高速化するため，コンテナとしてmapを用いる)
+		//! フィールドにいる全兵士(findを使用し，ID->兵士の実体へのアクセスを高速化するため，コンテナとしてmapを用いる)
 		std::map<std::string, CInfantry*> m_all_infantries;
 
-		// フィールドのサイズ
+		//! フィールドのサイズ
 		uint16_t m_width;
 		uint16_t m_height;
 };

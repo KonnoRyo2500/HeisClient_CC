@@ -1,5 +1,9 @@
-﻿// heis ゲーム(ローカルモード)進行管理クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		game_local.h
+*	@brief		heis ゲーム(ローカルモード)進行管理クラス
+*	@author		Ryo Konno
+*	@details	ローカルモードでheisのゲームを実行する．
+*/
 #pragma once
 
 #include "commander.h"
@@ -16,6 +20,9 @@
 extern CLog g_system_log;
 extern CLog g_battle_log;
 
+/**
+*	@brief	ローカルモード実行クラス
+*/
 class CGameLocal {
 	// 構造体，列挙体など
 	private:
@@ -41,20 +48,22 @@ class CGameLocal {
 	// メンバ変数
 	private:
 
-		// 司令官
+		//! 自分の司令官
 		CCommander* m_my_commander;
+		//! 敵の司令官
 		CCommander* m_enemy_commander;
 
-		// AI
+		//! 自分のAI
 		CUserAI* m_my_AI;
+		//! 敵のAI
 		COpponentAI* m_enemy_AI;
 
-		// 疑似サーバ
+		//! 疑似サーバ
 		CPseudoServer* m_pseudo_server;
 
-		// JSON解析
+		//! JSON解析
 		CJSONAnalyzer* m_json_analyzer;
 		
-		// 設定
+		//! ローカルモード設定
 		LocalSetting m_setting;
 };

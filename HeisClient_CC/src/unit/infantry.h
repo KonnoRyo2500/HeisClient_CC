@@ -1,5 +1,9 @@
-﻿// heis 兵士クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		infantry.h
+*	@brief		heis 兵士クラス
+*	@author		Ryo Konno
+*	@details	heisのユニットの1つである兵士ユニットを定義する．
+*/
 #pragma once
 
 #include "const_val.h"
@@ -8,16 +12,24 @@
 #include <string>
 #include <vector>
 
+/**
+*	@brief	兵士クラス
+*/
 class CInfantry
 {
 	// 構造体，列挙体など
 	public:
 
 	private:
-		// 初期値
+		/**
+		*	@enum InitialValue
+		*	兵士ユニットに関する初期値
+		*/
 		enum InitialValue {
-			InitialValue_HP = 2,				// HP
-			InitialValue_ActionRemain = 2,		// 残り行動回数
+			//! HP
+			InitialValue_HP = 2,
+			//! 残り行動回数
+			InitialValue_ActionRemain = 2,
 		};
 
 	// メンバ関数
@@ -68,22 +80,22 @@ class CInfantry
 
 	// メンバ変数
 	private:
-		// 所属チーム名
+		//! 所属チーム名
 		std::string m_team_name;
 
-		// ID
+		//! ID
 		std::string m_id;
 
-		// 位置
+		//! 位置
 		FieldPosition m_pos;
 
-		// 攻撃先の座標(まだ攻撃を行っていない場合には，uint16_t型の最大値が入る)
+		//! 攻撃先の座標(まだ攻撃を行っていない場合には，uint16_t型の最大値が入る)
 		FieldPosition m_attack_pos;
 
-		// 残り行動回数
+		//! 残り行動回数
 		uint8_t m_action_remain;
 
-		// HP
 		// HPについては，値が負になることも考慮して符号付きの値にする(それ以外の値は，負になることはないので符号なしの値にする)
+		//! HP
 		int8_t m_hp;
 };

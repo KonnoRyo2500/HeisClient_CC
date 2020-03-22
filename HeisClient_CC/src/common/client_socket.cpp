@@ -1,5 +1,9 @@
-﻿// heis TCP/IP通信用ソケットクラス(クライアント用)
-// Author: Ryo Konno
+﻿/**
+*	@file		client_socket.cpp
+*	@brief		TCP/IP通信用ソケットクラス(クライアント用)
+*	@author		Ryo Konno
+*	@details	TCP/IPソケットの操作をより抽象化したインターフェイスを提供する(クライアント用)．
+*/
 #include "client_socket.h"
 #include "heis_client_exception.h"
 
@@ -15,9 +19,8 @@
 
 /* public関数 */
 
-/*
-	コンストラクタ
-	引数なし
+/**
+*	@brief コンストラクタ
 */
 CClientSocket::CClientSocket()
 	: m_sck(0)
@@ -26,20 +29,18 @@ CClientSocket::CClientSocket()
 	sck_socket();
 }
 
-/*
-	デストラクタ
-	引数なし
+/**
+*	@brief デストラクタ
 */
 CClientSocket::~CClientSocket()
 {
 	finalize_socket();
 }
 
-/*
-	TCP通信用ソケットを相手に接続する関数
-	引数1: const std::string& dst_ip_addr 通信相手のIPアドレス
-	引数2: const uint16_t dst_port_no 通信相手のポート番号
-	返り値なし
+/**
+*	@brief TCP通信用ソケットを相手に接続する関数
+*	@param[in] dst_ip_addr 通信相手のIPアドレス
+*	@param[in] dst_port_no 通信相手のポート番号
 */
 void CClientSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const
 {
@@ -59,11 +60,10 @@ void CClientSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t d
 	}
 }
 
-/*
-	メッセージを送信する関数
-	引数1: const std::string& msg 送信するメッセージ
-	返り値なし
-	例外: 送信エラーが発生したとき
+/**
+*	@brief メッセージを送信する関数
+*	@param[in] msg 送信するメッセージ
+*	@throws CHeisClientException 送信エラーが発生したとき
 */
 void CClientSocket::sck_send(const std::string& msg) const
 {
@@ -85,11 +85,9 @@ void CClientSocket::sck_send(const std::string& msg) const
 	}
 }
 
-/*
-	サーバからメッセージを受信する関数
-	引数なし
-	返り値: std::string サーバから受信したメッセージ
-	例外: 受信エラーが発生したとき
+/**
+*	@brief サーバからメッセージを受信する関数
+*	@return std::string サーバから受信したメッセージ
 */
 std::string CClientSocket::sck_recv() const
 {
@@ -102,11 +100,9 @@ std::string CClientSocket::sck_recv() const
 
 /* private関数 */
 
-/*
-	ソケットを初期化する関数
-	引数なし
-	返り値なし
-	例外: ソケットの初期化に失敗したとき
+/**
+*	@brief ソケットを初期化する関数
+*	@throws CHeisClientException ソケットの初期化に失敗したとき
 */
 void CClientSocket::initialize_socket() const
 {
@@ -123,10 +119,8 @@ void CClientSocket::initialize_socket() const
 #endif // WIN32
 }
 
-/*
-	winsockの終了処理を行う関数
-	引数なし
-	返り値なし
+/**
+*	@brief winsockの終了処理を行う関数
 */
 void CClientSocket::finalize_socket() const
 {
@@ -138,11 +132,9 @@ void CClientSocket::finalize_socket() const
 #endif // WIN32
 }
 
-/*
-	TCP通信用ソケットを作成する関数
-	引数なし
-	返り値なし
-	例外: ソケットの作成に失敗したとき
+/**
+*	@brief TCP通信用ソケットを作成する関数
+*	@throws CHeisClientException ソケットの作成に失敗したとき
 */
 void CClientSocket::sck_socket()
 {
@@ -155,11 +147,10 @@ void CClientSocket::sck_socket()
 // 受信処理に関しては、#ifdefが関数中に入り乱れるのを防ぐため、プラットフォーム別に関数を分ける
 // TODO: プラットフォームに依らない受信処理の実装
 // TODO: 受信中に相手が新たに送信してきても，新たに送信されたメッセージをまとめて受信しないようにする
-/*
-	受信処理(Windows向け)
-	引数なし
-	返り値: std::string 受信したメッセージ
-	例外: 受信エラーが発生したとき
+/**
+*	@brief 受信処理(Windows向け)
+*	@return std::string 受信したメッセージ
+*	@throws CHeisClientException 受信エラーが発生したとき
 */
 std::string CClientSocket::sck_recv_core_win() const
 {
@@ -207,11 +198,10 @@ std::string CClientSocket::sck_recv_core_win() const
 #endif // WIN32
 }
 
-/*
-	受信処理(Linux向け)
-	引数なし
-	返り値: std::string 受信したメッセージ
-	例外: 受信エラーが発生したとき
+/**
+*	@brief 受信処理(Linux向け)
+*	@return std::string 受信したメッセージ
+*	@throws CHeisClientException 受信エラーが発生したとき
 */
 std::string CClientSocket::sck_recv_core_linux() const
 {

@@ -1,6 +1,9 @@
-﻿// CSV設定ファイルクラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		csv_setting_file_reader.cpp
+*	@brief		CSV設定ファイルクラス
+*	@author		Ryo Konno
+*	@detail		CSVファイルとして実現された設定ファイルから設定値を読み出す．
+*/
 #include "csv_setting_file_reader.h"
 
 #include <fstream>
@@ -8,10 +11,9 @@
 #include <regex>
 
 /* public関数 */
-/*
-	コンストラクタ
-	引数1: const std::string& file_name 設定ファイル名
-	例外: ファイルオープンに失敗したとき
+/**
+*	@brief コンストラクタ
+*	@param[in] file_name 設定ファイル名
 */
 CCsvSettingFileReader::CCsvSettingFileReader(const std::string& file_name)
 	:m_key_value()
@@ -19,9 +21,8 @@ CCsvSettingFileReader::CCsvSettingFileReader(const std::string& file_name)
 	load_all_value(file_name);
 }
 
-/*
-	デストラクタ
-	引数なし
+/**
+*	@brief デストラクタ
 */
 CCsvSettingFileReader::~CCsvSettingFileReader()
 {
@@ -29,11 +30,9 @@ CCsvSettingFileReader::~CCsvSettingFileReader()
 }
 
 /* private関数 */
-
-/*
-	すべての値を，設定ファイルから取得する関数
-	引数1: const std::string& file_name 設定ファイル名
-	返り値なし
+/**
+*	@brief すべての値を，設定ファイルから取得する関数
+*	@param[in] const std::string& file_name 設定ファイル名
 */
 void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 {
@@ -59,11 +58,11 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 	}
 }
 
-/*
-	指定されたキーを持つ値を探索する関数
-	引数1: const std::string& key キー名
-	返り値: token_array_t 値を表すトークンの集合
-	例外: 指定したキーがファイルになかったとき
+/**
+*	@brief 指定されたキーを持つ値を探索する関数
+*	@param[in] key キー名
+*	@return token_array_t 値を表すトークンの集合
+*	@throws CHeisClientException 指定したキーがファイルになかったとき
 */
 token_array_t CCsvSettingFileReader::search_value(const std::string& key) const
 {
@@ -74,10 +73,9 @@ token_array_t CCsvSettingFileReader::search_value(const std::string& key) const
 	return it->second;
 }
 
-/*
-	カンマの前後にある空白類文字を削除する関数
-	参照1: token_array_t& key_value キーと値全体(カンマによってトークンに分割済み)
-	返り値なし
+/**
+*	@brief カンマの前後にある空白類文字を削除する関数
+*	@param[out] key_value キーと値全体(カンマによってトークンに分割済み)
 */
 void CCsvSettingFileReader::remove_space_around_comma(token_array_t& key_value) const
 {

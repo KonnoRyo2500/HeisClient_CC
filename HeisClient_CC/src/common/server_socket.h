@@ -1,5 +1,9 @@
-﻿// heis TCP/IP通信用ソケットクラス(サーバ用)
-// Author: Ryo Konno
+﻿/**
+*	@file		server_socket.h
+*	@brief		heis TCP/IP通信用ソケットクラス(サーバ用)
+*	@author		Ryo Konno
+*	@details	TCP/IPソケットの操作をより抽象化したインターフェイスを提供する(サーバ用)．
+*/
 #pragma once
 
 #include <string>
@@ -8,14 +12,23 @@
 
 // TODO: このクラスを共通ソースに移動させる
 // TODO: ソケットの基本クラスを作成し，それを継承するようにする
+/**
+*	@brief	サーバ用TCP/IPソケットクラス
+*/
 class CServerSocket {
 	// 構造体，列挙体など
 	private:
-		// ソケットに関する諸定数
+		/**
+		*	@enum SocketConstVal
+		*	ソケットに関する諸定数
+		*/
 		enum SocketConstVal {
-			SocketConstVal_RecvBufSize = 1000,		// 受信バッファサイズ
-			SocketConstVal_ConnectReqQueueLen = 5,	// 同時接続要求の最大待ち受け数
-			SocketConstVal_SendIntervalTimeMs = 50,	// 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
+			//! 受信バッファサイズ
+			SocketConstVal_RecvBufSize = 1000,
+			//! 同時接続要求の最大待ち受け数
+			SocketConstVal_ConnectReqQueueLen = 5,
+			//! 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
+			SocketConstVal_SendIntervalTimeMs = 50,
 		};
 
 	// メンバ関数
@@ -60,8 +73,8 @@ class CServerSocket {
 
 	// メンバ変数
 	private:
-		// ソケットの実体(接続受け付け用)
+		//! ソケットの実体(接続受け付け用)
 		int m_sck_accept;
-		// 接続先の情報(IPアドレスとポート番号 -> 通信用ソケット)
+		//! 接続先の情報(IPアドレスとポート番号 -> 通信用ソケット)
 		std::map<std::pair<std::string, uint16_t>, int> m_dest_info;
 };

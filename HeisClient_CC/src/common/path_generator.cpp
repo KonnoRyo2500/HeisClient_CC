@@ -1,6 +1,9 @@
-﻿// heis	パス生成クラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		path_generator.cpp
+*	@brief		heis パス生成クラス
+*	@author		Ryo Konno
+*	@details	特定のファイルへのパスを生成する．
+*/
 #include "path_generator.h"
 #include "heis_client_exception.h"
 
@@ -9,14 +12,13 @@
 #include <Windows.h>
 #else
 #include <unistd.h>
-#endif
+#endif // WIN32
 
 /* public関数 */
 
-/*
-	実行ファイルのパスを返す関数
-	引数なし
-	返り値: std::string 実行ファイルのパス 
+/**
+*	@brief 実行ファイルのパスを返す関数
+*	@return std::string 実行ファイルのパス 
 */
 std::string CPathGenerator::get_exe_path()
 {

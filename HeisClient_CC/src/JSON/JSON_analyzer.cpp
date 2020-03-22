@@ -1,13 +1,15 @@
-﻿// heis JSON解析クラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		JSON_analyzer.cpp
+*	@brief		heis JSON解析クラス
+*	@author		Ryo Konno
+*	@details	サーバとやり取りするJSONをパースし，JSONに対応するパケットを作成する．
+*/
 #include "JSON_analyzer.h"
 
 /* public関数 */
 
-/*
-	コンストラクタ
-	引数なし
+/**
+*	@brief コンストラクタ
 */
 CJSONAnalyzer::CJSONAnalyzer()
 	: m_analyzed_JSON_kind(AnalyzedJSONKind_NoJSONAnalyzed)
@@ -15,29 +17,27 @@ CJSONAnalyzer::CJSONAnalyzer()
 	// 処理なし
 }
 
-/*
-	デストラクタ
-	引数なし
+/**
+*	@brief デストラクタ
 */
 CJSONAnalyzer::~CJSONAnalyzer()
 {
 	// 処理なし
 }
 
-/*
-	最後に解析したJSONの種類を取得する関数
-	引数なし
-	返り値: CJSONAnalyzer::AnalyzedJSONKind 最後に解析したJSONの種類
+/**
+*	@brief 最後に解析したJSONの種類を取得する関数
+*	@return CJSONAnalyzer::AnalyzedJSONKind 最後に解析したJSONの種類
 */
 CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::get_analyzed_JSON_kind()
 {
 	return m_analyzed_JSON_kind;
 }
 
-/*
-	「行動」パケットから「行動」JSONを作成する関数
-	引数1: const JSONSendPacket_Action& action_pkt 「行動」パケット
-	返り値: std::string 「行動」JSON
+/**
+*	@brief 「行動」パケットから「行動」JSONを作成する関数
+*	@param[in] action_pkt 「行動」パケット
+*	@return std::string 「行動」JSON
 */
 std::string CJSONAnalyzer::create_action_JSON(const JSONSendPacket_Action& action_pkt) const
 {
@@ -50,10 +50,10 @@ std::string CJSONAnalyzer::create_action_JSON(const JSONSendPacket_Action& actio
 	return serialize_JSON_obj(action_JSON);
 }
 
-/*
-	「名前」パケットから「名前」JSONを作成する関数
-	引数1: const JSONSendPacket_Name& name_pkt 「名前」パケット
-	返り値: std::string 「名前」JSON
+/**
+*	@brief 「名前」パケットから「名前」JSONを作成する関数
+*	@param[in] name_pkt 「名前」パケット
+*	@return std::string 「名前」JSON
 */
 std::string CJSONAnalyzer::create_name_JSON(const JSONSendPacket_Name& name_pkt) const
 {
@@ -65,10 +65,10 @@ std::string CJSONAnalyzer::create_name_JSON(const JSONSendPacket_Name& name_pkt)
 	return serialize_JSON_obj(name_JSON);
 }
 
-/*
-	与えられた「名前確定」JSONから，「名前確定」パケットを作成する関数
-	引数1: const std::string& name_decided_JSON 「名前確定」JSON
-	返り値: JSONRecvPacket_NameDecided 「名前確定」パケット
+/**
+*	@brief 与えられた「名前確定」JSONから，「名前確定」パケットを作成する関数
+*	@param[in] name_decided_JSON 「名前確定」JSON
+*	@return JSONRecvPacket_NameDecided 「名前確定」パケット
 */
 JSONRecvPacket_NameDecided CJSONAnalyzer::create_name_decided_pkt(const std::string& name_decided_JSON)
 {
@@ -83,10 +83,10 @@ JSONRecvPacket_NameDecided CJSONAnalyzer::create_name_decided_pkt(const std::str
 	return name_decided_pkt;
 }
 
-/*
-	与えられた「結果」JSONから，「結果」パケットを作成する関数
-	引数1: const std::string& result_JSON 「結果」JSON
-	返り値: JSONRecvPacket_Result 「結果」パケット
+/**
+*	@brief 与えられた「結果」JSONから，「結果」パケットを作成する関数
+*	@param[in] result_JSON 「結果」JSON
+*	@return JSONRecvPacket_Result 「結果」パケット
 */
 JSONRecvPacket_Result CJSONAnalyzer::create_result_pkt(const std::string& result_JSON)
 {
@@ -101,10 +101,10 @@ JSONRecvPacket_Result CJSONAnalyzer::create_result_pkt(const std::string& result
 	return result_pkt;
 }
 
-/*
-	与えられた「メッセージ」JSONから，「メッセージ」パケットを作成する関数
-	引数1: const std::string& message_JSON 「メッセージ」JSON
-	返り値: JSONRecvPacket_Message 「メッセージ」パケット
+/**
+*	@brief 与えられた「メッセージ」JSONから，「メッセージ」パケットを作成する関数
+*	@param[in] message_JSON 「メッセージ」JSON
+*	@return JSONRecvPacket_Message 「メッセージ」パケット
 */
 JSONRecvPacket_Message CJSONAnalyzer::create_message_pkt(const std::string& message_JSON)
 {
@@ -119,10 +119,10 @@ JSONRecvPacket_Message CJSONAnalyzer::create_message_pkt(const std::string& mess
 	return message_pkt;
 }
 
-/*
-	与えられた「盤面」JSONから，「盤面」パケットを作成する関数
-	引数1: const std::string& field_JSON 「盤面」JSON
-	返り値: JSONRecvPacket_Field 「盤面」パケット
+/**
+*	@brief 与えられた「盤面」JSONから，「盤面」パケットを作成する関数
+*	@param[in] field_JSON 「盤面」JSON
+*	@return JSONRecvPacket_Field 「盤面」パケット
 */
 JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JSON)
 {
@@ -145,11 +145,10 @@ JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JS
 
 /* private関数 */
 
-/*
-	与えられたJSONを解析(パース+種類判定)する関数
-	引数1: const std::string& src_JSON 解析元のJSON
-	返り値なし
-	例外: JSONのパースに失敗したとき
+/**
+*	@brief 与えられたJSONを解析(パース+種類判定)する関数
+*	@param[in] src_JSON 解析元のJSON
+*	@throws CHeisClientException JSONのパースに失敗したとき
 */
 void CJSONAnalyzer::analyze_JSON(const std::string& src_JSON)
 {
@@ -168,20 +167,20 @@ void CJSONAnalyzer::analyze_JSON(const std::string& src_JSON)
 	m_analyzed_JSON_kind = distinguish_analyzed_JSON_kind();
 }
 
-/*
-	JSONオブジェクトを文字列化する関数
-	引数1: const picojson::object& obj
-	返り値: std::string objを文字列化した文字列 
+/**
+*	@brief JSONオブジェクトを文字列化する関数
+*	@param[in] obj JSONオブジェクト
+*	@return std::string objを文字列化した文字列 
 */
 std::string CJSONAnalyzer::serialize_JSON_obj(const picojson::object& obj) const
 {
 	return picojson::value(obj).serialize();
 }
 
-/*
-	「行動」JSONの"contents"配列を作成する関数
-	引数1: const std::vector<ContentsArrayElem>& contents_data "contents"配列を作成するのに必要なデータ
-	返り値: picojson::array 作成された"contents"配列
+/**
+*	@brief 「行動」JSONの"contents"配列を作成する関数
+*	@param[in] contents_data "contents"配列を作成するのに必要なデータ
+*	@return picojson::array 作成された"contents"配列
 */
 picojson::array CJSONAnalyzer::make_contents_JSON(const std::vector<ContentsArrayElem>& contents_data) const
 {
@@ -215,10 +214,10 @@ picojson::array CJSONAnalyzer::make_contents_JSON(const std::vector<ContentsArra
 	return contents_array;
 }
 
-/*
-	「結果」JSONの"result"配列から，内部処理用データを作成する関数
-	引数1: const picojson::array& result_array "result"配列
-	返り値: std::vector<ResultArrayElem> "result"配列から作成されたデータ
+/**
+*	@brief 「結果」JSONの"result"配列から，内部処理用データを作成する関数
+*	@param[in] result_array "result"配列
+*	@return std::vector<ResultArrayElem> "result"配列から作成されたデータ
 */
 std::vector<ResultArrayElem> CJSONAnalyzer::make_result_array(const picojson::array& result_array) const
 {
@@ -235,10 +234,9 @@ std::vector<ResultArrayElem> CJSONAnalyzer::make_result_array(const picojson::ar
 	return result_data;
 }
 
-/*
-	「盤面」JSONの"players"配列から内部処理用データを作成する関数
-	引数なし
-	返り値: std::vector<std::string> "players"配列から作成されたデータ
+/**
+*	@brief 「盤面」JSONの"players"配列から内部処理用データを作成する関数
+*	@return std::vector<std::string> "players"配列から作成されたデータ
 */
 std::vector<std::string> CJSONAnalyzer::make_players_array(const picojson::array& players_array) const
 {
@@ -250,10 +248,9 @@ std::vector<std::string> CJSONAnalyzer::make_players_array(const picojson::array
 	return players_data;
 }
 
-/*
-	「盤面」JSONの"units"配列から内部処理用データを作成する関数
-	引数なし
-	返り値: std::vector<UnitsArrayElem> "units"配列から作成されたデータ
+/**
+*	@brief 「盤面」JSONの"units"配列から内部処理用データを作成する関数
+*	@return std::vector<UnitsArrayElem> "units"配列から作成されたデータ
 */
 std::vector<UnitsArrayElem> CJSONAnalyzer::make_units_array(const picojson::array& units_array) const
 {
@@ -273,10 +270,9 @@ std::vector<UnitsArrayElem> CJSONAnalyzer::make_units_array(const picojson::arra
 	return units_data;
 }
 
-/*
-	「盤面」JSONの"locate"オブジェクトから内部処理用データを作成する関数
-	引数なし
-	返り値: LocateObjData "locate"オブジェクトから作成されたデータ
+/**
+*	@brief「盤面」JSONの"locate"オブジェクトから内部処理用データを作成する関数
+*	@return LocateObjData "locate"オブジェクトから作成されたデータ
 */
 LocateObjData CJSONAnalyzer::make_locate_object(const picojson::object& locate_obj) const
 {
@@ -287,10 +283,9 @@ LocateObjData CJSONAnalyzer::make_locate_object(const picojson::object& locate_o
 	return locate_data;
 }
 
-/*
-	解析したJSONの種類を判定する関数
-	引数なし
-	返り値: CJSONAnalyzer::AnalyzedJSONKind 解析したJSONの種類
+/**
+*	@brief 解析したJSONの種類を判定する関数
+*	@return CJSONAnalyzer::AnalyzedJSONKind 解析したJSONの種類
 */
 CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::distinguish_analyzed_JSON_kind() const
 {
@@ -305,10 +300,9 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::distinguish_analyzed_JSON_kind() 
 	return JSON_kind;
 }
 
-/*
-	解析したJSONが「名前確定」JSONであるかどうか判定する関数
-	引数なし
-	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「名前確定」JSONであればAnalyzedJSONKind_NameDecided, そうでなければAnalyzedJSONKind_UnknownJSON)
+/**
+*	@brief 解析したJSONが「名前確定」JSONであるかどうか判定する関数
+*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「名前確定」JSONであればAnalyzedJSONKind_NameDecided, そうでなければAnalyzedJSONKind_UnknownJSON)
 */
 CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_name_decided_JSON() const
 {
@@ -323,10 +317,9 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_name_decided_JSON()
 	return is_contain_all_keys ? AnalyzedJSONKind_NameDecided : AnalyzedJSONKind_UnknownJSON;
 }
 
-/*
-	解析したJSONが「結果」JSONであるかどうか判定する関数
-	引数なし
-	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「結果」JSONであればAnalyzedJSONKind_Result, そうでなければAnalyzedJSONKind_UnknownJSON)
+/**
+*	@brief 解析したJSONが「結果」JSONであるかどうか判定する関数
+*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「結果」JSONであればAnalyzedJSONKind_Result, そうでなければAnalyzedJSONKind_UnknownJSON)
 */
 CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_result_JSON() const
 {
@@ -341,10 +334,9 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_result_JSON() const
 	return is_contain_all_keys ? AnalyzedJSONKind_Result : AnalyzedJSONKind_UnknownJSON;
 }
 
-/*
-	解析したJSONが「メッセージ」JSONであるかどうか判定する関数
-	引数なし
-	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「メッセージ」JSONであればAnalyzedJSONKind_Message, そうでなければAnalyzedJSONKind_UnknownJSON)
+/**
+*	@brief 解析したJSONが「メッセージ」JSONであるかどうか判定する関数
+*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「メッセージ」JSONであればAnalyzedJSONKind_Message, そうでなければAnalyzedJSONKind_UnknownJSON)
 */
 CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_message_JSON() const
 {
@@ -359,10 +351,9 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_message_JSON() cons
 	return is_contain_all_keys ? AnalyzedJSONKind_Message : AnalyzedJSONKind_UnknownJSON;
 }
 
-/*
-	解析したJSONが「盤面」JSONであるかどうか判定する関数
-	引数なし
-	返り値: CJSONAnalyzer::AnalyzedJSONKind 判定結果(「盤面」JSONであればAnalyzedJSONKind_Field, そうでなければAnalyzedJSONKind_UnknownJSON)
+/**
+*	@brief 解析したJSONが「盤面」JSONであるかどうか判定する関数
+*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「盤面」JSONであればAnalyzedJSONKind_Field, そうでなければAnalyzedJSONKind_UnknownJSON)
 */
 CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_field_JSON() const
 {
@@ -383,21 +374,20 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_field_JSON() const
 	return is_contain_all_keys ? AnalyzedJSONKind_Field : AnalyzedJSONKind_UnknownJSON;
 }
 
-/*
-	指定されたキーが与えられたJSONオブジェクトの中に存在するかどうかを判定する関数
-	引数1: const std::string& key キー
-	引数2: const picojson::object& obj オブジェクト
-	返り値: bool keyがobjに存在するか
+/**
+*	@brief 指定されたキーが与えられたJSONオブジェクトの中に存在するかどうかを判定する関数
+*	@param[in] key キー
+*	@param[in] obj オブジェクト
+*	@return bool keyがobjに存在するか
 */
 bool CJSONAnalyzer::exists_key_in_JSON_object(const std::string& key, const picojson::object& obj) const
 {
 	return obj.find(key) != obj.end();
 }
 
-/*
-	解析したJSONの種類と要求しているJSONの種類が一致しているかを判定する関数
-	引数1: const AnalyzedJSONKind req_JSON_kind 要求しているJSONの種類
-	返り値なし
+/**
+*	@brief 解析したJSONの種類と要求しているJSONの種類が一致しているかを判定する関数
+*	@param[in] req_JSON_kind 要求しているJSONの種類
 */
 void CJSONAnalyzer::validate_JSON_kind(const AnalyzedJSONKind req_JSON_kind) const
 {

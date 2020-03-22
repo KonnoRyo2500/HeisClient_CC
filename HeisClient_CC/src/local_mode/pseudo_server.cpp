@@ -1,16 +1,19 @@
-﻿// heis ローカルモード用疑似サーバクラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		pseudo_server.cpp
+*	@brief		heis ローカルモード用疑似サーバクラス
+*	@author		Ryo Konno
+*	@details	ローカルモードにおいて，サーバの動作を模擬する．
+*/
 #include "pseudo_server.h"
 #include "const_val.h"
 #include "field.h"
 
 /* public関数 */
 
-/*
-	「盤面」JSONを作成する関数
-	引数1: const LocalSetting& setting ローカルモード設定
-	返り値: std::string 「盤面」JSON
+/**
+*	@brief 「盤面」JSONを作成する関数
+*	@param[in] setting ローカルモード設定
+*	@return std::string 「盤面」JSON
 */
 std::string CPseudoServer::send_field_json(const LocalSetting& setting) const
 {
@@ -39,10 +42,10 @@ std::string CPseudoServer::send_field_json(const LocalSetting& setting) const
 
 /* private関数 */
 
-/*
-	JSONオブジェクトを文字列化する関数
-	引数1: const picojson::object& obj
-	返り値: std::string objを文字列化した文字列
+/**
+*	@brief JSONオブジェクトを文字列化する関数
+*	@param[in] obj JSONオブジェクト
+*	@return std::string objを文字列化した文字列
 */
 // TODO: この関数と全く同じ関数がJSON_analyzer.cppにも定義されているので，まとめたい
 std::string CPseudoServer::serialize_JSON_obj(const picojson::object& obj) const
@@ -50,21 +53,21 @@ std::string CPseudoServer::serialize_JSON_obj(const picojson::object& obj) const
 	return picojson::value(obj).serialize();
 }
 
-/*
-	「盤面」JSONの"units"配列を作成する関数
-	引数1: const LocalSetting& setting ローカルモード設定
-	引数2: const int turn_count ターンの回数
-	返り値: picojson::array 「盤面」JSONの"units"配列
+/**
+*	@brief 「盤面」JSONの"units"配列を作成する関数
+*	@param[in] setting ローカルモード設定
+*	@param[in] turn_count ターンの回数
+*	@return picojson::array 「盤面」JSONの"units"配列
 */
 picojson::array CPseudoServer::make_units_JSON_array(const LocalSetting& setting, const int turn_count) const
 {
 	return (turn_count > 1 ? make_units_JSON_array_from_field() : make_initial_units_JSON_array(setting));
 }
 
-/*
-	最初のターンにおける，「盤面」JSONの"units"配列を作成する関数
-	引数1: const LocalSetting& setting ローカルモード設定
-	返り値: picojson::array 「盤面」JSONの"units"配列
+/**
+*	@brief 最初のターンにおける，「盤面」JSONの"units"配列を作成する関数
+*	@param[in] setting ローカルモード設定
+*	@return picojson::array 「盤面」JSONの"units"配列
 */
 picojson::array CPseudoServer::make_initial_units_JSON_array(const LocalSetting& setting) const
 {
@@ -86,12 +89,12 @@ picojson::array CPseudoServer::make_initial_units_JSON_array(const LocalSetting&
 	return units;
 }
 
-/*
-	最初のターンにおける，"units"配列の要素1つ分のJSONオブジェクトを作成する関数
-	引数1: const std::string& team_name チーム名
-	引数2: const FieldPosition& init_pos 初期位置
-	引数3: const int infantry_serial_num 兵士のIDにつける番号
-	返り値: picojson::object settingで指定した初期配置に基づく
+/**
+*	@brief 最初のターンにおける，"units"配列の要素1つ分のJSONオブジェクトを作成する関数
+*	@param[in] team_name チーム名
+*	@param[in] init_pos 初期位置
+*	@param[in] infantry_serial_num 兵士のIDにつける番号
+*	@return picojson::object settingで指定した初期配置に基づく
 */
 picojson::object CPseudoServer::make_initial_units_elem(const std::string& team_name, const FieldPosition& init_pos, const int infantry_serial_num) const
 {
@@ -109,10 +112,9 @@ picojson::object CPseudoServer::make_initial_units_elem(const std::string& team_
 	return units_elem_obj;
 }
 
-/*
-	「盤面」JSONの"units"配列をフィールドから作成する関数
-	引数なし
-	返り値: picojson::array 「盤面」JSONの"units"配列
+/**
+*	@brief 「盤面」JSONの"units"配列をフィールドから作成する関数
+*	@return picojson::array 「盤面」JSONの"units"配列
 */
 picojson::array CPseudoServer::make_units_JSON_array_from_field() const
 {
@@ -132,10 +134,10 @@ picojson::array CPseudoServer::make_units_JSON_array_from_field() const
 	return units_JSON_array;
 }
 
-/*
-	フィールド上の兵士の情報から，"units"配列の要素1つ分のJSONオブジェクトを作成する関数
-	引数1: const CInfantry* infantry 兵士
-	返り値: picojson::object infantryのデータから作成されたJSONオブジェクト
+/**
+*	@brief フィールド上の兵士の情報から，"units"配列の要素1つ分のJSONオブジェクトを作成する関数
+*	@param[in] infantry 兵士
+*	@return picojson::object infantryのデータから作成されたJSONオブジェクト
 */
 picojson::object CPseudoServer::make_units_elem_from_field(const CInfantry* infantry) const
 {
@@ -153,10 +155,10 @@ picojson::object CPseudoServer::make_units_elem_from_field(const CInfantry* infa
 	return units_elem_obj;
 }
 
-/*
-	対戦が終了しているかどうかを判定し，「盤面」JSONの"finished"フィールドのための真偽値を返す関数
-	引数1: const LocalSetting& setting ローカルモード設定
-	返り値: bool 「盤面」JSONの"finished"フィールドの値
+/**
+*	@brief 対戦が終了しているかどうかを判定し，「盤面」JSONの"finished"フィールドのための真偽値を返す関数
+*	@param[in] setting ローカルモード設定
+*	@return bool 「盤面」JSONの"finished"フィールドの値
 */
 bool CPseudoServer::judge_finished(const LocalSetting& setting) const
 {
@@ -189,10 +191,10 @@ bool CPseudoServer::judge_finished(const LocalSetting& setting) const
 	return !(is_my_team_alive && is_enemy_team_alive);
 }
 
-/*
-	「盤面」JSONの"players"フィールドに入るJSON配列を構築する関数
-	引数1: const LocalSetting& setting ローカルモード設定
-	返り値: picojson::array 「盤面」JSONの"players"フィールドの値
+/**
+*	@brief 「盤面」JSONの"players"フィールドに入るJSON配列を構築する関数
+*	@param[in] setting ローカルモード設定
+*	@return picojson::array 「盤面」JSONの"players"フィールドの値
 */
 picojson::array CPseudoServer::make_players_array(const LocalSetting& setting) const
 {
@@ -204,22 +206,22 @@ picojson::array CPseudoServer::make_players_array(const LocalSetting& setting) c
 	return players;
 }
 
-/*
-	「盤面」JSONの"turn_team"に入るチーム名を切り替える関数
-	引数1: const LocalSetting& setting ローカルモード設定
-	参照1: std::string& turn_team チーム名(敵 <-> 味方が入れ替わる)
+/**
+*	@brief 「盤面」JSONの"turn_team"に入るチーム名を切り替える関数
+*	@param[in] setting ローカルモード設定
+*	@param[out] turn_team チーム名(敵 <-> 味方が入れ替わる)
 */
 void CPseudoServer::toggle_turn_team(const LocalSetting& setting, std::string& turn_team) const
 {
 	turn_team = (turn_team == setting.my_team_name ? setting.enemy_team_name : setting.my_team_name);
 }
 
-/*
-	ローカルモード用の兵士IDを作成する関数
-	引数1: const std::string& team_name 兵士のチーム名
-	引数2: const int infantry_serial_number IDの数字部分(兵士に付けられる連番)
-	返り値: std::string 兵士のID
-	備考: 兵士のコンストラクタに与えるIDを生成するための関数なので，CInfantry型のオブジェクトは渡せない
+/**
+*	@brief ローカルモード用の兵士IDを作成する関数
+*	@param[in] team_name 兵士のチーム名
+*	@param[in] infantry_serial_number IDの数字部分(兵士に付けられる連番)
+*	@return std::string 兵士のID
+*	@remark 兵士のコンストラクタに与えるIDを生成するための関数なので，CInfantry型のオブジェクトは渡せない
 */
 std::string CPseudoServer::make_infantry_id(const std::string& team_name, const int infantry_serial_number) const
 {

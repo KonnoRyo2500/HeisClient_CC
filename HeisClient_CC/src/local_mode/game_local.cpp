@@ -1,5 +1,9 @@
-﻿// heis ゲーム(ローカルモード)進行管理クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		game_local.cpp
+*	@brief		heis ゲーム(ローカルモード)進行管理クラス
+*	@author		Ryo Konno
+*	@details	ローカルモードでheisのゲームを実行する．
+*/
 
 #include "game_local.h"
 #include "field.h"
@@ -10,10 +14,8 @@
 
 /* public関数 */
 
-/*
-	heis ゲーム(ローカルモード)実行メイン処理
-	引数なし
-	返り値なし
+/**
+*	@brief ローカルモード実行メイン処理
 */
 void CGameLocal::play_game()
 {
@@ -71,10 +73,8 @@ void CGameLocal::play_game()
 
 /* private関数 */
 
-/*
-	対戦を開始する前の準備を行う関数
-	引数なし
-	返り値なし
+/**
+*	@brief 対戦を開始する前の準備を行う関数
 */
 void CGameLocal::initialize_battle()
 {
@@ -98,10 +98,8 @@ void CGameLocal::initialize_battle()
 	g_system_log.write_log(CLog::LogType_Infomation, false, "インスタンスの生成が完了しました");
 }
 
-/*
-	対戦終了後の後処理を行う関数
-	引数なし
-	返り値なし
+/**
+*	@brief 対戦終了後の後処理を行う関数
 */
 void CGameLocal::finalize_battle()
 {
@@ -127,10 +125,8 @@ void CGameLocal::finalize_battle()
 	g_system_log.write_log(CLog::LogType_Infomation, false, "インスタンスの削除が完了しました");
 }
 
-/*
-	ローカルモード設定ファイルから，設定を取得する関数
-	引数なし
-	返り値なし
+/**
+*	@brief ローカルモード設定ファイルから，設定を取得する関数
 */
 void CGameLocal::load_local_mode_setting()
 {
@@ -147,11 +143,11 @@ void CGameLocal::load_local_mode_setting()
 	g_system_log.write_log(CLog::LogType_Infomation, false, "ローカルモード設定ファイルの読み込みが完了しました");
 }
 
-/*
-	兵士の初期位置をローカルモード設定ファイルから取得する関数
-	引数1: const CCsvSettingFileReader& local_setting_file ローカルモード設定ファイル
-	引数2: const std::string& key 初期位置を取得するためのキー
-	返り値: std::vector<FieldPosition> 初期位置
+/**
+*	@brief 兵士の初期位置をローカルモード設定ファイルから取得する関数
+*	@param[in] local_setting_file ローカルモード設定ファイル
+*	@param[in] key 初期位置を取得するためのキー
+*	@return std::vector<FieldPosition> 初期位置
 */
 std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFileReader& local_setting_file, const std::string& key)
 {
@@ -175,10 +171,9 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 	return init_pos;
 }
 
-/*
-	対戦の決着がついた後，勝敗を決定する関数
-	引数なし
-	返り値: bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
+/**
+*	@beief 対戦の決着がついた後，勝敗を決定する関数
+*	@return bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
 */
 bool CGameLocal::judge_win()
 {

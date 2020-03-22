@@ -1,5 +1,9 @@
-﻿// heis ローカルモード用疑似サーバクラス
-// Author: Ryo Konno
+﻿/**
+*	@file		pseudo_server.h
+*	@brief		heis ローカルモード用疑似サーバクラス
+*	@author		Ryo Konno
+*	@details	ローカルモードにおいて，サーバの動作を模擬する．
+*/
 #pragma once
 
 #include <string>
@@ -14,6 +18,9 @@ extern CLog g_system_log;
 // クラス名に"Server"とついてはいるが，通信は行わない
 // また，ローカルモードで不要なJSONはやり取りしない(「メッセージ」JSON，「名前決定」JSONなど)
 // ただし，実際のサーバと同様に，情報のやり取りはJSONで行う
+/**
+*	@brief ローカルモード用疑似サーバクラス
+*/
 class CPseudoServer
 {
 	// 構造体，列挙体など

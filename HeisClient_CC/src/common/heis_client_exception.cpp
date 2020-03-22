@@ -1,15 +1,18 @@
-﻿// heis 例外クラス
-// Author: Ryo Konno
-
+﻿/**
+*	@file		heis_client_exception.cpp
+*	@brief		heis 例外クラス
+*	@author		Ryo Konno
+*	@details	CC内で投げる例外を定義する．
+*/
 #include "heis_client_exception.h"
 #include <cstdarg>
 #include <vector>
 
 
-/*
-	コンストラクタ
-	引数1: const char* format フォーマット文字列
-	可変長引数: ... フォーマット文字列の引数
+/**
+*	@brief コンストラクタ
+*	@param[in] format フォーマット文字列
+*	@param[in] ... フォーマット文字列の引数
 */
 CHeisClientException::CHeisClientException(const char* format, ...)
 	: std::runtime_error(format)
@@ -32,10 +35,9 @@ CHeisClientException::CHeisClientException(const char* format, ...)
 	m_error_message = std::string(error_message_buf.data());
 }
 
-/*
-	例外の詳細を表示する関数
-	引数なし
-	返り値: const char* 例外の内容
+/**
+*	@brief 例外の詳細を表示する関数
+*	@return const char* 例外の内容
 */
 const char* CHeisClientException::what() const noexcept
 {

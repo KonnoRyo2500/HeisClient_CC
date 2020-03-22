@@ -1,5 +1,9 @@
-﻿// heis 兵士クラス
-// Author: Ryo Konno
+﻿/**
+*	@file		infantry.cpp
+*	@brief		heis 兵士クラス
+*	@author		Ryo Konno
+*	@details	heisのユニットの1つである兵士ユニットを定義する．
+*/
 #include "infantry.h"
 #include "field.h"
 #include <stdexcept>
@@ -7,11 +11,11 @@
 
 /* public関数 */
 
-/*
-	コンストラクタ
-	引数1: const std::string& team_name 所属チーム名
-	引数2: const std::string& infantry_id ID
-	引数3: const FieldPosition& init_pos 初期位置
+/**
+*	@brief コンストラクタ
+*	@param[in] team_name 所属チーム名
+*	@param[in] infantry_id ID
+*	@param[in] init_pos 初期位置
 */
 CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const FieldPosition& init_pos)
 	: m_team_name(team_name)
@@ -28,9 +32,8 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_i
 	}
 }
 
-/*
-	デストラクタ
-	引数なし
+/**
+*	@brief デストラクタ
 */
 CInfantry::~CInfantry()
 {
@@ -41,50 +44,45 @@ CInfantry::~CInfantry()
 	}
 }
 
-/*
-	兵士のチーム名を取得する関数
-	引数なし
-	返り値: std::string 兵士のチーム名
+/**
+*	@brief 兵士のチーム名を取得する関数
+*	@return std::string 兵士のチーム名
 */
 std::string CInfantry::get_team_name() const
 {
 	return m_team_name;
 }
 
-/*
-	兵士のIDを取得する関数
-	引数なし
-	返り値: std::string 兵士のID
+/**
+*	@brief 兵士のIDを取得する関数
+*	@return std::string 兵士のID
 */
 std::string CInfantry::get_id() const
 {
 	return m_id;
 }
 
-/*
-	兵士の座標を取得する関数
-	引数なし
-	返り値: FieldPosition 兵士の座標
+/**
+*	@brief 兵士の座標を取得する関数
+*	@return FieldPosition 兵士の座標
 */
 FieldPosition CInfantry::get_position() const
 {
 	return m_pos;
 }
 
-/*
-	兵士の残り行動回数を取得する関数
-	引数なし
-	返り値: uint8_t 兵士の残り行動回数
+/**
+*	@brief 兵士の残り行動回数を取得する関数
+*	@return uint8_t 兵士の残り行動回数
 */
 uint8_t CInfantry::get_action_remain() const
 {
 	return m_action_remain;
 }
 
-/*
-	兵士のHPを取得する関数
-	引数なし
-	返り値: int8_t 兵士のHP
+/**
+*	@brief 兵士のHPを取得する関数
+*	@return int8_t 兵士のHP
 */
 int8_t CInfantry::get_hp() const
 {
@@ -92,10 +90,9 @@ int8_t CInfantry::get_hp() const
 }
 
 
-/*
-	指定した方向に攻撃を行う関数
-	引数1: const FieldPosition dst_pos 攻撃先の座標
-	返り値なし
+/**
+*	@brief 指定した方向に攻撃を行う関数
+*	@param[in] dst_pos 攻撃先の座標
 */
 void CInfantry::attack(const FieldPosition dst_pos)
 {
@@ -136,10 +133,9 @@ void CInfantry::attack(const FieldPosition dst_pos)
 	}
 }
 
-/*
-	兵士を移動する関数
-	引数1: const FieldPosition dst_pos 移動先の座標
-	返り値なし
+/**
+*	@brief 兵士を移動する関数
+*	@param[in] dst_pos 移動先の座標
 */
 void CInfantry::move(const FieldPosition dst_pos)
 {
@@ -175,10 +171,9 @@ void CInfantry::move(const FieldPosition dst_pos)
 	}
 }
 
-/*
-	移動可能なすべてのマスを返す関数
-	引数なし
-	返り値: std::vector<FieldPosition> 移動可能なマス
+/**
+*	@brief 移動可能なすべてのマスを返す関数
+*	@return std::vector<FieldPosition> 移動可能なマス
 */
 std::vector<FieldPosition> CInfantry::find_movable_position() const
 {
@@ -194,10 +189,9 @@ std::vector<FieldPosition> CInfantry::find_movable_position() const
 	return movable_pos;
 }
 
-/*
-	攻撃可能なすべてのマスを返す関数
-	引数なし
-	返り値: std::vector<FieldPosition> 攻撃可能なマス
+/**
+*	@brief 攻撃可能なすべてのマスを返す関数
+*	@return std::vector<FieldPosition> 攻撃可能なマス
 */
 std::vector<FieldPosition> CInfantry::find_attackable_position() const
 {
@@ -214,10 +208,9 @@ std::vector<FieldPosition> CInfantry::find_attackable_position() const
 	return attackable_pos;
 }
 
-/*
-	「行動」パケットの"contents"配列の1要素分のデータを作成する関数
-	引数なし
-	返り値: ContentsArrayElem "contents"配列の要素
+/**
+*	@brief 「行動」パケットの"contents"配列の1要素分のデータを作成する関数
+*	@return ContentsArrayElem "contents"配列の要素
 */
 ContentsArrayElem CInfantry::create_contents_array_elem() const
 {
@@ -241,10 +234,8 @@ ContentsArrayElem CInfantry::create_contents_array_elem() const
 
 /* private関数 */
 
-/*
-	敵の兵士からの攻撃を反映させる関数
-	引数なし
-	返り値なし
+/**
+*	@brief 敵の兵士からの攻撃を反映させる関数
 */
 void CInfantry::attacked()
 {
@@ -255,10 +246,10 @@ void CInfantry::attacked()
 	}
 }
 
-/*
-	指定されたマスに移動するための経路があるかどうかを判定する関数
-	引数1: const FieldPosition& dst_pos 行先のマス
-	返り値: 目的マスに移動できるか
+/**
+*	@brief 指定されたマスに移動するための経路があるかどうかを判定する関数
+*	@param[in] dst_pos 行先のマス
+*	@return 目的マスに移動できるか
 */
 bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
 {
@@ -303,11 +294,11 @@ bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
 	return false;
 }
 
-/*
-	目的マスに近づける移動方向を判定する関数
-	引数1: const FieldPosition& current_pos 現在いるマスの座標
-	引数2: const FieldPosition& dst_pos 目的マスの座標
-	返り値: std::vector<Direction> 現在いるマスから目的マスに近づける移動方向
+/**
+*	@brief 目的マスに近づける移動方向を判定する関数
+*	@param[in] current_pos 現在いるマスの座標
+*	@param[in] dst_pos 目的マスの座標
+*	@return std::vector<Direction> 現在いるマスから目的マスに近づける移動方向
 */
 std::vector<Direction> CInfantry::decide_move_direction(const FieldPosition& current_pos, const FieldPosition& dst_pos) const
 {
@@ -329,21 +320,21 @@ std::vector<Direction> CInfantry::decide_move_direction(const FieldPosition& cur
 	return directions_to_dst;
 }
 
-/*
-	与えられた2点のL1距離を計算する関数
-	引数1: const FieldPosition& src 点1の座標
-	引数2: const FieldPosition dst 点2の座標
-	返り値: uint16_t L1距離
+/**
+*	@brief 与えられた2点のL1距離を計算する関数
+*	@param[in] src 点1の座標
+*	@param[in] dst 点2の座標
+*	@return uint16_t L1距離
 */
 uint16_t CInfantry::calc_L1_distance(const FieldPosition& src, const FieldPosition dst) const
 {
 	return std::abs(src.x - dst.x) + std::abs(src.y - dst.y);
 }
 
-/*
-	自分の周囲のマスのうち，指定したL1距離以内にあるマスを取得する関数
-	引数1: const uint16_t search_distance 探索範囲のL1距離の上限
-	返り値: std::vector<FieldPosition> 取得したすべてのマス
+/**
+*	@brief 自分の周囲のマスのうち，指定したL1距離以内にあるマスを取得する関数
+*	@param[in] search_distance 探索範囲のL1距離の上限
+*	@return std::vector<FieldPosition> 取得したすべてのマス
 */
 std::vector<FieldPosition> CInfantry::get_around_position(const uint16_t search_distance) const
 {
@@ -368,10 +359,10 @@ std::vector<FieldPosition> CInfantry::get_around_position(const uint16_t search_
 	return around_positions;
 }
 
-/*
-	与えられた兵士が自分自身なのかを判定する関数
-	引数1: const CInfantry* infantry 兵士
-	返り値: bool 与えられた兵士が自分自身か
+/**
+*	@brief 与えられた兵士が自分自身なのかを判定する関数
+*	@param[in] infantry 兵士
+*	@return bool 与えられた兵士が自分自身か
 */
 bool CInfantry::is_self(const CInfantry* infantry) const
 {
@@ -385,12 +376,12 @@ bool CInfantry::is_self(const CInfantry* infantry) const
 	return false;
 }
 
-/*
-	フィールドのマスのうち，指定した方向に隣接したマスの座標を取得する関数
-	引数1: const Direction direction 方向
-	引数2: const FieldPosition& origin 基準となるマスの座標
-	返り値: FieldPosition 隣接したマス
-	備考: 指定した方向に隣接したマスの座標がフィールドの範囲外だった場合，基準となるマスの座標を返す
+/**
+*	@brief フィールドのマスのうち，指定した方向に隣接したマスの座標を取得する関数
+*	@param[in] direction 方向
+*	@param[in] origin 基準となるマスの座標
+*	@return FieldPosition 隣接したマス
+*	@remark 指定した方向に隣接したマスの座標がフィールドの範囲外だった場合，基準となるマスの座標を返す
 */
 FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const FieldPosition& origin) const
 {
@@ -398,15 +389,15 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 
 	// x座標を決定
 	switch (direction) {
-	case Direction_Left:
-		dst_pos.x = origin.x - 1;
-		break;
-	case Direction_Right:
-		dst_pos.x = origin.x + 1;
-		break;
-	default:
-		dst_pos.x = origin.x;
-		break;
+		case Direction_Left:
+			dst_pos.x = origin.x - 1;
+			break;
+		case Direction_Right:
+			dst_pos.x = origin.x + 1;
+			break;
+		default:
+			dst_pos.x = origin.x;
+			break;
 	}
 	if (dst_pos.x < 0) {
 		dst_pos.x = 0;
@@ -417,15 +408,15 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 
 	// y座標を決定
 	switch (direction) {
-	case Direction_Up:
-		dst_pos.y = origin.y - 1;
-		break;
-	case Direction_Down:
-		dst_pos.y = origin.y + 1;
-		break;
-	default:
-		dst_pos.y = origin.y;
-		break;
+		case Direction_Up:
+			dst_pos.y = origin.y - 1;
+			break;
+		case Direction_Down:
+			dst_pos.y = origin.y + 1;
+			break;
+		default:
+			dst_pos.y = origin.y;
+			break;
 	}
 	if (dst_pos.y < 0) {
 		dst_pos.y = 0;

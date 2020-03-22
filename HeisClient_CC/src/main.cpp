@@ -1,5 +1,10 @@
-﻿// heis メイン処理
-// Author: Ryo Konno
+﻿/**
+*	@file		main.cpp
+*	@brief		heis メイン処理
+*	@author		Ryo Konno
+*	@details	メイン関数を定義するファイル．
+*/
+
 #include "game_local.h"
 #include "game_online.h"
 #include "log.h"
@@ -10,29 +15,34 @@
 // ログファイル格納先のディレクトリは存在している前提
 // Gitにコミットされているので，通常使用する際はディレクトリが存在しているはず
 
-// フィールドログ
+//! フィールドログ
 CLog g_field_log("field_log");
-// 対戦ログ
+//! 対戦ログ
 CLog g_battle_log("battle_log");
-// システムログ
+//! システムログ
 CLog g_system_log("system_log");
 
 
-// ゲームモード
+/**
+*	@enum ゲームモード
+*/
 enum GameMode {
-	// ローカルモード
+	//! ローカルモード
 	GameMode_Local,
-	// オンラインモード
+	//! オンラインモード
 	GameMode_Online,
 };
 
 /* static関数 */
 
-// ゲームモードを選択する
+//! ゲームモードを選択する
 static GameMode ask_game_mode();
-// ゲームを開始する
+//! ゲームを開始する
 static void start_game(const GameMode mode);
 
+/**
+*	@brief メイン関数
+*/
 int main()
 {
 	int exit_code = EXIT_SUCCESS;
@@ -49,10 +59,9 @@ int main()
 	return exit_code;
 }
 
-/*
-	ユーザにゲームモードを選択させる関数
-	引数なし
-	返り値: GameMode 選択したゲームモード
+/**
+*	@brief ユーザにゲームモードを選択させる関数
+*	@return GameMode 選択したゲームモード
 */
 static GameMode ask_game_mode()
 {
@@ -80,10 +89,9 @@ static GameMode ask_game_mode()
 	return it->second;
 }
 
-/*
-	指定したモードでゲームを開始する関数
-	引数1: const GameMode mode ゲームモード
-	返り値なし
+/**
+*	@brief 指定したモードでゲームを開始する関数
+*	@param[in] mode ゲームモード
 */
 static void start_game(const GameMode mode)
 {

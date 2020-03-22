@@ -1,18 +1,30 @@
-﻿// heis TCP/IP通信用ソケットクラス(クライアント用)
-// Author: Ryo Konno
+﻿/**
+*	@file		client_socket.h
+*	@brief		TCP/IP通信用ソケットクラス(クライアント用)
+*	@author		Ryo Konno
+*	@details	TCP/IPソケットの操作をより抽象化したインターフェイスを提供する(クライアント用)．
+*/
 #pragma once
 
 #include <string>
 
 // TODO: このクラスを共通ソースに移動させる
 // TODO: ソケットの基本クラスを作成し，それを継承するようにする
+/**
+*	@brief	クライアント用TCP/IPソケットクラス
+*/
 class CClientSocket {
 	// 構造体，列挙体など
 	private:
-		// ソケットに関する諸定数
+		/**
+		*	@enum SocketConstVal
+		*	ソケットに関する諸定数
+		*/
 		enum SocketConstVal {
-			SocketConstVal_RecvBufSize = 1000,		// 受信バッファサイズ
-			SocketConstVal_SendIntervalTimeMs = 50,	// 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
+			//! 受信バッファサイズ
+			SocketConstVal_RecvBufSize = 1000,
+			//! 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
+			SocketConstVal_SendIntervalTimeMs = 50,
 		};
 
 	// メンバ関数
@@ -44,6 +56,6 @@ class CClientSocket {
 
 	// メンバ変数
 	private:
-		// ソケットの実体
+		//! ソケットの実体
 		int m_sck;
 };
