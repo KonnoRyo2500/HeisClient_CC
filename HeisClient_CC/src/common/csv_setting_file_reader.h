@@ -33,8 +33,6 @@ class CCsvSettingFileReader {
 		T get_single_value(const std::string& key, const size_t index) const;
 		template <typename T>
 		std::vector<T> get_all_value(const std::string& key) const;
-		template <typename T>
-		std::vector<T> get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const;
 
 	private:
 		// 値の取得
@@ -95,26 +93,6 @@ std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) cons
 	return ret_value;
 }
 
-/**
-*	@brief 指定した範囲のインデックスを持つ値を取得する関数
-*	@param[in] key キー名
-*	@param[in] begin_index 範囲の開始インデックス
-*	@param[in] end_index 範囲の終了インデックス
-*	@return std::vector<T> 値
-*/
-template <typename T>
-std::vector<T> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const
-{
-	std::vector<std::string> value_str = get_ranged_value<std::string>(key, begin_index, end_index);
-	std::vector<T> ret_value;
-
-	for (auto& v : value_str) {
-		ret_value.push_back(static_cast<T>(stof(v)));
-	}
-
-	return ret_value;
-}
-
 // テンプレート関数特殊化
 
 /**
@@ -145,33 +123,4 @@ template<>
 inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key) const
 {
 	return search_value(key);
-}
-
-/**
-*	@brief 指定した範囲のインデックスを持つ値を取得する関数(返す値の型が文字列の場合の処理)
-*	@param[in] key キー名
-*	@param[in] begin_index 範囲の開始インデックス
-*	@param[in] end_index 範囲の終了インデックス
-*	@return std::vector<std::string> 値
-*	@throws CHeisClientException 開始インデックス > 終了インデックスの場合
-*	@throws CHeisClientException インデックスが範囲外の場合
-*/
-template<>
-inline std::vector<std::string> CCsvSettingFileReader::get_ranged_value(const std::string& key, const size_t begin_index, const size_t end_index) const
-{
-	std::vector<std::string> all_value = search_value(key);
-	std::vector<std::string> ret_value;
-
-	if (begin_index > end_index) {
-		throw CHeisClientException("開始インデックスが終了インデックスよりも後ろにあります(開始: %d, 終了: %d)", begin_index, end_index);
-	}
-	try {
-		for (size_t i = begin_index; i <= end_index; i++) {
-			ret_value.push_back(all_value.at(i));
-		}
-		return ret_value;
-	}
-	catch (std::out_of_range&) {
-		throw CHeisClientException("インデックスが範囲外です(値の個数: %d, 開始: %d, 終了: %d)", all_value.size(), begin_index, end_index);
-	}
 }

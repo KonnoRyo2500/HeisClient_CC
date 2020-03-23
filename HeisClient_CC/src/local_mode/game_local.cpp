@@ -163,8 +163,8 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 		if (pos_token.size() != 2) {
 			throw CHeisClientException("兵士の初期位置の指定が不正です");
 		}
-		pos.x = stoi(CTokenManager::get_single_token(pos_token, 0));
-		pos.y = stoi(CTokenManager::get_single_token(pos_token, 1));
+		pos.x = stoi(pos_token[0]);
+		pos.y = stoi(pos_token[1]);
 		init_pos.push_back(pos);
 	}
 

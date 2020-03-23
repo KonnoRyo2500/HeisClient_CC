@@ -88,7 +88,7 @@ std::string CScenarioReader::get_message_to_send() const
 {
 	// TODO: 空白を含むメッセージにも対応できるようにする
 	if(m_latest_action.size() >= 3){
-		return CTokenManager::get_single_token(m_latest_action, 2);
+		return m_latest_action[2];
 	}
 	throw CHeisClientException("メッセージが指定されていない，もしくはアクションが異なります");
 }
@@ -102,7 +102,7 @@ std::string CScenarioReader::get_message_to_send() const
 std::string CScenarioReader::get_filename_to_send() const
 {
 	if(m_latest_action.size() >= 3){
-		return CPathGenerator::get_exe_path() + EXE_DIR_TO_FILE_DIR + CTokenManager::get_single_token(m_latest_action, 2);
+		return CPathGenerator::get_exe_path() + EXE_DIR_TO_FILE_DIR + m_latest_action[2];
 	}
 	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
 }
@@ -116,7 +116,7 @@ std::string CScenarioReader::get_filename_to_send() const
 std::string CScenarioReader::get_filename_to_write_recv_msg() const
 {
 	if(m_latest_action.size() >= 3){
-		return CTokenManager::get_single_token(m_latest_action, 2);
+		return m_latest_action[2];
 	}
 	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
 }
@@ -129,7 +129,7 @@ std::string CScenarioReader::get_filename_to_write_recv_msg() const
 CScenarioReader::TurnOrder CScenarioReader::get_turn_order() const
 {
 	if(m_latest_action.size() > 0){
-		std::string last_token = CTokenManager::get_single_token(m_latest_action, m_latest_action.size() - 1);
+		std::string last_token = m_latest_action[m_latest_action.size() - 1];
 		// 最後のトークンと，対象プレイヤーのターン順序との対応表
 		const std::map<std::string, CScenarioReader::TurnOrder> turn_order_map = {
 			{"first",	CScenarioReader::TurnOrder_First},

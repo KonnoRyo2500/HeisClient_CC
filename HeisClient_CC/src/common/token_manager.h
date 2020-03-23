@@ -40,11 +40,6 @@ class CTokenManager
 		// 文字列からトークン列生成
 		static token_array_t split_string(const std::string& str, const std::string& delim);
 
-		// トークン列からトークン取得
-		static token_t get_single_token(const token_array_t& tokens, const int index);
-		static token_array_t get_token_range(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos);
-		static std::string get_catnated_tokens(const token_array_t& tokens, const size_t begin_pos, const size_t end_pos);
-
 	private:
 		// コンストラクタ
 		CTokenManager();

@@ -47,11 +47,11 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 		// 値は最低1個以上ある必要があるので，キーと要素が両方揃っているためには要素数が2個以上ある必要がある
 		if (key_value.size() < 2) {
 			throw CHeisClientException("キーか値の少なくとも一方が欠損しています(キー名: %s)", 
-				key_value.size() >= 1 ? CTokenManager::get_single_token(key_value, 0).c_str() : "欠損");
+				key_value.size() >= 1 ? key_value[0].c_str() : "欠損");
 		}
 		remove_space_around_comma(key_value);
 
-		std::string key = CTokenManager::get_single_token(key_value, 0);
+		std::string key = key_value[0];
 		token_array_t value;
 		std::copy(key_value.begin() + 1, key_value.end(), std::back_inserter(value));
 		m_key_value.emplace(key, value);
