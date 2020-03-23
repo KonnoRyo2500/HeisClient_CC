@@ -20,10 +20,12 @@ Author: Ryo Konno
 	CCのソースコードをBitbucketよりダウンロードし，ビルドするまでの手順を説明します．
 	なお，実行にあたりGit, Visual Studio(Windowsのみ)，CMake(Linuxのみ)のインストールが事前に必要となります．
 	(1) Bitbucketからリポジトリをクローンする．
-		$ cd (適当なディレクトリ名)
-		$ git clone https://Konno_Ryo@bitbucket.org/Konno_Ryo/heisclient_cc.git
+		("git"コマンドが実行できるコマンドラインにて)
+			$ cd (適当なディレクトリ名)
+			$ git clone https://Konno_Ryo@bitbucket.org/Konno_Ryo/heisclient_cc.git
 		※クローン先のディレクトリを空にしておくことを推奨します．
-		※TortoiseGitを使用している場合は"Git クローン(複製)"から上記URLを指定してクローンを行ってください．
+		※GitのGUIクライアントソフト(TortoiseGitなど)を使用している場合には，上記URLでクローン操作を行ってください．
+		  詳細な操作方法については，お手数ですがソフトの説明書などをご参照ください．
 		※以下，記載するパスはここでクローンしたディレクトリを起点とします．
 
 	(2) ビルドする．
@@ -31,6 +33,7 @@ Author: Ryo Konno
 			a) "heisclient_cc\HeisClient_CC\project_win"ディレクトリ内にある
 			   "HeisClient_CC.sln"をクリックする．
 			b) Visual Studioが開くので，ビルド構成は"Release"，プラットフォーム構成は"x86"でビルドする．
+			Note: Visual Studioの操作方法が不明な場合は，同梱の"VS使い方ガイド.txt"をご参照ください．
 
 		(Linux) 
 			a) CMakeを用いてビルドする．
