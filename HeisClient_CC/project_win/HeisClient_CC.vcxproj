@@ -176,6 +176,7 @@
     <ClCompile Include="..\src\local_mode\game_local.cpp" />
     <ClCompile Include="..\src\local_mode\pseudo_server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\online_mode\audience_mode.cpp" />
     <ClCompile Include="..\src\online_mode\game_online.cpp" />
     <ClCompile Include="..\src\unit\commander.cpp" />
     <ClCompile Include="..\src\unit\infantry.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\src\local_mode\game_local.h" />
     <ClInclude Include="..\src\local_mode\local_setting.h" />
     <ClInclude Include="..\src\local_mode\pseudo_server.h" />
+    <ClInclude Include="..\src\online_mode\audience_mode.h" />
     <ClInclude Include="..\src\online_mode\game_online.h" />
     <ClInclude Include="..\src\unit\commander.h" />
     <ClInclude Include="..\src\unit\infantry.h" />

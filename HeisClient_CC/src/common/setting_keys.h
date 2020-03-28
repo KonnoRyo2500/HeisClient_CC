@@ -6,6 +6,18 @@
 */
 #pragma once
 
+/* 観戦モード用 */
+/**
+*	@def AUDIENCE_SETTING_KEY_SVR_ADDR
+*	@brief サーバのIPアドレス
+*/
+#define AUDIENCE_SETTING_KEY_SVR_ADDR "server_ip_addr"
+/**
+*	@def AUDIENCE_SETTING_KEY_SVR_PORT
+*	@brief サーバのポート番号
+*/
+#define AUDIENCE_SETTING_KEY_SVR_PORT "server_port_num"
+
 /* オンラインモード用 */
 /**
 *	@def ONLINE_SETTING_KEY_SVR_ADDR

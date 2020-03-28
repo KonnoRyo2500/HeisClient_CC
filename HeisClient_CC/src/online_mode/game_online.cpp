@@ -10,6 +10,10 @@
 #include "setting_keys.h"
 #include "path_generator.h"
 
+/**
+*	@def ONLINE_SETTING_FILE_NAME
+*	@brief オンラインモード設定ファイルの名前
+*/
 #define ONLINE_SETTING_FILE_NAME "online_setting.csv"
 
 /* public関数 */

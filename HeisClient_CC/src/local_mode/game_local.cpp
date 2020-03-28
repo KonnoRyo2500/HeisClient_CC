@@ -10,6 +10,10 @@
 #include "setting_keys.h"
 #include "path_generator.h"
 
+/**
+*	@def LOCAL_SETTING_FILE_NAME
+*	@brief ローカルモード設定ファイルの名前
+*/
 #define LOCAL_SETTING_FILE_NAME "local_setting.csv"
 
 /* public関数 */

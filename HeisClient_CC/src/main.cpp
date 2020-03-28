@@ -7,6 +7,7 @@
 
 #include "game_local.h"
 #include "game_online.h"
+#include "audience_mode.h"
 #include "log.h"
 
 /* グローバル変数 */
@@ -32,6 +33,8 @@ enum GameMode {
 	GameMode_Local,
 	//! オンラインモード
 	GameMode_Online,
+	//! 観戦モード
+	GameMode_Audience,
 };
 
 /* static関数 */
@@ -70,6 +73,7 @@ static GameMode ask_game_mode()
 	static const std::map<int, GameMode> selected_value_to_mode = {
 		{1, GameMode_Local},
 		{2, GameMode_Online},
+		{3, GameMode_Audience},
 	};
 	auto it = selected_value_to_mode.end();
 
@@ -77,7 +81,7 @@ static GameMode ask_game_mode()
 		// ゲームモードが確定するまで選択を続行する
 		try {
 			std::string user_input_buf;
-			printf("ゲームモードを入力して下さい(1: ローカルモード, 2: オンラインモード)\n");
+			printf("ゲームモードを入力して下さい(1: ローカルモード, 2: オンラインモード, 3: 観戦モード)\n");
 			std::cin >> user_input_buf;
 			it = selected_value_to_mode.find(stoi(user_input_buf));
 		}
@@ -99,6 +103,7 @@ static void start_game(const GameMode mode)
 	// TODO: ゲームクラス(CGameLocal, CGameOnline)の親となるクラスを作成すれば，この関数の処理を改善できそう
 	CGameLocal game_local = CGameLocal();
 	CGameOnline game_online = CGameOnline();
+	CAudienceMode audience = CAudienceMode();
 
 	switch (mode) {
 		case GameMode_Local:
@@ -106,6 +111,9 @@ static void start_game(const GameMode mode)
 			break;
 		case GameMode_Online:
 			game_online.play_game();
+			break;
+		case GameMode_Audience:
+			audience.watch_game();
 			break;
 		default:
 			throw CHeisClientException("ゲームモードが不正です");
