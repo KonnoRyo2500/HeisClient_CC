@@ -46,7 +46,7 @@ token_array_t CTokenManager::split_string(const std::string& str, const std::str
 
 /**
 *	@brief 文字列中の制御文字を削除する関数
-*	@param[out] std::string& str 制御文字を削除する対象の文字列
+*	@param[out] str 制御文字を削除する対象の文字列
 */
 void CTokenManager::erase_control_letter(std::string& str)
 {
@@ -71,7 +71,7 @@ void CTokenManager::erase_control_letter(std::string& str)
 
 /**
 *	@brief 文字列の先頭にある区切り文字列を削除する関数
-*	@param[out] 区切り文字列を削除する対象の文字列
+*	@param[out] str 区切り文字列を削除する対象の文字列
 *	@param[in] delim 区切り文字
 */
 void CTokenManager::erase_first_delimiters(std::string& str, const std::string& delim)
@@ -89,7 +89,7 @@ void CTokenManager::erase_first_delimiters(std::string& str, const std::string& 
 
 /**
 *	@brief 文字列の先頭にあるトークンを削除する関数
-*	@param[out] トークンを削除する対象の文字列
+*	@param[out] str トークンを削除する対象の文字列
 *	@param[in] delim 区切り文字
 */
 void CTokenManager::erase_first_token(std::string& str, const std::string& delim)

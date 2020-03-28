@@ -72,7 +72,7 @@ CInfantry* CField::get_infantry(const FieldPosition& pos) const
 /**
 *	@brief 指定した座標に兵士を配置する関数
 *	@param[in] pos 兵士を配置する座標
-*	@param[in] CInfantry* infantry 配置する兵士
+*	@param[in] infantry 配置する兵士
 *	@throws CHeisClientException NULLの兵士を配置しようとしたとき
 */
 void CField::set_infantry(const FieldPosition& pos, CInfantry* infantry)

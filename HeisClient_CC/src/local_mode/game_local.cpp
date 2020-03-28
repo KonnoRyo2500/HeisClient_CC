@@ -172,7 +172,7 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 }
 
 /**
-*	@beief 対戦の決着がついた後，勝敗を決定する関数
+*	@brief 対戦の決着がついた後，勝敗を決定する関数
 *	@return bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
 */
 bool CGameLocal::judge_win()

@@ -341,7 +341,7 @@ std::string CServerSocket::sck_recv_core_linux(const int sck_com) const
 /**
 *	@brief クライアントのIPアドレスとポート番号から，そのクライアントと通信するためのソケットを取得する関数
 *	@param[in] clt_ip_addr クライアントのIPアドレス
-*	@param[in] const uint16_t clt_port_no クライアントのポート番号
+*	@param[in] clt_port_no クライアントのポート番号
 *	@return int クライアントとの通信用ソケット(IPとポート番号に対応するソケットが見つからなければ-1)
 */
 int CServerSocket::client_info_to_socket(const std::string& clt_ip_addr, const uint16_t clt_port_no) const

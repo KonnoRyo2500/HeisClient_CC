@@ -135,7 +135,7 @@ struct ResultArrayElem {
 /**
 *	@struct JSONSendPacket_Name
 *	@brief 「名前」パケット
-*	@detail 「名前」JSONの情報を格納するパケット
+*	@details 「名前」JSONの情報を格納するパケット
 */
 struct JSONSendPacket_Name {
 	//! "team_name"(フィールド)
@@ -145,7 +145,7 @@ struct JSONSendPacket_Name {
 /**
 *	@struct JSONSendPacket_Action
 *	@brief 「行動」パケット
-*	@detail 「行動」JSONの情報を格納するパケット
+*	@details 「行動」JSONの情報を格納するパケット
 */
 struct JSONSendPacket_Action {
 	//! "turn_team"(フィールド)
@@ -160,7 +160,7 @@ struct JSONSendPacket_Action {
 /**
 *	@struct JSONRecvPacket_Field
 *	@brief 「盤面」パケット
-*	@detail 「盤面」JSONの情報を格納するパケット
+*	@details 「盤面」JSONの情報を格納するパケット
 */
 struct JSONRecvPacket_Field {
 	//! "width"(フィールド)
@@ -182,7 +182,7 @@ struct JSONRecvPacket_Field {
 /**
 *	@struct JSONRecvPacket_NameDecided
 *	@brief 「名前確定」パケット
-*	@detail 「名前確定」JSONの情報を格納するパケット
+*	@details 「名前確定」JSONの情報を格納するパケット
 */
 struct JSONRecvPacket_NameDecided {
 	//! "your_team"(フィールド)
@@ -192,7 +192,7 @@ struct JSONRecvPacket_NameDecided {
 /**
 *	@struct JSONRecvPacket_Result
 *	@brief 「結果」パケット
-*	@detail 「結果」JSONの情報を格納するパケット
+*	@details 「結果」JSONの情報を格納するパケット
 */
 struct JSONRecvPacket_Result {
 	//! "result"(配列)
@@ -202,7 +202,7 @@ struct JSONRecvPacket_Result {
 /**
 *	@struct JSONRecvPacket_Message
 *	@brief 「メッセージ」パケット
-*	@detail 「メッセージ」JSONの情報を格納するパケット
+*	@details 「メッセージ」JSONの情報を格納するパケット
 */
 struct JSONRecvPacket_Message {
 	//! "message"(フィールド)

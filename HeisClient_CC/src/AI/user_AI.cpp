@@ -50,7 +50,7 @@ void CUserAI::AI_main(const JSONRecvPacket_Field& field_pkt)
 
 /**
 *	@brief (サンプルAI用処理)兵士をランダムに移動させる関数
-*	@param[in] id 行動対象の兵士のID
+*	@param[in] infantry_id 行動対象の兵士のID
 */
 void CUserAI::sample_random_move(const std::string infantry_id)
 {
@@ -66,7 +66,7 @@ void CUserAI::sample_random_move(const std::string infantry_id)
 
 /**
 *	@brief (サンプルAI用処理)兵士をランダムな方向に攻撃させる関数
-*	@param[in] id 行動対象の兵士のID
+*	@param[in] infantry_id 行動対象の兵士のID
 */
 void CUserAI::sample_random_attack(const std::string infantry_id)
 {

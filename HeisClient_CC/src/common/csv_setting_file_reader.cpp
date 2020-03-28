@@ -2,7 +2,7 @@
 *	@file		csv_setting_file_reader.cpp
 *	@brief		CSV設定ファイルクラス
 *	@author		Ryo Konno
-*	@detail		CSVファイルとして実現された設定ファイルから設定値を読み出す．
+*	@details		CSVファイルとして実現された設定ファイルから設定値を読み出す．
 */
 #include "csv_setting_file_reader.h"
 
@@ -32,7 +32,7 @@ CCsvSettingFileReader::~CCsvSettingFileReader()
 /* private関数 */
 /**
 *	@brief すべての値を，設定ファイルから取得する関数
-*	@param[in] const std::string& file_name 設定ファイル名
+*	@param[in] file_name 設定ファイル名
 */
 void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 {

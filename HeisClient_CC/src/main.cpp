@@ -24,7 +24,8 @@ CLog g_system_log("system_log");
 
 
 /**
-*	@enum ゲームモード
+*	@enum GameMode
+*	ゲームモード
 */
 enum GameMode {
 	//! ローカルモード
