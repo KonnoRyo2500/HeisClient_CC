@@ -166,6 +166,7 @@
     <ClCompile Include="..\src\AI\user_AI.cpp" />
     <ClCompile Include="..\src\common\client_socket.cpp" />
     <ClCompile Include="..\src\common\csv_setting_file_reader.cpp" />
+    <ClCompile Include="..\src\common\game.cpp" />
     <ClCompile Include="..\src\common\heis_client_exception.cpp" />
     <ClCompile Include="..\src\common\log.cpp" />
     <ClCompile Include="..\src\common\path_generator.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="..\src\common\common_structure.h" />
     <ClInclude Include="..\src\common\const_val.h" />
     <ClInclude Include="..\src\common\csv_setting_file_reader.h" />
+    <ClInclude Include="..\src\common\game.h" />
     <ClInclude Include="..\src\common\heis_client_exception.h" />
     <ClInclude Include="..\src\common\log.h" />
     <ClInclude Include="..\src\common\path_generator.h" />
