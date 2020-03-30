@@ -100,22 +100,23 @@ static GameMode ask_game_mode()
 */
 static void start_game(const GameMode mode)
 {
-	// TODO: ゲームクラス(CGameLocal, CGameOnline)の親となるクラスを作成すれば，この関数の処理を改善できそう
-	CGameLocal game_local = CGameLocal();
-	CGameOnline game_online = CGameOnline();
-	CAudienceMode audience = CAudienceMode();
+	CGame* game;
 
 	switch (mode) {
 		case GameMode_Local:
-			game_local.play_game();
+			game = new CGameLocal();
 			break;
 		case GameMode_Online:
-			game_online.play_game();
+			game = new CGameOnline();
 			break;
 		case GameMode_Audience:
-			audience.watch_game();
+			game = new CAudienceMode();
 			break;
 		default:
 			throw CHeisClientException("ゲームモードが不正です");
 	}
+	game->play_game();
+
+	delete game;
+	game = NULL;
 }

@@ -6,6 +6,7 @@
 */
 #pragma once
 
+#include "game.h"
 #include "commander.h"
 #include "user_AI.h"
 #include "JSON_analyzer.h"
@@ -20,14 +21,14 @@ extern CLog g_battle_log;
 /**
 *	@brief	オンラインモード実行クラス
 */
-class CGameOnline {
+class CGameOnline : public CGame {
 	// 構造体，列挙体など
 	public:
 
 	// メンバ関数
 	public:
 		// 対戦開始
-		void play_game();
+		void play_game() override;
 		
 	private:
 		// 対戦開始前処理
@@ -40,7 +41,7 @@ class CGameOnline {
 		void finalize_battle();
 
 		// 対戦後の勝敗判定
-		bool judge_win();
+		bool judge_win() override;
 
 	// メンバ変数
 	private:

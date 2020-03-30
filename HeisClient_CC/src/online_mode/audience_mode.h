@@ -1,36 +1,39 @@
-/**
+﻿/**
 *	@file		audience_mode.h
-*	@brief		heis �ϐ탂�[�h�N���X
+*	@brief		heis 観戦モードクラス
 *	@author		Ryo Konno
-*	@details	heis�̑ΐ���ϐ킷��D
+*	@details	heisの対戦を観戦する．
 */
 #pragma once
 
+#include "game.h"
 #include "client_socket.h"
 #include "log.h"
 
 extern CLog g_system_log;
 
 /**
-*	@brief	�ϐ탂�[�h�N���X
+*	@brief	観戦モードクラス
+*	@remark 他のモードと同様にインスタンスを取り扱いたいため，CGameクラスの派生クラスとする
 */
-class CAudienceMode {
-	// �\���́C�񋓑̂Ȃ�
+class CAudienceMode : public CGame {
+	// 構造体，列挙体など
 	private:
 
-	// �����o�֐�
+	// メンバ関数
 	public:
-		void watch_game();
+		// 観戦メイン処理
+		void play_game() override;
 
 	private:
-		// �ϐ�̏�����
+		// 観戦の初期化
 		void initialize_watch();
 
-		// �ϐ�̏I������
+		// 観戦の終了処理
 		void finalize_watch();
 
-	// �����o�ϐ�
+	// メンバ変数
 	private:
-		//! TCP�\�P�b�g
+		//! TCPソケット
 		CClientSocket *m_sck;
 };

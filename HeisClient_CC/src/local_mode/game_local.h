@@ -6,6 +6,7 @@
 */
 #pragma once
 
+#include "game.h"
 #include "commander.h"
 #include "user_AI.h"
 #include "opponent_AI.h"
@@ -23,13 +24,13 @@ extern CLog g_battle_log;
 /**
 *	@brief	ローカルモード実行クラス
 */
-class CGameLocal {
+class CGameLocal : public CGame {
 	// 構造体，列挙体など
 	private:
 
 	// メンバ関数
 	public:
-		void play_game();
+		void play_game() override;
 
 	private:
 		// 設定を取得する
@@ -43,7 +44,7 @@ class CGameLocal {
 		void finalize_battle();
 
 		// 対戦後の勝敗判定
-		bool judge_win();
+		bool judge_win() override;
 
 	// メンバ変数
 	private:

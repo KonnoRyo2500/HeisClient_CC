@@ -1,8 +1,8 @@
-/**
+ï»¿/**
 *	@file		audience_mode.cpp
-*	@brief		heis ŠÏíƒ‚[ƒhƒNƒ‰ƒX
+*	@brief		heis è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	heis‚Ì‘Îí‚ğŠÏí‚·‚éD
+*	@details	heisã®å¯¾æˆ¦ã‚’è¦³æˆ¦ã™ã‚‹ï¼
 */
 
 #include "audience_mode.h"
@@ -12,38 +12,38 @@
 
 /**
 *	@def AUDIENCE_SETTING_FILE_NAME
-*	@brief ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚Ì–¼‘O
+*	@brief è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
 */
 #define AUDIENCE_SETTING_FILE_NAME "audience_setting.csv"
 
-/* publicŠÖ” */
+/* publicé–¢æ•° */
 /**
-*	@brief ŠÏíƒƒCƒ“ˆ—
+*	@brief è¦³æˆ¦ãƒ¡ã‚¤ãƒ³å‡¦ç†
 */
-void CAudienceMode::watch_game()
+void CAudienceMode::play_game()
 {
-	g_system_log.write_log(CLog::LogType_Infomation, false, "ŠÏí‚ğŠJn‚µ‚Ü‚µ‚½");
+	g_system_log.write_log(CLog::LogType_Infomation, false, "è¦³æˆ¦ã‚’é–‹å§‹ã—ã¾ã—ãŸ");
 
-	// ŠÏíŠJn
+	// è¦³æˆ¦é–‹å§‹
 	initialize_watch();
 
-	// ƒT[ƒo‚©‚çóM‚µ‚½•¶š—ñ‚ğ•\¦("finished"‚Í‘ÎíI—¹‚ğ•\‚·•¶š—ñ)
+	// ã‚µãƒ¼ãƒã‹ã‚‰å—ä¿¡ã—ãŸæ–‡å­—åˆ—ã‚’è¡¨ç¤º("finished"ã¯å¯¾æˆ¦çµ‚äº†ã‚’è¡¨ã™æ–‡å­—åˆ—)
 	std::string msg = "";
 	do {
 		msg = m_sck->sck_recv();
 		printf("%s\n", msg.c_str());
 	} while (msg != "finished");
 
-	// ŠÏíI—¹
+	// è¦³æˆ¦çµ‚äº†
 	finalize_watch();
 
-	g_system_log.write_log(CLog::LogType_Infomation, false, "ŠÏí‚ªI—¹‚µ‚Ü‚µ‚½");
+	g_system_log.write_log(CLog::LogType_Infomation, false, "è¦³æˆ¦ãŒçµ‚äº†ã—ã¾ã—ãŸ");
 }
 
-/* privateŠÖ” */
+/* privateé–¢æ•° */
 
 /**
-*	@brief ŠÏí‚Ì‰Šú‰»‚ğs‚¤ŠÖ”
+*	@brief è¦³æˆ¦ã®åˆæœŸåŒ–ã‚’è¡Œã†é–¢æ•°
 */
 void CAudienceMode::initialize_watch()
 {
@@ -51,23 +51,23 @@ void CAudienceMode::initialize_watch()
 	std::string svr_addr;
 	uint16_t svr_port;
 
-	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬
+	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	m_sck = new CClientSocket();
 
-	// Ú‘±‚·‚éƒT[ƒo‚Ìî•ñ‚ğİ’èƒtƒ@ƒCƒ‹‚©‚çæ“¾
+	// æ¥ç¶šã™ã‚‹ã‚µãƒ¼ãƒã®æƒ…å ±ã‚’è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å–å¾—
 	svr_addr = sr.get_single_value<std::string>(AUDIENCE_SETTING_KEY_SVR_ADDR, 0);
 	svr_port = sr.get_single_value<uint16_t>(AUDIENCE_SETTING_KEY_SVR_PORT, 0);
 
-	// ƒT[ƒo‚ÉÚ‘±
+	// ã‚µãƒ¼ãƒã«æ¥ç¶š
 	m_sck->sck_connect(svr_addr, svr_port);
 }
 
 /**
-*	@brief ŠÏí‚ÌI—¹ˆ—‚ğs‚¤ŠÖ”
+*	@brief è¦³æˆ¦ã®çµ‚äº†å‡¦ç†ã‚’è¡Œã†é–¢æ•°
 */
 void CAudienceMode::finalize_watch()
 {
-	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ”jŠü
+	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç ´æ£„
 	delete m_sck;
 	m_sck = NULL;
 }
