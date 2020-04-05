@@ -77,11 +77,11 @@ class CJSONAnalyzer{
 
 		// 値の取り出し
 		template <typename T>
-		OptionalVal<T> get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
+		OptionalVal<T> get_optional_val(const std::string& key, const picojson::object& src_JSON_obj) const;
+		template <typename T>
+		T get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const;
 		template <typename T>
 		OptionalVal<T> get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
-		template <typename T>
-		T get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
 		template <typename T>
 		T get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
 
@@ -108,13 +108,13 @@ class CJSONAnalyzer{
 
 // テンプレート関数
 /**
-*	@brief 直近に解析したJSONから，キーを指定して必須でない数値を取得する関数
+*	@brief 直近に解析したJSONから，キーを指定して必須でない値を取得する関数
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return T 取得した値
 */
 template <typename T>
-OptionalVal<T> CJSONAnalyzer::get_optional_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+OptionalVal<T> CJSONAnalyzer::get_optional_val(const std::string& key, const picojson::object& src_JSON_obj) const
 {
 	OptionalVal<T> ret_optional_val;
 
@@ -137,10 +137,59 @@ OptionalVal<T> CJSONAnalyzer::get_optional_number_val(const std::string& key, co
 }
 
 /**
+*	@brief 直近に解析したJSONから，キーを指定して必須でない値を取得する関数(文字列の場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return std::string 取得した値
+*/
+template <>
+inline OptionalVal<std::string> CJSONAnalyzer::get_optional_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_optional_not_number_val<std::string>(key, src_JSON_obj);
+}
+
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須でない値を取得する関数(真偽値の場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return bool 取得した値
+*/
+template <>
+inline OptionalVal<bool> CJSONAnalyzer::get_optional_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_optional_not_number_val<bool>(key, src_JSON_obj);
+}
+
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須でない値を取得する関数(オブジェクトの場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return picojson::object 取得した値
+*/
+template <>
+inline OptionalVal<picojson::object> CJSONAnalyzer::get_optional_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_optional_not_number_val<picojson::object>(key, src_JSON_obj);
+}
+
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須でない値を取得する関数(配列の場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return picojson::array 取得した値
+*/
+template <>
+inline OptionalVal<picojson::array> CJSONAnalyzer::get_optional_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_optional_not_number_val<picojson::array>(key, src_JSON_obj);
+}
+
+/**
 *	@brief 直近に解析したJSONから，キーを指定して必須でない非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return T 取得した値
+*	@remark この関数は，JSON_analyzer.cpp内では呼ばない
 */
 template <typename T>
 OptionalVal<T> CJSONAnalyzer::get_optional_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -165,14 +214,14 @@ OptionalVal<T> CJSONAnalyzer::get_optional_not_number_val(const std::string& key
 }
 
 /**
-*	@brief 直近に解析したJSONから，キーを指定して必須の数値を取得する関数
+*	@brief 直近に解析したJSONから，キーを指定して必須の値を取得する関数
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return T 取得した値
 *	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
 */
 template <typename T>
-T CJSONAnalyzer::get_obligatory_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
+T CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
 {
 	if (src_JSON_obj.find(key) != src_JSON_obj.end()) {
 		// picojsonの仕様上，数値型はdouble型でしか取り扱えないので，一旦double型で取得する
@@ -186,11 +235,64 @@ T CJSONAnalyzer::get_obligatory_number_val(const std::string& key, const picojso
 }
 
 /**
+*	@brief 直近に解析したJSONから，キーを指定して必須の値を取得する関数(文字列の場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return std::string 取得した値
+*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*/
+template <>
+inline std::string CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_obligatory_not_number_val<std::string>(key, src_JSON_obj);
+}
+
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須の値を取得する関数(真偽値の場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return bool 取得した値
+*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*/
+template <>
+inline bool CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_obligatory_not_number_val<bool>(key, src_JSON_obj);
+}
+
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須の値を取得する関数(オブジェクトの場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return picojson::object 取得した値
+*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*/
+template <>
+inline picojson::object CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_obligatory_not_number_val<picojson::object>(key, src_JSON_obj);
+}
+
+/**
+*	@brief 直近に解析したJSONから，キーを指定して必須の値を取得する関数(配列の場合)
+*	@param[in] key キー名
+*	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
+*	@return picojson::array 取得した値
+*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*/
+template <>
+inline picojson::array CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
+{
+	return get_obligatory_not_number_val<picojson::array>(key, src_JSON_obj);
+}
+
+/**
 *	@brief 直近に解析したJSONから，キーを指定して必須の非数値(文字列型の値，真偽値型の値, オブジェクトなど)を取得する関数
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return T 取得した値
 *	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@remark この関数は，JSON_analyzer.cpp内では呼ばない
 */
 template <typename T>
 T CJSONAnalyzer::get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const
