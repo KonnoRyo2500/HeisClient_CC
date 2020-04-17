@@ -1,139 +1,139 @@
-!! Hon bunsho ga mojibake suru baai wa, TEXT-EDITOR no moji ENCODING o SHIFT-JIS ni henko shite kudasai. !!
+﻿!! Hon bunsho ga mojibake suru baai wa, TEXT-EDITOR no moji ENCODING o UTF-8(BOM) ni henko shite kudasai. !!
 
-heis�����N���C�A���gCompreheisive Client �戵������
+heis総合クライアントCompreheisive Client 取扱説明書
 Author: Ryo Konno
 
-1. �T�v
-	�{�����́Cheis�����N���C�A���gCompreheisive Client(�ȉ��C"CC")�̎戵�������ł��D
+1. 概要
+	本文書は，heis総合クライアントCompreheisive Client(以下，"CC")の取扱説明書です．
 
-2. �����
-	CC�́CWindows OS�����Linux OS��œ��삵�܂��D
+2. 動作環境
+	CCは，Windows OSおよびLinux OS上で動作します．
 
-3. CC�̍쐬�w�i�ƖړI
-	����܂ł�heis�N���C�A���g�쐬(in ���쌤�v���O���~���O�[�~)�ł́C�t�B�[���h�⃆�j�b�g�̕\���CTCP�ʐM�̐���ȂǁC
-	AI�̎v�l���[�`���ȊO�ɂ��쐬����ׂ����̂������C�����̓v���O���~���O���s���ӂȊw���ɂƂ��Ă͏�ǂƂȂ��Ă��܂����D
-	CC�́C���̂悤�ȏ�ǂ���菜���Cheis�ΐ�pAI��e�Ղɍ쐬���邽�߂̊�Ճv���b�g�t�H�[���Ƃ��č쐬����܂����D
-	���ׂĂ̐��쌤�̊w�����C�v���O���~���O�[�~�ɂ�����AI�̎v�l���[�`���l�āE�쐬�ɐs�͂ł���悤�ɂȂ邱�Ƃ�
-	���ɂ̖ڕW�Ƃ��Ă��܂��D
+3. CCの作成背景と目的
+	これまでのheisクライアント作成(in 西野研プログラミングゼミ)では，フィールドやユニットの表現，TCP通信の制御など，
+	AIの思考ルーチン以外にも作成するべきものが多く，それらはプログラミングが不得意な学生にとっては障壁となっていました．
+	CCは，そのような障壁を取り除き，heis対戦用AIを容易に作成するための基盤プラットフォームとして作成されました．
+	すべての西野研の学生が，プログラミングゼミにおいてAIの思考ルーチン考案・作成に尽力できるようになることを
+	究極の目標としています．
 
-4. �C���X�g�[���E�r���h�菇
-	CC�̃\�[�X�R�[�h��Bitbucket���_�E�����[�h���C�r���h����܂ł̎菇��������܂��D
-	�Ȃ��C���s�ɂ�����Git, Visual Studio(Windows�̂�)�CCMake(Linux�̂�)�̃C���X�g�[�������O�ɕK�v�ƂȂ�܂��D
-	(1) Bitbucket���烊�|�W�g�����N���[������D
-		("git"�R�}���h�����s�ł���R�}���h���C���ɂ�)
-			$ cd (�K���ȃf�B���N�g����)
+4. インストール・ビルド手順
+	CCのソースコードをBitbucketよりダウンロードし，ビルドするまでの手順を説明します．
+	なお，実行にあたりGit, Visual Studio(Windowsのみ)，CMake(Linuxのみ)のインストールが事前に必要となります．
+	(1) Bitbucketからリポジトリをクローンする．
+		("git"コマンドが実行できるコマンドラインにて)
+			$ cd (適当なディレクトリ名)
 			$ git clone https://Konno_Ryo@bitbucket.org/Konno_Ryo/heisclient_cc.git
-		���N���[����̃f�B���N�g������ɂ��Ă������Ƃ𐄏����܂��D
-		��Git��GUI�N���C�A���g�\�t�g(TortoiseGit�Ȃ�)���g�p���Ă���ꍇ�ɂ́C��LURL�ŃN���[��������s���Ă��������D
-		  �ڍׂȑ�����@�ɂ��ẮC���萔�ł����\�t�g�̐������Ȃǂ����Q�Ƃ��������D
-		���ȉ��C�L�ڂ���p�X�͂����ŃN���[�������f�B���N�g�����N�_�Ƃ��܂��D
+		※クローン先のディレクトリを空にしておくことを推奨します．
+		※GitのGUIクライアントソフト(TortoiseGitなど)を使用している場合には，上記URLでクローン操作を行ってください．
+		  詳細な操作方法については，お手数ですがソフトの説明書などをご参照ください．
+		※以下，記載するパスはここでクローンしたディレクトリを起点とします．
 
-	(2) �r���h����D
+	(2) ビルドする．
 		(Windows) 
-			a) "heisclient_cc\HeisClient_CC\project_win"�f�B���N�g�����ɂ���
-			   "HeisClient_CC.sln"���N���b�N����D
-			b) Visual Studio���J���̂ŁC�r���h�\����"Release"�C�v���b�g�t�H�[���\����"x86"�Ńr���h����D
-			Note: Visual Studio�̑�����@���s���ȏꍇ�́C������"VS�g�����K�C�h.txt"�����Q�Ƃ��������D
+			a) "heisclient_cc\HeisClient_CC\project_win"ディレクトリ内にある
+			   "HeisClient_CC.sln"をクリックする．
+			b) Visual Studioが開くので，ビルド構成は"Release"，プラットフォーム構成は"x86"でビルドする．
+			Note: Visual Studioの操作方法が不明な場合は，同梱の"VS使い方ガイド.txt"をご参照ください．
 
 		(Linux) 
-			a) CMake��p���ăr���h����D
+			a) CMakeを用いてビルドする．
 			   $ cd heisclient_cc/HeisClient_CC/project_linux
 			   $ cmake .
 			   $ make
 
-5. ���[�h
-	CC�͈ȉ���3�̃��[�h��heis�̃Q�[�����v���C�ł��܂��D
-	(1)���[�J�����[�h
-		�{���[�h�́C�T�[�o�ɐڑ������I�t���C������heis���v���C�ł��܂��D
-		�ΐ푊���AI�����[�U�������ł��C�ΐ�������_��ɕύX�ł��܂��D
-		�����̍쐬����AI�̃V�~�����[�V�����ɂ��g�����������D
+5. モード
+	CCは以下の3つのモードでheisのゲームをプレイできます．
+	(1)ローカルモード
+		本モードは，サーバに接続せずオフライン環境でheisをプレイできます．
+		対戦相手のAIもユーザが実装でき，対戦条件も柔軟に変更できます．
+		自分の作成したAIのシミュレーションにお使いください．
 
-	(2)�I�����C�����[�h
-		�{���[�h�́C�T�[�o�ɐڑ����Ď��ۂ�heis�̑ΐ���s���܂��D
-		�ΐ�{�Ԏ��ɂ͂�����̃��[�h�Ńv���C���Ă��������D
+	(2)オンラインモード
+		本モードは，サーバに接続して実際にheisの対戦を行います．
+		対戦本番時にはこちらのモードでプレイしてください．
 
-	(3)�ϐ탂�[�h
-		�{���[�h�́C�T�[�o�ɐڑ����đ��v���C���[���m�̑ΐ���ϐ�ł��܂��D
+	(3)観戦モード
+		本モードは，サーバに接続して他プレイヤー同士の対戦を観戦できます．
 
-6. �ݒ�ύX
-	CC�̐ݒ�ύX�́C���[�h���Ƃɗp�ӂ����ݒ�t�@�C�������������邱�Ƃōs���܂��D
-	�ݒ�t�@�C����CSV�t�@�C���ł��邽�߁C�\�v�Z�\�t�g�ŕҏW���邱�Ƃ������߂��܂��D
-	�e�ݒ�t�@�C���́C���s�t�@�C���Ɠ����f�B���N�g���ɒu���Ă��������D
+6. 設定変更
+	CCの設定変更は，モードごとに用意される設定ファイルを書き換えることで行います．
+	設定ファイルはCSVファイルであるため，表計算ソフトで編集することをお勧めします．
+	各設定ファイルは，実行ファイルと同じディレクトリに置いてください．
 
-(1)���[�J�����[�h
-	"local_setting.csv"�Ƃ����t�@�C����ύX���܂��D
-	�ݒ�ł��鍀�ڂ��ȉ��Ɏ����܂��D
+(1)ローカルモード
+	"local_setting.csv"というファイルを変更します．
+	設定できる項目を以下に示します．
 
-	[���[�J�����[�h�̐ݒ荀��]
-		�E"field_width": �t�B�[���h�̉���(1�ȏ�)
-		�E"field_height": �t�B�[���h�̍���(1�ȏ�)
-		�E"my_team_name": ���`�[���̃`�[����(*1)
-		�E"enemy_team_name": �G�`�[���̃`�[����(*1)
-		�E"my_infantries_init_position": ���`�[�����m�̏����ʒu(*2)
-		�E"enemy_infantries_init_position": �G�`�[�����m�̏����ʒu(*2)
-		�E"first_turn_team": ��U�ɂȂ�`�[���̃`�[����(*3)
+	[ローカルモードの設定項目]
+		・"field_width": フィールドの横幅(1以上)
+		・"field_height": フィールドの高さ(1以上)
+		・"my_team_name": 自チームのチーム名(*1)
+		・"enemy_team_name": 敵チームのチーム名(*1)
+		・"my_infantries_init_position": 自チーム兵士の初期位置(*2)
+		・"enemy_infantries_init_position": 敵チーム兵士の初期位置(*2)
+		・"first_turn_team": 先攻になるチームのチーム名(*3)
 
-		(*1): �ŏ���2���������Ȃ��悤�Ȗ��O��ݒ肵�Ă��������D
+		(*1): 最初の2文字が被らないような名前を設定してください．
 		ex) my_team_name = "Team X", enemy_team_name = "Team Y" => NG
 			my_team_name = "Asterism", enemy_team_name = "TRiEDGE" => OK
-		(*2): �e�v�f��"X Y"�̌`���Ŏw�肵�Ă��������D
+		(*2): 各要素は"X Y"の形式で指定してください．
 		ex) my_infantries_init_position = "0 1,0 2,1 1"
-		(*3): my_team_name, enemy_team_name�Ŏw�肵�����O�̂ǂ���ł��Ȃ��ꍇ�C�G�`�[������U�ɂȂ�܂��D
+		(*3): my_team_name, enemy_team_nameで指定した名前のどちらでもない場合，敵チームが先攻になります．
 
-(2)�I�����C�����[�h
-	"online_setting.csv"�Ƃ����t�@�C����ύX���܂��D
-	�ݒ�ł��鍀�ڂ��ȉ��Ɏ����܂��D
+(2)オンラインモード
+	"online_setting.csv"というファイルを変更します．
+	設定できる項目を以下に示します．
 
-	[�I�����C�����[�h�̐ݒ荀��]
-		�E"server_ip_addr": �T�[�o��IP�A�h���X(IPv4)�D
-		�E"server_port_num": �T�[�o�̑ΐ�p�|�[�g�ԍ�(0-65535)�D
-		�E"team_name": �`�[����(*4)�D
+	[オンラインモードの設定項目]
+		・"server_ip_addr": サーバのIPアドレス(IPv4)．
+		・"server_port_num": サーバの対戦用ポート番号(0-65535)．
+		・"team_name": チーム名(*4)．
 
-		(*4): �ꍇ�ɂ���ẮC���ۂɃQ�[���Ŏg�p�����`�[�����͂����Őݒ肵���`�[������
-			  �قȂ閼�O�ɂȂ�\��������܂��D
+		(*4): 場合によっては，実際にゲームで使用されるチーム名はここで設定したチーム名と
+			  異なる名前になる可能性があります．
 
-(3)�ϐ탂�[�h
-	"audience_setting.csv"�Ƃ����t�@�C����ύX���܂��D
-	�ݒ�ł��鍀�ڂ��ȉ��Ɏ����܂��D
+(3)観戦モード
+	"audience_setting.csv"というファイルを変更します．
+	設定できる項目を以下に示します．
 
-	[�ϐ탂�[�h�̐ݒ荀��]
-		�E"server_ip_addr": �T�[�o��IP�A�h���X(IPv4)�D
-		�E"server_port_num": �T�[�o�̊ϐ�p�|�[�g�ԍ�(0-65535)�D
+	[観戦モードの設定項目]
+		・"server_ip_addr": サーバのIPアドレス(IPv4)．
+		・"server_port_num": サーバの観戦用ポート番号(0-65535)．
 
-7. ���s
-	�R�}���h���C������C�����Ȃ��Ŏ��s�ł��܂��D
-	���s��C���[�h��I������ΑI���������[�h�ŃQ�[�����J�n�ł��܂��D
-	[���s�t�@�C���̏ꏊ]
+7. 実行
+	コマンドラインから，引数なしで実行できます．
+	実行後，モードを選択すれば選択したモードでゲームが開始できます．
+	[実行ファイルの場所]
 		(Windows) heisclient_cc\HeisClient_CC\project_win\bin\Release
 		(Linux) heisclient_cc/HeisClient_CC/project_linux/bin
 
-8. ���O
-	���s���C�e���񂪃��O�t�@�C���ɏo�͂���܂��D
-	�ΐ팋�ʂ̊m�F��C�f�o�b�O�Ȃǂ����R�ɂ��g�����������D
-	�o�͂���郍�O�͈ȉ���3��ނł��D
-	����AI�J������헪�\�z���ɁC����CC���̂̃f�o�b�O���Ɋm�F���邱�Ƃ𐄏����郍�O�ł��D
-	[���O�̎��]
-		���t�B�[���h���O(field_log_(�쐬����).log): �e�^�[���ł̔Ֆʂ̏�Ԃ��L�^�������O�ł��D
-		���ΐ탍�O(battle_log_(�쐬����).log): �ΐ�̐i�s�󋵂�ΐ���ł̃A�N�V�������L�^�������O�ł��D
-		���V�X�e�����O(system_log_(�쐬����).log): CC�̃V�X�e����Ŕ��������C�x���g���L�^�������O�ł��D
+8. ログ
+	実行時，各種情報がログファイルに出力されます．
+	対戦結果の確認や，デバッグなどご自由にお使いください．
+	出力されるログは以下の3種類です．
+	★はAI開発時や戦略構想時に，○はCC自体のデバッグ時に確認することを推奨するログです．
+	[ログの種類]
+		★フィールドログ(field_log_(作成日時).log): 各ターンでの盤面の状態を記録したログです．
+		★対戦ログ(battle_log_(作成日時).log): 対戦の進行状況や対戦内でのアクションを記録したログです．
+		○システムログ(system_log_(作成日時).log): CCのシステム上で発生したイベントを記録したログです．
 
-	[���O�t�@�C���̏ꏊ]
+	[ログファイルの場所]
 		(Windows) heisclient_cc\HeisClient_CC\project_win\log
 		(Linux) heisclient_cc/HeisClient_CC/project_linux/log
 
-9. �{�\�t�g�̎�舵�����[��
-	�ECC(�⏕�\�t�g�E�F�A��R�����g���܂�)����ъ֘A�h�L�������g��
-	  �����E�V�K�쐬�E�z�z�E���r���[�ȂǂɊւ��銈���́C�ȉ��Ɏ����s�ׂ��������ׂĎ��R�Ƃ��C
-	  ���Ő����(Ryo Konno)�̋��Ȃ��s�����Ƃ��ł��܂��D
-	  �ȉ��Ɉᔽ����s�ׂ��s�����ꍇ�C���Ő���҂͂��̐ӔC�𕉂��܂���D
-		a) CC���C���ӂ��������\�t�g�E�F�A�ɉ������邱�ƁD
-		b) �{���̖ړI(heis�pAI�쐬)�łȂ��ړI�̂��߂ɁCCC����уh�L�������g�𗘗p�E�������邱�ƁD
-		c) CC����уh�L�������g���C���p���p���邱�ƁD
-		d) CC����уh�L�������g���C�L���Ŕ̔����邱��(�I�����C���E�I�t���C����₢�܂���)�D
-		e) CC����уh�L�������g�Ɉȉ��̓��e���L�ڂ��邱�ƁD
-			i) �l���D
-			ii) �@�����D
-			iii) ����̌l�������͒c�̂�������E����������e�D
-			iv) �킢���ȓ��e�ȂǁC�����Ǒ���@���ɔ�������e�D
-	�E�\�[�X�R�[�h�̉������s�����ꍇ�́CBitbucket��"HeisClient_CC"���|�W�g���ɃR�~�b�g���Ă���������Ƃ��肪�����ł��D
-	�ECC�Ɋւ��鎿��E�o�O�񍐁E�R�����g�Ȃǂ́C���쌤OB�pslack, LINE�C�������͌����ł��肢���܂��D
+9. 本ソフトの取り扱いルール
+	・CC(補助ソフトウェアやコメントを含む)および関連ドキュメントの
+	  改造・新規作成・配布・レビューなどに関する活動は，以下に示す行為を除きすべて自由とし，
+	  初版製作者(Ryo Konno)の許可なく行うことができます．
+	  以下に違反する行為を行った場合，初版製作者はその責任を負いません．
+		a) CCを，悪意を持ったソフトウェアに改造すること．
+		b) 本来の目的(heis用AI作成)でない目的のために，CCおよびドキュメントを利用・改造すること．
+		c) CCおよびドキュメントを，商用利用すること．
+		d) CCおよびドキュメントを，有償で販売すること(オンライン・オフラインを問いません)．
+		e) CCおよびドキュメントに以下の内容を記載すること．
+			i) 個人情報．
+			ii) 機密情報．
+			iii) 特定の個人もしくは団体を傷つける・脅迫する内容．
+			iv) わいせつな内容など，公序良俗や法律に反する内容．
+	・ソースコードの改造を行った場合は，Bitbucketの"HeisClient_CC"リポジトリにコミットしていただけるとありがたいです．
+	・CCに関する質問・バグ報告・コメントなどは，西野研OB用slack, LINE，もしくは口頭でお願いします．
