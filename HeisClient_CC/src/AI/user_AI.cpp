@@ -99,7 +99,7 @@ std::string CUserAI::sample_select_next_infantry(const std::vector<std::string>&
 
 /**
 *	@brief (サンプルAI用処理)兵士に対して命令する行動を決定する関数
-*	@return COpponentAI::SampleAction 次の行動
+*	@return CUserAI::SampleAction 次の行動
 */
 CUserAI::SampleAction CUserAI::sample_decide_action() const
 {
