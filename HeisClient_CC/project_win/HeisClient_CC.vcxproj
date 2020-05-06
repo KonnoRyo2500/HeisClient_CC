@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\field;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -111,7 +111,7 @@
       <Optimization>Custom</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\field;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -128,7 +128,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\field;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -147,7 +147,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(OutputPath)..\..\..\src\AI;$(OutputPath)..\..\..\src\common;$(OutputPath)..\..\..\src\unit;$(OutputPath)..\..\..\src\field;$(OutputPath)..\..\..\src\JSON;$(OutputPath)..\..\..\src\local_mode;$(OutputPath)..\..\..\src\online_mode;$(OutputPath)..\..\..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\field;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
