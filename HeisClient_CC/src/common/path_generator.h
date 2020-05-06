@@ -19,12 +19,15 @@ class CPathGenerator {
 
 	// メンバ関数
 	public:
-		// 実行ファイルのパスを取得
-		static std::string get_exe_path();
+		// プロジェクトのディレクトリを取得
+		static std::string get_project_dir();
 
 	private:
 		// コンストラクタ
 		CPathGenerator();
+
+		// 実行ファイルのディレクトリを取得
+		static std::string get_exe_dir();
 
 	// メンバ変数
 	private:
