@@ -58,7 +58,7 @@ Author: Ryo Konno
 6. 設定変更
 	CCの設定変更は，モードごとに用意される設定ファイルを書き換えることで行います．
 	設定ファイルはCSVファイルであるため，表計算ソフトで編集することをお勧めします．
-	各設定ファイルは，実行ファイルと同じディレクトリに置いてください．
+	各設定ファイルは，"heisclient_cc/HeisClient_CC/project_XXX/setting"に置いてください．
 
 (1)ローカルモード
 	"local_setting.csv"というファイルを変更します．
@@ -104,8 +104,10 @@ Author: Ryo Konno
 	コマンドラインから，引数なしで実行できます．
 	実行後，モードを選択すれば選択したモードでゲームが開始できます．
 	[実行ファイルの場所]
-		(Windows) heisclient_cc\HeisClient_CC\project_win\bin\Release
-		(Linux) heisclient_cc/HeisClient_CC/project_linux/bin
+		(Windows)
+			heisclient_cc\HeisClient_CC\project_win\bin\x86\Release
+		(Linux) 
+			heisclient_cc/HeisClient_CC/project_linux/bin
 
 8. ログ
 	実行時，各種情報がログファイルに出力されます．
