@@ -134,7 +134,11 @@ void CGameLocal::finalize_battle()
 */
 void CGameLocal::load_local_mode_setting()
 {
-	CCsvSettingFileReader local_setting_file(CPathGenerator::get_exe_path() + LOCAL_SETTING_FILE_NAME);
+#ifdef WIN32
+	CCsvSettingFileReader local_setting_file(CPathGenerator::get_exe_path() + "..\\..\\..\\setting\\" + LOCAL_SETTING_FILE_NAME);
+#else
+	CCsvSettingFileReader local_setting_file(CPathGenerator::get_exe_path() + "../setting/" + LOCAL_SETTING_FILE_NAME);
+#endif
 
 	m_setting.field_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_WIDTH, 0);
 	m_setting.field_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_HEIGHT, 0);

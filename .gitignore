@@ -1,6 +1,6 @@
-/.vs
 bin
 obj
+/HeisClient_CC/project_win/.vs
 /HeisClient_CC/project_win/HeisClient_CC.vcxproj.user
 /HeisClient_CC/project_win/log/*.log
 /HeisClient_CC/project_linux/log/*.log

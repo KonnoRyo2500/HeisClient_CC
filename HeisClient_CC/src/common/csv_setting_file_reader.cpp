@@ -2,7 +2,7 @@
 *	@file		csv_setting_file_reader.cpp
 *	@brief		CSV設定ファイルクラス
 *	@author		Ryo Konno
-*	@details		CSVファイルとして実現された設定ファイルから設定値を読み出す．
+*	@details	CSVファイルとして実現された設定ファイルから設定値を読み出す．
 */
 #include "csv_setting_file_reader.h"
 
