@@ -10,7 +10,7 @@
 
 // TODO: このクラスを共通ソースに移動させる
 /**
-*	@brief	ログ出力クラス
+*	@brief	パス生成クラス
 *	@remark このクラスはインスタンス化不要のため，staticクラスとする
 */
 class CPathGenerator {
