@@ -94,9 +94,9 @@ void CGameOnline::initialize_battle()
 	CField::create_field();
 
 #ifdef WIN32
-	m_setting_file = new CCsvSettingFileReader(CPathGenerator::get_project_dir() + "setting\\" + ONLINE_SETTING_FILE_NAME);
+	m_setting_file = new CCsvSettingFileReader(get_project_dir() + "setting\\" + ONLINE_SETTING_FILE_NAME);
 #else
-	m_setting_file = new CCsvSettingFileReader(CPathGenerator::get_project_dir() + "setting/" + ONLINE_SETTING_FILE_NAME);
+	m_setting_file = new CCsvSettingFileReader(get_project_dir() + "setting/" + ONLINE_SETTING_FILE_NAME);
 #endif
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_json_analyzer = new CJSONAnalyzer();

@@ -48,9 +48,9 @@ void CAudienceMode::play_game()
 void CAudienceMode::initialize_watch()
 {
 #ifdef WIN32
-	CCsvSettingFileReader sr(CPathGenerator::get_project_dir() + "setting\\" + AUDIENCE_SETTING_FILE_NAME);
+	CCsvSettingFileReader sr(get_project_dir() + "setting\\" + AUDIENCE_SETTING_FILE_NAME);
 #else
-	CCsvSettingFileReader sr(CPathGenerator::get_project_dir() + "setting/" + AUDIENCE_SETTING_FILE_NAME);
+	CCsvSettingFileReader sr(get_project_dir() + "setting/" + AUDIENCE_SETTING_FILE_NAME);
 #endif // WIN32
 	std::string svr_addr;
 	uint16_t svr_port;

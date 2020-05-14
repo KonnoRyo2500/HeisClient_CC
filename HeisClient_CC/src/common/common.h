@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+//! 共通処理・データ構造
 namespace cc_common {
 
 	/* テンプレート関数 */

@@ -1,6 +1,6 @@
 ﻿/**
 *	@file		path_generator.cpp
-*	@brief		heis パス生成クラス
+*	@brief		heis パス生成処理
 *	@author		Ryo Konno
 *	@details	特定のファイルへのパスを生成する．
 */
@@ -14,12 +14,15 @@
 #include <unistd.h>
 #endif // WIN32
 
-/* public関数 */
+/* static関数 */
+//! 実行ファイルのディレクトリを取得
+static std::string get_exe_dir();
+
 /**
 *	@brief プロジェクトのディレクトリを返す関数
 *	@return std::string プロジェクトのディレクトリ
 */
-std::string CPathGenerator::get_project_dir()
+std::string get_project_dir()
 {
 #ifdef WIN32
 	return get_exe_dir() + "..\\..\\..\\";
@@ -28,13 +31,11 @@ std::string CPathGenerator::get_project_dir()
 #endif
 }
 
-
-/* private関数 */
 /**
 *	@brief 実行ファイルのディレクトリを返す関数
 *	@return std::string 実行ファイルのディレクトリ
 */
-std::string CPathGenerator::get_exe_dir()
+static std::string get_exe_dir()
 {
 #ifdef WIN32
 	char path_buf[MAX_PATH] = { 0 };

@@ -29,9 +29,9 @@ CLog::CLog(const std::string& log_title, const bool add_datetime_to_name)
 	// WindowsとLinuxでプロジェクトディレクトリの構造が異なるので，それに合わせてログ出力先の
 	// パスも変える
 #ifdef WIN32
-	std::string log_name = CPathGenerator::get_project_dir() + "log\\" + log_title;
+	std::string log_name = get_project_dir() + "log\\" + log_title;
 #else
-	std::string log_name = CPathGenerator::get_project_dir() + "log/" + log_title;
+	std::string log_name = get_project_dir() + "log/" + log_title;
 #endif // WIN32
 
 	if (add_datetime_to_name) {
