@@ -1,6 +1,6 @@
 ﻿/**
 *	@file		token_manager.cpp
-*	@brief		heis トークン処理クラス
+*	@brief		heis トークン処理
 *	@author		Ryo Konno
 *	@details	文字列中のトークンを処理するための操作を提供する．
 */
@@ -8,7 +8,19 @@
 
 #include "token_manager.h"
 
-/* public関数 */
+/* static関数 */
+//! 制御文字の削除
+static void erase_control_letter(std::string& str);
+//! 先頭区切り文字の削除
+static void erase_first_delimiters(std::string& str, const std::string& delim);
+//! 先頭トークンの削除
+static void erase_first_token(std::string& str, const std::string& delim);
+//! 先頭トークンの取得
+static token_t get_first_token(const std::string& str, const std::string& delim);
+//! 部分文字列削除
+static void erase_substring(std::string& str, const std::string& erase_str);
+
+/* 公開関数 */
 
 /**
 *	@brief 文字列をトークン列に分割する関数
@@ -16,7 +28,7 @@
 *	@param[in] delim 区切り文字
 *	@return token_array_t トークン列
 */
-token_array_t CTokenManager::split_string(const std::string& str, const std::string& delim)
+token_array_t split_string(const std::string& str, const std::string& delim)
 {
 	// 元の文字列は残しておきたいため，文字列の複製をここで作っておく
 	std::string str_work(str);
@@ -41,13 +53,13 @@ token_array_t CTokenManager::split_string(const std::string& str, const std::str
 	return tokens;
 }
 
-/* private関数 */
+/* 非公開関数 */
 
 /**
 *	@brief 文字列中の制御文字を削除する関数
 *	@param[out] str 制御文字を削除する対象の文字列
 */
-void CTokenManager::erase_control_letter(std::string& str)
+static void erase_control_letter(std::string& str)
 {
 	// 削除する制御文字一覧
 	const std::vector<std::string> ctl_code_list = {
@@ -73,7 +85,7 @@ void CTokenManager::erase_control_letter(std::string& str)
 *	@param[out] str 区切り文字列を削除する対象の文字列
 *	@param[in] delim 区切り文字
 */
-void CTokenManager::erase_first_delimiters(std::string& str, const std::string& delim)
+static void erase_first_delimiters(std::string& str, const std::string& delim)
 {
 	// 次に出現するトークンの先頭位置
 	size_t next_token_pos = str.find_first_not_of(delim);
@@ -91,7 +103,7 @@ void CTokenManager::erase_first_delimiters(std::string& str, const std::string& 
 *	@param[out] str トークンを削除する対象の文字列
 *	@param[in] delim 区切り文字
 */
-void CTokenManager::erase_first_token(std::string& str, const std::string& delim)
+static void erase_first_token(std::string& str, const std::string& delim)
 {
 	// 次に出現する区切り文字列の先頭位置
 	size_t next_delims_pos = str.find_first_of(delim);
@@ -110,7 +122,7 @@ void CTokenManager::erase_first_token(std::string& str, const std::string& delim
 *	@param[in] delim 区切り文字
 *	@return token_t 取得したトークン
 */
-token_t CTokenManager::get_first_token(const std::string& str, const std::string& delim)
+static token_t get_first_token(const std::string& str, const std::string& delim)
 {
 	// 次に出現する区切り文字列の先頭位置
 	size_t next_delims_pos = str.find_first_of(delim);
@@ -127,7 +139,7 @@ token_t CTokenManager::get_first_token(const std::string& str, const std::string
 *	@param[out] str 加工対象の文字列
 *	@param[in] erase_str 削除する文字列
 */
-void CTokenManager::erase_substring(std::string& str, const std::string& erase_str)
+static void erase_substring(std::string& str, const std::string& erase_str)
 {
 	// TODO: replaceを使えれば，この関数は不要になるかも?
 	size_t substr_pos = str.find(erase_str);

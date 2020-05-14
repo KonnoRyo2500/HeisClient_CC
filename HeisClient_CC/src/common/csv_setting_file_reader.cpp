@@ -43,7 +43,7 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 
 	std::string str;
 	while (std::getline(csv_file, str)) {
-		token_array_t key_value = CTokenManager::split_string(str, ",");
+		token_array_t key_value = split_string(str, ",");
 		// 値は最低1個以上ある必要があるので，キーと要素が両方揃っているためには要素数が2個以上ある必要がある
 		if (key_value.size() < 2) {
 			throw std::runtime_error(cc_common::format("キーか値の少なくとも一方が欠損しています(キー名: %s)",

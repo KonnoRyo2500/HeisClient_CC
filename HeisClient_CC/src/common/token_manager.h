@@ -1,6 +1,6 @@
 ﻿/**
 *	@file		token_manager.h
-*	@brief		heis トークン処理クラス
+*	@brief		heis トークン処理
 *	@author		Ryo Konno
 *	@details	文字列中のトークンを処理するための操作を提供する．
 */
@@ -29,31 +29,5 @@ typedef std::string token_t;
 */
 typedef std::vector<token_t> token_array_t;
 
-/**
-*	@brief トークン処理クラス
-*	@remark このクラスはインスタンス化不要のため，staticクラスとする
-*/
-class CTokenManager
-{
-	// メンバ関数
-	public:
-		// 文字列からトークン列生成
-		static token_array_t split_string(const std::string& str, const std::string& delim);
-
-	private:
-		// コンストラクタ
-		CTokenManager();
-
-		// トークン列生成補助関数
-		static void erase_control_letter(std::string& str);
-		static void erase_first_delimiters(std::string& str, const std::string& delim);
-		static void erase_first_token(std::string& str, const std::string& delim);
-		static token_t get_first_token(const std::string& str, const std::string& delim);
-
-		// 部分文字列削除
-		static void erase_substring(std::string& str, const std::string& erase_str);
-
-	// メンバ変数
-	private:
-		// なし
-};
+// 文字列からトークン列生成
+token_array_t split_string(const std::string& str, const std::string& delim);

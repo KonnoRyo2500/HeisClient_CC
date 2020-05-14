@@ -164,7 +164,7 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 		FieldPosition pos;
 		token_array_t pos_token;
 
-		pos_token = CTokenManager::split_string(pos_str, " ");
+		pos_token = split_string(pos_str, " ");
 		if (pos_token.size() != 2) {
 			throw std::runtime_error("兵士の初期位置の指定が不正です");
 		}
