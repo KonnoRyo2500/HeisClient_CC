@@ -165,6 +165,10 @@
     <ClCompile Include="..\src\AI\opponent_AI.cpp" />
     <ClCompile Include="..\src\AI\user_AI.cpp" />
     <ClCompile Include="..\src\common\client_socket.cpp" />
+    <ClCompile Include="..\src\common\common.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="..\src\common\csv_setting_file_reader.cpp" />
     <ClCompile Include="..\src\common\game.cpp" />
     <ClCompile Include="..\src\common\heis_client_exception.cpp" />
@@ -186,6 +190,10 @@
     <ClInclude Include="..\src\AI\opponent_AI.h" />
     <ClInclude Include="..\src\AI\user_AI.h" />
     <ClInclude Include="..\src\common\client_socket.h" />
+    <ClInclude Include="..\src\common\common.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="..\src\common\common_structure.h" />
     <ClInclude Include="..\src\common\const_val.h" />
     <ClInclude Include="..\src\common\csv_setting_file_reader.h" />
