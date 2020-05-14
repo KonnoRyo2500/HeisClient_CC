@@ -8,7 +8,7 @@
 
 #include "JSON_data_packet.h"
 #include "picojson.h"
-#include "heis_client_exception.h"
+#include "common.h"
 
 /**
 *	@brief	JSON解析クラス
@@ -218,7 +218,7 @@ OptionalVal<T> CJSONAnalyzer::get_optional_not_number_val(const std::string& key
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return T 取得した値
-*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@throws std::runtime_error 指定されたキーに対応する値が存在しないとき
 */
 template <typename T>
 T CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -230,7 +230,7 @@ T CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::obje
 	}
 	else {
 		// キーに対応する値がない
-		throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
+		throw std::runtime_error(cc_common::format("必須のJSONキー\"%s\"が存在しません", key.c_str()));
 	}
 }
 
@@ -239,7 +239,7 @@ T CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::obje
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return std::string 取得した値
-*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@throws std::runtime_error 指定されたキーに対応する値が存在しないとき
 */
 template <>
 inline std::string CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -252,7 +252,7 @@ inline std::string CJSONAnalyzer::get_obligatory_val(const std::string& key, con
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return bool 取得した値
-*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@throws std::runtime_error 指定されたキーに対応する値が存在しないとき
 */
 template <>
 inline bool CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -265,7 +265,7 @@ inline bool CJSONAnalyzer::get_obligatory_val(const std::string& key, const pico
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return picojson::object 取得した値
-*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@throws std::runtime_error 指定されたキーに対応する値が存在しないとき
 */
 template <>
 inline picojson::object CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -278,7 +278,7 @@ inline picojson::object CJSONAnalyzer::get_obligatory_val(const std::string& key
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return picojson::array 取得した値
-*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@throws std::runtime_error 指定されたキーに対応する値が存在しないとき
 */
 template <>
 inline picojson::array CJSONAnalyzer::get_obligatory_val(const std::string& key, const picojson::object& src_JSON_obj) const
@@ -291,7 +291,7 @@ inline picojson::array CJSONAnalyzer::get_obligatory_val(const std::string& key,
 *	@param[in] key キー名
 *	@param[in] src_JSON_obj 値の取得元となるJSONオブジェクト
 *	@return T 取得した値
-*	@throws CHeisClientException 指定されたキーに対応する値が存在しないとき
+*	@throws std::runtime_error 指定されたキーに対応する値が存在しないとき
 *	@remark この関数は，JSON_analyzer.cpp内では呼ばない
 */
 template <typename T>
@@ -303,6 +303,6 @@ T CJSONAnalyzer::get_obligatory_not_number_val(const std::string& key, const pic
 	}
 	else {
 		// キーに対応する値がない
-		throw CHeisClientException("必須のJSONキー\"%s\"が存在しません", key.c_str());
+		throw std::runtime_error(cc_common::format("必須のJSONキー\"%s\"が存在しません", key.c_str()));
 	}
 }

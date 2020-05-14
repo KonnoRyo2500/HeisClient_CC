@@ -38,7 +38,7 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 {
 	std::ifstream csv_file(file_name);
 	if (csv_file.fail()) {
-		throw CHeisClientException("設定ファイルのオープンに失敗しました(ファイル名: %s)", file_name.c_str());
+		throw std::runtime_error(cc_common::format("設定ファイルのオープンに失敗しました(ファイル名: %s)", file_name.c_str()));
 	}
 
 	std::string str;
@@ -46,8 +46,8 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 		token_array_t key_value = CTokenManager::split_string(str, ",");
 		// 値は最低1個以上ある必要があるので，キーと要素が両方揃っているためには要素数が2個以上ある必要がある
 		if (key_value.size() < 2) {
-			throw CHeisClientException("キーか値の少なくとも一方が欠損しています(キー名: %s)", 
-				key_value.size() >= 1 ? key_value[0].c_str() : "欠損");
+			throw std::runtime_error(cc_common::format("キーか値の少なくとも一方が欠損しています(キー名: %s)",
+				key_value.size() >= 1 ? key_value[0].c_str() : "欠損"));
 		}
 		remove_space_around_comma(key_value);
 
@@ -62,13 +62,13 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 *	@brief 指定されたキーを持つ値を探索する関数
 *	@param[in] key キー名
 *	@return token_array_t 値を表すトークンの集合
-*	@throws CHeisClientException 指定したキーがファイルになかったとき
+*	@throws std::runtime_error 指定したキーがファイルになかったとき
 */
 token_array_t CCsvSettingFileReader::search_value(const std::string& key) const
 {
 	auto it = m_key_value.find(key);
 	if (it == m_key_value.end()) {
-		throw CHeisClientException("キーが見つかりませんでした(キー名: %s)", key.c_str());
+		throw std::runtime_error(cc_common::format("キーが見つかりませんでした(キー名: %s)", key.c_str()));
 	}
 	return it->second;
 }

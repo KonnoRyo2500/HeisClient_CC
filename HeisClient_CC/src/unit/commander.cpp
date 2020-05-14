@@ -33,7 +33,7 @@ CCommander::~CCommander()
 *	@brief 指定したIDを持つ兵士の位置を取得する関数
 *	@param[in] id 兵士のID
 *	@return FieldPosition 位置
-*	@throws CHeisClientException 指定したIDの兵士がいない場合
+*	@throws std::runtime_error 指定したIDの兵士がいない場合
 */
 FieldPosition CCommander::get_position(const std::string& id) const
 {
@@ -42,7 +42,7 @@ FieldPosition CCommander::get_position(const std::string& id) const
 	if (infantry != NULL) {
 		return infantry->get_position();
 	}
-	throw CHeisClientException("NULLの兵士の位置を取得しようとしています");
+	throw std::runtime_error("NULLの兵士の位置を取得しようとしています");
 }
 
 /**

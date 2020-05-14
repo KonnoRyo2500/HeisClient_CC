@@ -5,8 +5,9 @@
 *	@details	TCP/IPソケットの操作をより抽象化したインターフェイスを提供する(クライアント用)．
 */
 #include "client_socket.h"
-#include "heis_client_exception.h"
+#include "common.h"
 
+#include <stdexcept>
 #ifdef WIN32
 #include <WS2tcpip.h>
 #else
@@ -51,19 +52,19 @@ void CClientSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t d
 	sa.sin_port = htons(dst_port_no);
 	ercd = inet_pton(AF_INET, dst_ip_addr.c_str(), &sa.sin_addr);
 	if (ercd <= 0) {
-		throw CHeisClientException("IPアドレス\"%s\"は不正です", dst_ip_addr.c_str());
+		throw std::runtime_error(cc_common::format("IPアドレス\"%s\"は不正です", dst_ip_addr.c_str()));
 	}
 
 	ercd = connect(m_sck, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
 	if (ercd < 0) {
-		throw CHeisClientException("サーバとの接続に失敗しました(エラーコード: %d)", errno);
+		throw std::runtime_error(cc_common::format("サーバとの接続に失敗しました(エラーコード: %d)", errno));
 	}
 }
 
 /**
 *	@brief メッセージを送信する関数
 *	@param[in] msg 送信するメッセージ
-*	@throws CHeisClientException 送信エラーが発生したとき
+*	@throws std::runtime_error 送信エラーが発生したとき
 */
 void CClientSocket::sck_send(const std::string& msg) const
 {
@@ -79,7 +80,7 @@ void CClientSocket::sck_send(const std::string& msg) const
 
 	if (send_size < msg.size()) {
 		if (send_size < 0) {
-			throw CHeisClientException("送信でエラーが発生しました(エラーコード: %d)", errno);
+			throw std::runtime_error(cc_common::format("送信でエラーが発生しました(エラーコード: %d)", errno));
 		}
 		fprintf(stderr, "警告: 不完全なメッセージが送信されました(%zu文字中%zu文字が送信されました)\n", msg.size(), send_size);
 	}
@@ -102,7 +103,7 @@ std::string CClientSocket::sck_recv() const
 
 /**
 *	@brief ソケットを初期化する関数
-*	@throws CHeisClientException ソケットの初期化に失敗したとき
+*	@throws std::runtime_error ソケットの初期化に失敗したとき
 */
 void CClientSocket::initialize_socket() const
 {
@@ -114,7 +115,7 @@ void CClientSocket::initialize_socket() const
 	if (init_ercd != 0) {
 		// winsockの初期化失敗
 		// 初期化に失敗すると，その後の処理が不安定になるので失敗したら例外を投げてプログラムを終了させる
-		throw CHeisClientException("winsockの初期化に失敗しました(エラーコード: %d)", init_ercd);
+		throw std::runtime_error(cc_common::format("winsockの初期化に失敗しました(エラーコード: %d)", init_ercd));
 	}
 #endif // WIN32
 }
@@ -134,13 +135,13 @@ void CClientSocket::finalize_socket() const
 
 /**
 *	@brief TCP通信用ソケットを作成する関数
-*	@throws CHeisClientException ソケットの作成に失敗したとき
+*	@throws std::runtime_error ソケットの作成に失敗したとき
 */
 void CClientSocket::sck_socket()
 {
 	m_sck = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_sck < 0) {
-		throw CHeisClientException("ソケットの作成に失敗しました(エラーコード: %d)", errno);
+		throw std::runtime_error(cc_common::format("ソケットの作成に失敗しました(エラーコード: %d)", errno));
 	}
 }
 
@@ -150,7 +151,7 @@ void CClientSocket::sck_socket()
 /**
 *	@brief 受信処理(Windows向け)
 *	@return std::string 受信したメッセージ
-*	@throws CHeisClientException 受信エラーが発生したとき
+*	@throws std::runtime_error 受信エラーが発生したとき
 */
 std::string CClientSocket::sck_recv_core_win() const
 {
@@ -163,7 +164,7 @@ std::string CClientSocket::sck_recv_core_win() const
 	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
 	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
-		throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+		throw std::runtime_error(cc_common::format("受信でエラーが発生しました(エラーコード: %d)", errno));
 	}
 	recv_message += std::string(buf);
 
@@ -178,7 +179,7 @@ std::string CClientSocket::sck_recv_core_win() const
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 		if (recv_size < 0) {
 			if (WSAGetLastError() != WSAEWOULDBLOCK) {
-				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", WSAGetLastError());
+				throw std::runtime_error(cc_common::format("受信でエラーが発生しました(エラーコード: %d)", WSAGetLastError()));
 			}
 			else {
 				break;
@@ -201,7 +202,7 @@ std::string CClientSocket::sck_recv_core_win() const
 /**
 *	@brief 受信処理(Linux向け)
 *	@return std::string 受信したメッセージ
-*	@throws CHeisClientException 受信エラーが発生したとき
+*	@throws std::runtime_error 受信エラーが発生したとき
 */
 std::string CClientSocket::sck_recv_core_linux() const
 {
@@ -214,7 +215,7 @@ std::string CClientSocket::sck_recv_core_linux() const
 	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
 	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
-		throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+		throw std::runtime_error(cc_common::format("受信でエラーが発生しました(エラーコード: %d)", errno));
 	}
 	recv_message += std::string(buf);
 
@@ -225,7 +226,7 @@ std::string CClientSocket::sck_recv_core_linux() const
 		recv_size = recv(m_sck, buf, sizeof(buf) - 1, MSG_DONTWAIT);
 		if (recv_size < 0) {
 			if (errno != EAGAIN) {
-				throw CHeisClientException("受信でエラーが発生しました(エラーコード: %d)", errno);
+				throw std::runtime_error(cc_common::format("受信でエラーが発生しました(エラーコード: %d)", errno));
 			}
 			else {
 				break;

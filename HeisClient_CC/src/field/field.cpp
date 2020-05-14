@@ -5,7 +5,7 @@
 *	@details	heisの各種ユニットが配置されるフィールドの定義およびそれに対する操作を提供する．
 */
 #include "field.h"
-#include "heis_client_exception.h"
+#include "common.h"
 
 CField* CField::m_instance = NULL;
 
@@ -73,7 +73,7 @@ CInfantry* CField::get_infantry(const FieldPosition& pos) const
 *	@brief 指定した座標に兵士を配置する関数
 *	@param[in] pos 兵士を配置する座標
 *	@param[in] infantry 配置する兵士
-*	@throws CHeisClientException NULLの兵士を配置しようとしたとき
+*	@throws std::runtime_error NULLの兵士を配置しようとしたとき
 */
 void CField::set_infantry(const FieldPosition& pos, CInfantry* infantry)
 {
@@ -81,7 +81,7 @@ void CField::set_infantry(const FieldPosition& pos, CInfantry* infantry)
 	validate_position(pos);
 	// 兵士がNULLの場合は，IDを取得できないので不正
 	if (infantry == NULL) {
-		throw CHeisClientException("配置しようとしている兵士がNULLです．remove_infantry関数を呼ぶようにしてください");
+		throw std::runtime_error("配置しようとしている兵士がNULLです．remove_infantry関数を呼ぶようにしてください");
 	}
 
 	add_infantry(infantry);
@@ -258,7 +258,7 @@ void CField::relocate_all_infantries_from_units_array(const std::vector<UnitsArr
 /**
 *	@brief 座標を検証する関数
 *	@param[in] pos 検証対象の座標
-*	@throws CHeisClientException 指定した座標が範囲外のとき
+*	@throws std::runtime_error 指定した座標が範囲外のとき
 */
 void CField::validate_position(const FieldPosition& pos) const
 {
@@ -267,7 +267,7 @@ void CField::validate_position(const FieldPosition& pos) const
 
 	is_position_valid &= (0 <= pos.y && pos.y < m_height);
 	if (!is_position_valid) {
-		throw CHeisClientException("指定された座標(%d, %d)は不正です", pos.x, pos.y);
+		throw std::runtime_error(cc_common::format("指定された座標(%d, %d)は不正です", pos.x, pos.y));
 	}
 }
 
@@ -275,15 +275,15 @@ void CField::validate_position(const FieldPosition& pos) const
 *	@brief 「盤面」パケットから得られたフィールドのサイズを検証する関数
 *	@param[in] width フィールドの幅
 *	@param[in] height フィールドの高さ
-*	@throws CHeisClientException フィールドの幅もしくは高さが0以下のとき
-*	@throws CHeisClientException フィールドの幅もしくは高さが過去に受け取った「盤面」パケットの値と異なるとき
+*	@throws std::runtime_error フィールドの幅もしくは高さが0以下のとき
+*	@throws std::runtime_error フィールドの幅もしくは高さが過去に受け取った「盤面」パケットの値と異なるとき
 */
 void CField::validate_size(const uint16_t width, const uint16_t height) const
 {
 	if (width <= 0 || height <= 0) {
-		throw CHeisClientException("フィールドのサイズが不正です(サイズ: %d * %d)", width, height);
+		throw std::runtime_error(cc_common::format("フィールドのサイズが不正です(サイズ: %d * %d)", width, height));
 	}
 	if (width != m_width || height != m_height) {
-		throw CHeisClientException("フィールドのサイズが，過去に受信した「盤面」パケットから得られたサイズと異なります(今回のサイズ: %d * %d, これまでのサイズ: %d * %d)", width, height, m_width, m_height);
+		throw std::runtime_error(cc_common::format("フィールドのサイズが，過去に受信した「盤面」パケットから得られたサイズと異なります(今回のサイズ: %d * %d, これまでのサイズ: %d * %d)", width, height, m_width, m_height));
 	}
 }

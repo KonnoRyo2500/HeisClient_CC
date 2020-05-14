@@ -7,9 +7,10 @@
 #pragma once
 
 #include <map>
+#include <stdexcept>
 
 #include "token_manager.h"
-#include "heis_client_exception.h"
+#include "common.h"
 
 // TODO: このクラスを共通ソースに移動させる
 /**
@@ -100,7 +101,7 @@ std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) cons
 *	@param[in] key キー名
 *	@param[in] index 値のインデックス
 *	@return std::string 値
-*	@throws CHeisClientException インデックスが範囲外の場合
+*	@throws std::runtime_error インデックスが範囲外の場合
 */
 template<>
 inline std::string CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
@@ -110,7 +111,7 @@ inline std::string CCsvSettingFileReader::get_single_value(const std::string& ke
 		return value.at(index);
 	}
 	catch (std::out_of_range&) {
-		throw CHeisClientException("インデックスが範囲外です(インデックスの上限: %d, 指定されたインデックス: %d)", value.size() - 1, index);
+		throw std::runtime_error(cc_common::format("インデックスが範囲外です(インデックスの上限: %d, 指定されたインデックス: %d)", value.size() - 1, index));
 	}
 }
 

@@ -5,9 +5,9 @@
 *	@details	特定のファイルへのパスを生成する．
 */
 #include "path_generator.h"
-#include "heis_client_exception.h"
 
 #include <climits>
+#include <stdexcept>
 #ifdef WIN32
 #include <Windows.h>
 #else
@@ -50,7 +50,7 @@ std::string CPathGenerator::get_exe_dir()
 		return path + "/";
 }
 	else {
-		throw CHeisClientException("シナリオファイルのパス取得に失敗しました");
+		throw std::runtime_error("シナリオファイルのパス取得に失敗しました");
 	}
 #endif
 }

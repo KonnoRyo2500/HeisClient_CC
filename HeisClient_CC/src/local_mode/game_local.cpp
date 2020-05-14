@@ -9,6 +9,7 @@
 #include "field.h"
 #include "setting_keys.h"
 #include "path_generator.h"
+#include "common.h"
 
 /**
 *	@def LOCAL_SETTING_FILE_NAME
@@ -58,8 +59,8 @@ void CGameLocal::play_game()
 			m_enemy_AI->AI_main(field_pkt);
 		}
 		else {
-			throw CHeisClientException("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
-				,field_pkt.turn_team.c_str());
+			throw std::runtime_error(cc_common::format("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
+				,field_pkt.turn_team.c_str()));
 		}
 	}
 
@@ -169,7 +170,7 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 
 		pos_token = CTokenManager::split_string(pos_str, " ");
 		if (pos_token.size() != 2) {
-			throw CHeisClientException("兵士の初期位置の指定が不正です");
+			throw std::runtime_error("兵士の初期位置の指定が不正です");
 		}
 		pos.x = stoi(pos_token[0]);
 		pos.y = stoi(pos_token[1]);

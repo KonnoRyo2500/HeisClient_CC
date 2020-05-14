@@ -85,7 +85,7 @@ static GameMode ask_game_mode()
 			std::cin >> user_input_buf;
 			it = selected_value_to_mode.find(stoi(user_input_buf));
 		}
-		catch (std::exception e) {
+		catch (const std::exception& e) {
 			printf("入力されたゲームモードは受理できません(理由: %s)\n", e.what());
 			continue;
 		}
@@ -113,7 +113,7 @@ static void start_game(const GameMode mode)
 			game = new CAudienceMode();
 			break;
 		default:
-			throw CHeisClientException("ゲームモードが不正です");
+			throw std::runtime_error("ゲームモードが不正です");
 	}
 	game->play_game();
 

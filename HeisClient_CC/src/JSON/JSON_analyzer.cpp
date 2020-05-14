@@ -5,6 +5,7 @@
 *	@details	サーバとやり取りするJSONをパースし，JSONに対応するパケットを作成する．
 */
 #include "JSON_analyzer.h"
+#include "common.h"
 
 /* public関数 */
 
@@ -148,7 +149,7 @@ JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JS
 /**
 *	@brief 与えられたJSONを解析(パース+種類判定)する関数
 *	@param[in] src_JSON 解析元のJSON
-*	@throws CHeisClientException JSONのパースに失敗したとき
+*	@throws std::runtime_error JSONのパースに失敗したとき
 */
 void CJSONAnalyzer::analyze_JSON(const std::string& src_JSON)
 {
@@ -158,7 +159,7 @@ void CJSONAnalyzer::analyze_JSON(const std::string& src_JSON)
 		std::string errmsg = picojson::parse(parsed_JSON_val, src_JSON);
 
 		if (errmsg.size() > 0) {
-			throw CHeisClientException("JSONのパースに失敗しました(エラー内容: %s)", errmsg.c_str());
+			throw std::runtime_error(cc_common::format("JSONのパースに失敗しました(エラー内容: %s)", errmsg.c_str()));
 		}
 		// JSON -> データへの変換を行いやすくするため，picojson::value -> picojson::objectへの変換を行う
 		m_analyzed_JSON_root_obj = parsed_JSON_val.get<picojson::object>();
@@ -392,6 +393,6 @@ bool CJSONAnalyzer::exists_key_in_JSON_object(const std::string& key, const pico
 void CJSONAnalyzer::validate_JSON_kind(const AnalyzedJSONKind req_JSON_kind) const
 {
 	if (req_JSON_kind != m_analyzed_JSON_kind) {
-		throw CHeisClientException("直前に解析したJSONの種類と要求しているJSONの種類が一致しません");
+		throw std::runtime_error("直前に解析したJSONの種類と要求しているJSONの種類が一致しません");
 	}
 }

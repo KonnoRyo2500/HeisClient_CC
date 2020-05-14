@@ -30,9 +30,6 @@
     <ClCompile Include="..\src\common\csv_setting_file_reader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\common\heis_client_exception.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\common\path_generator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\src\common\csv_setting_file_reader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\common\heis_client_exception.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\src\common\path_generator.h">

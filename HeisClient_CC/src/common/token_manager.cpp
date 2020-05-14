@@ -7,7 +7,6 @@
 #include <stdexcept>
 
 #include "token_manager.h"
-#include "heis_client_exception.h"
 
 /* public関数 */
 

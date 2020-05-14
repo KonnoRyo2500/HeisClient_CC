@@ -5,8 +5,8 @@
 *	@details	ログを出力するための操作を提供する．
 */
 #include "log.h"
-#include "heis_client_exception.h"
 #include "path_generator.h"
+#include "common.h"
 
 #include <ctime>
 #include <locale>
@@ -41,7 +41,7 @@ CLog::CLog(const std::string& log_title, const bool add_datetime_to_name)
 
 	m_logfile = new std::ofstream(log_name);
 	if (m_logfile->fail()) {
-		throw CHeisClientException("ログファイルのオープンに失敗しました(ファイル名: %s)", log_name.c_str());
+		throw std::runtime_error(cc_common::format("ログファイルのオープンに失敗しました(ファイル名: %s)", log_name.c_str()));
 	}
 }
 
@@ -65,7 +65,7 @@ void CLog::write_log(const LogType log_type, const bool visible, const char* for
 {
 	va_list args;
 
-	// TODO: 同じような処理がCHeisClientExceptionクラスにもあるので，共通化したい
+	// TODO: 同じような処理がstd::runtime_errorクラスにもあるので，共通化したい
 	va_start(args, format);
 	int message_len = vsnprintf(NULL, 0, format, args);
 
@@ -98,7 +98,7 @@ std::string CLog::make_current_datetime_str(const std::string& format) const
 	std::time_t currnt_time = std::time(nullptr);
 
 	if (strftime(datetime, sizeof(datetime), format.c_str(), std::localtime(&currnt_time)) == 0) {
-		throw CHeisClientException("ログ用の現在日時の取得に失敗しました");
+		throw std::runtime_error("ログ用の現在日時の取得に失敗しました");
 	}
 	return std::string(datetime);
 }

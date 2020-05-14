@@ -6,9 +6,9 @@
 */
 #pragma once
 
-#include "heis_client_exception.h"
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 /**
 * @struct OptionalVal
@@ -30,7 +30,7 @@ struct OptionalVal {
 		T get() const
 		{
 			if (m_omit_flag) {
-				throw CHeisClientException("省略されたJSONキーを取得しようとしています");
+				throw std::runtime_error("省略されたJSONキーを取得しようとしています");
 			}
 			return m_val;
 		}
