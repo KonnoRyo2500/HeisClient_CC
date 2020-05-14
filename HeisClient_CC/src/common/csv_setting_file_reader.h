@@ -12,7 +12,6 @@
 #include "token_manager.h"
 #include "common.h"
 
-// TODO: このクラスを共通ソースに移動させる
 /**
 *	@brief	設定値読み出しクラス
 */

@@ -61,7 +61,6 @@ void CLog::write_log(const LogType log_type, const bool visible, const char* for
 {
 	va_list args;
 
-	// TODO: 同じような処理がstd::runtime_errorクラスにもあるので，共通化したい
 	va_start(args, format);
 	int message_len = vsnprintf(NULL, 0, format, args);
 

@@ -10,8 +10,6 @@
 #include <vector>
 #include <map>
 
-// TODO: このクラスを共通ソースに移動させる
-// TODO: ソケットの基本クラスを作成し，それを継承するようにする
 /**
 *	@brief	サーバ用TCP/IPソケットクラス
 */

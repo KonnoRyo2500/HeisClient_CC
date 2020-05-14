@@ -173,6 +173,7 @@ void CJSONAnalyzer::analyze_JSON(const std::string& src_JSON)
 *	@param[in] obj JSONオブジェクト
 *	@return std::string objを文字列化した文字列 
 */
+// TODO: この関数と全く同じ関数がpseudo_server.cppにも定義されているので，まとめたい
 std::string CJSONAnalyzer::serialize_JSON_obj(const picojson::object& obj) const
 {
 	return picojson::value(obj).serialize();
