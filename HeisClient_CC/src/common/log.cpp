@@ -28,11 +28,7 @@ CLog::CLog(const std::string& log_title, const bool add_datetime_to_name)
 	// "bin"ディレクトリと同列の"log"ディレクトリにログを出力する
 	// WindowsとLinuxでプロジェクトディレクトリの構造が異なるので，それに合わせてログ出力先の
 	// パスも変える
-#ifdef WIN32
-	std::string log_name = get_project_dir() + "log\\" + log_title;
-#else
-	std::string log_name = get_project_dir() + "log/" + log_title;
-#endif // WIN32
+	std::string log_name = get_log_dir() + log_title;
 
 	if (add_datetime_to_name) {
 		log_name += make_current_datetime_str("_%Y_%m_%d_%H_%M_%S");

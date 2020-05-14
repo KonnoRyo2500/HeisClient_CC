@@ -2,7 +2,7 @@
 *	@file		path_generator.cpp
 *	@brief		heis パス生成処理
 *	@author		Ryo Konno
-*	@details	特定のファイルへのパスを生成する．
+*	@details	特定のディレクトリへのパスを生成する．
 */
 #include "path_generator.h"
 
@@ -17,12 +17,44 @@
 /* static関数 */
 //! 実行ファイルのディレクトリを取得
 static std::string get_exe_dir();
+//! プロジェクトのディレクトリを取得
+static std::string get_project_dir();
+
+/* 公開関数 */
+
+/**
+*	@brief ログファイルを保存するディレクトリを取得する関数
+*	@return std::string ログファイル保存先のディレクトリ
+*/
+std::string get_log_dir()
+{
+#ifdef WIN32
+	return get_project_dir() + "log\\";
+#else
+	return get_project_dir() + "log/";
+#endif
+}
+
+/**
+*	@brief 設定ファイルを保存するディレクトリを取得する関数
+*	@return std::string 設定ファイル保存先のディレクトリ
+*/
+std::string get_setting_dir()
+{
+#ifdef WIN32
+	return get_project_dir() + "setting\\";
+#else
+	return get_project_dir() + "setting/";
+#endif
+}
+
+/* 非公開関数 */
 
 /**
 *	@brief プロジェクトのディレクトリを返す関数
 *	@return std::string プロジェクトのディレクトリ
 */
-std::string get_project_dir()
+static std::string get_project_dir()
 {
 #ifdef WIN32
 	return get_exe_dir() + "..\\..\\..\\";

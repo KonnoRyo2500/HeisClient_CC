@@ -93,11 +93,7 @@ void CGameOnline::initialize_battle()
 	// 必要なインスタンスの生成
 	CField::create_field();
 
-#ifdef WIN32
-	m_setting_file = new CCsvSettingFileReader(get_project_dir() + "setting\\" + ONLINE_SETTING_FILE_NAME);
-#else
-	m_setting_file = new CCsvSettingFileReader(get_project_dir() + "setting/" + ONLINE_SETTING_FILE_NAME);
-#endif
+	m_setting_file = new CCsvSettingFileReader(get_setting_dir() + ONLINE_SETTING_FILE_NAME);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_json_analyzer = new CJSONAnalyzer();
 	m_sck = new CClientSocket();
