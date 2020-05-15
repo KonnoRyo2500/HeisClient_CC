@@ -15,17 +15,18 @@ namespace cc_common {
 	/* テンプレート関数 */
 	/**
 	*	@brief フォーマット文字列を展開する関数
+	*	@param[in] fmt フォーマット文字列
+	*	@param[in] args fmtに与える引数
+	*	@return std::string fmtを展開した文字列
 	*/
-	template <typename ... Args>
+	template<typename ... Args>
 	std::string format(const std::string& fmt, Args ... args)
 	{
-		// snprintf関数の返り値は、第一、第二引数に依らずfmtを展開した後の文字数と同等になる(NULL文字の分は含まれない)
-		// したがって、このようにsnprintfを呼ぶことで展開後の文字列の長さが得られる
-		size_t len = std::snprintf(NULL, 0, fmt.c_str(), args ...) + 1;
-		std::vector<char> fmt_expand(len);
+		// 展開後の文字列長を得る(+1はNULL文字の分)
+		size_t expand_len = std::snprintf(NULL, 0, fmt.c_str(), args ...) + 1;
+		std::vector<char> expand_str(expand_len);
 
-		// vectorはメモリの連続性が保証されている
-		std::snprintf(&fmt_expand[0], len, fmt.c_str(), args ...);
-		return std::string(&fmt_expand[0]);
+		std::snprintf(&expand_str[0], expand_len, fmt.c_str(), args ...);
+		return std::string(&expand_str[0]);
 	}
 }
