@@ -10,7 +10,7 @@
 #include "client_socket.h"
 #include "log.h"
 
-extern CLog g_system_log;
+extern CLog *g_system_log;
 
 /**
 *	@brief	観戦モードクラス

@@ -167,7 +167,7 @@ void CField::show()
 	show_str += "\n";
 
 	// ログの先頭情報により，盤面が崩れて見えるのを防ぐため，先頭に改行を入れておく
-	g_field_log.write_log(CLog::LogType_Infomation, true, "\n%s", show_str.c_str());
+	g_field_log->write_log(CLog::LogType_Infomation, true, "\n%s", show_str.c_str());
 }
 
 /* private関数 */

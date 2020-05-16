@@ -22,7 +22,7 @@
 */
 void CAudienceMode::play_game()
 {
-	g_system_log.write_log(CLog::LogType_Infomation, false, "観戦を開始しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "観戦を開始しました");
 
 	// 観戦開始
 	initialize_watch();
@@ -37,7 +37,7 @@ void CAudienceMode::play_game()
 	// 観戦終了
 	finalize_watch();
 
-	g_system_log.write_log(CLog::LogType_Infomation, false, "観戦が終了しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "観戦が終了しました");
 }
 
 /* private関数 */

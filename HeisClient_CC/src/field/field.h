@@ -12,7 +12,7 @@
 #include <vector>
 #include <map>
 
-extern CLog g_field_log;
+extern CLog *g_field_log;
 
 /**
 *	@brief	フィールドクラス

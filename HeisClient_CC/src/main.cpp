@@ -13,15 +13,12 @@
 /* グローバル変数 */
 
 /* 各種ログ */
-// ログファイル格納先のディレクトリは存在している前提
-// Gitにコミットされているので，通常使用する際はディレクトリが存在しているはず
-
 //! フィールドログ
-CLog g_field_log("field_log");
+CLog *g_field_log = NULL;
 //! 対戦ログ
-CLog g_battle_log("battle_log");
+CLog *g_battle_log = NULL;
 //! システムログ
-CLog g_system_log("system_log");
+CLog *g_system_log = NULL;
 
 
 /**
@@ -43,24 +40,34 @@ enum GameMode {
 static GameMode ask_game_mode();
 //! ゲームを開始する
 static void start_game(const GameMode mode);
+//! ログ記録の開始
+static void start_logging();
+//! ログ記録の終了
+static void exit_logging();
 
 /**
 *	@brief メイン関数
 */
 int main()
 {
-	int exit_code = EXIT_SUCCESS;
-
 	try {
-		g_system_log.write_log(CLog::LogType_Infomation, false, "CCの実行が開始されました");
+		// 各種ログファイルを作成する
+		start_logging();
+
+		g_system_log->write_log(CLog::LogType_Infomation, false, "CCの実行が開始されました");
 		start_game(ask_game_mode());
-		g_system_log.write_log(CLog::LogType_Infomation, false, "CCの実行が正常に完了しました");
+		g_system_log->write_log(CLog::LogType_Infomation, false, "CCの実行が正常に完了しました");
+
+		// ログの記録を終了
+		exit_logging();
 	}
 	catch (const std::exception& e) {
-		g_system_log.write_log(CLog::LogType_Error, true, "heisの対戦中にエラーが発生しました(内容: %s)\n", e.what());
-		exit_code = EXIT_FAILURE;
+		// ログのインスタンスが正常に作成できていない可能性もあるため、コンソール出力にする
+		fprintf(stderr, "CCの実行中にエラーが発生しました(内容: %s)\n", e.what());
+		return EXIT_FAILURE;
 	}
-	return exit_code;
+
+	return EXIT_SUCCESS;
 }
 
 /**
@@ -119,4 +126,32 @@ static void start_game(const GameMode mode)
 
 	delete game;
 	game = NULL;
+}
+
+/**
+*	@brief ログの記録を開始する関数
+*/
+static void start_logging()
+{
+	g_field_log = new CLog("field_log");
+	g_battle_log = new CLog("battle_log");
+	g_system_log = new CLog("system_log");
+}
+
+/**
+*	@brief ログの記録を終了する関数
+*/
+static void exit_logging()
+{
+	// すべてのログインスタンスに対して、同じような処理をするため、ラムダ式にまとめておく
+	auto close_log = [](CLog **log) {
+		if (*log) {
+			delete *log;
+			*log = NULL;
+		}
+	};
+
+	close_log(&g_field_log);
+	close_log(&g_battle_log);
+	close_log(&g_system_log);
 }

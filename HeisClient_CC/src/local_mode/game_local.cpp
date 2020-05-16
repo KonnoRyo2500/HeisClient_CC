@@ -26,8 +26,8 @@ void CGameLocal::play_game()
 {
 	bool battle_result;
 
-	g_system_log.write_log(CLog::LogType_Infomation, false, "ローカルモードでゲームを開始しました");
-	g_battle_log.write_log(CLog::LogType_Infomation, false, "ローカルモードでゲームを開始しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "ローカルモードでゲームを開始しました");
+	g_battle_log->write_log(CLog::LogType_Infomation, false, "ローカルモードでゲームを開始しました");
 
 	// 対戦の初期化
 	initialize_battle();
@@ -68,12 +68,12 @@ void CGameLocal::play_game()
 	battle_result = judge_win();
 
 	// 勝敗を表示
-	g_battle_log.write_log(CLog::LogType_Infomation, true, battle_result ? "You win!" : "You lose...");
+	g_battle_log->write_log(CLog::LogType_Infomation, true, battle_result ? "You win!" : "You lose...");
 
 	// 対戦終了処理
 	finalize_battle();
 
-	g_system_log.write_log(CLog::LogType_Infomation, false, "ゲームが終了しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "ゲームが終了しました");
 }
 
 /* private関数 */
@@ -100,7 +100,7 @@ void CGameLocal::initialize_battle()
 
 	m_json_analyzer = new CJSONAnalyzer();
 
-	g_system_log.write_log(CLog::LogType_Infomation, false, "インスタンスの生成が完了しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "インスタンスの生成が完了しました");
 }
 
 /**
@@ -127,7 +127,7 @@ void CGameLocal::finalize_battle()
 	m_pseudo_server = NULL;
 	m_json_analyzer = NULL;
 
-	g_system_log.write_log(CLog::LogType_Infomation, false, "インスタンスの削除が完了しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "インスタンスの削除が完了しました");
 }
 
 /**
@@ -145,7 +145,7 @@ void CGameLocal::load_local_mode_setting()
 	m_setting.enemy_team_init_pos = get_initial_position(local_setting_file, LOCAL_SETTING_KEY_ENEMY_INIT_POS);
 	m_setting.is_my_team_first =
 		(local_setting_file.get_single_value<std::string>(LOCAL_SETTING_KEY_FIRST_TEAM, 0) == m_setting.my_team_name);
-	g_system_log.write_log(CLog::LogType_Infomation, false, "ローカルモード設定ファイルの読み込みが完了しました");
+	g_system_log->write_log(CLog::LogType_Infomation, false, "ローカルモード設定ファイルの読み込みが完了しました");
 }
 
 /**

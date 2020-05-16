@@ -12,7 +12,7 @@
 
 #define INFANTRY_STATUS_ERROR (-1)				// 兵士のステータス取得エラー(指定したIDの兵士がチームの全兵士の中にいないなど)
 
-extern CLog g_battle_log;
+extern CLog *g_battle_log;
 
 /**
 *	@brief	司令官クラス

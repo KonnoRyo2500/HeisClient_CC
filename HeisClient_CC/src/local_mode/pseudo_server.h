@@ -13,7 +13,7 @@
 #include "local_setting.h"
 #include "log.h"
 
-extern CLog g_system_log;
+extern CLog *g_system_log;
 
 // クラス名に"Server"とついてはいるが，通信は行わない
 // また，ローカルモードで不要なJSONはやり取りしない(「メッセージ」JSON，「名前決定」JSONなど)
