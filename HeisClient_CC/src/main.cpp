@@ -35,7 +35,6 @@ enum GameMode {
 };
 
 /* static関数 */
-
 //! ゲームモードを選択する
 static GameMode ask_game_mode();
 //! ゲームを開始する
@@ -54,6 +53,7 @@ int main()
 		// 各種ログファイルを作成する
 		start_logging();
 
+		// 対戦を実行
 		g_system_log->write_log(CLog::LogType_Infomation, false, "CCの実行が開始されました");
 		start_game(ask_game_mode());
 		g_system_log->write_log(CLog::LogType_Infomation, false, "CCの実行が正常に完了しました");
