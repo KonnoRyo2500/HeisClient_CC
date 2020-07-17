@@ -12,28 +12,24 @@
 #include <locale>
 #include <iostream>
 #include <map>
-#include <cstdarg>
 #include <vector>
 
 /* public関数 */
 
 /**
 *	@brief コンストラクタ
-*	@param[in] log_title ログファイルのタイトル
-*	@param[in] add_datetime_to_name ログファイル名の末尾に現在日時をつけるか(デフォルトはtrue)
-*	@remark ログファイル名は"(タイトル)_(日付).log"もしくは"(タイトル).log"となる
+*	@param[in] title ログファイルのタイトル
+*	@remark ログファイル名は"(タイトル)_(日付).log"となる
 */
-CLog::CLog(const std::string& log_title, const bool add_datetime_to_name)
+CLog::CLog(const std::string& title)
 {
 	// "bin"ディレクトリと同列の"log"ディレクトリにログを出力する
 	// WindowsとLinuxでプロジェクトディレクトリの構造が異なるので，それに合わせてログ出力先の
 	// パスも変える
-	std::string log_name = get_log_dir() + log_title;
-
-	if (add_datetime_to_name) {
-		log_name += make_current_datetime_str("_%Y_%m_%d_%H_%M_%S");
-	}
-	log_name += ".log";
+	std::string log_name = get_log_dir() 
+		+ title
+		+ make_current_datetime_str("_%Y_%m_%d_%H_%M_%S")
+		+ ".log";
 
 	m_logfile = new std::ofstream(log_name);
 	if (m_logfile->fail()) {
@@ -52,32 +48,23 @@ CLog::~CLog()
 
 /**
 *	@brief ログにメッセージを書き込む関数
-*	@param[in] log_type ログの種類
-*	@param[in] visible ログと同じ文字列を，コンソールにも表示するか
-*	@param[in] format 書き込むメッセージ(フォーマット文字列可)
-*	@param[in] ... フォーマット文字列の引数
+*	@param[in] level ログレベル
+*	@param[in] msg 書き込むメッセージ
 */
-void CLog::write_log(const LogType log_type, const bool visible, const char* format, ...) const
+void CLog::write_log(const LogLevel level, const std::string& msg) const
 {
-	va_list args;
-
-	va_start(args, format);
-	int message_len = vsnprintf(NULL, 0, format, args);
-
-	std::vector<char> message_buf(message_len + 1);
-	vsnprintf(&message_buf[0], message_len + 1, format, args);
-	va_end(args);
-
 	const std::string log_content = make_current_datetime_str("%Y/%m/%d %H:%M:%S ")
 		+ "["
-		+ make_log_type_str(log_type)
+		+ make_log_level_str(level)
 		+ "] "
-		+ std::string(message_buf.data());
+		+ msg;
 
 	*m_logfile << log_content << std::endl;
-	if (visible) {
-		printf("%s\n", message_buf.data());
+	
+	if (level == LogLevel_InvisibleInfo) {
+		return;
 	}
+	printf("%s\n", msg.c_str());
 }
 
 /* private関数 */
@@ -99,21 +86,22 @@ std::string CLog::make_current_datetime_str(const std::string& format) const
 }
 
 /**
-*	@brief ログの種類を表す文字列を作成する関数
-*	@param[in] type ログの種類
-*	@return std::string ログの種類を表す文字列
+*	@brief ログレベルを表す文字列を作成する関数
+*	@param[in] level ログレベル
+*	@return std::string ログレベルを表す文字列
 */
-std::string CLog::make_log_type_str(const LogType type) const
+std::string CLog::make_log_level_str(const LogLevel level) const
 {
-	// ログの種類 -> 文字列の対応表
-	const std::map<LogType, std::string> log_type_map = {
-		{LogType_Infomation,	"情報"},
-		{LogType_Warning,		"警告"},
-		{LogType_Error,			"エラー"},
+	// ログレベル -> 文字列の対応表
+	const std::map<LogLevel, std::string> log_level_map = {
+		{LogLevel_VisibleInfo,		"情報"},
+		{LogLevel_InvisibleInfo,	"情報"},
+		{LogLevel_Warning,			"警告"},
+		{LogLevel_Error,			"エラー"},
 	};
 
-	auto it = log_type_map.find(type);
-	if (it != log_type_map.end()) {
+	auto it = log_level_map.find(level);
+	if (it != log_level_map.end()) {
 		return it->second;
 	}
 

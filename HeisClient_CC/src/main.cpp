@@ -54,9 +54,9 @@ int main()
 		start_logging();
 
 		// 対戦を実行
-		g_system_log->write_log(CLog::LogType_Infomation, false, "CCの実行が開始されました");
+		g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "CCの実行が開始されました");
 		start_game(ask_game_mode());
-		g_system_log->write_log(CLog::LogType_Infomation, false, "CCの実行が正常に完了しました");
+		g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "CCの実行が正常に完了しました");
 
 		// ログの記録を終了
 		exit_logging();

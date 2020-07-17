@@ -23,8 +23,8 @@
 */
 void CGameOnline::play_game()
 {
-	g_system_log->write_log(CLog::LogType_Infomation, false, "オンラインモードでゲームを開始しました");
-	g_battle_log->write_log(CLog::LogType_Infomation, false, "オンラインモードでゲームを開始しました");
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "オンラインモードでゲームを開始しました");
+	g_battle_log->write_log(CLog::LogLevel_InvisibleInfo, "オンラインモードでゲームを開始しました");
 
 	bool battle_result;
 
@@ -67,9 +67,10 @@ void CGameOnline::play_game()
 		result_pkt = m_json_analyzer->create_result_pkt(m_sck->sck_recv());
 		// 「結果」パケットの内容を表示
 		for (const auto& result_elem : result_pkt.result) {
-			g_system_log->write_log(CLog::LogType_Warning, true, "サーバからエラーメッセージが送信されました(エラー内容: %s, 対象兵士ID: %s)", 
+			g_system_log->write_log(CLog::LogLevel_Warning,cc_common::format(
+				"サーバからエラーメッセージが送信されました(エラー内容: %s, 対象兵士ID: %s)",
 				result_elem.error.c_str(), 
-				result_elem.unit_id.is_omitted() ? "なし" : result_elem.unit_id.get().c_str());
+				result_elem.unit_id.is_omitted() ? "なし" : result_elem.unit_id.get().c_str()));
 		}
 	}
 
@@ -78,8 +79,8 @@ void CGameOnline::play_game()
 	finalize_battle();
 
 	// 勝敗を表示
-	g_battle_log->write_log(CLog::LogType_Infomation, true, battle_result ? "You win!" : "You lose...");
-	g_system_log->write_log(CLog::LogType_Infomation, false, "ゲームが終了しました");
+	g_battle_log->write_log(CLog::LogLevel_VisibleInfo, battle_result ? "You win!" : "You lose...");
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "ゲームが終了しました");
 }
 
 /* private関数 */
@@ -100,15 +101,17 @@ void CGameOnline::initialize_battle()
 
 	const std::string svr_addr = m_setting_file->get_single_value<std::string>(ONLINE_SETTING_KEY_SVR_ADDR, 0);
 	const uint16_t svr_port = m_setting_file->get_single_value<uint16_t>(ONLINE_SETTING_KEY_SVR_PORT, 0);
-	g_system_log->write_log(CLog::LogType_Infomation, false, "サーバに接続します(IPアドレス: %s, ポート番号: %d)",
-		svr_addr.c_str(), svr_port);
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+		"サーバに接続します(IPアドレス: %s, ポート番号: %d)",
+		svr_addr.c_str(), svr_port));
 
 	// サーバに接続
 	m_sck->sck_connect(svr_addr, svr_port);
 
-	g_system_log->write_log(CLog::LogType_Infomation, false, "サーバに接続しました(IPアドレス: %s, ポート番号: %d)",
-		svr_addr.c_str(), svr_port);
-	g_system_log->write_log(CLog::LogType_Infomation, false, "インスタンスの生成が完了しました");
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+		"サーバに接続しました(IPアドレス: %s, ポート番号: %d)",
+		svr_addr.c_str(), svr_port));
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの生成が完了しました");
 }
 
 /**
@@ -128,8 +131,9 @@ void CGameOnline::name_entry(const std::string& name)
 {
 	JSONSendPacket_Name name_pkt = {name};
 	m_sck->sck_send(m_json_analyzer->create_name_JSON(name_pkt));
-	g_system_log->write_log(CLog::LogType_Infomation, false, "チーム名をサーバに送信しました(チーム名: %s)",
-		name.c_str());
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+		"チーム名をサーバに送信しました(チーム名: %s)",
+		name.c_str()));
 }
 
 /**
@@ -144,8 +148,9 @@ void CGameOnline::name_register()
 	m_commander = new CCommander(m_team_name);
 	m_ai = new CUserAI(m_commander);
 
-	g_system_log->write_log(CLog::LogType_Infomation, false, "チーム名が確定しました(チーム名: %s)",
-		m_team_name.c_str());
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+		"チーム名が確定しました(チーム名: %s)",
+		m_team_name.c_str()));
 }
 
 /**
@@ -167,7 +172,7 @@ void CGameOnline::finalize_battle()
 
 	CField::delete_field();
 
-	g_system_log->write_log(CLog::LogType_Infomation, false, "インスタンスの削除が完了しました");
+	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの削除が完了しました");
 }
 
 /**
