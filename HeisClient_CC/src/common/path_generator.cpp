@@ -42,9 +42,9 @@ std::string get_log_dir()
 std::string get_setting_dir()
 {
 #ifdef WIN32
-	return get_project_dir() + "setting\\";
+	return get_project_dir() + "..\\setting\\CC\\";
 #else
-	return get_project_dir() + "setting/";
+	return get_project_dir() + "../setting/CC/";
 #endif
 }
 
