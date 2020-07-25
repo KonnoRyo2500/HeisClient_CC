@@ -58,7 +58,7 @@ Author: Ryo Konno
 6. 設定変更
 	CCの設定変更は、モードごとに用意される設定ファイルを書き換えることで行います。
 	設定ファイルはCSVファイルであるため、表計算ソフトで編集することをお勧めします。
-	各設定ファイルは、"heisclient_cc/HeisClient_CC/project_XXX/setting"に置いてください。
+	各設定ファイルは、"heisclient_cc/HeisClient_CC/setting/CC"にあります。
 
 (1)ローカルモード
 	"local_setting.csv"というファイルを変更します。
