@@ -33,7 +33,7 @@ class CUserAI {
 		explicit CUserAI(CCommander* commander);
 
 		// メイン処理
-		void AI_main(const JSONRecvPacket_Field& field_pkt);
+		void AI_main(const JSONRecvPacket_Board& board_pkt);
 
 	private:
 		// サンプルAI用の処理

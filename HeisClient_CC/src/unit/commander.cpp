@@ -6,7 +6,7 @@
 */
 
 #include "commander.h"
-#include "field.h"
+#include "board.h"
 #include "common.h"
 #include <algorithm>
 
@@ -33,10 +33,10 @@ CCommander::~CCommander()
 /**
 *	@brief 指定したIDを持つ兵士の位置を取得する関数
 *	@param[in] id 兵士のID
-*	@return FieldPosition 位置
+*	@return BoardPosition 位置
 *	@throws std::runtime_error 指定したIDの兵士がいない場合
 */
-FieldPosition CCommander::get_position(const std::string& id) const
+BoardPosition CCommander::get_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
@@ -85,7 +85,7 @@ int8_t CCommander::get_hp(const std::string& id) const
 *	@param[in] id 兵士のID
 *	@param[in] dst_pos 攻撃先の座標
 */
-void CCommander::attack(const std::string& id, const FieldPosition dst_pos) const
+void CCommander::attack(const std::string& id, const BoardPosition dst_pos) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
@@ -102,7 +102,7 @@ void CCommander::attack(const std::string& id, const FieldPosition dst_pos) cons
 *	@param[in] id 兵士のID
 *	@param[in] dst_pos 移動先の座標
 */
-void CCommander::move(const std::string& id, const FieldPosition dst_pos) const
+void CCommander::move(const std::string& id, const BoardPosition dst_pos) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
@@ -117,31 +117,31 @@ void CCommander::move(const std::string& id, const FieldPosition dst_pos) const
 /**
 *	@brief 移動可能なすべてのマスを返す関数
 *	@param[in] id 兵士のID
-*	@return std::vector<FieldPosition> 移動可能なマス
+*	@return std::vector<BoardPosition> 移動可能なマス
 */
-std::vector<FieldPosition> CCommander::find_movable_position(const std::string& id) const
+std::vector<BoardPosition> CCommander::find_movable_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL) {
 		return infantry->find_movable_position();
 	}
-	return std::vector<FieldPosition>();
+	return std::vector<BoardPosition>();
 }
 
 /**
 *	@brief 攻撃可能なすべてのマスを返す関数
 *	@param[in] id 兵士のID
-*	@return std::vector<FieldPosition> 攻撃可能なマス
+*	@return std::vector<BoardPosition> 攻撃可能なマス
 */
-std::vector<FieldPosition> CCommander::find_attackable_position(const std::string& id) const
+std::vector<BoardPosition> CCommander::find_attackable_position(const std::string& id) const
 {
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL) {
 		return infantry->find_attackable_position();
 	}
-	return std::vector<FieldPosition>();
+	return std::vector<BoardPosition>();
 }
 
 /**
@@ -227,18 +227,18 @@ JSONSendPacket_Action CCommander::create_action_pkt() const
 }
 
 /**
-*	@brief フィールドにいる兵士から，管理している兵士の情報を更新する関数
+*	@brief 盤面にいる兵士から，管理している兵士の情報を更新する関数
 */
 void CCommander::update()
 {
 	// 古い兵士リストを全削除
 	m_infantries.clear();
 
-	// フィールドにいる兵士をすべて兵士リストに加える
-	CField* field = CField::get_instance();
-	for (int x = 0; x < field->get_width(); x++) {
-		for (int y = 0; y < field->get_height(); y++) {
-			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
+	// 盤面にいる兵士をすべて兵士リストに加える
+	CBoard* board = CBoard::get_instance();
+	for (int x = 0; x < board->get_width(); x++) {
+		for (int y = 0; y < board->get_height(); y++) {
+			CInfantry* infantry = board->get_infantry(BoardPosition(x, y));
 			if (infantry != NULL) {
 				m_infantries.push_back(infantry);
 			}

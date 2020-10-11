@@ -37,15 +37,15 @@
 
 /* ローカルモード用 */
 /**
-*	@def LOCAL_SETTING_KEY_FIELD_WIDTH
-*	@brief フィールドの幅
+*	@def LOCAL_SETTING_KEY_BOARD_WIDTH
+*	@brief 盤面の幅
 */
-#define LOCAL_SETTING_KEY_FIELD_WIDTH "field_width"
+#define LOCAL_SETTING_KEY_BOARD_WIDTH "board_width"
 /**
-*	@def LOCAL_SETTING_KEY_FIELD_HEIGHT
-*	@brief フィールドの高さ
+*	@def LOCAL_SETTING_KEY_BOARD_HEIGHT
+*	@brief 盤面の高さ
 */
-#define LOCAL_SETTING_KEY_FIELD_HEIGHT "field_height"
+#define LOCAL_SETTING_KEY_BOARD_HEIGHT "board_height"
 /**
 *	@def LOCAL_SETTING_KEY_MY_NAME
 *	@brief 自チームの名前

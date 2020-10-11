@@ -22,11 +22,11 @@ class CJSONAnalyzer{
 		*/
 		enum AnalyzedJSONKind {
 			//! 「盤面」JSON
-			AnalyzedJSONKind_Field,
+			AnalyzedJSONKind_Board,
 			//! 「結果」JSON
 			AnalyzedJSONKind_Result,
 			//! 「名前確定」JSON
-			AnalyzedJSONKind_NameDecided,
+			AnalyzedJSONKind_ConfirmName,
 			//! 「メッセージ」JSON
 			AnalyzedJSONKind_Message,
 			//! 未定義のJSON
@@ -50,10 +50,10 @@ class CJSONAnalyzer{
 		std::string create_name_JSON(const JSONSendPacket_Name& name_pkt) const;
 
 		// 解析したJSONから各種パケットを生成
-		JSONRecvPacket_NameDecided create_name_decided_pkt(const std::string& name_decided_JSON);
+		JSONRecvPacket_ConfirmName create_confirm_name_pkt(const std::string& confirm_name_JSON);
 		JSONRecvPacket_Result create_result_pkt(const std::string& result_JSON);
 		JSONRecvPacket_Message create_message_pkt(const std::string& message_JSON);
-		JSONRecvPacket_Field create_field_pkt(const std::string& field_JSON);
+		JSONRecvPacket_Board create_board_pkt(const std::string& board_JSON);
 
 		// 解析したJSONの種別を取得
 		AnalyzedJSONKind get_analyzed_JSON_kind();
@@ -86,10 +86,10 @@ class CJSONAnalyzer{
 		T get_obligatory_not_number_val(const std::string& key, const picojson::object& src_JSON_obj) const;
 
 		// JSON種類判定処理
-		AnalyzedJSONKind check_whether_name_decided_JSON() const;
+		AnalyzedJSONKind check_whether_confirm_name_JSON() const;
 		AnalyzedJSONKind check_whether_result_JSON() const;
 		AnalyzedJSONKind check_whether_message_JSON() const;
-		AnalyzedJSONKind check_whether_field_JSON() const;
+		AnalyzedJSONKind check_whether_board_JSON() const;
 
 		// JSON種類判定補助
 		bool exists_key_in_JSON_object(const std::string& key, const picojson::object& obj) const;

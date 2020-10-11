@@ -6,7 +6,7 @@
 */
 
 #include "game_local.h"
-#include "field.h"
+#include "board.h"
 #include "setting_keys.h"
 #include "path_generator.h"
 #include "common.h"
@@ -36,31 +36,31 @@ void CGameLocal::play_game()
 	while (true) {
 		// オンラインモードと同様に，疑似サーバから受け取った「盤面」JSONを基に盤面を更新してから行動する
 		// しかし，「結果」JSONの送信など，不要な処理は行わない
-		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_pseudo_server->send_field_json(m_setting));
+		JSONRecvPacket_Board board_pkt = m_json_analyzer->create_board_pkt(m_pseudo_server->send_board_json(m_setting));
 
-		// フィールド更新
-		CField::get_instance()->update(field_pkt);
+		// 盤面更新
+		CBoard::get_instance()->update(board_pkt);
 
 		// 盤面を表示
-		CField::get_instance()->show();
+		CBoard::get_instance()->show();
 
-		if (field_pkt.finished) {
+		if (board_pkt.finished) {
 			break;
 		}
 
-		if (field_pkt.turn_team == m_setting.my_team_name) {
+		if (board_pkt.turn_team == m_setting.my_team_name) {
 			// 自チームのターン
 			m_my_commander->update();
-			m_my_AI->AI_main(field_pkt);
+			m_my_AI->AI_main(board_pkt);
 		}
-		else if(field_pkt.turn_team == m_setting.enemy_team_name) {
+		else if(board_pkt.turn_team == m_setting.enemy_team_name) {
 			// 敵チームのターン
 			m_enemy_commander->update();
-			m_enemy_AI->AI_main(field_pkt);
+			m_enemy_AI->AI_main(board_pkt);
 		}
 		else {
 			throw std::runtime_error(cc_common::format("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
-				,field_pkt.turn_team.c_str()));
+				,board_pkt.turn_team.c_str()));
 		}
 	}
 
@@ -86,8 +86,8 @@ void CGameLocal::initialize_battle()
 	// 設定ファイルの読み込み
 	load_local_mode_setting();
 
-	// フィールドの生成
-	CField::create_field();
+	// 盤面の生成
+	CBoard::create_board();
 
 	// 各インスタンスの生成
 	m_my_commander = new CCommander(m_setting.my_team_name);
@@ -108,8 +108,8 @@ void CGameLocal::initialize_battle()
 */
 void CGameLocal::finalize_battle()
 {
-	// フィールドを削除
-	CField::delete_field();
+	// 盤面を削除
+	CBoard::delete_board();
 
 	// メンバ変数のメモリ解放
 	delete m_my_commander;
@@ -137,8 +137,8 @@ void CGameLocal::load_local_mode_setting()
 {
 	CCsvSettingFileReader local_setting_file(get_setting_dir() + LOCAL_SETTING_FILE_NAME);
 
-	m_setting.field_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_WIDTH, 0);
-	m_setting.field_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_FIELD_HEIGHT, 0);
+	m_setting.board_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_WIDTH, 0);
+	m_setting.board_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_HEIGHT, 0);
 	m_setting.my_team_name = local_setting_file.get_single_value<std::string>(LOCAL_SETTING_KEY_MY_NAME, 0);
 	m_setting.enemy_team_name = local_setting_file.get_single_value<std::string>(LOCAL_SETTING_KEY_ENEMY_NAME, 0);
 	m_setting.my_team_init_pos = get_initial_position(local_setting_file, LOCAL_SETTING_KEY_MY_INIT_POS);
@@ -152,16 +152,16 @@ void CGameLocal::load_local_mode_setting()
 *	@brief 兵士の初期位置をローカルモード設定ファイルから取得する関数
 *	@param[in] local_setting_file ローカルモード設定ファイル
 *	@param[in] key 初期位置を取得するためのキー
-*	@return std::vector<FieldPosition> 初期位置
+*	@return std::vector<BoardPosition> 初期位置
 */
-std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFileReader& local_setting_file, const std::string& key)
+std::vector<BoardPosition>  CGameLocal::get_initial_position(const CCsvSettingFileReader& local_setting_file, const std::string& key)
 {
 	// 初期位置は"x1 y1,x2 y2,..."の形式で記載されているものとする
 	std::vector<std::string> all_init_pos_str = local_setting_file.get_all_value<std::string>(key);
-	std::vector<FieldPosition> init_pos;
+	std::vector<BoardPosition> init_pos;
 
 	for (auto& pos_str : all_init_pos_str) {
-		FieldPosition pos;
+		BoardPosition pos;
 		token_array_t pos_token;
 
 		pos_token = split_string(pos_str, " ");
@@ -182,7 +182,7 @@ std::vector<FieldPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 */
 bool CGameLocal::judge_win()
 {
-	// 最終状態のフィールドを司令官インスタンスに反映する
+	// 最終状態の盤面を司令官インスタンスに反映する
 	m_my_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
 	return m_my_commander->get_all_actable_infantry_ids(m_setting.my_team_name).size() > 0;

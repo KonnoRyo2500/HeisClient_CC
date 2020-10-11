@@ -6,7 +6,7 @@
 */
 #include "game_online.h"
 #include "const_val.h"
-#include "field.h"
+#include "board.h"
 #include "setting_keys.h"
 #include "path_generator.h"
 
@@ -38,27 +38,27 @@ void CGameOnline::play_game()
 	// 対戦
 	while (true) {
 		// サーバから受信するJSONから生成するパケット(「盤面」パケットはここで生成できる)
-		JSONRecvPacket_Field field_pkt = m_json_analyzer->create_field_pkt(m_sck->sck_recv());
+		JSONRecvPacket_Board board_pkt = m_json_analyzer->create_board_pkt(m_sck->sck_recv());
 		JSONRecvPacket_Result result_pkt;
 
 		// 受信した「盤面」JSONの内容に合うよう，内部のフィールドを更新
-		CField::get_instance()->update(field_pkt);
+		CBoard::get_instance()->update(board_pkt);
 		m_commander->update();
 
 		// 盤面を表示
-		CField::get_instance()->show();
+		CBoard::get_instance()->show();
 
 		// 「盤面」パケットは一旦変数に持っておきたいため，while文の条件部で対戦終了の判定をしない
-		if (field_pkt.finished) {
+		if (board_pkt.finished) {
 			break;
 		}
 		// 自分のターンでなければ，次の「盤面」JSON受信まで待つ
-		if (field_pkt.turn_team != m_team_name) {
+		if (board_pkt.turn_team != m_team_name) {
 			continue;
 		}
 
 		// ユーザAIの行動
-		m_ai->AI_main(field_pkt);
+		m_ai->AI_main(board_pkt);
 
 		// 「行動」パケットを作成して送信
 		m_sck->sck_send(m_json_analyzer->create_action_JSON(m_commander->create_action_pkt()));
@@ -92,7 +92,7 @@ void CGameOnline::play_game()
 void CGameOnline::initialize_battle()
 {
 	// 必要なインスタンスの生成
-	CField::create_field();
+	CBoard::create_board();
 
 	m_setting_file = new CCsvSettingFileReader(get_setting_dir() + ONLINE_SETTING_FILE_NAME);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
@@ -142,9 +142,9 @@ void CGameOnline::name_entry(const std::string& name)
 void CGameOnline::name_register()
 {
 	std::string received_JSON = m_sck->sck_recv();
-	JSONRecvPacket_NameDecided name_decided_pkt = m_json_analyzer->create_name_decided_pkt(received_JSON);
+	JSONRecvPacket_ConfirmName confirm_name_pkt = m_json_analyzer->create_confirm_name_pkt(received_JSON);
 
-	m_team_name = name_decided_pkt.your_team;
+	m_team_name = confirm_name_pkt.your_team;
 	m_commander = new CCommander(m_team_name);
 	m_ai = new CUserAI(m_commander);
 
@@ -170,18 +170,18 @@ void CGameOnline::finalize_battle()
 	m_sck = NULL;
 	m_setting_file = NULL;
 
-	CField::delete_field();
+	CBoard::delete_board();
 
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの削除が完了しました");
 }
 
 /**
-*	@brief 対戦の決着がついた後，フィールドの状態から勝敗を決定する関数
+*	@brief 対戦の決着がついた後，盤面の状態から勝敗を決定する関数
 *	@return bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
 */
 bool CGameOnline::judge_win()
 {
-	// 最終状態のフィールドを司令官インスタンスに反映する
+	// 最終状態の盤面を司令官インスタンスに反映する
 	m_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
 	return m_commander->get_all_actable_infantry_ids(m_team_name).size() > 0;

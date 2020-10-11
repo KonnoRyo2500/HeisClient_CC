@@ -20,14 +20,14 @@ struct LocalSetting {
 	std::string my_team_name;
 	//! 敵チーム名
 	std::string enemy_team_name;
-	//! フィールドの横幅
-	uint16_t field_width;
-	//! フィールドの高さ
-	uint16_t field_height;
+	//! 盤面の横幅
+	uint16_t board_width;
+	//! 盤面の高さ
+	uint16_t board_height;
 	//! 自チーム兵士の初期位置
-	std::vector<FieldPosition> my_team_init_pos;
+	std::vector<BoardPosition> my_team_init_pos;
 	//! 敵チーム兵士の初期位置
-	std::vector<FieldPosition> enemy_team_init_pos;
+	std::vector<BoardPosition> enemy_team_init_pos;
 	//! 自分のチームが先攻か
 	bool is_my_team_first;
 };

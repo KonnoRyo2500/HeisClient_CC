@@ -13,8 +13,8 @@
 /* グローバル変数 */
 
 /* 各種ログ */
-//! フィールドログ
-CLog *g_field_log = NULL;
+//! 盤面ログ
+CLog *g_board_log = NULL;
 //! 対戦ログ
 CLog *g_battle_log = NULL;
 //! システムログ
@@ -133,7 +133,7 @@ static void start_game(const GameMode mode)
 */
 static void start_logging()
 {
-	g_field_log = new CLog("field_log");
+	g_board_log = new CLog("board_log");
 	g_battle_log = new CLog("battle_log");
 	g_system_log = new CLog("system_log");
 }
@@ -151,7 +151,7 @@ static void exit_logging()
 		}
 	};
 
-	close_log(&g_field_log);
+	close_log(&g_board_log);
 	close_log(&g_battle_log);
 	close_log(&g_system_log);
 }

@@ -9,30 +9,30 @@
 #include <cstdint>
 
 /**
-*	@struct FieldPosition
-*	@brief フィールド上の位置
+*	@struct BoardPosition
+*	@brief 盤面上の位置
 */
-struct FieldPosition
+struct BoardPosition
 {	
 	// メンバ関数
 	public:
 		//! コンストラクタ(位置指定あり)
-		FieldPosition(const uint16_t init_x,  const uint16_t init_y) 
+		BoardPosition(const uint16_t init_x,  const uint16_t init_y) 
 			: x(init_x)
 			, y(init_y)
 		{}
 		//! コンストラクタ(位置指定なし)
-		FieldPosition()
+		BoardPosition()
 			: x(0)
 			, y(0)
 		{}
 		//! 比較演算子(==)
-		bool operator==(const FieldPosition& dst)
+		bool operator==(const BoardPosition& dst)
 		{
 			return x == dst.x && y == dst.y;
 		}
 		//! 比較演算子(!=)
-		bool operator!=(const FieldPosition& dst)
+		bool operator!=(const BoardPosition& dst)
 		{
 			return x != dst.x || y != dst.y;
 		}

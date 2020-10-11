@@ -70,7 +70,7 @@ struct OptionalVal {
 		bool m_omit_flag;
 };
 
-/* 以下のパケットの構造は，ファイル「兵ズ通信仕様.ods」で定義されているJSONの仕様に基づく */
+/* 以下のパケットの構造は，通信仕様書で定義されているJSONの仕様に基づく */
 
 /* 各種パケットの要素 */
 
@@ -158,11 +158,11 @@ struct JSONSendPacket_Action {
 
 // 「盤面」パケット
 /**
-*	@struct JSONRecvPacket_Field
+*	@struct JSONRecvPacket_Board
 *	@brief 「盤面」パケット
 *	@details 「盤面」JSONの情報を格納するパケット
 */
-struct JSONRecvPacket_Field {
+struct JSONRecvPacket_Board {
 	//! "width"(フィールド)
 	uint16_t width;
 	//! "height"(フィールド)
@@ -180,11 +180,11 @@ struct JSONRecvPacket_Field {
 };
 
 /**
-*	@struct JSONRecvPacket_NameDecided
+*	@struct JSONRecvPacket_ConfirmName
 *	@brief 「名前確定」パケット
 *	@details 「名前確定」JSONの情報を格納するパケット
 */
-struct JSONRecvPacket_NameDecided {
+struct JSONRecvPacket_ConfirmName {
 	//! "your_team"(フィールド)
 	std::string your_team;
 };

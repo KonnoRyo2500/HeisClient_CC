@@ -5,7 +5,7 @@
 *	@details	heis対戦用AIの思考ルーチンを定義する．
 */
 #include "user_AI.h"
-#include "field.h"
+#include "board.h"
 #include <random>
 
 /* public関数 */
@@ -21,12 +21,12 @@ CUserAI::CUserAI(CCommander* commander)
 
 /**
 *	@brief ユーザAI メイン処理
-*	@param[in] field_pkt 「盤面」パケット
+*	@param[in] board_pkt 「盤面」パケット
 */
-void CUserAI::AI_main(const JSONRecvPacket_Field& field_pkt)
+void CUserAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 {
 	/* この関数内に，ユーザAIの動作を記述すること */
-	std::string my_team_name = field_pkt.turn_team;
+	std::string my_team_name = board_pkt.turn_team;
 
 	while (m_commander->get_all_actable_infantry_ids(my_team_name).size() != 0) {
 		std::string infantry_id;
@@ -54,11 +54,11 @@ void CUserAI::AI_main(const JSONRecvPacket_Field& field_pkt)
 */
 void CUserAI::sample_random_move(const std::string infantry_id)
 {
-	std::vector<FieldPosition> movable_pos = m_commander->find_movable_position(infantry_id);
+	std::vector<BoardPosition> movable_pos = m_commander->find_movable_position(infantry_id);
 	std::random_device rnd_dev;
 
 	if (movable_pos.size() > 0) {
-		FieldPosition dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
+		BoardPosition dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
 
 		m_commander->move(infantry_id, dst_pos);
 	}
@@ -70,11 +70,11 @@ void CUserAI::sample_random_move(const std::string infantry_id)
 */
 void CUserAI::sample_random_attack(const std::string infantry_id)
 {
-	std::vector<FieldPosition> attackable_pos = m_commander->find_attackable_position(infantry_id);
+	std::vector<BoardPosition> attackable_pos = m_commander->find_attackable_position(infantry_id);
 	std::random_device rnd_dev;
 
 	if (attackable_pos.size() > 0) {
-		FieldPosition dst_pos = attackable_pos.at(rnd_dev() % attackable_pos.size());
+		BoardPosition dst_pos = attackable_pos.at(rnd_dev() % attackable_pos.size());
 
 		m_commander->attack(infantry_id, dst_pos);
 	}

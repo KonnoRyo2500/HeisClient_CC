@@ -5,7 +5,7 @@
 *	@details	heisのユニットの1つである兵士ユニットを定義する．
 */
 #include "infantry.h"
-#include "field.h"
+#include "board.h"
 #include <stdexcept>
 #include <queue>
 
@@ -17,7 +17,7 @@
 *	@param[in] infantry_id ID
 *	@param[in] init_pos 初期位置
 */
-CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const FieldPosition& init_pos)
+CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const BoardPosition& init_pos)
 	: m_team_name(team_name)
 	, m_id(infantry_id)
 	, m_pos(init_pos)
@@ -25,10 +25,10 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_i
 	, m_action_remain(InitialValue_ActionRemain)
 	, m_hp(InitialValue_HP)
 {
-	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから配置するようにする
-	CField* field = CField::get_instance();
-	if (field != NULL && (field->get_width() != 0 && field->get_height() != 0)) {
-		field->set_infantry(init_pos, this);
+	// 呼ばれるタイミングによっては盤面が未作成の場合もあるので，盤面が作成済みであることを確認してから配置するようにする
+	CBoard* board = CBoard::get_instance();
+	if (board != NULL && (board->get_width() != 0 && board->get_height() != 0)) {
+		board->set_infantry(init_pos, this);
 	}
 }
 
@@ -37,10 +37,10 @@ CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_i
 */
 CInfantry::~CInfantry()
 {
-	// 呼ばれるタイミングによってはフィールドが未作成の場合もあるので，フィールドが作成済みであることを確認してから削除するようにする
-	CField* field = CField::get_instance();
-	if (field != NULL && (field->get_width() != 0 && field->get_height() != 0)) {
-		field->remove_infantry(m_pos);
+	// 呼ばれるタイミングによっては盤面が未作成の場合もあるので，盤面が作成済みであることを確認してから削除するようにする
+	CBoard* board = CBoard::get_instance();
+	if (board != NULL && (board->get_width() != 0 && board->get_height() != 0)) {
+		board->remove_infantry(m_pos);
 	}
 }
 
@@ -64,9 +64,9 @@ std::string CInfantry::get_id() const
 
 /**
 *	@brief 兵士の座標を取得する関数
-*	@return FieldPosition 兵士の座標
+*	@return BoardPosition 兵士の座標
 */
-FieldPosition CInfantry::get_position() const
+BoardPosition CInfantry::get_position() const
 {
 	return m_pos;
 }
@@ -94,7 +94,7 @@ int8_t CInfantry::get_hp() const
 *	@brief 指定した方向に攻撃を行う関数
 *	@param[in] dst_pos 攻撃先の座標
 */
-void CInfantry::attack(const FieldPosition dst_pos)
+void CInfantry::attack(const BoardPosition dst_pos)
 {
 	if (m_action_remain <= 0) {
 		fprintf(stderr, "この兵士は行動できません\n");
@@ -105,10 +105,10 @@ void CInfantry::attack(const FieldPosition dst_pos)
 		return;
 	}
 
-	CField* field = CField::get_instance();
+	CBoard* board = CBoard::get_instance();
 
 	try {
-		CInfantry* dst_infantry = field->get_infantry(dst_pos);
+		CInfantry* dst_infantry = board->get_infantry(dst_pos);
 		if (dst_infantry != NULL) {
 			if (dst_infantry->get_team_name() == m_team_name) {
 				fprintf(stderr, "味方の兵士を攻撃しようとしています\n");
@@ -137,14 +137,14 @@ void CInfantry::attack(const FieldPosition dst_pos)
 *	@brief 兵士を移動する関数
 *	@param[in] dst_pos 移動先の座標
 */
-void CInfantry::move(const FieldPosition dst_pos)
+void CInfantry::move(const BoardPosition dst_pos)
 {
 	if (m_action_remain <= 0) {
 		fprintf(stderr, "この兵士は行動できません\n");
 		return;
 	}
 
-	CField* field = CField::get_instance();
+	CBoard* board = CBoard::get_instance();
 
 	if (calc_L1_distance(m_pos, dst_pos) > m_action_remain) {
 		fprintf(stderr, "移動できる歩数の上限を超えて移動しようとしています\n");
@@ -152,9 +152,9 @@ void CInfantry::move(const FieldPosition dst_pos)
 	}
 	try {
 		if (exists_path_for_move(dst_pos)) {
-			// フィールド上の座標を更新する
-			field->remove_infantry(m_pos);
-			field->set_infantry(dst_pos, this);
+			// 盤面上の座標を更新する
+			board->remove_infantry(m_pos);
+			board->set_infantry(dst_pos, this);
 
 			// 移動した歩数分だけ，行動回数を減らす
 			m_action_remain -= calc_L1_distance(m_pos, dst_pos);
@@ -173,14 +173,14 @@ void CInfantry::move(const FieldPosition dst_pos)
 
 /**
 *	@brief 移動可能なすべてのマスを返す関数
-*	@return std::vector<FieldPosition> 移動可能なマス
+*	@return std::vector<BoardPosition> 移動可能なマス
 */
-std::vector<FieldPosition> CInfantry::find_movable_position() const
+std::vector<BoardPosition> CInfantry::find_movable_position() const
 {
-	std::vector<FieldPosition> movable_pos;
+	std::vector<BoardPosition> movable_pos;
 
 	// 移動可能なマスをすべて探索する
-	for (FieldPosition pos : get_around_position(m_action_remain)) {
+	for (BoardPosition pos : get_around_position(m_action_remain)) {
 		if (exists_path_for_move(pos)) {
 			movable_pos.push_back(pos);
 		}
@@ -191,16 +191,16 @@ std::vector<FieldPosition> CInfantry::find_movable_position() const
 
 /**
 *	@brief 攻撃可能なすべてのマスを返す関数
-*	@return std::vector<FieldPosition> 攻撃可能なマス
+*	@return std::vector<BoardPosition> 攻撃可能なマス
 */
-std::vector<FieldPosition> CInfantry::find_attackable_position() const
+std::vector<BoardPosition> CInfantry::find_attackable_position() const
 {
-	std::vector<FieldPosition> attackable_pos;
-	CField* field = CField::get_instance();
+	std::vector<BoardPosition> attackable_pos;
+	CBoard* board = CBoard::get_instance();
 
 	// 攻撃は自分に隣接したマスにしかできないので，自分の上下左右のマス(自身からのL1距離が1のマス)のみを探索すればよい
-	for (FieldPosition pos : get_around_position(1)) {
-		if (field->get_infantry(pos) != NULL && field->get_infantry(pos)->get_team_name() != m_team_name) {
+	for (BoardPosition pos : get_around_position(1)) {
+		if (board->get_infantry(pos) != NULL && board->get_infantry(pos)->get_team_name() != m_team_name) {
 			attackable_pos.push_back(pos);
 		}
 	}
@@ -240,9 +240,9 @@ ContentsArrayElem CInfantry::create_contents_array_elem() const
 void CInfantry::attacked()
 {
 	m_hp--;
-	// 自身の体力が尽きたら，死ぬ(自身をフィールドから消去する)
+	// 自身の体力が尽きたら，死ぬ(自身を盤面から消去する)
 	if (m_hp <= 0) {
-		CField::get_instance()->remove_infantry(m_pos);
+		CBoard::get_instance()->remove_infantry(m_pos);
 	}
 }
 
@@ -251,16 +251,16 @@ void CInfantry::attacked()
 *	@param[in] dst_pos 行先のマス
 *	@return 目的マスに移動できるか
 */
-bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
+bool CInfantry::exists_path_for_move(const BoardPosition& dst_pos) const
 {
 	// 目的マスに兵士がいれば，その時点で移動経路がないことがわかる
-	if (CField::get_instance()->get_infantry(dst_pos) != NULL) {
+	if (CBoard::get_instance()->get_infantry(dst_pos) != NULL) {
 		return false;
 	}
 
 	// 移動可能なマスの一覧
-	std::queue<FieldPosition> available_pos;
-	FieldPosition current_pos;
+	std::queue<BoardPosition> available_pos;
+	BoardPosition current_pos;
 
 	available_pos.push(m_pos);
 	while(available_pos.size() > 0){
@@ -278,8 +278,8 @@ bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
 		available_pos.pop();
 		// 移動可能な隣接マスの探索
 		for (Direction dir_to_dst : decide_move_direction(current_pos, dst_pos)) {
-			CField* field = CField::get_instance();
-			CInfantry* neighbor_infantry = field->get_infantry(get_neighbor_pos(dir_to_dst, current_pos));
+			CBoard* board = CBoard::get_instance();
+			CInfantry* neighbor_infantry = board->get_infantry(get_neighbor_pos(dir_to_dst, current_pos));
 			// 味方の兵士は飛び越して移動できるので，兵士がいたとしても味方ならばそのマスは移動可能とする
 			if (neighbor_infantry == NULL || neighbor_infantry->get_team_name() == m_team_name) {
 				if (get_neighbor_pos(dir_to_dst, current_pos) == dst_pos) {
@@ -300,7 +300,7 @@ bool CInfantry::exists_path_for_move(const FieldPosition& dst_pos) const
 *	@param[in] dst_pos 目的マスの座標
 *	@return std::vector<Direction> 現在いるマスから目的マスに近づける移動方向
 */
-std::vector<Direction> CInfantry::decide_move_direction(const FieldPosition& current_pos, const FieldPosition& dst_pos) const
+std::vector<Direction> CInfantry::decide_move_direction(const BoardPosition& current_pos, const BoardPosition& dst_pos) const
 {
 	std::vector<Direction> directions_to_dst;
 
@@ -326,7 +326,7 @@ std::vector<Direction> CInfantry::decide_move_direction(const FieldPosition& cur
 *	@param[in] dst 点2の座標
 *	@return uint16_t L1距離
 */
-uint16_t CInfantry::calc_L1_distance(const FieldPosition& src, const FieldPosition dst) const
+uint16_t CInfantry::calc_L1_distance(const BoardPosition& src, const BoardPosition dst) const
 {
 	return std::abs(src.x - dst.x) + std::abs(src.y - dst.y);
 }
@@ -334,24 +334,24 @@ uint16_t CInfantry::calc_L1_distance(const FieldPosition& src, const FieldPositi
 /**
 *	@brief 自分の周囲のマスのうち，指定したL1距離以内にあるマスを取得する関数
 *	@param[in] search_distance 探索範囲のL1距離の上限
-*	@return std::vector<FieldPosition> 取得したすべてのマス
+*	@return std::vector<BoardPosition> 取得したすべてのマス
 */
-std::vector<FieldPosition> CInfantry::get_around_position(const uint16_t search_distance) const
+std::vector<BoardPosition> CInfantry::get_around_position(const uint16_t search_distance) const
 {
-	std::vector<FieldPosition> around_positions;
-	CField* field = CField::get_instance();
+	std::vector<BoardPosition> around_positions;
+	CBoard* board = CBoard::get_instance();
 	// for文の初期化式および条件式が長くなるのを防ぐため，x, yの境界値は変数に入れる
-	// フィールドの範囲チェック付きで，現在地からのL1距離がsearch_distance以内のすべてのマスを探索できるようになっている
+	// 盤面の範囲チェック付きで，現在地からのL1距離がsearch_distance以内のすべてのマスを探索できるようになっている
 	uint16_t x_begin = (search_distance <= m_pos.x ? m_pos.x - search_distance : 0);
-	uint16_t x_end = (m_pos.x + search_distance < field->get_width() ? m_pos.x + search_distance : field->get_width() - 1);
+	uint16_t x_end = (m_pos.x + search_distance < board->get_width() ? m_pos.x + search_distance : board->get_width() - 1);
 
 	for (uint16_t x = x_begin; x <= x_end; x++) {
 		uint16_t y_begin = ((search_distance - std::abs(m_pos.x - x)) <= m_pos.y ? m_pos.y - (search_distance - std::abs(m_pos.x - x)) : 0);
-		uint16_t y_end = (m_pos.y + (search_distance - std::abs(m_pos.x - x)) < field->get_height() ? m_pos.y + (search_distance - std::abs(m_pos.x - x)) : field->get_height() - 1);
+		uint16_t y_end = (m_pos.y + (search_distance - std::abs(m_pos.x - x)) < board->get_height() ? m_pos.y + (search_distance - std::abs(m_pos.x - x)) : board->get_height() - 1);
 		for (uint16_t y = y_begin; y <= y_end; y++) {
 			// 自身のいるマスは簡単にわかるので，自分のいるマスについては探索対象としない
-			if (FieldPosition(x, y) != m_pos) {
-				around_positions.push_back(FieldPosition(x, y));
+			if (BoardPosition(x, y) != m_pos) {
+				around_positions.push_back(BoardPosition(x, y));
 			}
 		}
 	}
@@ -377,15 +377,15 @@ bool CInfantry::is_self(const CInfantry* infantry) const
 }
 
 /**
-*	@brief フィールドのマスのうち，指定した方向に隣接したマスの座標を取得する関数
+*	@brief 盤面のマスのうち，指定した方向に隣接したマスの座標を取得する関数
 *	@param[in] direction 方向
 *	@param[in] origin 基準となるマスの座標
-*	@return FieldPosition 隣接したマス
-*	@remark 指定した方向に隣接したマスの座標がフィールドの範囲外だった場合，基準となるマスの座標を返す
+*	@return BoardPosition 隣接したマス
+*	@remark 指定した方向に隣接したマスの座標が盤面の範囲外だった場合，基準となるマスの座標を返す
 */
-FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const FieldPosition& origin) const
+BoardPosition CInfantry::get_neighbor_pos(const Direction direction, const BoardPosition& origin) const
 {
-	FieldPosition dst_pos;
+	BoardPosition dst_pos;
 
 	// x座標を決定
 	switch (direction) {
@@ -402,8 +402,8 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 	if (dst_pos.x < 0) {
 		dst_pos.x = 0;
 	}
-	else if (CField::get_instance()->get_width() <= dst_pos.x) {
-		dst_pos.x = CField::get_instance()->get_width() - 1;
+	else if (CBoard::get_instance()->get_width() <= dst_pos.x) {
+		dst_pos.x = CBoard::get_instance()->get_width() - 1;
 	}
 
 	// y座標を決定
@@ -421,8 +421,8 @@ FieldPosition CInfantry::get_neighbor_pos(const Direction direction, const Field
 	if (dst_pos.y < 0) {
 		dst_pos.y = 0;
 	}
-	else if (CField::get_instance()->get_height() <= dst_pos.y) {
-		dst_pos.y = CField::get_instance()->get_height() - 1;
+	else if (CBoard::get_instance()->get_height() <= dst_pos.y) {
+		dst_pos.y = CBoard::get_instance()->get_height() - 1;
 	}
 
 	return dst_pos;

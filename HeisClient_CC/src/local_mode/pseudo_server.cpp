@@ -6,7 +6,7 @@
 */
 #include "pseudo_server.h"
 #include "const_val.h"
-#include "field.h"
+#include "board.h"
 #include "common.h"
 
 /* public関数 */
@@ -16,29 +16,29 @@
 *	@param[in] setting ローカルモード設定
 *	@return std::string 「盤面」JSON
 */
-std::string CPseudoServer::send_field_json(const LocalSetting& setting) const
+std::string CPseudoServer::send_board_json(const LocalSetting& setting) const
 {
-	picojson::object field_json_obj;
+	picojson::object board_json_obj;
 	static int turn_count = 1;
 	static std::string turn_team = (setting.is_my_team_first ? setting.my_team_name : setting.enemy_team_name);
 
-	field_json_obj.insert(std::make_pair("width", static_cast<double>(setting.field_width)));
-	field_json_obj.insert(std::make_pair("height", static_cast<double>(setting.field_height)));
-	field_json_obj.insert(std::make_pair("count", static_cast<double>(turn_count)));
-	field_json_obj.insert(std::make_pair("finished", judge_finished(setting)));
-	field_json_obj.insert(std::make_pair("turn_team", turn_team));
-	field_json_obj.insert(std::make_pair("players", make_players_array(setting)));
-	field_json_obj.insert(std::make_pair("units", make_units_JSON_array(setting, turn_count)));
+	board_json_obj.insert(std::make_pair("width", static_cast<double>(setting.board_width)));
+	board_json_obj.insert(std::make_pair("height", static_cast<double>(setting.board_height)));
+	board_json_obj.insert(std::make_pair("count", static_cast<double>(turn_count)));
+	board_json_obj.insert(std::make_pair("finished", judge_finished(setting)));
+	board_json_obj.insert(std::make_pair("turn_team", turn_team));
+	board_json_obj.insert(std::make_pair("players", make_players_array(setting)));
+	board_json_obj.insert(std::make_pair("units", make_units_JSON_array(setting, turn_count)));
 	
 	// 次の「盤面」JSONを送信するための準備
 	turn_count++;
 	toggle_turn_team(setting, turn_team);
 
-	const std::string field_json = serialize_JSON_obj(field_json_obj);
+	const std::string board_json = serialize_JSON_obj(board_json_obj);
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format("疑似サーバが「盤面」JSONを送信しました: %s",
-		field_json.c_str()));
+		board_json.c_str()));
 
-	return field_json;
+	return board_json;
 }
 
 /* private関数 */
@@ -62,7 +62,7 @@ std::string CPseudoServer::serialize_JSON_obj(const picojson::object& obj) const
 */
 picojson::array CPseudoServer::make_units_JSON_array(const LocalSetting& setting, const int turn_count) const
 {
-	return (turn_count > 1 ? make_units_JSON_array_from_field() : make_initial_units_JSON_array(setting));
+	return (turn_count > 1 ? make_units_JSON_array_from_board() : make_initial_units_JSON_array(setting));
 }
 
 /**
@@ -97,7 +97,7 @@ picojson::array CPseudoServer::make_initial_units_JSON_array(const LocalSetting&
 *	@param[in] infantry_serial_num 兵士のIDにつける番号
 *	@return picojson::object settingで指定した初期配置に基づく
 */
-picojson::object CPseudoServer::make_initial_units_elem(const std::string& team_name, const FieldPosition& init_pos, const int infantry_serial_num) const
+picojson::object CPseudoServer::make_initial_units_elem(const std::string& team_name, const BoardPosition& init_pos, const int infantry_serial_num) const
 {
 	picojson::object units_elem_obj;
 	picojson::object locate_obj;
@@ -114,21 +114,21 @@ picojson::object CPseudoServer::make_initial_units_elem(const std::string& team_
 }
 
 /**
-*	@brief 「盤面」JSONの"units"配列をフィールドから作成する関数
+*	@brief 「盤面」JSONの"units"配列を盤面から作成する関数
 *	@return picojson::array 「盤面」JSONの"units"配列
 */
-picojson::array CPseudoServer::make_units_JSON_array_from_field() const
+picojson::array CPseudoServer::make_units_JSON_array_from_board() const
 {
 	picojson::array units_JSON_array;
-	CField* field = CField::get_instance();
+	CBoard* board = CBoard::get_instance();
 
-	// フィールド上にいる全兵士の情報を，そのまま"units"配列に入れる
-	for (int x = 0; x < field->get_width(); x++) {
-		for (int y = 0; y < field->get_height(); y++) {
-			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
+	// 盤面上にいる全兵士の情報を，そのまま"units"配列に入れる
+	for (int x = 0; x < board->get_width(); x++) {
+		for (int y = 0; y < board->get_height(); y++) {
+			CInfantry* infantry = board->get_infantry(BoardPosition(x, y));
 
 			if (infantry != NULL) {
-				units_JSON_array.push_back(picojson::value(make_units_elem_from_field(infantry)));
+				units_JSON_array.push_back(picojson::value(make_units_elem_from_board(infantry)));
 			}
 		}
 	}
@@ -136,11 +136,11 @@ picojson::array CPseudoServer::make_units_JSON_array_from_field() const
 }
 
 /**
-*	@brief フィールド上の兵士の情報から，"units"配列の要素1つ分のJSONオブジェクトを作成する関数
+*	@brief 盤面上の兵士の情報から，"units"配列の要素1つ分のJSONオブジェクトを作成する関数
 *	@param[in] infantry 兵士
 *	@return picojson::object infantryのデータから作成されたJSONオブジェクト
 */
-picojson::object CPseudoServer::make_units_elem_from_field(const CInfantry* infantry) const
+picojson::object CPseudoServer::make_units_elem_from_board(const CInfantry* infantry) const
 {
 	picojson::object units_elem_obj;
 	picojson::object locate_obj;
@@ -163,18 +163,18 @@ picojson::object CPseudoServer::make_units_elem_from_field(const CInfantry* infa
 */
 bool CPseudoServer::judge_finished(const LocalSetting& setting) const
 {
-	CField* field = CField::get_instance();
+	CBoard* board = CBoard::get_instance();
 	bool is_my_team_alive = false, is_enemy_team_alive = false;
 
 	// 最初のターンは，必ず継続させる
-	if (field->get_width() <= 0 && field->get_height() <= 0) {
+	if (board->get_width() <= 0 && board->get_height() <= 0) {
 		return false;
 	}
 
-	// フィールド上にいる全兵士の情報を，そのまま"units"配列に入れる
-	for (int x = 0; x < field->get_width(); x++) {
-		for (int y = 0; y < field->get_height(); y++) {
-			CInfantry* infantry = field->get_infantry(FieldPosition(x, y));
+	// 盤面上にいる全兵士の情報を，そのまま"units"配列に入れる
+	for (int x = 0; x < board->get_width(); x++) {
+		for (int y = 0; y < board->get_height(); y++) {
+			CInfantry* infantry = board->get_infantry(BoardPosition(x, y));
 
 			// infantry != NULLとして下のif文をネストさせるとネストが深くなるので，このような書き方をした
 			if (infantry == NULL) {

@@ -68,20 +68,20 @@ std::string CJSONAnalyzer::create_name_JSON(const JSONSendPacket_Name& name_pkt)
 
 /**
 *	@brief 与えられた「名前確定」JSONから，「名前確定」パケットを作成する関数
-*	@param[in] name_decided_JSON 「名前確定」JSON
-*	@return JSONRecvPacket_NameDecided 「名前確定」パケット
+*	@param[in] confirm_name_JSON 「名前確定」JSON
+*	@return JSONRecvPacket_ConfirmName 「名前確定」パケット
 */
-JSONRecvPacket_NameDecided CJSONAnalyzer::create_name_decided_pkt(const std::string& name_decided_JSON)
+JSONRecvPacket_ConfirmName CJSONAnalyzer::create_confirm_name_pkt(const std::string& confirm_name_JSON)
 {
 	// JSONの解析+種別チェック
-	analyze_JSON(name_decided_JSON);
-	validate_JSON_kind(AnalyzedJSONKind_NameDecided);
+	analyze_JSON(confirm_name_JSON);
+	validate_JSON_kind(AnalyzedJSONKind_ConfirmName);
 
 	// JSONからパケット作成
-	JSONRecvPacket_NameDecided name_decided_pkt;
+	JSONRecvPacket_ConfirmName confirm_name_pkt;
 
-	name_decided_pkt.your_team = get_obligatory_val<std::string>("your_team", m_analyzed_JSON_root_obj);
-	return name_decided_pkt;
+	confirm_name_pkt.your_team = get_obligatory_val<std::string>("your_team", m_analyzed_JSON_root_obj);
+	return confirm_name_pkt;
 }
 
 /**
@@ -122,26 +122,26 @@ JSONRecvPacket_Message CJSONAnalyzer::create_message_pkt(const std::string& mess
 
 /**
 *	@brief 与えられた「盤面」JSONから，「盤面」パケットを作成する関数
-*	@param[in] field_JSON 「盤面」JSON
-*	@return JSONRecvPacket_Field 「盤面」パケット
+*	@param[in] board_JSON 「盤面」JSON
+*	@return JSONRecvPacket_Board 「盤面」パケット
 */
-JSONRecvPacket_Field CJSONAnalyzer::create_field_pkt(const std::string& field_JSON)
+JSONRecvPacket_Board CJSONAnalyzer::create_board_pkt(const std::string& board_JSON)
 {
 	// JSONの解析+種別チェック
-	analyze_JSON(field_JSON);
-	validate_JSON_kind(AnalyzedJSONKind_Field);
+	analyze_JSON(board_JSON);
+	validate_JSON_kind(AnalyzedJSONKind_Board);
 
 	// JSONからデータ作成
-	JSONRecvPacket_Field field_pkt;
+	JSONRecvPacket_Board board_pkt;
 
-	field_pkt.width = get_obligatory_val<uint16_t>("width", m_analyzed_JSON_root_obj);
-	field_pkt.height = get_obligatory_val<uint16_t>("height", m_analyzed_JSON_root_obj);
-	field_pkt.turn_team = get_obligatory_val<std::string>("turn_team", m_analyzed_JSON_root_obj);
-	field_pkt.finished = get_obligatory_val<bool>("finished", m_analyzed_JSON_root_obj);
-	field_pkt.count = get_obligatory_val<uint32_t>("count", m_analyzed_JSON_root_obj);
-	field_pkt.players = make_players_array(get_obligatory_val<picojson::array>("players", m_analyzed_JSON_root_obj));
-	field_pkt.units = make_units_array(get_obligatory_val<picojson::array>("units", m_analyzed_JSON_root_obj));
-	return field_pkt;
+	board_pkt.width = get_obligatory_val<uint16_t>("width", m_analyzed_JSON_root_obj);
+	board_pkt.height = get_obligatory_val<uint16_t>("height", m_analyzed_JSON_root_obj);
+	board_pkt.turn_team = get_obligatory_val<std::string>("turn_team", m_analyzed_JSON_root_obj);
+	board_pkt.finished = get_obligatory_val<bool>("finished", m_analyzed_JSON_root_obj);
+	board_pkt.count = get_obligatory_val<uint32_t>("count", m_analyzed_JSON_root_obj);
+	board_pkt.players = make_players_array(get_obligatory_val<picojson::array>("players", m_analyzed_JSON_root_obj));
+	board_pkt.units = make_units_array(get_obligatory_val<picojson::array>("units", m_analyzed_JSON_root_obj));
+	return board_pkt;
 }
 
 /* private関数 */
@@ -294,19 +294,19 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::distinguish_analyzed_JSON_kind() 
 	AnalyzedJSONKind JSON_kind = AnalyzedJSONKind_UnknownJSON;
 
 	// JSONの種類が判明するまで，JSON種類確認用関数を呼ぶ
-	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_name_decided_JSON() : JSON_kind);
+	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_confirm_name_JSON() : JSON_kind);
 	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_result_JSON() : JSON_kind);
 	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_message_JSON() : JSON_kind);
-	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_field_JSON() : JSON_kind);
+	JSON_kind = (JSON_kind == AnalyzedJSONKind_UnknownJSON ? check_whether_board_JSON() : JSON_kind);
 
 	return JSON_kind;
 }
 
 /**
 *	@brief 解析したJSONが「名前確定」JSONであるかどうか判定する関数
-*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「名前確定」JSONであればAnalyzedJSONKind_NameDecided, そうでなければAnalyzedJSONKind_UnknownJSON)
+*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「名前確定」JSONであればAnalyzedJSONKind_ConfirmName, そうでなければAnalyzedJSONKind_UnknownJSON)
 */
-CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_name_decided_JSON() const
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_confirm_name_JSON() const
 {
 	bool is_contain_all_keys = true;
 	const size_t num_obligatory_key = 1;
@@ -316,7 +316,7 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_name_decided_JSON()
 
 	// 必須のキーの個数を確認
 	is_contain_all_keys &= m_analyzed_JSON_root_obj.size() == num_obligatory_key;
-	return is_contain_all_keys ? AnalyzedJSONKind_NameDecided : AnalyzedJSONKind_UnknownJSON;
+	return is_contain_all_keys ? AnalyzedJSONKind_ConfirmName : AnalyzedJSONKind_UnknownJSON;
 }
 
 /**
@@ -355,9 +355,9 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_message_JSON() cons
 
 /**
 *	@brief 解析したJSONが「盤面」JSONであるかどうか判定する関数
-*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「盤面」JSONであればAnalyzedJSONKind_Field, そうでなければAnalyzedJSONKind_UnknownJSON)
+*	@return CJSONAnalyzer::AnalyzedJSONKind 判定結果(「盤面」JSONであればAnalyzedJSONKind_Board, そうでなければAnalyzedJSONKind_UnknownJSON)
 */
-CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_field_JSON() const
+CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_board_JSON() const
 {
 	bool is_contain_all_keys = true;
 	const size_t num_obligatory_key = 7;
@@ -373,7 +373,7 @@ CJSONAnalyzer::AnalyzedJSONKind CJSONAnalyzer::check_whether_field_JSON() const
 
 	// 必須のキーの個数を確認
 	is_contain_all_keys &= m_analyzed_JSON_root_obj.size() == num_obligatory_key;
-	return is_contain_all_keys ? AnalyzedJSONKind_Field : AnalyzedJSONKind_UnknownJSON;
+	return is_contain_all_keys ? AnalyzedJSONKind_Board : AnalyzedJSONKind_UnknownJSON;
 }
 
 /**
