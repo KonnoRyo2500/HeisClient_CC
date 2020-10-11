@@ -12,6 +12,7 @@
 
 /**
 *	@brief	サーバ用TCP/IPソケットクラス
+*	@remark heisでは、JSON(文字列データ)のみ取り扱うため、データはstd::string型で持つものとする。
 */
 class CServerSocket {
 	// 構造体，列挙体など
