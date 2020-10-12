@@ -46,7 +46,7 @@ class CServerSocket {
 		void sck_accept();
 
 		// 送受信(送信先指定あり)
-		void sck_sendto(const std::string& msg, const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
+		void sck_sendto(const std::string& data, const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
 		std::string sck_recvfrom(const std::string& clt_ip_addr = "", const uint16_t clt_port_no = 0) const;
 
 		// クライアントの情報取得

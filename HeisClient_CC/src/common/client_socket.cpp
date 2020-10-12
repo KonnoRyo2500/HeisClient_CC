@@ -62,33 +62,33 @@ void CClientSocket::sck_connect(const std::string& dst_ip_addr, const uint16_t d
 }
 
 /**
-*	@brief メッセージを送信する関数
-*	@param[in] msg 送信するメッセージ
+*	@brief データを送信する関数
+*	@param[in] data 送信するデータ
 *	@throws std::runtime_error 送信エラーが発生したとき
 */
-void CClientSocket::sck_send(const std::string& msg) const
+void CClientSocket::sck_send(const std::string& data) const
 {
-	// サーバが前回送信されたメッセージを受信中に再度送信することを防ぐため，少しだけ待ちを入れる
+	// サーバが前回送信されたデータを受信中に再度送信することを防ぐため，少しだけ待ちを入れる
 #ifdef WIN32
 	Sleep(SocketConstVal_SendIntervalTimeMs);
 #else
 	usleep(SocketConstVal_SendIntervalTimeMs * 1000);
 #endif
 
-	// メッセージを確実にNULL終端させるため，size + 1文字送信する
-	size_t send_size = send(m_sck, msg.c_str(), msg.size() + 1, 0);
+	// データを確実にNULL終端させるため，size + 1バイト送信する
+	size_t send_size = send(m_sck, data.c_str(), data.size() + 1, 0);
 
-	if (send_size < msg.size()) {
+	if (send_size < data.size()) {
 		if (send_size < 0) {
 			throw std::runtime_error(cc_common::format("送信でエラーが発生しました(エラーコード: %d)", errno));
 		}
-		fprintf(stderr, "警告: 不完全なメッセージが送信されました(%zu文字中%zu文字が送信されました)\n", msg.size(), send_size);
+		fprintf(stderr, "警告: 不完全なデータが送信されました(%zuバイト中%zuバイトが送信されました)\n", data.size(), send_size);
 	}
 }
 
 /**
-*	@brief サーバからメッセージを受信する関数
-*	@return std::string サーバから受信したメッセージ
+*	@brief サーバからデータを受信する関数
+*	@return std::string サーバから受信したデータ
 */
 std::string CClientSocket::sck_recv() const
 {
@@ -147,26 +147,25 @@ void CClientSocket::sck_socket()
 
 // 受信処理に関しては、#ifdefが関数中に入り乱れるのを防ぐため、プラットフォーム別に関数を分ける
 // TODO: プラットフォームに依らない受信処理の実装
-// TODO: 受信中に相手が新たに送信してきても，新たに送信されたメッセージをまとめて受信しないようにする
 /**
 *	@brief 受信処理(Windows向け)
-*	@return std::string 受信したメッセージ
+*	@return std::string 受信したデータ
 *	@throws std::runtime_error 受信エラーが発生したとき
 */
 std::string CClientSocket::sck_recv_core_win() const
 {
 #ifdef WIN32
-	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
+	// データを確実にNULL終端させるため，バッファは1バイト余分に取る
 	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
 	int recv_size;
-	std::string recv_message;
+	std::string recv_data;
 
 	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
 	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
 		throw std::runtime_error(cc_common::format("受信でエラーが発生しました(エラーコード: %d)", errno));
 	}
-	recv_message += std::string(buf);
+	recv_data += std::string(buf);
 
 	// 入力キューにデータが残っていれば，それらもすべて受信する
 	{
@@ -185,7 +184,7 @@ std::string CClientSocket::sck_recv_core_win() const
 				break;
 			}
 		}
-		recv_message += std::string(buf);
+		recv_data += std::string(buf);
 	}
 	// 次の呼び出しでの最初の受信をブロッキングにするため，ソケットをブロッキングに戻す
 	{
@@ -193,7 +192,7 @@ std::string CClientSocket::sck_recv_core_win() const
 		ioctlsocket(m_sck, FIONBIO, &nonblocking_disable);
 	}
 
-	return recv_message;
+	return recv_data;
 #else
 	return "";
 #endif // WIN32
@@ -201,23 +200,23 @@ std::string CClientSocket::sck_recv_core_win() const
 
 /**
 *	@brief 受信処理(Linux向け)
-*	@return std::string 受信したメッセージ
+*	@return std::string 受信したデータ
 *	@throws std::runtime_error 受信エラーが発生したとき
 */
 std::string CClientSocket::sck_recv_core_linux() const
 {
 #ifndef WIN32
-	// メッセージを確実にNULL終端させるため，バッファは1バイト余分に取る
+	// データを確実にNULL終端させるため，バッファは1バイト余分に取る
 	char buf[SocketConstVal_RecvBufSize + 1] = { 0 };
 	int recv_size;
-	std::string recv_message;
+	std::string recv_data;
 
 	// データの到着前に抜けてしまうのを防ぐため，最初の受信はブロッキングにする
 	recv_size = recv(m_sck, buf, sizeof(buf) - 1, 0);
 	if (recv_size < 0) {
 		throw std::runtime_error(cc_common::format("受信でエラーが発生しました(エラーコード: %d)", errno));
 	}
-	recv_message += std::string(buf);
+	recv_data += std::string(buf);
 
 	// 入力キューにデータが残っていれば，それらもすべて受信する
 	while (recv_size == sizeof(buf) - 1) {
@@ -232,10 +231,10 @@ std::string CClientSocket::sck_recv_core_linux() const
 				break;
 			}
 		}
-		recv_message += std::string(buf);
+		recv_data += std::string(buf);
 	};
 
-	return recv_message;
+	return recv_data;
 #else
 	return "";
 #endif // WIN32

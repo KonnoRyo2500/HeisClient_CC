@@ -38,7 +38,7 @@ class CClientSocket {
 		void sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
 
 		// 送受信
-		void sck_send(const std::string& msg) const;
+		void sck_send(const std::string& data) const;
 		std::string sck_recv() const;
 
 	private:
