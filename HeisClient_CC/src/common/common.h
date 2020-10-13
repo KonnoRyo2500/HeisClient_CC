@@ -11,8 +11,23 @@
 
 //! 共通処理・データ構造
 namespace cc_common {
+	/* 文字列処理 */
+	// 文字列の切り取り
+	std::string cut_string(std::string& str, const size_t begin_pos, const size_t end_pos = SIZE_MAX);
 
 	/* テンプレート関数 */
+	/**
+	*	@brief 特定の文字や文字列が含まれているか判定する関数
+	*	@param[in] str 文字列
+	*	@param[in] target 検索する文字 or 文字列
+	*	@return bool strにtargetが含まれているか(含まれていればtrue)
+	*/
+	template<typename T>
+	bool contains(const std::string& str, const T& target)
+	{
+		return str.find(target) != std::string::npos;
+	}
+
 	/**
 	*	@brief フォーマット文字列を展開する関数
 	*	@param[in] fmt フォーマット文字列

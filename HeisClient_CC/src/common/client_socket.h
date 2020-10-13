@@ -22,8 +22,6 @@ class CClientSocket {
 		enum SocketConstVal {
 			//! 受信バッファサイズ
 			SocketConstVal_RecvBufSize = 1000,
-			//! 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
-			SocketConstVal_SendIntervalTimeMs = 50,
 		};
 
 	// メンバ関数
@@ -38,8 +36,8 @@ class CClientSocket {
 		void sck_connect(const std::string& dst_ip_addr, const uint16_t dst_port_no) const;
 
 		// 送受信
-		void sck_send(const std::string& data) const;
-		std::string sck_recv() const;
+		void sck_send(const std::string& data, const char etx = '\n') const;
+		std::string sck_recv(const char etx = '\n');
 
 	private:
 		// 初期化，終了処理
@@ -49,12 +47,11 @@ class CClientSocket {
 		// ソケット生成
 		void sck_socket();
 
-		// プラットフォーム別の受信処理
-		std::string sck_recv_core_win() const;			// Windows用
-		std::string sck_recv_core_linux() const;		// Linux用
-
 	// メンバ変数
 	private:
 		//! ソケットの実体
 		int m_sck;
+
+		//! 前回の受信時に余分に受信したデータ
+		std::string m_prev_recv_remaind_data;
 };
