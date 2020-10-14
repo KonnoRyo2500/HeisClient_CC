@@ -15,6 +15,11 @@ class CGame {
 
 	// メンバ関数
 	public:
+		// コンストラクタ
+		CGame();
+		// デストラクタ
+		virtual ~CGame();
+
 		// 対戦の実行
 		/**
 		*	@brief 対戦メイン処理

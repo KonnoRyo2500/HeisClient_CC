@@ -9,6 +9,22 @@
 
 /* public関数 */
 
+/**
+*	@brief コンストラクタ
+*/
+CGame::CGame()
+{
+	// 処理なし
+}
+
+/**
+*	@brief デストラクタ
+*/
+CGame::~CGame()
+{
+	// 処理なし
+}
+
 /* private関数 */
 
 /**
