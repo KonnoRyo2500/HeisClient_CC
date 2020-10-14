@@ -6,6 +6,8 @@
 */
 #pragma once
 
+#include "socket_base.h"
+
 #include <string>
 #include <vector>
 
@@ -14,22 +16,7 @@
 *	@details 本クラスのインスタンス1つにつき、1つのクライアントと通信する。
 *	@remark heisでは、JSON(文字列データ)のみ取り扱うため、データはstd::string型で持つものとする。
 */
-class CServerSocket {
-	// 構造体，列挙体など
-	private:
-		/**
-		*	@enum SocketConstVal
-		*	ソケットに関する諸定数
-		*/
-		enum SocketConstVal {
-			//! 同時接続要求の最大待ち受け数
-			SocketConstVal_ConnectReqQueueLen = 5,
-			//! 受信バッファサイズ
-			SocketConstVal_RecvBufSize = 1000,
-			//! 送信時の待ち時間(ms単位, 相手が受信中に再度送信することを防ぐための待ち時間)
-			SocketConstVal_SendIntervalTimeMs = 50,
-		};
-
+class CServerSocket : public CSocketBase{
 	// メンバ関数
 	public:
 		// コンストラクタ
@@ -45,26 +32,9 @@ class CServerSocket {
 		void sck_listen() const;
 		void sck_accept();
 
-		// 送受信
-		void sck_send(const std::string& data, const char etx = '\n') const;
-		std::string sck_recv(const char etx = '\n');
-
 	private:
-		// ソケット生成
-		void sck_socket();
-
-		// ソケット閉鎖
-		void sck_close() const;
-
-		// 初期化，終了処理
-		void initialize_socket() const;
-		void finalize_socket() const;
 
 	// メンバ変数
 	private:
-		//! ソケットの実体
-		int m_sck;
-
-		//! 前回の受信時に余分に受信したデータ
-		std::string m_prev_recv_remaind_data;
+		// なし
 };

@@ -174,6 +174,10 @@
     <ClCompile Include="..\src\common\log.cpp" />
     <ClCompile Include="..\src\common\path_generator.cpp" />
     <ClCompile Include="..\src\common\server_socket.cpp" />
+    <ClCompile Include="..\src\common\socket_base.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="..\src\common\token_manager.cpp" />
     <ClCompile Include="..\src\board\board.cpp" />
     <ClCompile Include="..\src\JSON\JSON_analyzer.cpp" />
@@ -201,6 +205,10 @@
     <ClInclude Include="..\src\common\path_generator.h" />
     <ClInclude Include="..\src\common\server_socket.h" />
     <ClInclude Include="..\src\common\setting_keys.h" />
+    <ClInclude Include="..\src\common\socket_base.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="..\src\common\token_manager.h" />
     <ClInclude Include="..\src\board\board.h" />
     <ClInclude Include="..\src\JSON\JSON_analyzer.h" />
