@@ -46,8 +46,8 @@ class CServerSocket {
 		void sck_accept();
 
 		// 送受信
-		void sck_send(const std::string& data) const;
-		std::string sck_recv() const;
+		void sck_send(const std::string& data, const char etx = '\n') const;
+		std::string sck_recv(const char etx = '\n');
 
 	private:
 		// ソケット生成
@@ -60,12 +60,11 @@ class CServerSocket {
 		void initialize_socket() const;
 		void finalize_socket() const;
 
-		// 送受信処理
-		std::string sck_recv_core_win() const;
-		std::string sck_recv_core_linux() const;
-
 	// メンバ変数
 	private:
 		//! ソケットの実体
 		int m_sck;
+
+		//! 前回の受信時に余分に受信したデータ
+		std::string m_prev_recv_remaind_data;
 };
