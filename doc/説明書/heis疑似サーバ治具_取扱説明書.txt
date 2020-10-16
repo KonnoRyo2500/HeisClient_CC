@@ -56,16 +56,17 @@ Author: Ryo Konno
 			   {"text": "hello,world!"}というJSONを後攻プレイヤーに送信します。
 			=> 続けて、json.txtに記載されているJSONを読み出し、後攻プレイヤーに送信します。
 
+	シナリオファイルは、以下のディレクトリに置いてください。
+		heisclient_cc/setting/PseudoServer/files/
+
 6. 設定変更
 	PSの設定変更は、設定ファイル"heis_ps_setting.csv"を書き換えることで行います。
 	設定ファイルはCSVファイルであるため、表計算ソフトで編集することをお勧めします。
-	各設定ファイルは、実行ファイルと同じディレクトリに置いてください。
+	設定ファイルは、以下のディレクトリに置いてください。
+		heisclient_cc/setting/PseudoServer/
+
 	設定可能な項目を以下に示します。
 
 	[PSの設定項目]
-		・ps_scenario_file_name: シナリオファイルのパス(※1)
 		・ps_listen_port_num: 接続を待ち受けるポート番号(2個)
 		・ps_listen_ip_addr: 接続を待ち受けるIPアドレス(IPv4, 2個)
-
-		※1: 場所はPSの実行ファイルがあるディレクトリを基準とします。
-			 違うディレクトリに置きたい場合は、そのディレクトリまでの相対パスを記述してください。
