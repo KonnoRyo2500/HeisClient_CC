@@ -17,7 +17,7 @@
 int main(int argc, char **argv)
 {
 	try{
-		CCsvSettingFileReader setting_reader(CPathGenerator::get_exe_path() + SETTING_FILE_NAME);
+		CCsvSettingFileReader setting_reader(get_setting_dir() + SETTING_FILE_NAME);
 		const std::string scenario_file_name = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_SCENARIO_NAME, 0);
 		CScenarioReader scenario_reader(scenario_file_name);
 		CScenarioReader::ActionType act_type;

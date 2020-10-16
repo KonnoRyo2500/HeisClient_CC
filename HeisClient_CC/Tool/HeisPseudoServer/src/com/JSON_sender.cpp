@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include "JSON_sender.h"
-#include "heis_client_exception.h"
+#include "common.h"
 
 /* public関数 */
 
@@ -16,7 +16,7 @@
 */
 void CJsonSender::send_JSON(const CServerSocket& sck, const std::string& JSON) const
 {
-	sck.sck_sendto(JSON);
+	sck.sck_send(JSON);
 }
 
 /*
@@ -32,12 +32,12 @@ void CJsonSender::send_JSON_from_file(const CServerSocket& sck, const std::strin
 	std::string JSON;
 
 	if(JSON_file.fail()){
-		throw CHeisClientException("JSONファイルのオープンに失敗しました(ファイル名: %s)", JSON_file_name.c_str());
+		throw std::runtime_error(cc_common::format("JSONファイルのオープンに失敗しました(ファイル名: %s)", JSON_file_name.c_str()));
 	}
 	while(std::getline(JSON_file, JSON_buff)){
 		JSON += JSON_buff;
 	}
-	sck.sck_sendto(JSON);
+	sck.sck_send(JSON);
 }
 
 /* private関数 */

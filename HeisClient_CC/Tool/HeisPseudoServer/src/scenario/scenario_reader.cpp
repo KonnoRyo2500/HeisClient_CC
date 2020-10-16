@@ -4,16 +4,17 @@
 #include <map>
 
 #include "scenario_reader.h"
-#include "heis_client_exception.h"
 #include "path_generator.h"
+#include "token_manager.h"
+#include "common.h"
 
 #include <limits.h>
 #include <unistd.h>
 
 #define SPACE_AND_TAB " 　\t"
 
-// 実行ファイルディレクトリからファイル格納ディレクトリまでの相対パス
-#define EXE_DIR_TO_FILE_DIR "../files/"
+// 設定ファイルディレクトリからファイル格納ディレクトリまでの相対パス
+#define SETTING_DIR_TO_FILE_DIR "../files/"
 
 /* public関数 */
 
@@ -24,9 +25,11 @@
 */
 CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
 {
-	m_scenario_file = std::ifstream(CPathGenerator::get_exe_path() + EXE_DIR_TO_FILE_DIR + scenario_file_name);
+	std::string scenario_path = get_setting_dir() + SETTING_DIR_TO_FILE_DIR + scenario_file_name;
+
+	m_scenario_file = std::ifstream(scenario_path);
 	if(m_scenario_file.fail()){
-		throw CHeisClientException("シナリオファイルのオープンに失敗しました(ファイル名: %s)", (CPathGenerator::get_exe_path() + scenario_file_name).c_str());
+		throw std::runtime_error(cc_common::format("シナリオファイルのオープンに失敗しました(ファイル名: %s)", (scenario_path).c_str()));
 	}
 }
 
@@ -63,7 +66,7 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 	
 	// シナリオファイルから読み出し，トークンに分割
 	getline(m_scenario_file, action_str);
-	token_array_t action = CTokenManager::split_string(action_str, SPACE_AND_TAB);
+	token_array_t action = split_string(action_str, SPACE_AND_TAB);
 	m_latest_action = action;
 
 	// アクションの種類を判定
@@ -90,7 +93,7 @@ std::string CScenarioReader::get_message_to_send() const
 	if(m_latest_action.size() >= 3){
 		return m_latest_action[2];
 	}
-	throw CHeisClientException("メッセージが指定されていない，もしくはアクションが異なります");
+	throw std::runtime_error("メッセージが指定されていない，もしくはアクションが異なります");
 }
 
 /*
@@ -102,9 +105,9 @@ std::string CScenarioReader::get_message_to_send() const
 std::string CScenarioReader::get_filename_to_send() const
 {
 	if(m_latest_action.size() >= 3){
-		return CPathGenerator::get_exe_path() + EXE_DIR_TO_FILE_DIR + m_latest_action[2];
+		return get_setting_dir() + SETTING_DIR_TO_FILE_DIR + m_latest_action[2];
 	}
-	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
+	throw std::runtime_error("ファイル名が指定されていない，もしくはアクションが異なります");
 }
 
 /*
@@ -118,7 +121,7 @@ std::string CScenarioReader::get_filename_to_write_recv_msg() const
 	if(m_latest_action.size() >= 3){
 		return m_latest_action[2];
 	}
-	throw CHeisClientException("ファイル名が指定されていない，もしくはアクションが異なります");
+	throw std::runtime_error("ファイル名が指定されていない，もしくはアクションが異なります");
 }
 
 /*
@@ -140,7 +143,7 @@ CScenarioReader::TurnOrder CScenarioReader::get_turn_order() const
 		if(it != turn_order_map.end()){
 			return it->second;
 		}
-		throw CHeisClientException("アクション対象のプレイヤーのターン順序が取得できません");
+		throw std::runtime_error("アクション対象のプレイヤーのターン順序が取得できません");
 	}
 	return CScenarioReader::TurnOrder_None;
 }

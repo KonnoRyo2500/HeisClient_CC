@@ -6,8 +6,8 @@
 class CJsonReceiver {
 	// メンバ関数
 	public:
-		void recv_JSON_and_print(const CServerSocket& sck) const;
-		void recv_JSON_and_write_file(const CServerSocket& sck, const std::string& JSON_file_name) const;
+		void recv_JSON_and_print(CServerSocket& sck);
+		void recv_JSON_and_write_file(CServerSocket& sck, const std::string& JSON_file_name);
 
 	private:
 		
