@@ -8,7 +8,6 @@
 #include "game_local.h"
 #include "board.h"
 #include "setting_keys.h"
-#include "path_generator.h"
 #include "common.h"
 
 /**
@@ -135,7 +134,11 @@ void CGameLocal::finalize_battle()
 */
 void CGameLocal::load_local_mode_setting()
 {
-	CCsvSettingFileReader local_setting_file(get_setting_dir() + LOCAL_SETTING_FILE_NAME);
+	CCsvSettingFileReader local_setting_file(
+		cc_common::get_setting_dir()
+		+ cc_common::get_separator_char()
+		+ LOCAL_SETTING_FILE_NAME
+	);
 
 	m_setting.board_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_WIDTH, 0);
 	m_setting.board_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_HEIGHT, 0);
@@ -162,9 +165,9 @@ std::vector<BoardPosition>  CGameLocal::get_initial_position(const CCsvSettingFi
 
 	for (auto& pos_str : all_init_pos_str) {
 		BoardPosition pos;
-		token_array_t pos_token;
+		std::vector<std::string> pos_token;
 
-		pos_token = split_string(pos_str, " ");
+		pos_token = cc_common::split_string(pos_str, " ");
 		if (pos_token.size() != 2) {
 			throw std::runtime_error("兵士の初期位置の指定が不正です");
 		}

@@ -4,17 +4,12 @@
 #include <map>
 
 #include "scenario_reader.h"
-#include "path_generator.h"
-#include "token_manager.h"
 #include "common.h"
 
 #include <limits.h>
 #include <unistd.h>
 
 #define SPACE_AND_TAB " 　\t"
-
-// 設定ファイルディレクトリからファイル格納ディレクトリまでの相対パス
-#define SETTING_DIR_TO_FILE_DIR "../files/"
 
 /* public関数 */
 
@@ -25,7 +20,11 @@
 */
 CScenarioReader::CScenarioReader(const std::string& scenario_file_name)
 {
-	std::string scenario_path = get_setting_dir() + SETTING_DIR_TO_FILE_DIR + scenario_file_name;
+	std::string scenario_path = cc_common::make_relative_path(
+		cc_common::get_setting_dir(),
+		"files",
+		scenario_file_name
+	);
 
 	m_scenario_file = std::ifstream(scenario_path);
 	if(m_scenario_file.fail()){
@@ -52,7 +51,7 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 {
 	std::string action_str;
 	// コマンドとアクションの種類の対応表
-	const std::map<token_array_t, ActionType> command_actiontype_map = {
+	const std::map<std::vector<std::string>, ActionType> command_actiontype_map = {
 		{{"recv", "print"},		ActionType_PrintRecvMessage	},
 		{{"recv", "write"},		ActionType_WriteRecvMessage	},
 		{{"send", "msg"},		ActionType_SendMessage		},
@@ -66,7 +65,7 @@ CScenarioReader::ActionType CScenarioReader::get_next_aciton_type()
 	
 	// シナリオファイルから読み出し，トークンに分割
 	getline(m_scenario_file, action_str);
-	token_array_t action = split_string(action_str, SPACE_AND_TAB);
+	std::vector<std::string> action = cc_common::split_string(action_str, SPACE_AND_TAB);
 	m_latest_action = action;
 
 	// アクションの種類を判定
@@ -105,7 +104,11 @@ std::string CScenarioReader::get_message_to_send() const
 std::string CScenarioReader::get_filename_to_send() const
 {
 	if(m_latest_action.size() >= 3){
-		return get_setting_dir() + SETTING_DIR_TO_FILE_DIR + m_latest_action[2];
+		return cc_common::make_relative_path(
+			cc_common::get_setting_dir(),
+			"files",
+			m_latest_action[2]
+		);
 	}
 	throw std::runtime_error("ファイル名が指定されていない，もしくはアクションが異なります");
 }
@@ -151,11 +154,11 @@ CScenarioReader::TurnOrder CScenarioReader::get_turn_order() const
 /* private関数 */
 /*
 	与えられたアクションのコマンド部分が，与えられたコマンドに一致しているかを判定する関数
-	引数1: const token_array_t action アクション
-	引数2: const token_array_t command コマンド
+	引数1: const std::vector<std::string>& action アクション
+	引数2: const std::vector<std::string>& command コマンド
 	返り値: bool actionのコマンド部分が，commandと一致しているか(一致: true, 不一致: false)
 */
-bool CScenarioReader::is_match_command_part(const token_array_t action, const token_array_t command) const
+bool CScenarioReader::is_match_command_part(const std::vector<std::string>& action, const std::vector<std::string>& command) const
 {
 	if(action.size() < command.size()){
 		return false;

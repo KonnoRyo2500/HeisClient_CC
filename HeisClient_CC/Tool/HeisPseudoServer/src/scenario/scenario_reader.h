@@ -5,8 +5,6 @@
 #include <vector>
 #include <fstream>
 
-#include "token_manager.h"
-
 class CScenarioReader
 {
 	// 構造体・列挙体など
@@ -59,7 +57,7 @@ class CScenarioReader
 
 	private:
 		// アクション解析
-		bool is_match_command_part(const token_array_t action, const token_array_t command) const;
+		bool is_match_command_part(const std::vector<std::string>& action, const std::vector<std::string>& command) const;
 		bool is_empty_line(const std::string& action_str) const;
 
 	// メンバ変数
@@ -67,5 +65,5 @@ class CScenarioReader
 		// シナリオファイル
 		std::ifstream m_scenario_file;
 		// 直前に読んだアクション
-		token_array_t m_latest_action;
+		std::vector<std::string> m_latest_action;
 };

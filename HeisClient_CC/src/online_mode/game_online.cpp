@@ -8,7 +8,6 @@
 #include "const_val.h"
 #include "board.h"
 #include "setting_keys.h"
-#include "path_generator.h"
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
@@ -94,7 +93,11 @@ void CGameOnline::initialize_battle()
 	// 必要なインスタンスの生成
 	CBoard::create_board();
 
-	m_setting_file = new CCsvSettingFileReader(get_setting_dir() + ONLINE_SETTING_FILE_NAME);
+	m_setting_file = new CCsvSettingFileReader(
+		cc_common::get_setting_dir()
+		+ cc_common::get_separator_char()
+		+ ONLINE_SETTING_FILE_NAME
+	);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_json_analyzer = new CJSONAnalyzer();
 	m_sck = new CClientSocket();

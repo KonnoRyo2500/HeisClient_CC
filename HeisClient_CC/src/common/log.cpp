@@ -5,7 +5,6 @@
 *	@details	ログを出力するための操作を提供する．
 */
 #include "log.h"
-#include "path_generator.h"
 #include "common.h"
 
 #include <ctime>
@@ -24,16 +23,16 @@
 CLog::CLog(const std::string& title)
 {
 	// "bin"ディレクトリと同列の"log"ディレクトリにログを出力する
-	// WindowsとLinuxでプロジェクトディレクトリの構造が異なるので，それに合わせてログ出力先の
-	// パスも変える
-	std::string log_name = get_log_dir() 
+	std::string log_path =
+		cc_common::get_log_dir()
+		+ cc_common::get_separator_char()
 		+ title
 		+ make_current_datetime_str("_%Y_%m_%d_%H_%M_%S")
 		+ ".log";
 
-	m_logfile = new std::ofstream(log_name);
+	m_logfile = new std::ofstream(log_path);
 	if (m_logfile->fail()) {
-		throw std::runtime_error(cc_common::format("ログファイルのオープンに失敗しました(ファイル名: %s)", log_name.c_str()));
+		throw std::runtime_error(cc_common::format("ログファイルのオープンに失敗しました(パス: %s)", log_path.c_str()));
 	}
 }
 

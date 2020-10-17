@@ -96,7 +96,7 @@
       <Optimization>Custom</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -129,7 +129,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -148,7 +148,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -172,13 +172,11 @@
     <ClCompile Include="..\src\common\csv_setting_file_reader.cpp" />
     <ClCompile Include="..\src\common\game.cpp" />
     <ClCompile Include="..\src\common\log.cpp" />
-    <ClCompile Include="..\src\common\path_generator.cpp" />
     <ClCompile Include="..\src\common\server_socket.cpp" />
     <ClCompile Include="..\src\common\socket_base.cpp">
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="..\src\common\token_manager.cpp" />
     <ClCompile Include="..\src\board\board.cpp" />
     <ClCompile Include="..\src\JSON\JSON_analyzer.cpp" />
     <ClCompile Include="..\src\local_mode\game_local.cpp" />
@@ -202,14 +200,12 @@
     <ClInclude Include="..\src\common\csv_setting_file_reader.h" />
     <ClInclude Include="..\src\common\game.h" />
     <ClInclude Include="..\src\common\log.h" />
-    <ClInclude Include="..\src\common\path_generator.h" />
     <ClInclude Include="..\src\common\server_socket.h" />
     <ClInclude Include="..\src\common\setting_keys.h" />
     <ClInclude Include="..\src\common\socket_base.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="..\src\common\token_manager.h" />
     <ClInclude Include="..\src\board\board.h" />
     <ClInclude Include="..\src\JSON\JSON_analyzer.h" />
     <ClInclude Include="..\src\JSON\JSON_data_packet.h" />

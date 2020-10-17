@@ -9,7 +9,6 @@
 #include <map>
 #include <stdexcept>
 
-#include "token_manager.h"
 #include "common.h"
 
 /**
@@ -39,15 +38,15 @@ class CCsvSettingFileReader {
 		void load_all_value(const std::string& file_name);
 
 		// 値の検索
-		token_array_t search_value(const std::string& key) const;
+		std::vector<std::string> search_value(const std::string& key) const;
 
 		//不要文字の削除
-		void remove_space_around_comma(token_array_t& key_value) const;
+		void remove_space_around_comma(std::vector<std::string>& key_value) const;
 
 	// メンバ変数
 	private:
 		//! 設定ファイルから取得したキーと値の組
-		std::map<std::string, token_array_t> m_key_value;
+		std::map<std::string, std::vector<std::string>> m_key_value;
 };
 
 // テンプレート関数
@@ -105,7 +104,7 @@ std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) cons
 template<>
 inline std::string CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
 {
-	token_array_t value = search_value(key);
+	std::vector<std::string> value = search_value(key);
 	try {
 		return value.at(index);
 	}
