@@ -7,7 +7,7 @@
 
 #include "audience_mode.h"
 #include "setting_keys.h"
-#include "csv_setting_file_reader.h"
+#include "setting_file_reader.h"
 
 /**
 *	@def AUDIENCE_SETTING_FILE_NAME
@@ -46,7 +46,7 @@ void CAudienceMode::play_game()
 */
 void CAudienceMode::initialize_watch()
 {
-	CCsvSettingFileReader reader(
+	CSettingFileReader reader(
 		cc_common::get_setting_dir()
 		+ cc_common::get_separator_char()
 		+ AUDIENCE_SETTING_FILE_NAME

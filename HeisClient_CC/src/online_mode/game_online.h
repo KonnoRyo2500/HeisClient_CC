@@ -11,7 +11,7 @@
 #include "user_AI.h"
 #include "JSON_analyzer.h"
 #include "client_socket.h"
-#include "csv_setting_file_reader.h"
+#include "setting_file_reader.h"
 #include <string>
 #include <vector>
 
@@ -61,5 +61,5 @@ class CGameOnline : public CGame {
 		CClientSocket* m_sck;
 
 		//! オンラインモード設定ファイル
-		CCsvSettingFileReader* m_setting_file;
+		CSettingFileReader* m_setting_file;
 };

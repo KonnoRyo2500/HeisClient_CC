@@ -1,8 +1,8 @@
 ﻿/**
-*	@file		csv_setting_file_reader.h
-*	@brief		CSV設定ファイルクラス
+*	@file		setting_file_reader.h
+*	@brief		設定ファイル読み出しクラス
 *	@author		Ryo Konno
-*	@details	CSVファイルとして実現された設定ファイルから設定値を読み出す．
+*	@details	設定ファイルから設定値を読み出す．
 */
 #pragma once
 
@@ -14,17 +14,17 @@
 /**
 *	@brief	設定値読み出しクラス
 */
-class CCsvSettingFileReader {
+class CSettingFileReader {
 	// 構造体，列挙体など
 	public:
 		
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CCsvSettingFileReader(const std::string& file_name);
+		explicit CSettingFileReader(const std::string& file_name);
 
 		// デストラクタ
-		~CCsvSettingFileReader();
+		~CSettingFileReader();
 
 		// 値の取得
 		// TODO: 処理を見直す(よりきれいな処理にできないか?)
@@ -60,7 +60,7 @@ class CCsvSettingFileReader {
 *	@remark 値を文字列として返す場合は別途処理を定義しているため，この処理は数値を返すことを想定している
 */
 template <typename T>
-T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
+T CSettingFileReader::get_single_value(const std::string& key, const size_t index) const
 {	
 	// std::string型のデータを返すget_single_valueは自身を呼び出さない別処理なので，再帰呼び出しにはならない(以下同様)
 	std::string value_str = get_single_value<std::string>(key, index);
@@ -80,7 +80,7 @@ T CCsvSettingFileReader::get_single_value(const std::string& key, const size_t i
 *	@return std::vector<T> 値
 */
 template <typename T>
-std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) const
+std::vector<T> CSettingFileReader::get_all_value(const std::string& key) const
 {
 	std::vector<std::string> value_str = search_value(key);
 	std::vector<T> ret_value;
@@ -102,7 +102,7 @@ std::vector<T> CCsvSettingFileReader::get_all_value(const std::string& key) cons
 *	@throws std::runtime_error インデックスが範囲外の場合
 */
 template<>
-inline std::string CCsvSettingFileReader::get_single_value(const std::string& key, const size_t index) const
+inline std::string CSettingFileReader::get_single_value(const std::string& key, const size_t index) const
 {
 	std::vector<std::string> value = search_value(key);
 	try {
@@ -119,7 +119,7 @@ inline std::string CCsvSettingFileReader::get_single_value(const std::string& ke
 *	@return std::vector<std::string> 値
 */
 template<>
-inline std::vector<std::string> CCsvSettingFileReader::get_all_value(const std::string& key) const
+inline std::vector<std::string> CSettingFileReader::get_all_value(const std::string& key) const
 {
 	return search_value(key);
 }

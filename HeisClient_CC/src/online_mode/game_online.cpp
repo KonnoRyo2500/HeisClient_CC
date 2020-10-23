@@ -93,7 +93,7 @@ void CGameOnline::initialize_battle()
 	// 必要なインスタンスの生成
 	CBoard::create_board();
 
-	m_setting_file = new CCsvSettingFileReader(
+	m_setting_file = new CSettingFileReader(
 		cc_common::get_setting_dir()
 		+ cc_common::get_separator_char()
 		+ ONLINE_SETTING_FILE_NAME

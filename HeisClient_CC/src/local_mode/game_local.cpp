@@ -134,7 +134,7 @@ void CGameLocal::finalize_battle()
 */
 void CGameLocal::load_local_mode_setting()
 {
-	CCsvSettingFileReader local_setting_file(
+	CSettingFileReader local_setting_file(
 		cc_common::get_setting_dir()
 		+ cc_common::get_separator_char()
 		+ LOCAL_SETTING_FILE_NAME
@@ -157,7 +157,7 @@ void CGameLocal::load_local_mode_setting()
 *	@param[in] key 初期位置を取得するためのキー
 *	@return std::vector<BoardPosition> 初期位置
 */
-std::vector<BoardPosition>  CGameLocal::get_initial_position(const CCsvSettingFileReader& local_setting_file, const std::string& key)
+std::vector<BoardPosition>  CGameLocal::get_initial_position(const CSettingFileReader& local_setting_file, const std::string& key)
 {
 	// 初期位置は"x1 y1,x2 y2,..."の形式で記載されているものとする
 	std::vector<std::string> all_init_pos_str = local_setting_file.get_all_value<std::string>(key);

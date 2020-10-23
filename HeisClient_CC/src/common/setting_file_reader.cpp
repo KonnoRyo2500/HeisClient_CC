@@ -1,10 +1,10 @@
 ﻿/**
-*	@file		csv_setting_file_reader.cpp
-*	@brief		CSV設定ファイルクラス
+*	@file		setting_file_reader.cpp
+*	@brief		設定ファイル読み出しクラス
 *	@author		Ryo Konno
-*	@details	CSVファイルとして実現された設定ファイルから設定値を読み出す．
+*	@details	設定ファイルから設定値を読み出す．
 */
-#include "csv_setting_file_reader.h"
+#include "setting_file_reader.h"
 
 #include <fstream>
 #include <algorithm>
@@ -15,7 +15,7 @@
 *	@brief コンストラクタ
 *	@param[in] file_name 設定ファイル名
 */
-CCsvSettingFileReader::CCsvSettingFileReader(const std::string& file_name)
+CSettingFileReader::CSettingFileReader(const std::string& file_name)
 	:m_key_value()
 {
 	load_all_value(file_name);
@@ -24,7 +24,7 @@ CCsvSettingFileReader::CCsvSettingFileReader(const std::string& file_name)
 /**
 *	@brief デストラクタ
 */
-CCsvSettingFileReader::~CCsvSettingFileReader()
+CSettingFileReader::~CSettingFileReader()
 {
 	// 処理なし
 }
@@ -34,7 +34,7 @@ CCsvSettingFileReader::~CCsvSettingFileReader()
 *	@brief すべての値を，設定ファイルから取得する関数
 *	@param[in] file_name 設定ファイル名
 */
-void CCsvSettingFileReader::load_all_value(const std::string& file_name)
+void CSettingFileReader::load_all_value(const std::string& file_name)
 {
 	std::ifstream csv_file(file_name);
 	if (csv_file.fail()) {
@@ -64,7 +64,7 @@ void CCsvSettingFileReader::load_all_value(const std::string& file_name)
 *	@return std::vector<std::string> 値を表すトークンの集合
 *	@throws std::runtime_error 指定したキーがファイルになかったとき
 */
-std::vector<std::string> CCsvSettingFileReader::search_value(const std::string& key) const
+std::vector<std::string> CSettingFileReader::search_value(const std::string& key) const
 {
 	auto it = m_key_value.find(key);
 	if (it == m_key_value.end()) {
@@ -77,7 +77,7 @@ std::vector<std::string> CCsvSettingFileReader::search_value(const std::string& 
 *	@brief カンマの前後にある空白類文字を削除する関数
 *	@param[out] key_value キーと値全体(カンマによってトークンに分割済み)
 */
-void CCsvSettingFileReader::remove_space_around_comma(std::vector<std::string>& key_value) const
+void CSettingFileReader::remove_space_around_comma(std::vector<std::string>& key_value) const
 {
 	for (auto& token : key_value) {
 		// 単語の先頭と末尾についている空白を削除する

@@ -5,7 +5,7 @@
 #include "JSON_sender.h"
 #include "JSON_receiver.h"
 #include "server_socket.h"
-#include "csv_setting_file_reader.h"
+#include "setting_file_reader.h"
 #include "ps_setting_keys.h"
 
 #define SETTING_FILE_NAME "heis_ps_setting.csv"
@@ -16,7 +16,7 @@
 int main(int argc, char **argv)
 {
 	try{
-		CCsvSettingFileReader setting_reader(
+		CSettingFileReader setting_reader(
 			cc_common::get_setting_dir()
 			+ cc_common::get_separator_char()
 			+ SETTING_FILE_NAME
