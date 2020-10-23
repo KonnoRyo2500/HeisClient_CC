@@ -86,7 +86,10 @@ std::string CSocketBase::sck_recv(const char etx)
 	} while (!cc_common::contains(recv_data, etx));
 
 	// 終端文字以降のデータは、次の受信時に読みだすようにする
-	m_prev_recv_remaind_data = cc_common::cut_string(recv_data, recv_data.find_first_of(etx) + 1);
+	{
+		size_t etx_pos = recv_data.find_first_of(etx);
+		m_prev_recv_remaind_data = (etx_pos == recv_data.size() - 1 ? "" : cc_common::cut_string(recv_data, etx_pos + 1));
+	}
 
 	return recv_data;
 }
