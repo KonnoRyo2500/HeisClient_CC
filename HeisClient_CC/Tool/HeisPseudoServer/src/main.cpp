@@ -30,13 +30,18 @@ int main(int argc, char **argv)
 		CServerSocket com_sck_to_first, com_sck_to_second;
 		
 		// ソケットの初期化
-		com_sck_to_first.sck_bind(setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 0),
-								  setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 0));
+		std::string first_ip = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 0);
+		std::string second_ip = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 1);
+		uint16_t first_port = setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 0);
+		uint16_t second_port = setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 1);
+
+		printf("CCをIPアドレス: %s, ポート番号: %dに接続してください\n", first_ip.c_str(), first_port);
+		com_sck_to_first.sck_bind(first_port, first_ip);
 		com_sck_to_first.sck_listen();
 		com_sck_to_first.sck_accept();
-		
-		com_sck_to_second.sck_bind(setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 1),
-								   setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 1));
+
+		printf("CCをIPアドレス: %s, ポート番号: %dに接続してください\n", second_ip.c_str(), second_port);
+		com_sck_to_second.sck_bind(second_port, second_ip);
 		com_sck_to_second.sck_listen();
 		com_sck_to_second.sck_accept();
 		
