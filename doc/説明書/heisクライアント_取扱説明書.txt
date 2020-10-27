@@ -57,48 +57,51 @@ Author: Ryo Konno
 
 6. 設定変更
 	CCの設定変更は、モードごとに用意される設定ファイルを書き換えることで行います。
-	設定ファイルはCSVファイルであるため、表計算ソフトで編集することをお勧めします。
+	設定ファイルはテキストファイルであるため、テキストエディタで編集できます。
 	各設定ファイルは、"heisclient_cc/HeisClient_CC/setting/CC"にあります。
 
-(1)ローカルモード
-	"local_setting.csv"というファイルを変更します。
-	設定できる項目を以下に示します。
+	(1)ローカルモード
+		"local_setting.conf"というファイルを変更します。
+		設定できる項目を以下に示します。
 
-	[ローカルモードの設定項目]
-		・"field_width": フィールドの横幅(1以上)
-		・"field_height": フィールドの高さ(1以上)
-		・"my_team_name": 自チームのチーム名(*1)
-		・"enemy_team_name": 敵チームのチーム名(*1)
-		・"my_infantries_init_position": 自チーム兵士の初期位置(*2)
-		・"enemy_infantries_init_position": 敵チーム兵士の初期位置(*2)
-		・"first_turn_team": 先攻になるチームのチーム名(*3)
+		[ローカルモードの設定項目]
+			・"field_width": フィールドの横幅(1以上)
+			・"field_height": フィールドの高さ(1以上)
+			・"my_team_name": 自チームのチーム名(*1)
+			・"enemy_team_name": 敵チームのチーム名(*1)
+			・"my_infantries_init_x_coodinate_N": 自チームの、N番目の兵士の初期x座標(N=1,2, ...)
+			・"my_infantries_init_y_coodinate_N": 自チームの、N番目の兵士の初期y座標(N=1,2, ...)
+			・"enemy_infantries_init_x_coodinate_N": 敵チームの、N番目の兵士の初期x座標(N=1,2, ...)
+			・"enemy_infantries_init_y_coodinate_N": 敵チームの、N番目の兵士の初期y座標(N=1,2, ...)
+			・"first_turn_team": 先攻になるチームのチーム名(*2)
 
-		(*1): 最初の2文字が被らないような名前を設定してください。
-			ex) my_team_name = "Team X", enemy_team_name = "Team Y" => NG
-				my_team_name = "XTeam", enemy_team_name = "YTeam" => OK
-		(*2): 各要素は"X Y"の形式で指定してください。
-			ex) my_infantries_init_position = "0 1,0 2,1 1"
-		(*3): my_team_name, enemy_team_nameで指定した名前のどちらでもない場合、敵チームが先攻になります。
+			(*1): 最初の2文字が被らないような名前を設定してください。
+			      また、空白を含んだ名前は非推奨です。
+				ex) my_team_name = "TeamX", enemy_team_name = "TeamY" => NG
+					my_team_name = "My Team", enemy_team_name = "Enemy Team" => 動作するが、非推奨
+					my_team_name = "MyTeam", enemy_team_name = "EnemyTeam" => OK
 
-(2)オンラインモード
-	"online_setting.csv"というファイルを変更します。
-	設定できる項目を以下に示します。
+			(*2): my_team_name, enemy_team_nameで指定した名前のどちらでもない場合、敵チームが先攻になります。
 
-	[オンラインモードの設定項目]
-		・"server_ip_addr": サーバのIPアドレス(IPv4)。
-		・"server_port_num": サーバの対戦用ポート番号(0-65535)。
-		・"team_name": チーム名(*4)。
+	(2)オンラインモード
+		"online_setting.conf"というファイルを変更します。
+		設定できる項目を以下に示します。
 
-		(*4): 場合によっては、実際にゲームで使用されるチーム名はここで設定したチーム名と
-			  異なる名前になる可能性があります。
+		[オンラインモードの設定項目]
+			・"server_ip_addr": サーバのIPアドレス(IPv4)。
+			・"server_port_num": サーバの対戦用ポート番号(0-65535)。
+			・"team_name": 自チーム名(*3)。
 
-(3)観戦モード
-	"audience_setting.csv"というファイルを変更します。
-	設定できる項目を以下に示します。
+			(*3): 場合によっては、実際にゲームで使用されるチーム名はここで設定したチーム名と
+				  異なる名前になる可能性があります。
 
-	[観戦モードの設定項目]
-		・"server_ip_addr": サーバのIPアドレス(IPv4)。
-		・"server_port_num": サーバの観戦用ポート番号(0-65535)。
+	(3)観戦モード
+		"audience_setting.conf"というファイルを変更します。
+		設定できる項目を以下に示します。
+
+		[観戦モードの設定項目]
+			・"server_ip_addr": サーバのIPアドレス(IPv4)。
+			・"server_port_num": サーバの観戦用ポート番号(0-65535)。
 
 7. 実行
 	コマンドラインから、引数なしで実行できます。
@@ -108,6 +111,19 @@ Author: Ryo Konno
 			heisclient_cc\HeisClient_CC\project_win\bin\x86\Release
 		(Linux) 
 			heisclient_cc/HeisClient_CC/project_linux/bin
+
+	[実行例]
+		(Linux)
+			$ bin/HeisClient_CC.exe
+			ゲームモードを選択してください(1: ローカルモード, 2: オンラインモード, 3: 観戦モード)
+			1
+			...
+
+		(Windows)
+			> HeisClient_CC.exe
+			ゲームモードを選択してください(1: ローカルモード, 2: オンラインモード, 3: 観戦モード)
+			1
+			...
 
 8. ログ
 	実行時、各種情報がログファイルに出力されます。
