@@ -35,7 +35,7 @@ class CGameLocal : public CGame {
 	private:
 		// 設定を取得する
 		void load_local_mode_setting();
-		std::vector<BoardPosition> get_initial_position(const CSettingFileReader& local_setting_file, const std::string& key);	
+		void load_initial_position(const CSettingFileReader& reader);
 
 		// 対戦の初期化
 		void initialize_battle();

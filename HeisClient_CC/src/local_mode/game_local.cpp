@@ -14,7 +14,7 @@
 *	@def LOCAL_SETTING_FILE_NAME
 *	@brief ローカルモード設定ファイルの名前
 */
-#define LOCAL_SETTING_FILE_NAME "local_setting.csv"
+#define LOCAL_SETTING_FILE_NAME "local_setting.conf"
 
 /* public関数 */
 
@@ -134,49 +134,43 @@ void CGameLocal::finalize_battle()
 */
 void CGameLocal::load_local_mode_setting()
 {
-	CSettingFileReader local_setting_file(
+	CSettingFileReader reader(
 		cc_common::get_setting_dir()
 		+ cc_common::get_separator_char()
 		+ LOCAL_SETTING_FILE_NAME
 	);
 
-	m_setting.board_width = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_WIDTH, 0);
-	m_setting.board_height = local_setting_file.get_single_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_HEIGHT, 0);
-	m_setting.my_team_name = local_setting_file.get_single_value<std::string>(LOCAL_SETTING_KEY_MY_NAME, 0);
-	m_setting.enemy_team_name = local_setting_file.get_single_value<std::string>(LOCAL_SETTING_KEY_ENEMY_NAME, 0);
-	m_setting.my_team_init_pos = get_initial_position(local_setting_file, LOCAL_SETTING_KEY_MY_INIT_POS);
-	m_setting.enemy_team_init_pos = get_initial_position(local_setting_file, LOCAL_SETTING_KEY_ENEMY_INIT_POS);
+	m_setting.board_width = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_WIDTH);
+	m_setting.board_height = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_HEIGHT);
+	m_setting.my_team_name = reader.get_value<std::string>(LOCAL_SETTING_KEY_MY_NAME);
+	m_setting.enemy_team_name = reader.get_value<std::string>(LOCAL_SETTING_KEY_ENEMY_NAME);
 	m_setting.is_my_team_first =
-		(local_setting_file.get_single_value<std::string>(LOCAL_SETTING_KEY_FIRST_TEAM, 0) == m_setting.my_team_name);
+		(reader.get_value<std::string>(LOCAL_SETTING_KEY_FIRST_TEAM) == m_setting.my_team_name);
+	load_initial_position(reader);
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "ローカルモード設定ファイルの読み込みが完了しました");
 }
 
 /**
 *	@brief 兵士の初期位置をローカルモード設定ファイルから取得する関数
-*	@param[in] local_setting_file ローカルモード設定ファイル
-*	@param[in] key 初期位置を取得するためのキー
-*	@return std::vector<BoardPosition> 初期位置
+*	@param[in] reader 設定ファイル読み出しインスタンス
 */
-std::vector<BoardPosition>  CGameLocal::get_initial_position(const CSettingFileReader& local_setting_file, const std::string& key)
+void CGameLocal::load_initial_position(const CSettingFileReader& reader)
 {
-	// 初期位置は"x1 y1,x2 y2,..."の形式で記載されているものとする
-	std::vector<std::string> all_init_pos_str = local_setting_file.get_all_value<std::string>(key);
-	std::vector<BoardPosition> init_pos;
+	// HACK: 横に長すぎるので、何とかしたい
+	// HACK: 同じようなコードが2回出現するので、うまくまとめたい
+	for (int infantry_num = 1; reader.exists_key(LOCAL_SETTING_KEY_MY_INIT_COORD_X(infantry_num)) && reader.exists_key(LOCAL_SETTING_KEY_MY_INIT_COORD_Y(infantry_num)); infantry_num++) {
+		uint16_t init_x = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_MY_INIT_COORD_X(infantry_num));
+		uint16_t init_y = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_MY_INIT_COORD_Y(infantry_num));
 
-	for (auto& pos_str : all_init_pos_str) {
-		BoardPosition pos;
-		std::vector<std::string> pos_token;
-
-		pos_token = cc_common::split_string(pos_str, " ");
-		if (pos_token.size() != 2) {
-			throw std::runtime_error("兵士の初期位置の指定が不正です");
-		}
-		pos.x = stoi(pos_token[0]);
-		pos.y = stoi(pos_token[1]);
-		init_pos.push_back(pos);
+		m_setting.my_team_init_pos.push_back(BoardPosition(init_x, init_y));
 	}
 
-	return init_pos;
+	for (int infantry_num = 1; reader.exists_key(LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X(infantry_num)) && reader.exists_key(LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y(infantry_num)); infantry_num++) {
+		uint16_t init_x = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X(infantry_num));
+		uint16_t init_y = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y(infantry_num));
+
+		m_setting.enemy_team_init_pos.push_back(BoardPosition(init_x, init_y));
+	}
 }
 
 /**

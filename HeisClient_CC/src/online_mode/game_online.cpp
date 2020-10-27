@@ -13,7 +13,7 @@
 *	@def ONLINE_SETTING_FILE_NAME
 *	@brief オンラインモード設定ファイルの名前
 */
-#define ONLINE_SETTING_FILE_NAME "online_setting.csv"
+#define ONLINE_SETTING_FILE_NAME "online_setting.conf"
 
 /* public関数 */
 
@@ -31,7 +31,7 @@ void CGameOnline::play_game()
 	initialize_battle();
 
 	recv_name_request();
-	name_entry(m_setting_file->get_single_value<std::string>(ONLINE_SETTING_KEY_TEAM_NAME, 0));
+	name_entry(m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_TEAM_NAME));
 	name_register();
 
 	// 対戦
@@ -102,8 +102,8 @@ void CGameOnline::initialize_battle()
 	m_json_analyzer = new CJSONAnalyzer();
 	m_sck = new CClientSocket();
 
-	const std::string svr_addr = m_setting_file->get_single_value<std::string>(ONLINE_SETTING_KEY_SVR_ADDR, 0);
-	const uint16_t svr_port = m_setting_file->get_single_value<uint16_t>(ONLINE_SETTING_KEY_SVR_PORT, 0);
+	const std::string svr_addr = m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_SVR_ADDR);
+	const uint16_t svr_port = m_setting_file->get_value<uint16_t>(ONLINE_SETTING_KEY_SVR_PORT);
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
 		"サーバに接続します(IPアドレス: %s, ポート番号: %d)",
 		svr_addr.c_str(), svr_port));

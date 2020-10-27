@@ -13,7 +13,7 @@
 *	@def AUDIENCE_SETTING_FILE_NAME
 *	@brief 観戦モード設定ファイルの名前
 */
-#define AUDIENCE_SETTING_FILE_NAME "audience_setting.csv"
+#define AUDIENCE_SETTING_FILE_NAME "audience_setting.conf"
 
 /* public関数 */
 /**
@@ -58,8 +58,8 @@ void CAudienceMode::initialize_watch()
 	m_sck = new CClientSocket();
 
 	// 接続するサーバの情報を設定ファイルから取得
-	svr_addr = reader.get_single_value<std::string>(AUDIENCE_SETTING_KEY_SVR_ADDR, 0);
-	svr_port = reader.get_single_value<uint16_t>(AUDIENCE_SETTING_KEY_SVR_PORT, 0);
+	svr_addr = reader.get_value<std::string>(AUDIENCE_SETTING_KEY_SVR_ADDR);
+	svr_port = reader.get_value<uint16_t>(AUDIENCE_SETTING_KEY_SVR_PORT);
 
 	// サーバに接続
 	m_sck->sck_connect(svr_addr, svr_port);

@@ -13,12 +13,13 @@
 /* public関数 */
 /**
 *	@brief コンストラクタ
-*	@param[in] file_name 設定ファイル名
+*	@param[in] path 設定ファイルのパス
 */
-CSettingFileReader::CSettingFileReader(const std::string& file_name)
-	:m_key_value()
+CSettingFileReader::CSettingFileReader(const std::string& path)
+	: m_key_value()
+	, m_path(path)
 {
-	load_all_value(file_name);
+	load(path);
 }
 
 /**
@@ -29,58 +30,39 @@ CSettingFileReader::~CSettingFileReader()
 	// 処理なし
 }
 
+/**
+*	@brief 指定されたキーが存在するか判定する関数
+*	@param[in] key キー名
+*	@return bool キーが存在するか(存在する: true, 存在しない: false)
+*/
+bool CSettingFileReader::exists_key(const std::string& key) const
+{
+	return m_key_value.find(key) != m_key_value.end();
+}
+
 /* private関数 */
 /**
-*	@brief すべての値を，設定ファイルから取得する関数
-*	@param[in] file_name 設定ファイル名
+*	@brief 設定ファイルからキーと値をロードする関数
+*	@param[in] path 設定ファイルのパス
 */
-void CSettingFileReader::load_all_value(const std::string& file_name)
+void CSettingFileReader::load(const std::string& path)
 {
-	std::ifstream csv_file(file_name);
-	if (csv_file.fail()) {
-		throw std::runtime_error(cc_common::format("設定ファイルのオープンに失敗しました(ファイル名: %s)", file_name.c_str()));
+	std::ifstream setting_file(path);
+
+	if (setting_file.fail()) {
+		throw std::runtime_error(cc_common::format("設定ファイル%sのオープンに失敗しました", path.c_str()));
 	}
 
-	std::string str;
-	while (std::getline(csv_file, str)) {
-		std::vector<std::string> key_value = cc_common::split_string(str, ",");
-		// 値は最低1個以上ある必要があるので，キーと要素が両方揃っているためには要素数が2個以上ある必要がある
-		if (key_value.size() < 2) {
-			throw std::runtime_error(cc_common::format("キーか値の少なくとも一方が欠損しています(キー名: %s)",
-				key_value.size() >= 1 ? key_value[0].c_str() : "欠損"));
+	std::string line;
+	while (std::getline(setting_file, line)) {
+		std::smatch smatch;
+
+		if (std::regex_match(line, smatch, std::regex("^\\s*(\\w+)\\s+([^\\s]+)\\s*$"))) {
+			// smatch[0] -> 文字列全体, smatch[1] -> キー, smatch[2] -> 値
+			std::string key = smatch[1].str();
+			std::string value = smatch[2].str();
+
+			m_key_value[key] = value;
 		}
-		remove_space_around_comma(key_value);
-
-		std::string key = key_value[0];
-		std::vector<std::string> value;
-		std::copy(key_value.begin() + 1, key_value.end(), std::back_inserter(value));
-		m_key_value.emplace(key, value);
-	}
-}
-
-/**
-*	@brief 指定されたキーを持つ値を探索する関数
-*	@param[in] key キー名
-*	@return std::vector<std::string> 値を表すトークンの集合
-*	@throws std::runtime_error 指定したキーがファイルになかったとき
-*/
-std::vector<std::string> CSettingFileReader::search_value(const std::string& key) const
-{
-	auto it = m_key_value.find(key);
-	if (it == m_key_value.end()) {
-		throw std::runtime_error(cc_common::format("キーが見つかりませんでした(キー名: %s)", key.c_str()));
-	}
-	return it->second;
-}
-
-/**
-*	@brief カンマの前後にある空白類文字を削除する関数
-*	@param[out] key_value キーと値全体(カンマによってトークンに分割済み)
-*/
-void CSettingFileReader::remove_space_around_comma(std::vector<std::string>& key_value) const
-{
-	for (auto& token : key_value) {
-		// 単語の先頭と末尾についている空白を削除する
-		token = std::regex_replace(token, std::regex("(^\\s+)|(\\s+$)"), "");
 	}
 }

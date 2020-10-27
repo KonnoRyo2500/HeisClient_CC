@@ -8,7 +8,7 @@
 #include "setting_file_reader.h"
 #include "ps_setting_keys.h"
 
-#define SETTING_FILE_NAME "heis_ps_setting.csv"
+#define SETTING_FILE_NAME "heis_ps_setting.conf"
 
 /*
 	メイン関数
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 			+ cc_common::get_separator_char()
 			+ SETTING_FILE_NAME
 		);
-		const std::string scenario_file_name = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_SCENARIO_NAME, 0);
+		const std::string scenario_file_name = setting_reader.get_value<std::string>(KEY_SCENARIO_NAME);
 		CScenarioReader scenario_reader(scenario_file_name);
 		CScenarioReader::ActionType act_type;
 		CJsonSender json_sender;
@@ -30,10 +30,10 @@ int main(int argc, char **argv)
 		CServerSocket com_sck_to_first, com_sck_to_second;
 		
 		// ソケットの初期化
-		std::string first_ip = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 0);
-		std::string second_ip = setting_reader.get_single_value<std::string>(PS_SETTING_FILE_KEY_LISTEN_ADDR, 1);
-		uint16_t first_port = setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 0);
-		uint16_t second_port = setting_reader.get_single_value<uint16_t>(PS_SETTING_FILE_KEY_LISTEN_PORT, 1);
+		std::string first_ip = setting_reader.get_value<std::string>(KEY_LISTEN_IP_FIRST);
+		std::string second_ip = setting_reader.get_value<std::string>(KEY_LISTEN_IP_SECOND);
+		uint16_t first_port = setting_reader.get_value<uint16_t>(KEY_LISTEN_PORT_FIRST);
+		uint16_t second_port = setting_reader.get_value<uint16_t>(KEY_LISTEN_PORT_SECOND);
 
 		printf("CCをIPアドレス: %s, ポート番号: %dに接続してください\n", first_ip.c_str(), first_port);
 		com_sck_to_first.sck_bind(first_port, first_ip);

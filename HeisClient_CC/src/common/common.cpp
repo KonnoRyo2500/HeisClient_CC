@@ -122,8 +122,8 @@ std::vector<std::string> cc_common::split_string(const std::string& str, const s
 /**
 *	@brief 特定の範囲の文字列を切り取って返す関数
 *	@param[in] str 文字列
-*	@param[in] 切り取る範囲の始端位置(0始まり)
-*	@param[in] 切り取る範囲の終端位置(0始まり, 省略可。省略したり、strの終端より後ろを指定した場合はstrの終端)
+*	@param[in] begin_pos 切り取る範囲の始端位置(0始まり)
+*	@param[in] end_pos 切り取る範囲の終端位置(0始まり, 省略可。省略したり、strの終端より後ろを指定した場合はstrの終端)
 */
 std::string cc_common::cut_string(std::string& str, const size_t begin_pos, const size_t end_pos)
 {

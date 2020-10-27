@@ -21,105 +21,66 @@ class CSettingFileReader {
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CSettingFileReader(const std::string& file_name);
+		explicit CSettingFileReader(const std::string& path);
 
 		// デストラクタ
 		~CSettingFileReader();
 
 		// 値の取得
-		// TODO: 処理を見直す(よりきれいな処理にできないか?)
 		template <typename T>
-		T get_single_value(const std::string& key, const size_t index) const;
-		template <typename T>
-		std::vector<T> get_all_value(const std::string& key) const;
+		T get_value(const std::string& key) const;
+		// キーの検索
+		bool exists_key(const std::string& key) const;
 
 	private:
 		// 値の取得
-		void load_all_value(const std::string& file_name);
-
-		// 値の検索
-		std::vector<std::string> search_value(const std::string& key) const;
-
-		//不要文字の削除
-		void remove_space_around_comma(std::vector<std::string>& key_value) const;
+		void load(const std::string& path);
 
 	// メンバ変数
 	private:
 		//! 設定ファイルから取得したキーと値の組
-		std::map<std::string, std::vector<std::string>> m_key_value;
+		std::map<std::string, std::string> m_key_value;
+		//! 設定ファイルのパス
+		std::string m_path;
 };
 
 // テンプレート関数
 /* public関数 */
 
 /**
-*	@brief 単一の値を取得する関数
+*	@brief 値を取得する関数
 *	@param[in] key キー名
-*	@param[in] index 値のインデックス
 *	@return T 値
 *	@remark 値を文字列として返す場合は別途処理を定義しているため，この処理は数値を返すことを想定している
 */
 template <typename T>
-T CSettingFileReader::get_single_value(const std::string& key, const size_t index) const
+T CSettingFileReader::get_value(const std::string& key) const
 {	
-	// std::string型のデータを返すget_single_valueは自身を呼び出さない別処理なので，再帰呼び出しにはならない(以下同様)
-	std::string value_str = get_single_value<std::string>(key, index);
+	// 文字列での値取得は別途処理を定義しているため、再帰処理にならない
+	// また、キーの存在チェックも行われる
+	std::string value_str = get_value<std::string>(key);
 	/* 
 		整数型と浮動小数点型どちらを返すかによって文字列 -> 数値に変換する関数が異なる
 		それぞれの型について関数を定義することを防ぐため，一旦浮動小数点に変換し，そのあと必要な型にキャストするようにする
-		以下に定義する関数も同様
 	*/
 	T value = static_cast<T>(stof(value_str));
-
 	return value;
-}
-
-/**
-*	@brief すべての値を取得する関数
-*	@param[in] key キー名
-*	@return std::vector<T> 値
-*/
-template <typename T>
-std::vector<T> CSettingFileReader::get_all_value(const std::string& key) const
-{
-	std::vector<std::string> value_str = search_value(key);
-	std::vector<T> ret_value;
-
-	for (auto& v : value_str) {
-		ret_value.push_back(static_cast<T>(stof(v)));
-	}
-
-	return ret_value;
 }
 
 // テンプレート関数特殊化
 
 /**
-*	@brief 単一の値を取得する関数(返す値の型が文字列の場合の処理)
+*	@brief 値を取得する関数(返す値の型が文字列の場合の処理)
 *	@param[in] key キー名
-*	@param[in] index 値のインデックス
 *	@return std::string 値
-*	@throws std::runtime_error インデックスが範囲外の場合
+*	@throws std::runtime_error キーが存在しない場合
 */
 template<>
-inline std::string CSettingFileReader::get_single_value(const std::string& key, const size_t index) const
+inline std::string CSettingFileReader::get_value(const std::string& key) const
 {
-	std::vector<std::string> value = search_value(key);
-	try {
-		return value.at(index);
+	if (!exists_key(key)) {
+		throw std::runtime_error(cc_common::format("キー%sがファイル%sに存在しません", key.c_str(), m_path.c_str()));
 	}
-	catch (std::out_of_range&) {
-		throw std::runtime_error(cc_common::format("インデックスが範囲外です(インデックスの上限: %d, 指定されたインデックス: %d)", value.size() - 1, index));
-	}
-}
-
-/**
-*	@brief すべての値を取得する関数(返す値の型が文字列の場合の処理)
-*	@param[in] key キー名
-*	@return std::vector<std::string> 値
-*/
-template<>
-inline std::vector<std::string> CSettingFileReader::get_all_value(const std::string& key) const
-{
-	return search_value(key);
+	// []演算子はconstな関数でないため、使用できない
+	return m_key_value.at(key);
 }
