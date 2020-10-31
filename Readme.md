@@ -1,3 +1,3 @@
-# Heis総合クライアント - Comprehe<span style="color: red; ">i</span>sive Client -
+# Heis総合クライアント - Comprehe*i*sive Client -
 
 作成中。
