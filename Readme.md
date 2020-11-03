@@ -145,7 +145,7 @@ CCを起動したら、対戦モードを選択します。
 CCの開発にあたって、以下の外部ソフトウェア・ライブラリを使用しております。
 製作者の皆様に心より感謝いたします。
 
-- kazuho様 - [picojson](https://github.com/kazuho/picojson) (BSD 2条項ライセンス)
+- kazuho様 - [picojson](https://github.com/kazuho/picojson)
 
 
 
