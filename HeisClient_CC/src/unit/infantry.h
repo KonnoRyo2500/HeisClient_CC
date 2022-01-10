@@ -35,7 +35,7 @@ class CInfantry
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CInfantry(const std::string& team_name, const std::string& infantry_id, const BoardPosition& init_pos);
+		explicit CInfantry(const std::string& team_name, const std::string& infantry_id, const BoardPosition& init_pos, const int init_hp = InitialValue_HP);
 
 		// デストラクタ
 		~CInfantry();

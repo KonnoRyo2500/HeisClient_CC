@@ -16,14 +16,16 @@
 *	@param[in] team_name 所属チーム名
 *	@param[in] infantry_id ID
 *	@param[in] init_pos 初期位置
+*	@param[in] init_hp 初期HP(「盤面」JSONから再配置する際に使用する)
+*	@remark "init_hp"は、「盤面」JSONから兵士を再配置する際に使用する。それ以外は省略し、デフォルト値を与える。
 */
-CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const BoardPosition& init_pos)
+CInfantry::CInfantry(const std::string& team_name, const std::string& infantry_id, const BoardPosition& init_pos, const int init_hp)
 	: m_team_name(team_name)
 	, m_id(infantry_id)
 	, m_pos(init_pos)
 	, m_attack_pos({ UINT16_MAX, UINT16_MAX })
 	, m_action_remain(InitialValue_ActionRemain)
-	, m_hp(InitialValue_HP)
+	, m_hp(init_hp)
 {
 	// 呼ばれるタイミングによっては盤面が未作成の場合もあるので，盤面が作成済みであることを確認してから配置するようにする
 	CBoard* board = CBoard::get_instance();

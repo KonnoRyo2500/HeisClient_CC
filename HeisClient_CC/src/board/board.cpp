@@ -250,7 +250,7 @@ void CBoard::add_infantry(CInfantry* new_infantry)
 void CBoard::relocate_all_infantries_from_units_array(const std::vector<UnitsArrayElem>& units_array)
 {
 	for (auto& infantry_data : units_array) {
-		CInfantry* infantry = new CInfantry(infantry_data.team, infantry_data.unit_id, BoardPosition(infantry_data.locate.x, infantry_data.locate.y));
+		CInfantry* infantry = new CInfantry(infantry_data.team, infantry_data.unit_id, BoardPosition(infantry_data.locate.x, infantry_data.locate.y), infantry_data.hp);
 		set_infantry( BoardPosition(infantry_data.locate.x, infantry_data.locate.y), infantry);
 	}
 }
