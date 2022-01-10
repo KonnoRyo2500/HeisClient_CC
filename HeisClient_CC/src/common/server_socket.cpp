@@ -81,7 +81,7 @@ void CServerSocket::sck_accept()
 {
 	sockaddr_in client_addr_info = { 0 };
 	int new_sck;
-	int addr_info_len = sizeof(sockaddr_in);
+	socklen_t addr_info_len = sizeof(sockaddr_in);
 	
 	// 通信用ソケット作成
 	new_sck = accept(m_sck, reinterpret_cast<sockaddr*>(&client_addr_info), &addr_info_len);
