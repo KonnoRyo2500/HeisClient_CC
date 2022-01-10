@@ -1,0 +1,5 @@
+Compreheisive Client(CC)はパブリック・ドメインです。
+自己責任の下で、このソフトウェアを自由に利用できます。
+
+Compreheisive Client(CC) is licensed under Public Domain. 
+You may use this software freely on your responsibility.
