@@ -162,6 +162,7 @@
     <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AI\base\ai_base.cpp" />
     <ClCompile Include="..\src\AI\opponent_AI.cpp" />
     <ClCompile Include="..\src\AI\user_AI.cpp" />
     <ClCompile Include="..\src\common\client_socket.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="..\src\unit\infantry.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\AI\base\ai_base.h" />
     <ClInclude Include="..\src\AI\opponent_AI.h" />
     <ClInclude Include="..\src\AI\user_AI.h" />
     <ClInclude Include="..\src\common\client_socket.h" />
