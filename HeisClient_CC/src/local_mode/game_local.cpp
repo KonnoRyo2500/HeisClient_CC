@@ -9,6 +9,7 @@
 #include "board.h"
 #include "setting_keys.h"
 #include "common.h"
+#include "ai_factory.h"
 
 /**
 *	@def LOCAL_SETTING_FILE_NAME
@@ -92,8 +93,15 @@ void CGameLocal::initialize_battle()
 	m_my_commander = new CCommander(m_setting.my_team_name);
 	m_enemy_commander = new CCommander(m_setting.enemy_team_name);
 
-	m_my_AI = new CUserAI(m_my_commander);
-	m_enemy_AI = new COpponentAI(m_enemy_commander);
+	CAIFactory ai_factory = CAIFactory();
+	m_my_AI = ai_factory.create_instance(m_my_commander, m_setting.my_team_ai_impl);
+	m_enemy_AI = ai_factory.create_instance(m_enemy_commander, m_setting.enemy_team_ai_impl);
+	if (m_my_AI == NULL){
+		throw std::runtime_error("自チームのAIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
+	}
+	if (m_enemy_AI == NULL) {
+		throw std::runtime_error("敵チームのAIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
+	}
 
 	m_pseudo_server = new CPseudoServer();
 
@@ -144,6 +152,8 @@ void CGameLocal::load_local_mode_setting()
 	m_setting.board_height = reader.get_value<uint16_t>(LOCAL_SETTING_KEY_BOARD_HEIGHT);
 	m_setting.my_team_name = reader.get_value<std::string>(LOCAL_SETTING_KEY_MY_NAME);
 	m_setting.enemy_team_name = reader.get_value<std::string>(LOCAL_SETTING_KEY_ENEMY_NAME);
+	m_setting.my_team_ai_impl = reader.get_value<std::string>(LOCAL_SETTING_KEY_MY_AI_IMPL);
+	m_setting.enemy_team_ai_impl = reader.get_value<std::string>(LOCAL_SETTING_KEY_ENEMY_AI_IMPL);
 	m_setting.is_my_team_first =
 		(reader.get_value<std::string>(LOCAL_SETTING_KEY_FIRST_TEAM) == m_setting.my_team_name);
 	load_initial_position(reader);

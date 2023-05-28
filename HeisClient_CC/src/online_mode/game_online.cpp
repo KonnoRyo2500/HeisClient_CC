@@ -8,6 +8,7 @@
 #include "const_val.h"
 #include "board.h"
 #include "setting_keys.h"
+#include "ai_factory.h"
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
@@ -146,10 +147,17 @@ void CGameOnline::name_register()
 {
 	std::string received_JSON = m_sck->sck_recv();
 	JSONRecvPacket_ConfirmName confirm_name_pkt = m_json_analyzer->create_confirm_name_pkt(received_JSON);
+	CAIFactory ai_factory = CAIFactory();
 
 	m_team_name = confirm_name_pkt.your_team;
 	m_commander = new CCommander(m_team_name);
-	m_ai = new CUserAI(m_commander);
+	m_ai = ai_factory.create_instance(
+		m_commander,
+		m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_AI_IMPL)
+	);
+	if (m_ai == NULL) {
+		throw std::runtime_error("AIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
+	}
 
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
 		"チーム名が確定しました(チーム名: %s)",

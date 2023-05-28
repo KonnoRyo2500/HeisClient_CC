@@ -38,6 +38,12 @@
 */
 #define ONLINE_SETTING_KEY_TEAM_NAME "team_name"
 
+/**
+*	@def ONLINE_SETTING_KEY_AI_IMPL
+*	@brief ゲームで利用するAIの実装方式
+*/
+#define ONLINE_SETTING_KEY_AI_IMPL "ai_implementation"
+
 /* ローカルモード用 */
 /**
 *	@def LOCAL_SETTING_KEY_BOARD_WIDTH
@@ -62,6 +68,18 @@
 *	@brief 敵チームの名前
 */
 #define LOCAL_SETTING_KEY_ENEMY_NAME "enemy_team_name"
+
+/**
+*	@def LOCAL_SETTING_KEY_MY_AI_IMPL
+*	@brief 自チームで利用するAIの実装方式
+*/
+#define LOCAL_SETTING_KEY_MY_AI_IMPL "my_ai_implementation"
+
+/**
+*	@def LOCAL_SETTING_KEY_ENEMY_AI_IMPL
+*	@brief 敵チームで利用するAIの実装方式
+*/
+#define LOCAL_SETTING_KEY_ENEMY_AI_IMPL "enemy_ai_implementation"
 
 /**
 *	@def LOCAL_SETTING_KEY_MY_INIT_COORD_X

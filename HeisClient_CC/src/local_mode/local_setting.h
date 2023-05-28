@@ -20,6 +20,10 @@ struct LocalSetting {
 	std::string my_team_name;
 	//! 敵チーム名
 	std::string enemy_team_name;
+	//! 自チームのAI実装
+	std::string my_team_ai_impl;
+	//! 敵チームのAI実装
+	std::string enemy_team_ai_impl;
 	//! 盤面の横幅
 	uint16_t board_width;
 	//! 盤面の高さ

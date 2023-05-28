@@ -13,7 +13,7 @@
 *	@brief サンプルAIクラス
 *	@details サンプル実装のAI。ランダムに行動を選択します。AI実装の際の参考としてお使いください。
 */
-class CSampleAI : CAIBase
+class CSampleAI : public CAIBase
 {
 	// 構造体・列挙体など
 private:

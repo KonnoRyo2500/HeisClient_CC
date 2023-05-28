@@ -8,8 +8,7 @@
 
 #include "game.h"
 #include "commander.h"
-#include "user_AI.h"
-#include "opponent_AI.h"
+#include "ai_base.h"
 #include "JSON_analyzer.h"
 #include "pseudo_server.h"
 #include "local_setting.h"
@@ -55,9 +54,9 @@ class CGameLocal : public CGame {
 		CCommander* m_enemy_commander;
 
 		//! 自分のAI
-		CUserAI* m_my_AI;
+		CAIBase* m_my_AI;
 		//! 敵のAI
-		COpponentAI* m_enemy_AI;
+		CAIBase* m_enemy_AI;
 
 		//! 疑似サーバ
 		CPseudoServer* m_pseudo_server;
