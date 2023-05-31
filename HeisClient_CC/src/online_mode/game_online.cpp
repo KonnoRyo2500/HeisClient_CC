@@ -9,6 +9,12 @@
 #include "board.h"
 #include "setting_keys.h"
 #include "ai_factory.h"
+#include "board_json_converter.h"
+#include "action_json_converter.h"
+#include "result_json_converter.h"
+#include "message_json_converter.h"
+#include "name_json_converter.h"
+#include "confirm_name_json_converter.h"
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
@@ -38,7 +44,10 @@ void CGameOnline::play_game()
 	// 対戦
 	while (true) {
 		// サーバから受信するJSONから生成するパケット(「盤面」パケットはここで生成できる)
-		JSONRecvPacket_Board board_pkt = m_json_analyzer->create_board_pkt(m_sck->sck_recv());
+		BoardJsonConverter board_json_converter;
+		ActionJsonConverter action_json_converter;
+		ResultJsonConverter result_json_converter;
+		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->sck_recv());
 		JSONRecvPacket_Result result_pkt;
 
 		// 受信した「盤面」JSONの内容に合うよう，内部のフィールドを更新
@@ -49,11 +58,11 @@ void CGameOnline::play_game()
 		CBoard::get_instance()->show();
 
 		// 「盤面」パケットは一旦変数に持っておきたいため，while文の条件部で対戦終了の判定をしない
-		if (board_pkt.finished) {
+		if (board_pkt.finished.get_value()) {
 			break;
 		}
 		// 自分のターンでなければ，次の「盤面」JSON受信まで待つ
-		if (board_pkt.turn_team != m_team_name) {
+		if (board_pkt.turn_team.get_value() != m_team_name) {
 			continue;
 		}
 
@@ -61,16 +70,16 @@ void CGameOnline::play_game()
 		m_ai->AI_main(board_pkt);
 
 		// 「行動」パケットを作成して送信
-		m_sck->sck_send(m_json_analyzer->create_action_JSON(m_commander->create_action_pkt()));
+		m_sck->sck_send(action_json_converter.from_packet_to_json(m_commander->create_action_pkt()));
 
 		// 「結果」パケットを受信
-		result_pkt = m_json_analyzer->create_result_pkt(m_sck->sck_recv());
+		result_pkt = result_json_converter.from_json_to_packet(m_sck->sck_recv());
 		// 「結果」パケットの内容を表示
-		for (const auto& result_elem : result_pkt.result) {
+		for (const auto& result_elem : result_pkt.result.get_value()) {
 			g_system_log->write_log(CLog::LogLevel_Warning,cc_common::format(
 				"サーバからエラーメッセージが送信されました(エラー内容: %s, 対象兵士ID: %s)",
-				result_elem.error.c_str(), 
-				result_elem.unit_id.is_omitted() ? "なし" : result_elem.unit_id.get().c_str()));
+				result_elem.error.get_value().c_str(), 
+				result_elem.unit_id.exists() ? result_elem.unit_id.get_value().c_str() : "なし"));
 		}
 	}
 
@@ -100,7 +109,6 @@ void CGameOnline::initialize_battle()
 		+ ONLINE_SETTING_FILE_NAME
 	);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
-	m_json_analyzer = new CJSONAnalyzer();
 	m_sck = new CClientSocket();
 
 	const std::string svr_addr = m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_SVR_ADDR);
@@ -124,7 +132,8 @@ void CGameOnline::initialize_battle()
 void CGameOnline::recv_name_request() const
 {
 	std::string received_JSON = m_sck->sck_recv();
-	JSONRecvPacket_Message name_req_msg_pkt = m_json_analyzer->create_message_pkt(received_JSON);
+	MessageJsonConverter message_json_converter;
+	JSONRecvPacket_Message name_req_msg_pkt = message_json_converter.from_json_to_packet(received_JSON);
 }
 
 /**
@@ -133,8 +142,10 @@ void CGameOnline::recv_name_request() const
 */
 void CGameOnline::name_entry(const std::string& name)
 {
-	JSONSendPacket_Name name_pkt = {name};
-	m_sck->sck_send(m_json_analyzer->create_name_JSON(name_pkt));
+	JSONSendPacket_Name name_pkt;
+	NameJsonConverter name_json_converter;
+	name_pkt.team_name.set_value(name);
+	m_sck->sck_send(name_json_converter.from_packet_to_json(name_pkt));
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
 		"チーム名をサーバに送信しました(チーム名: %s)",
 		name.c_str()));
@@ -146,10 +157,11 @@ void CGameOnline::name_entry(const std::string& name)
 void CGameOnline::name_register()
 {
 	std::string received_JSON = m_sck->sck_recv();
-	JSONRecvPacket_ConfirmName confirm_name_pkt = m_json_analyzer->create_confirm_name_pkt(received_JSON);
+	ConfirmNameJsonConverter confirm_name_json_converter;
+	JSONRecvPacket_ConfirmName confirm_name_pkt = confirm_name_json_converter.from_json_to_packet(received_JSON);
 	CAIFactory ai_factory = CAIFactory();
 
-	m_team_name = confirm_name_pkt.your_team;
+	m_team_name = confirm_name_pkt.your_team.get_value();
 	m_commander = new CCommander(m_team_name);
 	m_ai = ai_factory.create_instance(
 		m_commander,
@@ -171,13 +183,11 @@ void CGameOnline::finalize_battle()
 {
 	delete m_commander;
 	delete m_ai;
-	delete m_json_analyzer;
 	delete m_sck;
 	delete m_setting_file;
 
 	m_commander = NULL;
 	m_ai = NULL;
-	m_json_analyzer = NULL;
 	m_sck = NULL;
 	m_setting_file = NULL;
 

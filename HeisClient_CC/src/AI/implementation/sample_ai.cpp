@@ -27,7 +27,7 @@ CSampleAI::CSampleAI(CCommander* commander)
 */
 void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 {
-	std::string my_team_name = board_pkt.turn_team;
+	std::string my_team_name = board_pkt.turn_team.get_value();
 
 	while (m_commander->get_all_actable_infantry_ids(my_team_name).size() != 0) {
 		std::string infantry_id;

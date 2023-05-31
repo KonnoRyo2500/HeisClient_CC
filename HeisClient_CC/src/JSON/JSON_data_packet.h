@@ -11,63 +11,32 @@
 #include <stdexcept>
 
 /**
-* @struct OptionalVal
-* @brief 任意値パケット
+*	@struct JsonElement
+*	@brief JSONの要素
 */
 template <typename T>
-struct OptionalVal {
-	// メンバ関数
-	public:
-		//! コンストラクタ
-		OptionalVal()
-			: m_val()	// 警告抑止(この記述に特に意味はない)
-			, m_omit_flag(true)
-		{
-			// 処理なし
-		}
-
-		//! 値の取得
-		T get() const
-		{
-			if (m_omit_flag) {
-				throw std::runtime_error("省略されたJSONキーを取得しようとしています");
-			}
-			return m_val;
-		}
-
-		//! 値が省略されているか
-		bool is_omitted() const
-		{
-			return m_omit_flag;
-		}
-
-		/* 以下の関数は，CJSONAnalyzerクラスでパケットを作成するときだけ呼ぶこと */
-
-		//! 値をセットする
-		void set_val(const T& new_val)
-		{
-			m_val = new_val;
-		}
-
-		//! 省略フラグをセットする(値が省略されたとき)
-		void set_omit_flag()
-		{
-			m_omit_flag = true;
-		}
-
-		//! 省略フラグを降ろす(値が省略されなかったとき)
-		void clear_omit_flag()
-		{
-			m_omit_flag = false;
-		}
-
-
-	// メンバ変数
-	private:
-		//! 値本体
-		T m_val;
-		//! 省略フラグ(JSONで対応するキーが省略されていればtrue, あればfalse)
-		bool m_omit_flag;
+struct JsonElement
+{
+// メンバ関数
+public:
+	// 値をセットする
+	void set_value(T value) {
+		this->value = value;
+		exists_value = true;
+	}
+	// 値を取得する
+	T get_value() const {
+		return value;
+	}
+	// 値が存在するか
+	bool exists() const {
+		return exists_value;
+	}
+	
+// メンバ変数
+private:
+	T value;
+	bool exists_value = false;
 };
 
 /* 以下のパケットの構造は，通信仕様書で定義されているJSONの仕様に基づく */
@@ -80,15 +49,15 @@ struct OptionalVal {
 */
 struct ContentsArrayElem {
 	//! "unit_id"フィールドの値
-	std::string unit_id;
+	JsonElement<std::string> unit_id;
 	//! "to"."x"フィールドの値
-	uint16_t to_x;
+	JsonElement<uint16_t> to_x;
 	//! "to"."y"フィールドの値
-	uint16_t to_y;
+	JsonElement<uint16_t> to_y;
 	//! "atk"."x"フィールドの値
-	uint16_t atk_x;
+	JsonElement<uint16_t> atk_x;
 	//! "atk"."y"フィールドの値
-	uint16_t atk_y;	
+	JsonElement<uint16_t> atk_y;
 };
  
 /**
@@ -97,9 +66,9 @@ struct ContentsArrayElem {
 */
 struct LocateObjData {
 	//! "x"(フィールド)
-	uint16_t x;
+	JsonElement<uint16_t> x;
 	//! "y"(フィールド)
-	uint16_t y;
+	JsonElement<uint16_t> y;
 };
 
 /**
@@ -108,15 +77,15 @@ struct LocateObjData {
 */
 struct UnitsArrayElem {
 	//! "type"(フィールド)
-	std::string type;
+	JsonElement<std::string> type;
 	//! "unit_id"(フィールド)
-	std::string unit_id;
+	JsonElement<std::string> unit_id;
 	//! "locate"(オブジェクト)
-	LocateObjData locate;
+	JsonElement<LocateObjData> locate;
 	//! "hp"(フィールド)
-	int8_t hp;
+	JsonElement<int8_t> hp;
 	//! "team"(フィールド)
-	std::string team;
+	JsonElement<std::string> team;
 };
 
 /**
@@ -125,9 +94,9 @@ struct UnitsArrayElem {
 */
 struct ResultArrayElem {
 	//! "unit_id"(フィールド, 省略可能)
-	OptionalVal<std::string> unit_id;
+	JsonElement<std::string> unit_id;
 	//! "error"(フィールド)
-	std::string error;
+	JsonElement<std::string> error;
 };
 
 /* サーバに送信するJSONを作成するためのパケット */
@@ -139,7 +108,7 @@ struct ResultArrayElem {
 */
 struct JSONSendPacket_Name {
 	//! "team_name"(フィールド)
-	std::string team_name;
+	JsonElement<std::string> team_name;
 };
 
 /**
@@ -149,9 +118,9 @@ struct JSONSendPacket_Name {
 */
 struct JSONSendPacket_Action {
 	//! "turn_team"(フィールド)
-	std::string turn_team;
+	JsonElement<std::string> turn_team;
 	//! "contents"(配列)
-	std::vector<ContentsArrayElem> contents;
+	JsonElement<std::vector<ContentsArrayElem>> contents;
 };
 
 /* サーバから受信したJSONのデータを格納するパケット */
@@ -164,19 +133,19 @@ struct JSONSendPacket_Action {
 */
 struct JSONRecvPacket_Board {
 	//! "width"(フィールド)
-	uint16_t width;
+	JsonElement<uint16_t> width;
 	//! "height"(フィールド)
-	uint16_t height;
+	JsonElement<uint16_t> height;
 	//! "turn_team"(フィールド)
-	std::string turn_team;
+	JsonElement<std::string> turn_team;
 	//! "players"(配列)
-	std::vector<std::string> players;
+	JsonElement<std::vector<std::string>> players;
 	//! "finished"(フィールド)
-	bool finished;
+	JsonElement<bool> finished;
 	//! "count"(フィールド)
-	uint32_t count;
+	JsonElement<uint32_t> count;
 	//! "units"(配列)
-	std::vector<UnitsArrayElem> units;
+	JsonElement<std::vector<UnitsArrayElem>> units;
 };
 
 /**
@@ -186,7 +155,7 @@ struct JSONRecvPacket_Board {
 */
 struct JSONRecvPacket_ConfirmName {
 	//! "your_team"(フィールド)
-	std::string your_team;
+	JsonElement<std::string> your_team;
 };
 
 /**
@@ -196,7 +165,7 @@ struct JSONRecvPacket_ConfirmName {
 */
 struct JSONRecvPacket_Result {
 	//! "result"(配列)
-	std::vector<ResultArrayElem> result;
+	JsonElement<std::vector<ResultArrayElem>> result;
 };
 
 /**
@@ -206,5 +175,5 @@ struct JSONRecvPacket_Result {
 */
 struct JSONRecvPacket_Message {
 	//! "message"(フィールド)
-	std::string message;
+	JsonElement<std::string> message;
 };

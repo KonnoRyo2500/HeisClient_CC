@@ -10,6 +10,7 @@
 #include "setting_keys.h"
 #include "common.h"
 #include "ai_factory.h"
+#include "board_json_converter.h"
 
 /**
 *	@def LOCAL_SETTING_FILE_NAME
@@ -36,7 +37,8 @@ void CGameLocal::play_game()
 	while (true) {
 		// オンラインモードと同様に，疑似サーバから受け取った「盤面」JSONを基に盤面を更新してから行動する
 		// しかし，「結果」JSONの送信など，不要な処理は行わない
-		JSONRecvPacket_Board board_pkt = m_json_analyzer->create_board_pkt(m_pseudo_server->send_board_json(m_setting));
+		BoardJsonConverter board_json_converter;
+		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_pseudo_server->send_board_json(m_setting));
 
 		// 盤面更新
 		CBoard::get_instance()->update(board_pkt);
@@ -44,23 +46,23 @@ void CGameLocal::play_game()
 		// 盤面を表示
 		CBoard::get_instance()->show();
 
-		if (board_pkt.finished) {
+		if (board_pkt.finished.get_value()) {
 			break;
 		}
 
-		if (board_pkt.turn_team == m_setting.my_team_name) {
+		if (board_pkt.turn_team.get_value() == m_setting.my_team_name) {
 			// 自チームのターン
 			m_my_commander->update();
 			m_my_AI->AI_main(board_pkt);
 		}
-		else if(board_pkt.turn_team == m_setting.enemy_team_name) {
+		else if(board_pkt.turn_team.get_value() == m_setting.enemy_team_name) {
 			// 敵チームのターン
 			m_enemy_commander->update();
 			m_enemy_AI->AI_main(board_pkt);
 		}
 		else {
 			throw std::runtime_error(cc_common::format("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
-				,board_pkt.turn_team.c_str()));
+				,board_pkt.turn_team.get_value().c_str()));
 		}
 	}
 
@@ -105,8 +107,6 @@ void CGameLocal::initialize_battle()
 
 	m_pseudo_server = new CPseudoServer();
 
-	m_json_analyzer = new CJSONAnalyzer();
-
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの生成が完了しました");
 }
 
@@ -124,7 +124,6 @@ void CGameLocal::finalize_battle()
 	delete m_my_AI;
 	delete m_enemy_AI;
 	delete m_pseudo_server;
-	delete m_json_analyzer;
 	// m_settingについては実体を保持しているため，明示的なメモリ解放は必要ない
 
 	m_my_commander = NULL;
@@ -132,7 +131,6 @@ void CGameLocal::finalize_battle()
 	m_my_AI = NULL;
 	m_enemy_AI = NULL;
 	m_pseudo_server = NULL;
-	m_json_analyzer = NULL;
 
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの削除が完了しました");
 }

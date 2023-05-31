@@ -219,10 +219,12 @@ JSONSendPacket_Action CCommander::create_action_pkt() const
 {
 	JSONSendPacket_Action action_pkt;
 
-	action_pkt.turn_team = m_team_name;
+	action_pkt.turn_team.set_value(m_team_name);
+	std::vector<ContentsArrayElem> contents = action_pkt.contents.get_value();
 	for (CInfantry* infantry : m_infantries) {
-		action_pkt.contents.push_back(infantry->create_contents_array_elem());
+		contents.push_back(infantry->create_contents_array_elem());
 	}
+	action_pkt.contents.set_value(contents);
 	return action_pkt;
 }
 

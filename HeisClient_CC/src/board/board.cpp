@@ -131,16 +131,16 @@ void CBoard::update(const JSONRecvPacket_Board& board_pkt)
 {
 	// 最初の「盤面」パケットを受け取ったときに，盤面のマス目が構成される
 	if (m_width == 0 && m_height == 0) {
-		m_width = board_pkt.width;
-		m_height = board_pkt.height;
-		create_grid(board_pkt.width, board_pkt.height);
+		m_width = board_pkt.width.get_value();
+		m_height = board_pkt.height.get_value();
+		create_grid(board_pkt.width.get_value(), board_pkt.height.get_value());
 	}
-	validate_size(board_pkt.width, board_pkt.height);
+	validate_size(board_pkt.width.get_value(), board_pkt.height.get_value());
 
 	// 盤面の各兵士の状態を，「盤面」パケットに記載された各兵士の状態と合わせる
 	delete_all_infantries();
 	clear_grid();
-	relocate_all_infantries_from_units_array(board_pkt.units);
+	relocate_all_infantries_from_units_array(board_pkt.units.get_value());
 }
 
 /**
@@ -250,8 +250,22 @@ void CBoard::add_infantry(CInfantry* new_infantry)
 void CBoard::relocate_all_infantries_from_units_array(const std::vector<UnitsArrayElem>& units_array)
 {
 	for (auto& infantry_data : units_array) {
-		CInfantry* infantry = new CInfantry(infantry_data.team, infantry_data.unit_id, BoardPosition(infantry_data.locate.x, infantry_data.locate.y), infantry_data.hp);
-		set_infantry( BoardPosition(infantry_data.locate.x, infantry_data.locate.y), infantry);
+		CInfantry* infantry = new CInfantry(
+			infantry_data.team.get_value(),
+			infantry_data.unit_id.get_value(),
+			BoardPosition(
+				infantry_data.locate.get_value().x.get_value(),
+				infantry_data.locate.get_value().y.get_value()
+			),
+			infantry_data.hp.get_value()
+		);
+		set_infantry(
+			BoardPosition(
+				infantry_data.locate.get_value().x.get_value(),
+				infantry_data.locate.get_value().y.get_value()
+			),
+			infantry
+		);
 	}
 }
 

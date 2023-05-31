@@ -179,7 +179,12 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="..\src\board\board.cpp" />
-    <ClCompile Include="..\src\JSON\JSON_analyzer.cpp" />
+    <ClCompile Include="..\src\JSON\action_json_converter.cpp" />
+    <ClCompile Include="..\src\JSON\board_json_converter.cpp" />
+    <ClCompile Include="..\src\JSON\confirm_name_json_converter.cpp" />
+    <ClCompile Include="..\src\JSON\message_json_converter.cpp" />
+    <ClCompile Include="..\src\JSON\name_json_converter.cpp" />
+    <ClCompile Include="..\src\JSON\result_json_converter.cpp" />
     <ClCompile Include="..\src\local_mode\game_local.cpp" />
     <ClCompile Include="..\src\local_mode\pseudo_server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -209,8 +214,14 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="..\src\board\board.h" />
-    <ClInclude Include="..\src\JSON\JSON_analyzer.h" />
+    <ClInclude Include="..\src\JSON\action_json_converter.h" />
+    <ClInclude Include="..\src\JSON\board_json_converter.h" />
+    <ClInclude Include="..\src\JSON\confirm_name_json_converter.h" />
+    <ClInclude Include="..\src\JSON\json_converter_base.h" />
     <ClInclude Include="..\src\JSON\JSON_data_packet.h" />
+    <ClInclude Include="..\src\JSON\message_json_converter.h" />
+    <ClInclude Include="..\src\JSON\name_json_converter.h" />
+    <ClInclude Include="..\src\JSON\result_json_converter.h" />
     <ClInclude Include="..\src\local_mode\game_local.h" />
     <ClInclude Include="..\src\local_mode\local_setting.h" />
     <ClInclude Include="..\src\local_mode\pseudo_server.h" />

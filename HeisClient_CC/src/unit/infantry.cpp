@@ -218,18 +218,18 @@ ContentsArrayElem CInfantry::create_contents_array_elem() const
 {
 	ContentsArrayElem contents_elem;
 
-	contents_elem.unit_id = m_id;
-	contents_elem.to_x = m_pos.x;
-	contents_elem.to_y = m_pos.y;
+	contents_elem.unit_id.set_value(m_id);
+	contents_elem.to_x.set_value(m_pos.x);
+	contents_elem.to_y.set_value(m_pos.y);
 	if (m_attack_pos.x != UINT16_MAX && m_attack_pos.y != UINT16_MAX) {
 		// ターン内に攻撃していれば，攻撃先を設定する
-		contents_elem.atk_x = m_attack_pos.x;
-		contents_elem.atk_y = m_attack_pos.y;
+		contents_elem.atk_x.set_value(m_attack_pos.x);
+		contents_elem.atk_y.set_value(m_attack_pos.y);
 	}
 	else {
 		// 攻撃していなければ，現在位置と同じ座標を設定する
-		contents_elem.atk_x = m_pos.x;
-		contents_elem.atk_y = m_pos.y;
+		contents_elem.atk_x.set_value(m_pos.x);
+		contents_elem.atk_y.set_value(m_pos.y);
 	}
 	return contents_elem;
 }

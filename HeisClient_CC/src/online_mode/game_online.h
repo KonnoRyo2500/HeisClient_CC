@@ -9,7 +9,6 @@
 #include "game.h"
 #include "commander.h"
 #include "ai_base.h"
-#include "JSON_analyzer.h"
 #include "client_socket.h"
 #include "setting_file_reader.h"
 #include <string>
@@ -53,9 +52,6 @@ class CGameOnline : public CGame {
 
 		//! AI
 		CAIBase* m_ai;
-		
-		//! JSON解析器
-		CJSONAnalyzer* m_json_analyzer;
 
 		//! TCPソケット
 		CClientSocket* m_sck;

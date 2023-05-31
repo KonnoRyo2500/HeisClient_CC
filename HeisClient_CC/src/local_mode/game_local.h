@@ -9,7 +9,6 @@
 #include "game.h"
 #include "commander.h"
 #include "ai_base.h"
-#include "JSON_analyzer.h"
 #include "pseudo_server.h"
 #include "local_setting.h"
 #include "setting_file_reader.h"
@@ -60,9 +59,6 @@ class CGameLocal : public CGame {
 
 		//! 疑似サーバ
 		CPseudoServer* m_pseudo_server;
-
-		//! JSON解析
-		CJSONAnalyzer* m_json_analyzer;
 		
 		//! ローカルモード設定
 		LocalSetting m_setting;
