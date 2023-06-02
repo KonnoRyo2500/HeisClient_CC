@@ -9,6 +9,7 @@
 #include "game.h"
 #include "client_socket.h"
 #include "log.h"
+#include "setting.h"
 
 extern CLog *g_system_log;
 
@@ -27,7 +28,7 @@ class CAudienceMode : public CGame {
 
 	private:
 		// 観戦の初期化
-		void initialize_watch();
+		void initialize_watch(AudienceSetting setting);
 
 		// 観戦の終了処理
 		void finalize_watch();

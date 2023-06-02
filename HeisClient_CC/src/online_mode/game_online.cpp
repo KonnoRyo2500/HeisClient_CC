@@ -15,12 +15,13 @@
 #include "message_json_converter.h"
 #include "name_json_converter.h"
 #include "confirm_name_json_converter.h"
+#include "online_setting_file.h"
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
 *	@brief オンラインモード設定ファイルの名前
 */
-#define ONLINE_SETTING_FILE_NAME "online_setting.conf"
+#define ONLINE_SETTING_FILE_NAME "online_setting.csv"
 
 /* public関数 */
 
@@ -34,12 +35,19 @@ void CGameOnline::play_game()
 
 	bool battle_result;
 
+	// 設定ファイルの読み込み
+	OnlineSetting setting = COnlineSettingFile().load(
+		cc_common::get_setting_dir()
+		+ cc_common::get_separator_char()
+		+ ONLINE_SETTING_FILE_NAME
+	);
+
 	// 対戦の準備
-	initialize_battle();
+	initialize_battle(setting);
 
 	recv_name_request();
-	name_entry(m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_TEAM_NAME));
-	name_register();
+	name_entry(setting.team_name);
+	name_register(setting);
 
 	// 対戦
 	while (true) {
@@ -96,33 +104,26 @@ void CGameOnline::play_game()
 
 /**
 *	@brief 対戦を開始する前の準備を行う関数
+*	@param[in] setting オンラインモード設定値
 *	@remark この関数では，名前確定前に生成できるインスタンスを生成する
 */
-void CGameOnline::initialize_battle()
+void CGameOnline::initialize_battle(OnlineSetting setting)
 {
 	// 必要なインスタンスの生成
 	CBoard::create_board();
 
-	m_setting_file = new CSettingFileReader(
-		cc_common::get_setting_dir()
-		+ cc_common::get_separator_char()
-		+ ONLINE_SETTING_FILE_NAME
-	);
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_sck = new CClientSocket();
-
-	const std::string svr_addr = m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_SVR_ADDR);
-	const uint16_t svr_port = m_setting_file->get_value<uint16_t>(ONLINE_SETTING_KEY_SVR_PORT);
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
 		"サーバに接続します(IPアドレス: %s, ポート番号: %d)",
-		svr_addr.c_str(), svr_port));
+		setting.server_ip_addr.c_str(), setting.server_port_num));
 
 	// サーバに接続
-	m_sck->sck_connect(svr_addr, svr_port);
+	m_sck->sck_connect(setting.server_ip_addr, setting.server_port_num);
 
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
 		"サーバに接続しました(IPアドレス: %s, ポート番号: %d)",
-		svr_addr.c_str(), svr_port));
+		setting.server_ip_addr.c_str(), setting.server_port_num));
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの生成が完了しました");
 }
 
@@ -153,8 +154,9 @@ void CGameOnline::name_entry(const std::string& name)
 
 /**
 *	@brief サーバーから受信した名前をチーム名として登録する関数
+*	@param[in] setting オンラインモード設定値
 */
-void CGameOnline::name_register()
+void CGameOnline::name_register(OnlineSetting setting)
 {
 	std::string received_JSON = m_sck->sck_recv();
 	ConfirmNameJsonConverter confirm_name_json_converter;
@@ -165,7 +167,7 @@ void CGameOnline::name_register()
 	m_commander = new CCommander(m_team_name);
 	m_ai = ai_factory.create_instance(
 		m_commander,
-		m_setting_file->get_value<std::string>(ONLINE_SETTING_KEY_AI_IMPL)
+		setting.ai_impl
 	);
 	if (m_ai == NULL) {
 		throw std::runtime_error("AIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
@@ -184,12 +186,10 @@ void CGameOnline::finalize_battle()
 	delete m_commander;
 	delete m_ai;
 	delete m_sck;
-	delete m_setting_file;
 
 	m_commander = NULL;
 	m_ai = NULL;
 	m_sck = NULL;
-	m_setting_file = NULL;
 
 	CBoard::delete_board();
 

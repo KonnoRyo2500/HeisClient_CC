@@ -1,0 +1,4 @@
+server_ip_addr,127.0.0.1
+server_port_num,20000
+team_name,MyTeam
+ai_implementation,Sample

@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;$(SolutionDir)..\src\AI\base;$(SolutionDir)..\src\AI\implementation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;$(SolutionDir)..\src\AI\base;$(SolutionDir)..\src\AI\implementation;$(SolutionDir)..\src\setting;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -170,7 +170,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="..\src\common\setting_file_reader.cpp" />
     <ClCompile Include="..\src\common\game.cpp" />
     <ClCompile Include="..\src\common\log.cpp" />
     <ClCompile Include="..\src\common\server_socket.cpp" />
@@ -190,6 +189,9 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\online_mode\audience_mode.cpp" />
     <ClCompile Include="..\src\online_mode\game_online.cpp" />
+    <ClCompile Include="..\src\setting\audience_setting_file.cpp" />
+    <ClCompile Include="..\src\setting\local_setting_file.cpp" />
+    <ClCompile Include="..\src\setting\online_setting_file.cpp" />
     <ClCompile Include="..\src\unit\commander.cpp" />
     <ClCompile Include="..\src\unit\infantry.cpp" />
   </ItemGroup>
@@ -204,7 +206,6 @@
     </ClInclude>
     <ClInclude Include="..\src\common\common_structure.h" />
     <ClInclude Include="..\src\common\const_val.h" />
-    <ClInclude Include="..\src\common\setting_file_reader.h" />
     <ClInclude Include="..\src\common\game.h" />
     <ClInclude Include="..\src\common\log.h" />
     <ClInclude Include="..\src\common\server_socket.h" />
@@ -223,10 +224,14 @@
     <ClInclude Include="..\src\JSON\name_json_converter.h" />
     <ClInclude Include="..\src\JSON\result_json_converter.h" />
     <ClInclude Include="..\src\local_mode\game_local.h" />
-    <ClInclude Include="..\src\local_mode\local_setting.h" />
     <ClInclude Include="..\src\local_mode\pseudo_server.h" />
     <ClInclude Include="..\src\online_mode\audience_mode.h" />
     <ClInclude Include="..\src\online_mode\game_online.h" />
+    <ClInclude Include="..\src\setting\audience_setting_file.h" />
+    <ClInclude Include="..\src\setting\local_setting_file.h" />
+    <ClInclude Include="..\src\setting\online_setting_file.h" />
+    <ClInclude Include="..\src\setting\setting.h" />
+    <ClInclude Include="..\src\setting\setting_file_base.h" />
     <ClInclude Include="..\src\unit\commander.h" />
     <ClInclude Include="..\src\unit\infantry.h" />
   </ItemGroup>

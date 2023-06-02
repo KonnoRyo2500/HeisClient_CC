@@ -84,30 +84,26 @@
 /**
 *	@def LOCAL_SETTING_KEY_MY_INIT_COORD_X
 *	@brief 自チームの兵士初期位置のx座標
-*	@param num 兵士の番号
 */
-#define LOCAL_SETTING_KEY_MY_INIT_COORD_X(num) ("my_infantries_init_x_coodinate_" + std::to_string(num))
+#define LOCAL_SETTING_KEY_MY_INIT_COORD_X "my_infantries_init_x_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_MY_INIT_COORD_Y
 *	@brief 自チームの兵士初期位置のy座標
-*	@param num 兵士の番号
 */
-#define LOCAL_SETTING_KEY_MY_INIT_COORD_Y(num) ("my_infantries_init_y_coodinate_" + std::to_string(num))
+#define LOCAL_SETTING_KEY_MY_INIT_COORD_Y "my_infantries_init_y_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X
 *	@brief 敵チームの兵士初期位置のx座標
-*	@param num 兵士の番号
 */
-#define LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X(num) ("enemy_infantries_init_x_coodinate_" + std::to_string(num))
+#define LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X "enemy_infantries_init_x_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y
 *	@brief 敵チームの兵士初期位置のy座標
-*	@param num 兵士の番号
 */
-#define LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y(num) ("enemy_infantries_init_y_coodinate_" + std::to_string(num))
+#define LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y "enemy_infantries_init_y_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_FIRST_TEAM

@@ -10,9 +10,8 @@
 #include "commander.h"
 #include "ai_base.h"
 #include "pseudo_server.h"
-#include "local_setting.h"
-#include "setting_file_reader.h"
 #include "log.h"
+#include "setting.h"
 
 #include <string>
 
@@ -31,18 +30,14 @@ class CGameLocal : public CGame {
 		void play_game() override;
 
 	private:
-		// 設定を取得する
-		void load_local_mode_setting();
-		void load_initial_position(const CSettingFileReader& reader);
-
 		// 対戦の初期化
-		void initialize_battle();
+		void initialize_battle(LocalSetting setting);
 
 		// 対戦の終了処理
 		void finalize_battle();
 
 		// 対戦後の勝敗判定
-		bool judge_win() override;
+		bool judge_win(LocalSetting setting) const;
 
 	// メンバ変数
 	private:
@@ -59,7 +54,4 @@ class CGameLocal : public CGame {
 
 		//! 疑似サーバ
 		CPseudoServer* m_pseudo_server;
-		
-		//! ローカルモード設定
-		LocalSetting m_setting;
 };

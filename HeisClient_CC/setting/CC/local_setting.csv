@@ -1,0 +1,11 @@
+board_width,10
+board_height,10
+my_team_name,MyTeam
+enemy_team_name,EnemyTeam
+my_ai_implementation,Sample
+enemy_ai_implementation,Sample
+my_infantries_init_x_coodinate,0,1,2
+my_infantries_init_y_coodinate,0,0,0
+enemy_infantries_init_x_coodinate,9,8,7
+enemy_infantries_init_y_coodinate,9,9,9
+first_turn_team,MyTeam

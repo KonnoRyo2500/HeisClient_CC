@@ -20,7 +20,7 @@ std::string CPseudoServer::send_board_json(const LocalSetting& setting) const
 {
 	picojson::object board_json_obj;
 	static int turn_count = 1;
-	static std::string turn_team = (setting.is_my_team_first ? setting.my_team_name : setting.enemy_team_name);
+	static std::string turn_team = setting.first_turn_team;
 
 	board_json_obj.insert(std::make_pair("width", static_cast<double>(setting.board_width)));
 	board_json_obj.insert(std::make_pair("height", static_cast<double>(setting.board_height)));

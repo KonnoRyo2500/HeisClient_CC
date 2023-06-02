@@ -10,7 +10,7 @@
 #include "commander.h"
 #include "ai_base.h"
 #include "client_socket.h"
-#include "setting_file_reader.h"
+#include "setting.h"
 #include <string>
 #include <vector>
 
@@ -21,9 +21,6 @@ extern CLog *g_battle_log;
 *	@brief	オンラインモード実行クラス
 */
 class CGameOnline : public CGame {
-	// 構造体，列挙体など
-	public:
-
 	// メンバ関数
 	public:
 		// 対戦開始
@@ -31,16 +28,16 @@ class CGameOnline : public CGame {
 		
 	private:
 		// 対戦開始前処理
-		void initialize_battle();
+		void initialize_battle(OnlineSetting setting);
 		void recv_name_request() const;
 		void name_entry(const std::string& name);
-		void name_register();
+		void name_register(OnlineSetting setting);
 
 		// 対戦終了後処理
 		void finalize_battle();
 
 		// 対戦後の勝敗判定
-		bool judge_win() override;
+		bool judge_win();
 
 	// メンバ変数
 	private:
@@ -55,7 +52,4 @@ class CGameOnline : public CGame {
 
 		//! TCPソケット
 		CClientSocket* m_sck;
-
-		//! オンラインモード設定ファイル
-		CSettingFileReader* m_setting_file;
 };

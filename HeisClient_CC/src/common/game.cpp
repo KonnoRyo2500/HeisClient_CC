@@ -14,7 +14,7 @@
 */
 CGame::CGame()
 {
-	// 処理なし
+	// Do Nothing
 }
 
 /**
@@ -22,16 +22,5 @@ CGame::CGame()
 */
 CGame::~CGame()
 {
-	// 処理なし
-}
-
-/* private関数 */
-
-/**
-*	@brief 勝敗を判定する関数
-*	@remark 勝敗判定が必要ない場合(観戦モードなど)を考慮し，純粋仮想関数にはしない
-*/
-bool CGame::judge_win()
-{
-	return true;
+	// Do Nothing
 }

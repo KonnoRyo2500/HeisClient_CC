@@ -7,13 +7,13 @@
 
 #include "audience_mode.h"
 #include "setting_keys.h"
-#include "setting_file_reader.h"
+#include "audience_setting_file.h"
 
 /**
 *	@def AUDIENCE_SETTING_FILE_NAME
 *	@brief 観戦モード設定ファイルの名前
 */
-#define AUDIENCE_SETTING_FILE_NAME "audience_setting.conf"
+#define AUDIENCE_SETTING_FILE_NAME "audience_setting.csv"
 
 /* public関数 */
 /**
@@ -23,8 +23,15 @@ void CAudienceMode::play_game()
 {
 	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "観戦を開始しました");
 
+	// 設定ファイルの読み込み
+	AudienceSetting setting = CAudienceSettingFile().load(
+		cc_common::get_setting_dir()
+		+ cc_common::get_separator_char()
+		+ AUDIENCE_SETTING_FILE_NAME
+	);
+
 	// 観戦開始
-	initialize_watch();
+	initialize_watch(setting);
 
 	// サーバから受信した文字列を表示("finished"は対戦終了を表す文字列)
 	std::string msg = "";
@@ -43,26 +50,13 @@ void CAudienceMode::play_game()
 
 /**
 *	@brief 観戦の初期化を行う関数
+*	@param[in] setting 観戦モード設定値
 */
-void CAudienceMode::initialize_watch()
+void CAudienceMode::initialize_watch(AudienceSetting setting)
 {
-	CSettingFileReader reader(
-		cc_common::get_setting_dir()
-		+ cc_common::get_separator_char()
-		+ AUDIENCE_SETTING_FILE_NAME
-	);
-	std::string svr_addr;
-	uint16_t svr_port;
-
-	// インスタンスを生成
-	m_sck = new CClientSocket();
-
-	// 接続するサーバの情報を設定ファイルから取得
-	svr_addr = reader.get_value<std::string>(AUDIENCE_SETTING_KEY_SVR_ADDR);
-	svr_port = reader.get_value<uint16_t>(AUDIENCE_SETTING_KEY_SVR_PORT);
-
 	// サーバに接続
-	m_sck->sck_connect(svr_addr, svr_port);
+	m_sck = new CClientSocket();
+	m_sck->sck_connect(setting.server_ip_addr, setting.server_port_num);
 }
 
 /**
