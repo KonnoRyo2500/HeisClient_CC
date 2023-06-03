@@ -16,6 +16,7 @@
 #include "name_json_converter.h"
 #include "confirm_name_json_converter.h"
 #include "online_setting_file.h"
+#include "path.h"
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
@@ -37,9 +38,7 @@ void CGameOnline::play_game()
 
 	// 設定ファイルの読み込み
 	OnlineSetting setting = COnlineSettingFile().load(
-		cc_common::get_setting_dir()
-		+ cc_common::get_separator_char()
-		+ ONLINE_SETTING_FILE_NAME
+		join({CC_SETTING_DIR, ONLINE_SETTING_FILE_NAME})
 	);
 
 	// 対戦の準備

@@ -13,14 +13,6 @@
 
 //! 共通処理・データ構造
 namespace cc_common {
-	/* パス操作 */
-	// パスの区切り文字を取得
-	char get_separator_char();
-	// 設定ファイルのあるディレクトリを取得
-	std::string get_setting_dir();
-	// ログファイルのあるディレクトリを取得
-	std::string get_log_dir();
-
 	/* 文字列処理 */
 	// 文字列の分割
 	std::vector<std::string> split_string(const std::string& str, const std::string& delim);
@@ -28,26 +20,6 @@ namespace cc_common {
 	std::string cut_string(std::string& str, const size_t begin_pos, const size_t end_pos = SIZE_MAX);
 
 	/* テンプレート関数 */
-	/**
-	*	@brief 相対パスを作成する関数
-	*	@details パスの区切り文字は、実行環境に準ずる
-	*	@remark 引数に与える各ディレクトリの末尾には、区切り文字をつけないこと
-	*	@param[in] base_dir 基準となるディレクトリ
-	*	@param[in] contents 途中で経由するディレクトリ名や対象のファイル名
-	*	@return std::string 相対パス
-	*/
-	template<typename ... Args>
-	std::string make_relative_path(const std::string& base_dir, Args ... contents)
-	{
-		std::string relative_path = base_dir;
-
-		for (auto content : std::initializer_list<std::string>{ contents... }) {
-			relative_path += get_separator_char() + content;
-		}
-
-		return relative_path;
-	}
-	
 	/**
 	*	@brief 特定の文字や文字列が含まれているか判定する関数
 	*	@param[in] str 文字列

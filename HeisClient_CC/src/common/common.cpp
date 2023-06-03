@@ -16,11 +16,6 @@
 #include "common.h"
 
 /* static関数 */
-//! 実行ファイルのあるディレクトリを取得
-static std::string get_exe_dir();
-//! プロジェクトディレクトリを取得
-static std::string get_project_dir();
-
 //! 制御文字の削除
 static void erase_control_letter(std::string& str);
 //! 先頭区切り文字の削除
@@ -31,62 +26,6 @@ static void erase_first_token(std::string& str, const std::string& delim);
 static std::string get_first_token(const std::string& str, const std::string& delim);
 //! 部分文字列削除
 static void erase_substring(std::string& str, const std::string& erase_str);
-
-/**
-*	@brief パスの区切り文字を取得する関数
-*	@return パスの区切り文字(Windowsであれば'\', Linuxであれば'/')
-*/
-char cc_common::get_separator_char()
-{
-#ifdef WIN32
-	return '\\';
-#else
-	return '/';
-#endif
-}
-
-/**
-*	@brief 設定ファイルのあるディレクトリを取得する関数
-*	@return std::string 設定ファイルのあるディレクトリ
-*/
-std::string cc_common::get_setting_dir()
-{
-#ifdef CC
-	return cc_common::make_relative_path(
-		get_project_dir(),
-		"..",
-		"setting",
-		"CC"
-	);
-#endif // CC
-#ifdef PS
-	return cc_common::make_relative_path(
-		get_project_dir(),
-		"..",
-		"..",
-		"setting",
-		"PseudoServer"
-	);
-#endif // PS
-}
-
-/**
-*	@brief ログファイルのあるディレクトリを取得する関数
-*	@return std::string ログファイルのあるディレクトリ
-*/
-std::string cc_common::get_log_dir()
-{
-#ifdef CC
-	return cc_common::make_relative_path(
-		get_project_dir(),
-		"log"
-	);
-#endif
-#ifdef PS
-	static_assert(true, "疑似サーバにはログディレクトリが存在しません");
-	return "";
-#endif // PS
-}
 
 /**
 *	@brief 文字列をトークン列に分割する関数
@@ -150,58 +89,6 @@ std::string cc_common::cut_string(std::string& str, const size_t begin_pos, cons
 }
 
 /* 非公開関数 */
-
-/**
-*	@brief プロジェクトのディレクトリを返す関数
-*	@return std::string プロジェクトのディレクトリ
-*/
-static std::string get_project_dir()
-{
-#ifdef CC
-	return cc_common::make_relative_path(
-		get_exe_dir(),
-		".."
-#ifdef WIN32
-		,"..",
-		".."
-#endif // WIN32
-	);
-#endif // CC
-#ifdef PS
-	return cc_common::make_relative_path(
-		get_exe_dir(),
-		".."
-	);
-#endif
-}
-
-/**
-*	@brief 実行ファイルのディレクトリを返す関数
-*	@return std::string 実行ファイルのディレクトリ
-*/
-static std::string get_exe_dir()
-{
-#ifdef WIN32
-	char exe_path_c[MAX_PATH] = { 0 };
-
-	GetModuleFileName(NULL, exe_path_c, sizeof(exe_path_c));
-	std::string exe_path_s = std::string(exe_path_c);
-	std::string exe_dir = exe_path_s.substr(0, exe_path_s.find_last_of("\\"));
-	return exe_dir;
-#else
-	char exe_path_c[PATH_MAX] = { 0 };
-
-	if (readlink("/proc/self/exe", exe_path_c, sizeof(exe_path_c) - 1) > 0) {
-		std::string exe_path_s = std::string(exe_path_c);
-		std::string exe_dir = exe_path_s.substr(0, exe_path_s.find_last_of("/"));
-		return exe_dir;
-	}
-	else {
-		throw std::runtime_error("実行ファイルのパス取得に失敗しました");
-	}
-#endif
-}
-
 /**
 *	@brief 文字列中の制御文字を削除する関数
 *	@param[out] str 制御文字を削除する対象の文字列

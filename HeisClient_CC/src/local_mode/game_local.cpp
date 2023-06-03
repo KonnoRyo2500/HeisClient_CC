@@ -12,6 +12,7 @@
 #include "ai_factory.h"
 #include "board_json_converter.h"
 #include "local_setting_file.h"
+#include "path.h"
 
 /**
 *	@def LOCAL_SETTING_FILE_NAME
@@ -33,9 +34,7 @@ void CGameLocal::play_game()
 
 	// 設定ファイルの読み込み
 	LocalSetting setting = CLocalSettingFile().load(
-		cc_common::get_setting_dir()
-		+ cc_common::get_separator_char()
-		+ LOCAL_SETTING_FILE_NAME
+		join({CC_SETTING_DIR, LOCAL_SETTING_FILE_NAME})
 	);
 
 	// 対戦の初期化

@@ -8,6 +8,7 @@
 #include "audience_mode.h"
 #include "setting_keys.h"
 #include "audience_setting_file.h"
+#include "path.h"
 
 /**
 *	@def AUDIENCE_SETTING_FILE_NAME
@@ -25,9 +26,7 @@ void CAudienceMode::play_game()
 
 	// 設定ファイルの読み込み
 	AudienceSetting setting = CAudienceSettingFile().load(
-		cc_common::get_setting_dir()
-		+ cc_common::get_separator_char()
-		+ AUDIENCE_SETTING_FILE_NAME
+		join({CC_SETTING_DIR, AUDIENCE_SETTING_FILE_NAME})
 	);
 
 	// 観戦開始

@@ -6,6 +6,7 @@
 */
 #include "log.h"
 #include "common.h"
+#include "path.h"
 
 #include <ctime>
 #include <locale>
@@ -23,12 +24,8 @@
 CLog::CLog(const std::string& title)
 {
 	// "bin"ディレクトリと同列の"log"ディレクトリにログを出力する
-	std::string log_path =
-		cc_common::get_log_dir()
-		+ cc_common::get_separator_char()
-		+ title
-		+ make_current_datetime_str("_%Y_%m_%d_%H_%M_%S")
-		+ ".log";
+	std::string log_file_name = title + make_current_datetime_str("_%Y_%m_%d_%H_%M_%S") + ".log";
+	std::string log_path = join({CC_PROJECT_DIR, "log", log_file_name});
 
 	m_logfile = new std::ofstream(log_path);
 	if (m_logfile->fail()) {

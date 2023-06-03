@@ -99,6 +99,7 @@
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;$(SolutionDir)..\src\AI\base;$(SolutionDir)..\src\AI\implementation;$(SolutionDir)..\src\setting;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -172,6 +173,7 @@
     </ClCompile>
     <ClCompile Include="..\src\common\game.cpp" />
     <ClCompile Include="..\src\common\log.cpp" />
+    <ClCompile Include="..\src\common\path.cpp" />
     <ClCompile Include="..\src\common\server_socket.cpp" />
     <ClCompile Include="..\src\common\socket_base.cpp">
       <SubType>
@@ -208,6 +210,7 @@
     <ClInclude Include="..\src\common\const_val.h" />
     <ClInclude Include="..\src\common\game.h" />
     <ClInclude Include="..\src\common\log.h" />
+    <ClInclude Include="..\src\common\path.h" />
     <ClInclude Include="..\src\common\server_socket.h" />
     <ClInclude Include="..\src\common\setting_keys.h" />
     <ClInclude Include="..\src\common\socket_base.h">
