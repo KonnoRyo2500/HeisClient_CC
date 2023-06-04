@@ -35,7 +35,7 @@ std::string CPseudoServer::send_board_json(const LocalSetting& setting) const
 	toggle_turn_team(setting, turn_team);
 
 	const std::string board_json = serialize_JSON_obj(board_json_obj);
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format("疑似サーバが「盤面」JSONを送信しました: %s",
+	CLog::write(CLog::LogLevel_Information, cc_common::format("疑似サーバが「盤面」JSONを送信しました: %s",
 		board_json.c_str()));
 
 	return board_json;

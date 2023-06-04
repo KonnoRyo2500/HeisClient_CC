@@ -22,7 +22,7 @@
 */
 void CAudienceMode::play_game()
 {
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "観戦を開始しました");
+	CLog::write(CLog::LogLevel_Information, "観戦を開始しました");
 
 	// 設定ファイルの読み込み
 	AudienceSetting setting = CAudienceSettingFile().load(
@@ -42,7 +42,7 @@ void CAudienceMode::play_game()
 	// 観戦終了
 	finalize_watch();
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "観戦が終了しました");
+	CLog::write(CLog::LogLevel_Information, "観戦が終了しました");
 }
 
 /* private関数 */

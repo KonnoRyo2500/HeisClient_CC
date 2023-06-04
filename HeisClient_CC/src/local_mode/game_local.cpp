@@ -29,8 +29,8 @@ void CGameLocal::play_game()
 {
 	bool battle_result;
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "ローカルモードでゲームを開始しました");
-	g_battle_log->write_log(CLog::LogLevel_InvisibleInfo, "ローカルモードでゲームを開始しました");
+	CLog::write(CLog::LogLevel_Information, "ローカルモードでゲームを開始しました");
+	CLog::write(CLog::LogLevel_Information, "ローカルモードでゲームを開始しました");
 
 	// 設定ファイルの読み込み
 	LocalSetting setting = CLocalSettingFile().load(
@@ -77,12 +77,12 @@ void CGameLocal::play_game()
 	battle_result = judge_win(setting);
 
 	// 勝敗を表示
-	g_battle_log->write_log(CLog::LogLevel_VisibleInfo, battle_result ? "You win!" : "You lose...");
+	CLog::write(CLog::LogLevel_Information, battle_result ? "You win!" : "You lose...", true);
 
 	// 対戦終了処理
 	finalize_battle();
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "ゲームが終了しました");
+	CLog::write(CLog::LogLevel_Information, "ゲームが終了しました");
 }
 
 /* private関数 */
@@ -112,7 +112,7 @@ void CGameLocal::initialize_battle(LocalSetting setting)
 
 	m_pseudo_server = new CPseudoServer();
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの生成が完了しました");
+	CLog::write(CLog::LogLevel_Information, "インスタンスの生成が完了しました");
 }
 
 /**
@@ -136,7 +136,7 @@ void CGameLocal::finalize_battle()
 	m_enemy_AI = NULL;
 	m_pseudo_server = NULL;
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの削除が完了しました");
+	CLog::write(CLog::LogLevel_Information, "インスタンスの削除が完了しました");
 }
 
 /**

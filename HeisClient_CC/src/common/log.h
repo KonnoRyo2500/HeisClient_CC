@@ -11,6 +11,7 @@
 
 /**
 *	@brief	ログ出力クラス
+*	@remark インスタンスを作成しなくてもログ記録ができるよう、staticクラスとする
 */
 class CLog
 {
@@ -21,35 +22,28 @@ class CLog
 		*	ログの種類
 		*/
 		enum LogLevel {
-			//! 情報(コンソールに表示する)
-			LogLevel_VisibleInfo,
-			//! 情報(コンソールン表示しない)
-			LogLevel_InvisibleInfo,
+			//! 情報
+			LogLevel_Information,
 			//! 警告
 			LogLevel_Warning,
 			//! エラー
 			LogLevel_Error,
 		};
 
-	// メンバ関数
-	public:
-		// コンストラクタ
-		CLog(const std::string& title);
-		// デストラクタ
-		~CLog();
+	// クラス関数
+public:
+	// ログ記録を開始する
+	static void start_logging();
+	// ログ記録を終了する
+	static void end_logging();
+	// ログにメッセージを追加する
+	static void write(LogLevel level, std::string msg, bool output_to_console = false);
 
-		// ログに書き込む
-		void write_log(const LogLevel level, const std::string& msg) const;
+private:
+	// 現在日時を表す文字列を作成する
+	static std::string build_current_datetime_str(const std::string& format);
 
-	private:
-		// 現在日時を表す文字列を取得
-		std::string make_current_datetime_str(const std::string& format) const;
-
-		// ログの種類を表す文字列を作成する
-		std::string make_log_level_str(const LogLevel level) const;
-
-	// メンバ変数
-	private:
-		//! ログファイルの実体
-		std::ofstream* m_logfile;
+	// クラス変数
+private:
+	static std::ofstream *m_log;
 };

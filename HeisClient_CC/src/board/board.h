@@ -12,8 +12,6 @@
 #include <vector>
 #include <map>
 
-extern CLog *g_board_log;
-
 /**
 *	@brief	盤面クラス
 */

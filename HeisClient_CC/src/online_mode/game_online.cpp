@@ -31,8 +31,8 @@
 */
 void CGameOnline::play_game()
 {
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "オンラインモードでゲームを開始しました");
-	g_battle_log->write_log(CLog::LogLevel_InvisibleInfo, "オンラインモードでゲームを開始しました");
+	CLog::write(CLog::LogLevel_Information, "オンラインモードでゲームを開始しました");
+	CLog::write(CLog::LogLevel_Information, "オンラインモードでゲームを開始しました");
 
 	bool battle_result;
 
@@ -83,7 +83,7 @@ void CGameOnline::play_game()
 		result_pkt = result_json_converter.from_json_to_packet(m_sck->sck_recv());
 		// 「結果」パケットの内容を表示
 		for (const auto& result_elem : result_pkt.result.get_value()) {
-			g_system_log->write_log(CLog::LogLevel_Warning,cc_common::format(
+			CLog::write(CLog::LogLevel_Warning,cc_common::format(
 				"サーバからエラーメッセージが送信されました(エラー内容: %s, 対象兵士ID: %s)",
 				result_elem.error.get_value().c_str(), 
 				result_elem.unit_id.exists() ? result_elem.unit_id.get_value().c_str() : "なし"));
@@ -95,8 +95,8 @@ void CGameOnline::play_game()
 	finalize_battle();
 
 	// 勝敗を表示
-	g_battle_log->write_log(CLog::LogLevel_VisibleInfo, battle_result ? "You win!" : "You lose...");
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "ゲームが終了しました");
+	CLog::write(CLog::LogLevel_Information, battle_result ? "You win!" : "You lose...", true);
+	CLog::write(CLog::LogLevel_Information, "ゲームが終了しました");
 }
 
 /* private関数 */
@@ -113,17 +113,17 @@ void CGameOnline::initialize_battle(OnlineSetting setting)
 
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_sck = new CClientSocket();
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"サーバに接続します(IPアドレス: %s, ポート番号: %d)",
 		setting.server_ip_addr.c_str(), setting.server_port_num));
 
 	// サーバに接続
 	m_sck->sck_connect(setting.server_ip_addr, setting.server_port_num);
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"サーバに接続しました(IPアドレス: %s, ポート番号: %d)",
 		setting.server_ip_addr.c_str(), setting.server_port_num));
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの生成が完了しました");
+	CLog::write(CLog::LogLevel_Information, "インスタンスの生成が完了しました");
 }
 
 /**
@@ -146,7 +146,7 @@ void CGameOnline::name_entry(const std::string& name)
 	NameJsonConverter name_json_converter;
 	name_pkt.team_name.set_value(name);
 	m_sck->sck_send(name_json_converter.from_packet_to_json(name_pkt));
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"チーム名をサーバに送信しました(チーム名: %s)",
 		name.c_str()));
 }
@@ -172,7 +172,7 @@ void CGameOnline::name_register(OnlineSetting setting)
 		throw std::runtime_error("AIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
 	}
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"チーム名が確定しました(チーム名: %s)",
 		m_team_name.c_str()));
 }
@@ -192,7 +192,7 @@ void CGameOnline::finalize_battle()
 
 	CBoard::delete_board();
 
-	g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "インスタンスの削除が完了しました");
+	CLog::write(CLog::LogLevel_Information, "インスタンスの削除が完了しました");
 }
 
 /**

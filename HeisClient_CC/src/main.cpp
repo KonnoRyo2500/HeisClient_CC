@@ -10,17 +10,6 @@
 #include "audience_mode.h"
 #include "log.h"
 
-/* グローバル変数 */
-
-/* 各種ログ */
-//! 盤面ログ
-CLog *g_board_log = NULL;
-//! 対戦ログ
-CLog *g_battle_log = NULL;
-//! システムログ
-CLog *g_system_log = NULL;
-
-
 /**
 *	@enum GameMode
 *	ゲームモード
@@ -39,10 +28,6 @@ enum GameMode {
 static GameMode ask_game_mode();
 //! ゲームを開始する
 static void start_game(const GameMode mode);
-//! ログ記録の開始
-static void start_logging();
-//! ログ記録の終了
-static void exit_logging();
 
 /**
 *	@brief メイン関数
@@ -51,15 +36,15 @@ int main()
 {
 	try {
 		// 各種ログファイルを作成する
-		start_logging();
+		CLog::start_logging();
 
 		// 対戦を実行
-		g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "CCの実行が開始されました");
+		CLog::write(CLog::LogLevel_Information, "CCの実行が開始されました");
 		start_game(ask_game_mode());
-		g_system_log->write_log(CLog::LogLevel_InvisibleInfo, "CCの実行が正常に完了しました");
+		CLog::write(CLog::LogLevel_Information, "CCの実行が正常に完了しました");
 
 		// ログの記録を終了
-		exit_logging();
+		CLog::end_logging();
 	}
 	catch (const std::exception& e) {
 		// ログのインスタンスが正常に作成できていない可能性もあるため、コンソール出力にする
@@ -126,32 +111,4 @@ static void start_game(const GameMode mode)
 
 	delete game;
 	game = NULL;
-}
-
-/**
-*	@brief ログの記録を開始する関数
-*/
-static void start_logging()
-{
-	g_board_log = new CLog("board_log");
-	g_battle_log = new CLog("battle_log");
-	g_system_log = new CLog("system_log");
-}
-
-/**
-*	@brief ログの記録を終了する関数
-*/
-static void exit_logging()
-{
-	// すべてのログインスタンスに対して、同じような処理をするため、ラムダ式にまとめておく
-	auto close_log = [](CLog **log) {
-		if (*log) {
-			delete *log;
-			*log = NULL;
-		}
-	};
-
-	close_log(&g_board_log);
-	close_log(&g_battle_log);
-	close_log(&g_system_log);
 }

@@ -90,7 +90,7 @@ void CCommander::attack(const std::string& id, const BoardPosition dst_pos) cons
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL && infantry->get_team_name() == m_team_name) {
-		g_battle_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+		CLog::write(CLog::LogLevel_Information, cc_common::format(
 			"ID\"%s\"の兵士が，座標(%d, %d)に対して攻撃しました",
 			id.c_str(), dst_pos.x, dst_pos.y));
 		infantry->attack(dst_pos);
@@ -107,7 +107,7 @@ void CCommander::move(const std::string& id, const BoardPosition dst_pos) const
 	CInfantry* infantry = search_infantry_by_id(id);
 
 	if (infantry != NULL && infantry->get_team_name() == m_team_name) {
-		g_battle_log->write_log(CLog::LogLevel_InvisibleInfo, cc_common::format(
+		CLog::write(CLog::LogLevel_Information, cc_common::format(
 			"ID\"%s\"の兵士が，座標(%d, %d)から(%d, %d)に移動しました",
 			id.c_str(), infantry->get_position().x, infantry->get_position().y, dst_pos.x, dst_pos.y));
 		infantry->move(dst_pos);

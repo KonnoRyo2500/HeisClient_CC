@@ -4,73 +4,93 @@
 *	@author		Ryo Konno
 *	@details	ログを出力するための操作を提供する．
 */
-#include "log.h"
-#include "common.h"
-#include "path.h"
 
-#include <ctime>
-#include <locale>
-#include <iostream>
-#include <map>
-#include <vector>
+#include "log.h"
+#include "path.h"
+#include "common.h"
+
+#include <assert.h>
+#include <filesystem>
+
+// staticメンバ変数の定義
+std::ofstream *CLog::m_log = NULL;
 
 /* public関数 */
 
 /**
-*	@brief コンストラクタ
-*	@param[in] title ログファイルのタイトル
-*	@remark ログファイル名は"(タイトル)_(日付).log"となる
+*	@brief ログ記録を開始する
 */
-CLog::CLog(const std::string& title)
+void CLog::start_logging()
 {
-	// "bin"ディレクトリと同列の"log"ディレクトリにログを出力する
-	std::string log_file_name = title + make_current_datetime_str("_%Y_%m_%d_%H_%M_%S") + ".log";
-	std::string log_path = join({CC_PROJECT_DIR, "log", log_file_name});
+	// 現在日時がログファイル名に含まれるため、既存のログファイルと名前が被ってしまうことは現実的に起こりえない
+	std::string log_file_name = "log" + build_current_datetime_str("_%Y_%m_%d_%H_%M_%S") + ".log";
+	std::string log_path = join({ CC_PROJECT_DIR, "log", log_file_name });
 
-	m_logfile = new std::ofstream(log_path);
-	if (m_logfile->fail()) {
-		throw std::runtime_error(cc_common::format("ログファイルのオープンに失敗しました(パス: %s)", log_path.c_str()));
+	// ログファイルの作成
+	m_log = new std::ofstream(log_path, std::ios::app);
+	if (m_log->fail()) {
+		throw std::runtime_error("ログ記録の開始に失敗しました");
 	}
 }
 
 /**
-*	@brief デストラクタ
+*	@brief ログ記録を終了する
 */
-CLog::~CLog()
+void CLog::end_logging()
 {
-	delete m_logfile;
-	m_logfile = NULL;
+	delete m_log;
+	m_log = NULL;
 }
 
 /**
-*	@brief ログにメッセージを書き込む関数
-*	@param[in] level ログレベル
-*	@param[in] msg 書き込むメッセージ
+*	@brief ログにメッセージを追加する
+*	@param[in] level ログのレベル(重要度)
+*	@param[in] msg 追加するメッセージ
+*	@param[in] output_to_console ログメッセージをコンソールに表示するか(デフォルトではfalse(無効))
 */
-void CLog::write_log(const LogLevel level, const std::string& msg) const
+void CLog::write(LogLevel level, std::string msg, bool output_to_console)
 {
-	const std::string log_content = make_current_datetime_str("%Y/%m/%d %H:%M:%S ")
-		+ "["
-		+ make_log_level_str(level)
-		+ "] "
-		+ msg;
+	// ログ記録が開始されていない
+	assert(m_log != NULL);
 
-	*m_logfile << log_content << std::endl;
-	
-	if (level == LogLevel_InvisibleInfo) {
-		return;
+	// ログのヘッダを作成する
+	std::string log_header = "";
+	// 書き込み日時
+	log_header += build_current_datetime_str("%Y/%m/%d %H:%M:%S ");
+
+	// ログレベル
+	switch (level)
+	{
+	case CLog::LogLevel_Information:
+		log_header += "[情報]";
+		break;
+	case CLog::LogLevel_Warning:
+		log_header += "[警告]";
+		break;
+	case CLog::LogLevel_Error:
+		log_header += "[エラー]";
+		break;
+	default:
+		log_header += "[未定義!]";
+		break;
 	}
-	printf("%s\n", msg.c_str());
+
+	// ログに追記する
+	*m_log << log_header << " " << msg << std::endl;
+
+	// 必要があれば、メッセージをコンソールにも出力する
+	// ヘッダ部分は
+	if (output_to_console) {
+		printf("%s\n", msg.c_str());
+	}
 }
 
-/* private関数 */
-
 /**
-*	@brief 現在日時を表す文字列を返す関数
+*	@brief 現在日時を表す文字列を作成する
 *	@param[in] format 日時を指定するフォーマット文字列(strftime形式)
 *	@return std::string 現在日時を表す文字列
 */
-std::string CLog::make_current_datetime_str(const std::string& format) const
+std::string CLog::build_current_datetime_str(const std::string& format)
 {
 	char datetime[200] = { 0 };
 	std::time_t currnt_time = std::time(nullptr);
@@ -79,27 +99,4 @@ std::string CLog::make_current_datetime_str(const std::string& format) const
 		throw std::runtime_error("ログ用の現在日時の取得に失敗しました");
 	}
 	return std::string(datetime);
-}
-
-/**
-*	@brief ログレベルを表す文字列を作成する関数
-*	@param[in] level ログレベル
-*	@return std::string ログレベルを表す文字列
-*/
-std::string CLog::make_log_level_str(const LogLevel level) const
-{
-	// ログレベル -> 文字列の対応表
-	const std::map<LogLevel, std::string> log_level_map = {
-		{LogLevel_VisibleInfo,		"情報"},
-		{LogLevel_InvisibleInfo,	"情報"},
-		{LogLevel_Warning,			"警告"},
-		{LogLevel_Error,			"エラー"},
-	};
-
-	auto it = log_level_map.find(level);
-	if (it != log_level_map.end()) {
-		return it->second;
-	}
-
-	return "未定義のログ";
 }

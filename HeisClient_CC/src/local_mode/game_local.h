@@ -15,9 +15,6 @@
 
 #include <string>
 
-extern CLog *g_system_log;
-extern CLog *g_battle_log;
-
 /**
 *	@brief	ローカルモード実行クラス
 */

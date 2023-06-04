@@ -11,8 +11,6 @@
 #include "log.h"
 #include "setting.h"
 
-extern CLog *g_system_log;
-
 /**
 *	@brief	観戦モードクラス
 *	@remark 他のモードと同様にインスタンスを取り扱いたいため，CGameクラスの派生クラスとする

@@ -167,7 +167,7 @@ void CBoard::show()
 	show_str += "\n";
 
 	// ログの先頭情報により，盤面が崩れて見えるのを防ぐため，先頭に改行を入れておく
-	g_board_log->write_log(CLog::LogLevel_VisibleInfo, cc_common::format("\n%s", show_str.c_str()));
+	CLog::write(CLog::LogLevel_Information, "\n" + show_str, true);
 }
 
 /* private関数 */

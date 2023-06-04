@@ -14,9 +14,6 @@
 #include <string>
 #include <vector>
 
-extern CLog *g_system_log;
-extern CLog *g_battle_log;
-
 /**
 *	@brief	オンラインモード実行クラス
 */
