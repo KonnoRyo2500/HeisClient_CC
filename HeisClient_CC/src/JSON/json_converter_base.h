@@ -20,13 +20,13 @@ class JsonConverterBase
 	// メンバ関数
 public:
 	// JSON文字列からパケットに変換する
-	virtual PacketType from_json_to_packet(std::string json) const = 0;
+	virtual PacketType from_json_to_packet(const std::string& json) const = 0;
 	// パケットからJSON文字列に変換する
-	virtual std::string from_packet_to_json(PacketType pkt) const = 0;
+	virtual std::string from_packet_to_json(const PacketType& pkt) const = 0;
 
 protected:
 	// JSON文字列をパースする
-	picojson::object parse_json(std::string json) const;
+	picojson::object parse_json(const std::string& json) const;
 };
 
 /**
@@ -36,7 +36,7 @@ protected:
 *	@return picojson::object パースされたJSONオブジェクト
 */
 template <typename PacketType>
-picojson::object JsonConverterBase<PacketType>::parse_json(std::string json) const
+picojson::object JsonConverterBase<PacketType>::parse_json(const std::string& json) const
 {
 	picojson::value parsed_JSON_val;
 	std::string errmsg = picojson::parse(parsed_JSON_val, json);

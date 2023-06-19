@@ -21,7 +21,7 @@
 *	@param[in] paths パス文字列
 *	@return std::string 結合後のパス文字列
 */
-std::string join(std::vector<std::string> paths)
+std::string join(const std::vector<std::string>& paths)
 {
 	std::filesystem::path joined_path;
 

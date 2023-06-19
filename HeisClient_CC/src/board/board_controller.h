@@ -21,7 +21,7 @@ class CBoardController
 	// ƒƒ“ƒoŠÖ”
 public:
 	// •ºm‚ÉUŒ‚‚ğw¦‚·‚é
-	void attack(CBoard* board, CBoardObserver observer, BoardPosition src, BoardPosition dst);
+	void attack(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const;
 	// •ºm‚ÉˆÚ“®‚ğw¦‚·‚é
-	void move(CBoard* board, CBoardObserver observer, BoardPosition src, BoardPosition dst);
+	void move(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const;
 };

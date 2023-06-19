@@ -25,16 +25,16 @@ class CGameOnline : public CGame {
 		
 	private:
 		// 対戦開始前処理
-		void initialize_battle(OnlineSetting setting);
+		void initialize_battle(const OnlineSetting& setting);
 		void recv_name_request() const;
-		void name_entry(const std::string& name);
-		void name_register(OnlineSetting setting);
+		void name_entry(const std::string& name) const;
+		void name_register(const OnlineSetting& setting);
 
 		// 対戦終了後処理
 		void finalize_battle();
 
 		// 対戦後の勝敗判定
-		bool judge_win();
+		bool judge_win() const;
 
 	// メンバ変数
 	private:

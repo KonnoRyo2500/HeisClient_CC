@@ -107,7 +107,7 @@ void CGameOnline::play_game()
 *	@param[in] setting オンラインモード設定値
 *	@remark この関数では，名前確定前に生成できるインスタンスを生成する
 */
-void CGameOnline::initialize_battle(OnlineSetting setting)
+void CGameOnline::initialize_battle(const OnlineSetting& setting)
 {
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_sck = new CClientSocket();
@@ -138,7 +138,7 @@ void CGameOnline::recv_name_request() const
 *	@brief 指定された名前をサーバーに送る関数
 *	@param[in] name 名前
 */
-void CGameOnline::name_entry(const std::string& name)
+void CGameOnline::name_entry(const std::string& name) const
 {
 	JSONSendPacket_Name name_pkt;
 	NameJsonConverter name_json_converter;
@@ -153,7 +153,7 @@ void CGameOnline::name_entry(const std::string& name)
 *	@brief サーバーから受信した名前をチーム名として登録する関数
 *	@param[in] setting オンラインモード設定値
 */
-void CGameOnline::name_register(OnlineSetting setting)
+void CGameOnline::name_register(const OnlineSetting& setting)
 {
 	std::string received_JSON = m_sck->sck_recv();
 	ConfirmNameJsonConverter confirm_name_json_converter;
@@ -192,7 +192,7 @@ void CGameOnline::finalize_battle()
 *	@brief 対戦の決着がついた後，盤面の状態から勝敗を決定する関数
 *	@return bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
 */
-bool CGameOnline::judge_win()
+bool CGameOnline::judge_win() const
 {
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
 	return m_commander->get_all_actable_infantry_ids(m_team_name).size() > 0;

@@ -15,7 +15,7 @@
 *	@brief コンストラクタ
 *	@param[in] commander 司令官インスタンス
 */
-CSampleAI::CSampleAI(CCommander commander)
+CSampleAI::CSampleAI(const CCommander& commander)
 	: CAIBase(commander)
 {
 	// Do Nothing
@@ -53,7 +53,7 @@ void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 *	@brief 兵士をランダムに移動させる関数
 *	@param[in] infantry_id 行動対象の兵士のID
 */
-void CSampleAI::sample_random_move(const std::string infantry_id)
+void CSampleAI::sample_random_move(const std::string& infantry_id) const
 {
 	std::vector<BoardPosition> movable_pos = m_commander.find_movable_position(infantry_id);
 	std::random_device rnd_dev;
@@ -69,7 +69,7 @@ void CSampleAI::sample_random_move(const std::string infantry_id)
 *	@brief 兵士をランダムな方向に攻撃させる関数
 *	@param[in] infantry_id 行動対象の兵士のID
 */
-void CSampleAI::sample_random_attack(const std::string infantry_id)
+void CSampleAI::sample_random_attack(const std::string& infantry_id)
 {
 	std::vector<BoardPosition> attackable_pos = m_commander.find_attackable_position(infantry_id);
 	std::random_device rnd_dev;

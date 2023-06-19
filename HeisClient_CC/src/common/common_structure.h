@@ -28,7 +28,7 @@ public:
 	*	@param[in] x x座標
 	*	@param[in] y y座標
 	*/
-	explicit BoardPosition(const int x,  const int y) 
+	explicit BoardPosition(const int x,  const int y)
 		: x(x)
 		, y(y)
 	{
@@ -39,7 +39,7 @@ public:
 	*	@param[in] dst L1座標を計算する点
 	*	@return uint32_t 自身とdstとのL1座標
 	*/
-	uint32_t calc_l1_distance(BoardPosition dst)
+	uint32_t calc_l1_distance(const BoardPosition& dst) const
 	{
 		return std::abs(this->x - dst.x) + std::abs(this->y - dst.y);
 	}
@@ -47,7 +47,7 @@ public:
 	*	@brief 比較演算子(==)
 	*	@param[in] dst 右辺
 	*/
-	bool operator==(const BoardPosition& dst)
+	bool operator==(const BoardPosition& dst) const
 	{
 		return x == dst.x && y == dst.y;
 	}
@@ -55,7 +55,7 @@ public:
 	*	@brief 比較演算子(!=)
 	*	@param[in] dst 右辺
 	*/
-	bool operator!=(const BoardPosition& dst)
+	bool operator!=(const BoardPosition& dst) const
 	{
 		return x != dst.x || y != dst.y;
 	}

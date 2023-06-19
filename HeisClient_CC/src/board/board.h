@@ -23,7 +23,7 @@ struct Square
 	*	@param[in] infantry 兵士のインスタンス
 	*	@param[in] exists 兵士が実在するかどうか
 	*/
-	Square(CInfantry infantry, bool exists)
+	Square(const CInfantry& infantry, bool exists)
 		: infantry(infantry)
 		, exists(exists)
 	{
@@ -67,23 +67,23 @@ class CBoard
 	// メンバ関数
 public:
 	// コンストラクタ
-	explicit CBoard(JSONRecvPacket_Board pkt);
+	explicit CBoard(const JSONRecvPacket_Board& pkt);
 
 	// デストラクタ
 	~CBoard();
 
 	// マス目を取得する
-	Square get_square(const BoardPosition& pos);
+	Square get_square(const BoardPosition& pos) const;
 	// 兵士をセットする
-	void set_infantry(BoardPosition pos, CInfantry infantry);
+	void set_infantry(const BoardPosition& pos, const CInfantry& infantry);
 	// 兵士を削除する
 	void remove_infantry(const BoardPosition& pos);
 
 	// 盤面のサイズを取得する
-	BoardSize get_size();
+	BoardSize get_size() const;
 
 	// デバッグ，動作確認用
-	void show();
+	void show() const;
 
 	// メンバ変数
 private:

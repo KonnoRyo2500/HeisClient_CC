@@ -27,8 +27,8 @@ struct InfantryStatus
 	*	@param[in] action_remain 初期残り行動回数
 	*/
 	explicit InfantryStatus(
-		std::string team_name,
-		std::string id,
+		const std::string& team_name,
+		const std::string& id,
 		uint8_t hp = INFANTRY_INITIAL_HP,
 		uint8_t action_remain = INFANTRY_ACTION_LIMIT
 	)
@@ -58,7 +58,7 @@ class CInfantry
 	// メンバ関数
 	public:
 		// コンストラクタ
-		explicit CInfantry(InfantryStatus init_status);
+		explicit CInfantry(const InfantryStatus& init_status);
 
 		// デストラクタ
 		~CInfantry();
@@ -69,10 +69,10 @@ class CInfantry
 		// HPを1減らす
 		void reduce_hp();
 		// 行動回数を指定された回数減らす
-		void reduce_remaining_action(uint8_t n_reduce);
+		void reduce_remaining_action(const uint8_t n_reduce);
 
 		// 死んでいるかどうかの判定
-		bool is_dead();
+		bool is_dead() const;
 
 	// メンバ変数
 	private:

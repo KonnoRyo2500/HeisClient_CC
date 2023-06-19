@@ -13,7 +13,7 @@
 *	@param[in] path ローカルモード設定ファイルのパス
 *	@return LocalSetting 読み込まれた設定値
 */
-LocalSetting CLocalSettingFile::load(std::string path) const
+LocalSetting CLocalSettingFile::load(const std::string& path) const
 {
 	// CSVの読み込み
 	CsvRecords records = parse_csv(path);
@@ -45,7 +45,7 @@ LocalSetting CLocalSettingFile::load(std::string path) const
 *	@param[in] path ローカルモード設定ファイルのパス
 *	@param[in] setting 書き込む設定値
 */
-void CLocalSettingFile::save(std::string path, LocalSetting setting) const
+void CLocalSettingFile::save(const std::string& path, const LocalSetting& setting) const
 {
 	// 現時点でローカルモード設定ファイルに設定値を保存する必要がないため、Do Nothing
 	// 保存する必要が生じたら、適宜実装する
@@ -58,8 +58,8 @@ void CLocalSettingFile::save(std::string path, LocalSetting setting) const
 *	@return std::vector<BoardPosition> 各兵士の初期位置
 */
 std::vector<BoardPosition> CLocalSettingFile::build_init_positions(
-	std::vector<std::string> init_x_from_csv,
-	std::vector<std::string> init_y_from_csv
+	const std::vector<std::string>& init_x_from_csv,
+	const std::vector<std::string>& init_y_from_csv
 ) const
 {
 	// x座標・y座標の数が同じでなければエラー

@@ -18,7 +18,7 @@ class BoardJsonConverter : public JsonConverterBase<JSONRecvPacket_Board>
 	// メンバ関数
 public:
 	// JSON文字列からパケットに変換する
-	JSONRecvPacket_Board from_json_to_packet(std::string json) const;
+	JSONRecvPacket_Board from_json_to_packet(const std::string& json) const;
 	// パケットからJSON文字列に変換する
-	std::string from_packet_to_json(JSONRecvPacket_Board pkt) const;
+	std::string from_packet_to_json(const JSONRecvPacket_Board& pkt) const;
 };

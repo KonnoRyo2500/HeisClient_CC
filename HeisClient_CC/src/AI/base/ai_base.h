@@ -19,7 +19,7 @@ class CAIBase
 // メンバ関数
 public:
 	// コンストラクタ
-	explicit CAIBase(CCommander commander);
+	explicit CAIBase(const CCommander& commander);
 
 	// メイン処理
 	virtual void AI_main(const JSONRecvPacket_Board& board_pkt) = 0;

@@ -26,7 +26,7 @@ class CAudienceMode : public CGame {
 
 	private:
 		// 観戦の初期化
-		void initialize_watch(AudienceSetting setting);
+		void initialize_watch(const AudienceSetting& setting);
 
 		// 観戦の終了処理
 		void finalize_watch();

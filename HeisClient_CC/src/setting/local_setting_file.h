@@ -19,14 +19,14 @@ class CLocalSettingFile : public CSettingFileBase<LocalSetting>
 	// メンバ関数
 public:
 	// 設定値をローカルモード設定ファイルから読み込む
-	LocalSetting load(std::string path) const;
+	LocalSetting load(const std::string& path) const;
 	// 設定値をローカルモード設定ファイルに書き込む
-	void save(std::string path, LocalSetting setting) const;
+	void save(const std::string& path, const LocalSetting& setting) const;
 
 private:
 	// 各兵士の初期位置の情報を、盤面上の位置を表す構造体に変換する
 	std::vector<BoardPosition> build_init_positions(
-		std::vector<std::string> init_x_from_csv,
-		std::vector<std::string> init_y_from_csv
+		const std::vector<std::string>& init_x_from_csv,
+		const std::vector<std::string>& init_y_from_csv
 	) const;
 };

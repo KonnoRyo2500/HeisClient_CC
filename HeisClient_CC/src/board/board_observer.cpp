@@ -14,7 +14,7 @@
 *	@param[in] board 盤面
 *	@return std::vector<InfantryWithPos> 盤面上の全兵士とその位置
 */
-std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(CBoard board)
+std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(const CBoard& board) const
 {
 	std::vector<InfantryWithPos> infantries_and_positions;
 	BoardSize size = board.get_size();
@@ -40,7 +40,7 @@ std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(CBo
 *	@param[in] pos 取得対象の兵士の位置
 *	@return std::vector<BoardPosition> 移動できるマス(指定したIDの兵士がいない場合は常に空)
 */
-std::vector<BoardPosition> CBoardObserver::search_position_to_move(CBoard board, BoardPosition pos)
+std::vector<BoardPosition> CBoardObserver::search_position_to_move(const CBoard& board, const BoardPosition& pos) const
 {
 	// posからL1距離が2以内のマスを得るための差分
 	std::vector<int> dxs{ 0, -1, 0, 1, -2, -1, 1, 2, -1, 0, 1, 0 };
@@ -65,7 +65,7 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_move(CBoard board,
 *	@param[in] pos 取得対象の兵士の位置
 *	@return std::vector<BoardPosition> 攻撃できるマス(指定したIDの兵士がいない場合は常に空)
 */
-std::vector<BoardPosition> CBoardObserver::search_position_to_attack(CBoard board, BoardPosition pos)
+std::vector<BoardPosition> CBoardObserver::search_position_to_attack(const CBoard& board, const BoardPosition& pos) const
 {
 	// posの上下左右のマスを得るための差分
 	std::vector<int> dxs{ 0, 0, -1, 1 };
@@ -90,7 +90,7 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_attack(CBoard boar
 *	@param[in] coord 座標
 *	@return coordがboard内にあるか
 */
-bool CBoardObserver::is_coord_in_board(CBoard board, BoardPosition coord)
+bool CBoardObserver::is_coord_in_board(const CBoard& board, const BoardPosition& coord) const
 {
 	BoardSize size = board.get_size();
 	return
@@ -105,7 +105,7 @@ bool CBoardObserver::is_coord_in_board(CBoard board, BoardPosition coord)
 *	@param[in] dst 移動先のマス
 *	@return bool 移動できるかどうか
 */
-bool CBoardObserver::can_move(CBoard board, BoardPosition src, BoardPosition dst)
+bool CBoardObserver::can_move(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
 {
 	// 1: dstが盤面上に存在すること
 	if (!is_coord_in_board(board, dst)) {
@@ -148,7 +148,7 @@ bool CBoardObserver::can_move(CBoard board, BoardPosition src, BoardPosition dst
 *	@param[in] dst 移動先のマス
 *	@return bool srcからdstに至るパスが存在するかどうか
 */
-bool CBoardObserver::exists_path(CBoard board, BoardPosition src, BoardPosition dst)
+bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
 {
 	Square src_sq = board.get_square(src);
 	Square dst_sq = board.get_square(dst);
@@ -216,7 +216,7 @@ bool CBoardObserver::exists_path(CBoard board, BoardPosition src, BoardPosition 
 *	@param[in] dst 移動先のマス
 *	@return bool 攻撃できるかどうか
 */
-bool CBoardObserver::can_attack(CBoard board, BoardPosition src, BoardPosition dst)
+bool CBoardObserver::can_attack(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
 {
 	// 1: dstが盤面上に存在すること
 	if (!is_coord_in_board(board, dst)) {

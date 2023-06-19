@@ -14,7 +14,7 @@
 *	@param[in] team_name チーム名
 *	@param[in] board 盤面
 */
-CCommander::CCommander(std::string team_name, CBoard* board)
+CCommander::CCommander(const std::string& team_name, CBoard* board)
 	: m_team_name(team_name)
 	, m_board(board)
 	, m_observer(CBoardObserver())
@@ -28,7 +28,7 @@ CCommander::CCommander(std::string team_name, CBoard* board)
 *	@param[in] id 兵士ID
 *	@return BoardPosition 兵士の位置(指定したIDの兵士が見つからない場合はINVALID_POSITION)
 */
-BoardPosition CCommander::get_infantry_position_by_id(std::string id)
+BoardPosition CCommander::get_infantry_position_by_id(const std::string& id) const
 {
 	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
 	for (auto& ip : infantries_and_pos) {
@@ -45,7 +45,7 @@ BoardPosition CCommander::get_infantry_position_by_id(std::string id)
 *	@param[in] id 兵士ID
 *	@return InfantryStatus 兵士のステータス
 */
-InfantryStatus CCommander::get_infantry_status_by_id(std::string id)
+InfantryStatus CCommander::get_infantry_status_by_id(const std::string& id) const
 {
 	CInfantry infantry = find_infantry_by_id(id).first;
 	return infantry.get_status();
@@ -56,7 +56,7 @@ InfantryStatus CCommander::get_infantry_status_by_id(std::string id)
 *	@param[in] id 兵士のID
 *	@param[in] dst 攻撃先の座標
 */
-void CCommander::attack(std::string id, BoardPosition dst)
+void CCommander::attack(const std::string& id, const BoardPosition& dst)
 {
 	InfantryWithPos infantry_and_pos = find_infantry_by_id(id);
 	CInfantry infantry = infantry_and_pos.first;
@@ -72,7 +72,7 @@ void CCommander::attack(std::string id, BoardPosition dst)
 *	@param[in] id 兵士のID
 *	@param[in] dst 移動先の座標
 */
-void CCommander::move(std::string id, BoardPosition dst)
+void CCommander::move(const std::string& id, const BoardPosition& dst) const
 {
 	InfantryWithPos infantry_and_pos = find_infantry_by_id(id);
 	BoardPosition pos = infantry_and_pos.second;
@@ -84,7 +84,7 @@ void CCommander::move(std::string id, BoardPosition dst)
 *	@param[in] id 兵士のID
 *	@return std::vector<BoardPosition> 移動可能なマス
 */
-std::vector<BoardPosition> CCommander::find_movable_position(std::string id)
+std::vector<BoardPosition> CCommander::find_movable_position(const std::string& id) const
 {
 	BoardPosition pos = find_infantry_by_id(id).second;
 	return m_observer.search_position_to_move(*m_board, pos);
@@ -95,7 +95,7 @@ std::vector<BoardPosition> CCommander::find_movable_position(std::string id)
 *	@param[in] id 兵士のID
 *	@return std::vector<BoardPosition> 攻撃可能なマス
 */
-std::vector<BoardPosition> CCommander::find_attackable_position(std::string id)
+std::vector<BoardPosition> CCommander::find_attackable_position(const std::string& id) const
 {
 	BoardPosition pos = find_infantry_by_id(id).second;
 	return m_observer.search_position_to_attack(*m_board, pos);
@@ -107,7 +107,7 @@ std::vector<BoardPosition> CCommander::find_attackable_position(std::string id)
 *	@param[in] team_name 兵士ID取得対象のチーム名
 *	@return std::vector<std::string> 行動可能な兵士のID
 */
-std::vector<std::string> CCommander::get_all_actable_infantry_ids(std::string team_name)
+std::vector<std::string> CCommander::get_all_actable_infantry_ids(const std::string& team_name) const
 {
 	std::vector<std::string> movable_ids = get_all_movable_infantry_ids(team_name);
 	std::vector<std::string> attackable_ids = get_all_attackable_infantry_ids(team_name);
@@ -129,7 +129,7 @@ std::vector<std::string> CCommander::get_all_actable_infantry_ids(std::string te
 *	@param[in] team_name 兵士ID取得対象のチーム名
 *	@return std::vector<std::string> 移動可能な兵士のID
 */
-std::vector<std::string> CCommander::get_all_movable_infantry_ids(std::string team_name)
+std::vector<std::string> CCommander::get_all_movable_infantry_ids(const std::string& team_name) const
 {
 	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
 	std::vector<std::string> ids;
@@ -153,7 +153,7 @@ std::vector<std::string> CCommander::get_all_movable_infantry_ids(std::string te
 *	@param[in] team_name 兵士ID取得対象のチーム名
 *	@return std::vector<std::string> 攻撃可能な兵士のID
 */
-std::vector<std::string> CCommander::get_all_attackable_infantry_ids(std::string team_name)
+std::vector<std::string> CCommander::get_all_attackable_infantry_ids(const std::string& team_name) const
 {
 	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
 	std::vector<std::string> ids;
@@ -188,7 +188,7 @@ JSONSendPacket_Action CCommander::create_action_pkt()
 *	@param[in] id 兵士ID
 *	@return InfantryWithPos 兵士の実体とその位置
 */
-InfantryWithPos CCommander::find_infantry_by_id(std::string id)
+InfantryWithPos CCommander::find_infantry_by_id(const std::string& id) const
 {
 	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
 	for (auto& ip : infantries_and_pos) {

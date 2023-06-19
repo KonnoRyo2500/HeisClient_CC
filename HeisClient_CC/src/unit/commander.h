@@ -22,36 +22,36 @@ class CCommander
 	// メンバ関数
 public:
 	// コンストラクタ
-	explicit CCommander(std::string team_name, CBoard* board);
+	explicit CCommander(const std::string& team_name, CBoard* board);
 
 	// 指定した兵士の位置を取得する
-	BoardPosition get_infantry_position_by_id(std::string id);
+	BoardPosition get_infantry_position_by_id(const std::string& id) const;
 	// 指定した兵士のステータスを取得する
-	InfantryStatus get_infantry_status_by_id(std::string id);
+	InfantryStatus get_infantry_status_by_id(const std::string& id) const;
 
 	// 兵士に攻撃を指示する
-	void attack(std::string id, BoardPosition dst);
+	void attack(const std::string& id, const BoardPosition& dst);
 	// 兵士に移動を指示する
-	void move(std::string id, BoardPosition dst);
+	void move(const std::string& id, const BoardPosition& dst) const;
 
 	// 移動可能なすべてのマスを取得する
-	std::vector<BoardPosition> find_movable_position(std::string id);
+	std::vector<BoardPosition> find_movable_position(const std::string& id) const;
 	// 攻撃可能なすべてのマスを取得する
-	std::vector<BoardPosition> find_attackable_position(std::string id);
+	std::vector<BoardPosition> find_attackable_position(const std::string& id) const;
 
 	// 行動可能な兵士のIDを取得する
-	std::vector<std::string> get_all_actable_infantry_ids(std::string team_name);
+	std::vector<std::string> get_all_actable_infantry_ids(const std::string& team_name) const;
 	// 移動可能な兵士のIDを取得する
-	std::vector<std::string> get_all_movable_infantry_ids(std::string team_name);
+	std::vector<std::string> get_all_movable_infantry_ids(const std::string& team_name) const;
 	// 攻撃可能な兵士のIDを取得する
-	std::vector<std::string> get_all_attackable_infantry_ids(std::string team_name);
+	std::vector<std::string> get_all_attackable_infantry_ids(const std::string& team_name) const;
 
 	// 「行動」パケットを作成する
 	JSONSendPacket_Action create_action_pkt();
 
 private:
 	// IDから兵士を取得する
-	InfantryWithPos find_infantry_by_id(std::string id);
+	InfantryWithPos find_infantry_by_id(const std::string& id) const;
 
 	// メンバ変数
 private:

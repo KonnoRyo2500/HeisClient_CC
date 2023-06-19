@@ -29,13 +29,13 @@ class CSettingFileBase
 	// メンバ関数
 public:
 	// 設定値をローカルモード設定ファイルから読み込む
-	virtual SettingType load(std::string path) const = 0;
+	virtual SettingType load(const std::string& path) const = 0;
 	// 設定値をローカルモード設定ファイルに書き込む
-	virtual void save(std::string path, SettingType setting) const = 0;
+	virtual void save(const std::string& path, const SettingType& setting) const = 0;
 
 protected:
 	// CSVファイルの中身をパースする
-	CsvRecords parse_csv(std::string path) const;
+	CsvRecords parse_csv(const std::string& path) const;
 };
 
 /**
@@ -45,7 +45,7 @@ protected:
 *	@return CsvRecords 構造化されたCSVレコード
 */
 template <typename SettingType>
-CsvRecords CSettingFileBase<SettingType>::parse_csv(std::string path) const
+CsvRecords CSettingFileBase<SettingType>::parse_csv(const std::string& path) const
 {
 	std::ifstream in_stream(path);
 	CsvRecords records;

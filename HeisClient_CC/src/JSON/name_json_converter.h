@@ -18,7 +18,7 @@ class NameJsonConverter : JsonConverterBase<JSONSendPacket_Name>
 	// メンバ関数
 public:
 	// JSON文字列からパケットに変換する
-	JSONSendPacket_Name from_json_to_packet(std::string json) const;
+	JSONSendPacket_Name from_json_to_packet(const std::string& json) const;
 	// パケットからJSON文字列に変換する
-	std::string from_packet_to_json(JSONSendPacket_Name pkt) const;
+	std::string from_packet_to_json(const JSONSendPacket_Name& pkt) const;
 };

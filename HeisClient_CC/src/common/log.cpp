@@ -48,7 +48,7 @@ void CLog::end_logging()
 *	@param[in] msg 追加するメッセージ
 *	@param[in] output_to_console ログメッセージをコンソールに表示するか(デフォルトではfalse(無効))
 */
-void CLog::write(LogLevel level, std::string msg, bool output_to_console)
+void CLog::write(LogLevel level, const std::string& msg, bool output_to_console)
 {
 	// ログ記録が開始されていない
 	assert(m_log != NULL);

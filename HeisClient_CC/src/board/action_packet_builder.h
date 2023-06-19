@@ -18,17 +18,17 @@ class CActionPacketBuilder
 	// メンバ関数
 public:
 	// 「行動」パケットを作成する
-	JSONSendPacket_Action build(CBoard board, std::string team_name);
+	JSONSendPacket_Action build(const CBoard& board, const std::string& team_name) const;
 
 	// 兵士が攻撃した座標を追加する
-	void add_attack_destination(CInfantry infantry, BoardPosition atk_dst);
+	void add_attack_destination(const CInfantry& infantry, const BoardPosition& atk_dst);
 
 	// 内部状態を初期化する
 	void clear();
 
 private:
 	// もし兵士が攻撃済みならば、攻撃先の座標を返す
-	BoardPosition find_attack_destination_if_attacked(std::string id);
+	BoardPosition find_attack_destination_if_attacked(const std::string& id) const;
 
 	// メンバ変数
 private:

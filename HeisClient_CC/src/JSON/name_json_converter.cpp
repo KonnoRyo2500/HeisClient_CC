@@ -12,7 +12,7 @@
 *	@param[in] json 変換対象の「名前」JSON
 *	@return std::string 変換結果の「名前」パケット
 */
-JSONSendPacket_Name NameJsonConverter::from_json_to_packet(std::string json) const
+JSONSendPacket_Name NameJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	// クライアント側で「名前」JSONから「名前」パケットに変換する必要がないため、Do Nothing
 	// 変換する必要が生じたら適宜実装する
@@ -24,7 +24,7 @@ JSONSendPacket_Name NameJsonConverter::from_json_to_packet(std::string json) con
 *	@param[in] pkt 変換対象の「名前」パケット
 *	@return std::string 変換結果の「名前」JSON
 */
-std::string NameJsonConverter::from_packet_to_json(JSONSendPacket_Name pkt) const
+std::string NameJsonConverter::from_packet_to_json(const JSONSendPacket_Name& pkt) const
 {
 	picojson::object name_obj;
 

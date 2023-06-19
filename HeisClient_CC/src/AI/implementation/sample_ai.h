@@ -31,16 +31,16 @@ private:
 	// メンバ関数
 public:
 	// コンストラクタ
-	explicit CSampleAI(CCommander commander);
+	explicit CSampleAI(const CCommander& commander);
 
 	// メイン処理
 	void AI_main(const JSONRecvPacket_Board& board_pkt);
 
 private:
 	// ランダムな方向に移動する
-	void sample_random_move(const std::string infantry_id);
+	void sample_random_move(const std::string& infantry_id) const;
 	// ランダムな方向に攻撃する
-	void sample_random_attack(const std::string infantry_id);
+	void sample_random_attack(const std::string& infantry_id);
 	// 次に行動する兵士を選択する
 	std::string sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const;
 	// 兵士がどの行動をするか選択する

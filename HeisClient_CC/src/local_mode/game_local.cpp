@@ -85,7 +85,7 @@ void CGameLocal::play_game()
 *	@param[in] setting ローカルモード設定値
 *	@return JSONRecvPacket_Board 最初のターンの「盤面」パケット
 */
-JSONRecvPacket_Board CGameLocal::create_initial_board_packet(LocalSetting setting)
+JSONRecvPacket_Board CGameLocal::create_initial_board_packet(const LocalSetting& setting) const
 {
 	JSONRecvPacket_Board pkt;
 
@@ -107,7 +107,7 @@ JSONRecvPacket_Board CGameLocal::create_initial_board_packet(LocalSetting settin
 *	@param[in] setting ローカルモード設定値
 *	@return std::vector<UnitsArrayElem> 最初の「盤面」パケットの"units"要素
 */
-std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(LocalSetting setting)
+std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(const LocalSetting& setting) const
 {
 	std::vector<UnitsArrayElem> units;
 	int serial_number = 1;
@@ -162,7 +162,7 @@ std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(Loc
 *	@brief 盤面上の兵士の行動回数をリセットする
 *	@param[out] board 盤面
 */
-void CGameLocal::reset_infantry_action_remain(CBoard& board)
+void CGameLocal::reset_infantry_action_remain(CBoard& board) const
 {
 	BoardSize size = board.get_size();
 
@@ -195,7 +195,7 @@ void CGameLocal::reset_infantry_action_remain(CBoard& board)
 *	@param[in] pkt 現在の「盤面」パケット
 *	@return std::string 次のターンのチーム名
 */
-std::string CGameLocal::get_next_turn_team_name(JSONRecvPacket_Board pkt, LocalSetting setting)
+std::string CGameLocal::get_next_turn_team_name(const JSONRecvPacket_Board& pkt, const LocalSetting& setting) const
 {
 	return (pkt.turn_team.get_value() == setting.my_team_name ? setting.enemy_team_name : setting.my_team_name);
 }
@@ -205,7 +205,7 @@ std::string CGameLocal::get_next_turn_team_name(JSONRecvPacket_Board pkt, LocalS
 *	@param[in] board 現在の盤面
 *	@return std::string 勝利しているチーム名(どちらも勝利していない場合は空文字列)
 */
-std::string CGameLocal::get_winning_team_name(CBoard board)
+std::string CGameLocal::get_winning_team_name(const CBoard& board) const
 {
 	BoardSize size = board.get_size();
 	std::vector<std::string> teams; // ここに2つ以上のチーム名が入ったら試合継続中

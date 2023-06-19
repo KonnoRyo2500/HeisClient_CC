@@ -12,7 +12,7 @@
 *	@param[in] json 変換対象の「結果」JSON
 *	@return std::string 変換結果の「結果」パケット
 */
-JSONRecvPacket_Result ResultJsonConverter::from_json_to_packet(std::string json) const
+JSONRecvPacket_Result ResultJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_Result result_pkt;
 	picojson::object root_obj = parse_json(json);
@@ -42,7 +42,7 @@ JSONRecvPacket_Result ResultJsonConverter::from_json_to_packet(std::string json)
 *	@param[in] pkt 変換対象の「結果」パケット
 *	@return std::string 変換結果の「結果」JSON
 */
-std::string ResultJsonConverter::from_packet_to_json(JSONRecvPacket_Result pkt) const
+std::string ResultJsonConverter::from_packet_to_json(const JSONRecvPacket_Result& pkt) const
 {
 	// クライアント側で「結果」パケットから「結果」JSONに変換する必要がないため、Do Nothing
 	// 変換する必要が生じたら適宜実装する

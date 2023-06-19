@@ -18,7 +18,7 @@
 *	@brief コンストラクタ
 *	@param[in] pkt 「盤面」パケット
 */
-CBoard::CBoard(JSONRecvPacket_Board pkt)
+CBoard::CBoard(const JSONRecvPacket_Board& pkt)
 {
 	// すべて空の盤面を作成する
 	Row row(pkt.width.get_value(), EMPTY_SQUARE);
@@ -55,7 +55,7 @@ CBoard::~CBoard()
 *	@param[in] pos 取得したいマス目の座標
 *	@return Square マス目
 */
-Square CBoard::get_square(const BoardPosition& pos)
+Square CBoard::get_square(const BoardPosition& pos) const
 {
 	return m_grid[pos.y][pos.x];
 }
@@ -65,7 +65,7 @@ Square CBoard::get_square(const BoardPosition& pos)
 *	@param[in] pos 兵士をセットする座標
 *	@param[in] infantry セットする兵士
 */
-void CBoard::set_infantry(BoardPosition pos, CInfantry infantry)
+void CBoard::set_infantry(const BoardPosition& pos, const CInfantry& infantry)
 {
 	m_grid[pos.y][pos.x] = Square(infantry, true);
 }
@@ -87,7 +87,7 @@ void CBoard::remove_infantry(const BoardPosition& pos)
 *	@brief 盤面のサイズを取得する
 *	@return BoardSize 盤面のサイズ
 */
-BoardSize CBoard::get_size()
+BoardSize CBoard::get_size() const
 {
 	BoardSize size;
 	size.height = m_grid.size();
@@ -98,7 +98,7 @@ BoardSize CBoard::get_size()
 /**
 *	@brief 盤面を画面に表示する関数
 */
-void CBoard::show()
+void CBoard::show() const
 {
 	std::string show_str = "";
 	BoardSize size = get_size();

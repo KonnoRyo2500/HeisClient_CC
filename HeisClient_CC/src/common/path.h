@@ -11,7 +11,7 @@
 #include <vector>
 
 // パス文字列を結合する
-std::string join(std::vector<std::string> paths);
+std::string join(const std::vector<std::string>& paths);
 // CCのルートディレクトリを得る
 std::string build_cc_root_dir();
 

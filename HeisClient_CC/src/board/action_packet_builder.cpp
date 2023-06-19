@@ -13,7 +13,7 @@
 *	@param[in] team_name チーム名
 *	@return JSONSendPacket_Action 「行動」パケット
 */
-JSONSendPacket_Action CActionPacketBuilder::build(CBoard board, std::string team_name)
+JSONSendPacket_Action CActionPacketBuilder::build(const CBoard& board, const std::string& team_name) const
 {
 	JSONSendPacket_Action action_pkt;
 
@@ -49,7 +49,7 @@ JSONSendPacket_Action CActionPacketBuilder::build(CBoard board, std::string team
 *	@param[in] infantry 攻撃した兵士
 *	@param[in] atk_dst 攻撃先座標
 */
-void CActionPacketBuilder::add_attack_destination(CInfantry infantry, BoardPosition atk_dst)
+void CActionPacketBuilder::add_attack_destination(const CInfantry& infantry, const BoardPosition& atk_dst)
 {
 	std::string id = infantry.get_status().id;
 	m_attack_destinations.push_back(std::make_pair(id, atk_dst));
@@ -68,7 +68,7 @@ void CActionPacketBuilder::clear()
 *	@param[in] id 兵士ID
 *	@return BoardPosition 攻撃先の座標(攻撃済みでなければINVALID_POSITION)
 */
-BoardPosition CActionPacketBuilder::find_attack_destination_if_attacked(std::string id)
+BoardPosition CActionPacketBuilder::find_attack_destination_if_attacked(const std::string& id) const
 {
 	for (auto& dst : m_attack_destinations) {
 		if (dst.first == id) {

@@ -17,7 +17,7 @@
 *	@param[in] id ID
 *	@param[in] hp 初期HP(「盤面」JSONから再配置する際に使用する)
 */
-CInfantry::CInfantry(InfantryStatus init_status)
+CInfantry::CInfantry(const InfantryStatus& init_status)
 	: m_status(init_status)
 {
 	// Do Nothing
@@ -70,7 +70,7 @@ void CInfantry::reduce_remaining_action(uint8_t n_reduce)
 *	@brief 自分が死んでいるかを判定する
 *	@return bool 自分が死んでいるか
 */
-bool CInfantry::is_dead()
+bool CInfantry::is_dead() const
 {
 	return m_status.hp == 0;
 }

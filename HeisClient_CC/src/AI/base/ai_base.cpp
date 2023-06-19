@@ -11,7 +11,7 @@
 *	@brief コンストラクタ
 *	@param[in] commander 司令官インスタンス
 */
-CAIBase::CAIBase(CCommander commander)
+CAIBase::CAIBase(const CCommander& commander)
 	: m_commander(commander)
 {
 	// Do Nothing

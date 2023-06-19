@@ -12,7 +12,7 @@
 *	@param[in] json 変換対象の「メッセージ」JSON
 *	@return std::string 変換結果の「メッセージ」パケット
 */
-JSONRecvPacket_Message MessageJsonConverter::from_json_to_packet(std::string json) const
+JSONRecvPacket_Message MessageJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_Message message_pkt;
 	picojson::object root_obj = parse_json(json);
@@ -28,7 +28,7 @@ JSONRecvPacket_Message MessageJsonConverter::from_json_to_packet(std::string jso
 *	@param[in] pkt 変換対象の「メッセージ」パケット
 *	@return std::string 変換結果の「メッセージ」JSON
 */
-std::string MessageJsonConverter::from_packet_to_json(JSONRecvPacket_Message pkt) const
+std::string MessageJsonConverter::from_packet_to_json(const JSONRecvPacket_Message& pkt) const
 {
 	// クライアント側で「メッセージ」パケットから「メッセージ」JSONに変換する必要がないため、Do Nothing
 	// 変換する必要が生じたら適宜実装する

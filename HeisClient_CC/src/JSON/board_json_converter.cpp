@@ -12,7 +12,7 @@
 *	@param[in] json 変換対象の「盤面」JSON
 *	@return std::string 変換結果の「盤面」パケット
 */
-JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(std::string json) const
+JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_Board board_pkt;
 	picojson::object root_obj = parse_json(json);
@@ -63,7 +63,7 @@ JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(std::string json) c
 *	@param[in] pkt 変換対象の「盤面」パケット
 *	@return std::string 変換結果の「盤面」JSON
 */
-std::string BoardJsonConverter::from_packet_to_json(JSONRecvPacket_Board pkt) const
+std::string BoardJsonConverter::from_packet_to_json(const JSONRecvPacket_Board& pkt) const
 {
 	// クライアント側で「盤面」パケットから「盤面」JSONに変換する必要がないため、Do Nothing
 	// 変換する必要が生じたら適宜実装する

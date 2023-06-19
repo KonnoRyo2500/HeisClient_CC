@@ -13,7 +13,7 @@
 *	@param[in] path 観戦モード設定ファイルのパス
 *	@return OnlineSetting 読み込まれた設定値
 */
-AudienceSetting CAudienceSettingFile::load(std::string path) const
+AudienceSetting CAudienceSettingFile::load(const std::string& path) const
 {
 	// CSVの読み込み
 	CsvRecords records = parse_csv(path);
@@ -32,7 +32,7 @@ AudienceSetting CAudienceSettingFile::load(std::string path) const
 *	@param[in] path 観戦モード設定ファイルのパス
 *	@param[in] setting 書き込む設定値
 */
-void CAudienceSettingFile::save(std::string path, AudienceSetting setting) const
+void CAudienceSettingFile::save(const std::string& path, const AudienceSetting& setting) const
 {
 	// 現時点で観戦モード設定ファイルに設定値を保存する必要がないため、Do Nothing
 	// 保存する必要が生じたら、適宜実装する

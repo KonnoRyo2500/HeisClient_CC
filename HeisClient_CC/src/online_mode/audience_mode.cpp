@@ -51,7 +51,7 @@ void CAudienceMode::play_game()
 *	@brief 観戦の初期化を行う関数
 *	@param[in] setting 観戦モード設定値
 */
-void CAudienceMode::initialize_watch(AudienceSetting setting)
+void CAudienceMode::initialize_watch(const AudienceSetting& setting)
 {
 	// サーバに接続
 	m_sck = new CClientSocket();

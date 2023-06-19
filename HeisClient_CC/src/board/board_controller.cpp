@@ -14,7 +14,7 @@
 *	@param[in] src UŒ‚Œ³À•W
 *	@param[in] dst UŒ‚æÀ•W
 */
-void CBoardController::attack(CBoard* board, CBoardObserver observer, BoardPosition src, BoardPosition dst)
+void CBoardController::attack(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const
 {
 	// UŒ‚Œ³‚Ì•ºŽm‚ðŽæ“¾
 	Square src_sq = board->get_square(src);
@@ -63,7 +63,7 @@ void CBoardController::attack(CBoard* board, CBoardObserver observer, BoardPosit
 *	@param[in] src ˆÚ“®Œ³À•W
 *	@param[in] dst ˆÚ“®æÀ•W
 */
-void CBoardController::move(CBoard* board, CBoardObserver observer, BoardPosition src, BoardPosition dst)
+void CBoardController::move(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const
 {
 	// ˆÚ“®Œ³‚Ì•ºŽm‚ðŽæ“¾
 	Square src_sq = board->get_square(src);

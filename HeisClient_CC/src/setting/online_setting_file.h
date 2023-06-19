@@ -19,7 +19,7 @@ class COnlineSettingFile : public CSettingFileBase<OnlineSetting>
 	// メンバ関数
 public:
 	// 設定値をオンラインモード設定ファイルから読み込む
-	OnlineSetting load(std::string path) const;
+	OnlineSetting load(const std::string& path) const;
 	// 設定値をオンラインモード設定ファイルに書き込む
-	void save(std::string path, OnlineSetting setting) const;
+	void save(const std::string& path, const OnlineSetting& setting) const;
 };

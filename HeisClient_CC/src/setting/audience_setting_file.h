@@ -19,7 +19,7 @@ class CAudienceSettingFile : public CSettingFileBase<AudienceSetting>
 	// メンバ関数
 public:
 	// 設定値を観戦モード設定ファイルから読み込む
-	AudienceSetting load(std::string path) const;
+	AudienceSetting load(const std::string& path) const;
 	// 設定値を観戦モード設定ファイルに書き込む
-	void save(std::string path, AudienceSetting setting) const;
+	void save(const std::string& path, const AudienceSetting& setting) const;
 };

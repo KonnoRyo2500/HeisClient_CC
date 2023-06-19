@@ -37,7 +37,7 @@ public:
 	// ログ記録を終了する
 	static void end_logging();
 	// ログにメッセージを追加する
-	static void write(LogLevel level, std::string msg, bool output_to_console = false);
+	static void write(LogLevel level, const std::string& msg, bool output_to_console = false);
 
 private:
 	// 現在日時を表す文字列を作成する

@@ -13,7 +13,7 @@
 *	@param[in] path オンラインモード設定ファイルのパス
 *	@return OnlineSetting 読み込まれた設定値
 */
-OnlineSetting COnlineSettingFile::load(std::string path) const
+OnlineSetting COnlineSettingFile::load(const std::string& path) const
 {
 	// CSVの読み込み
 	CsvRecords records = parse_csv(path);
@@ -34,7 +34,7 @@ OnlineSetting COnlineSettingFile::load(std::string path) const
 *	@param[in] path オンラインモード設定ファイルのパス
 *	@param[in] setting 書き込む設定値
 */
-void COnlineSettingFile::save(std::string path, OnlineSetting setting) const
+void COnlineSettingFile::save(const std::string& path, const OnlineSetting& setting) const
 {
 	// 現時点でオンラインモード設定ファイルに設定値を保存する必要がないため、Do Nothing
 	// 保存する必要が生じたら、適宜実装する

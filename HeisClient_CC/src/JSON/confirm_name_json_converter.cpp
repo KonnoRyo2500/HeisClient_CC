@@ -12,7 +12,7 @@
 *	@param[in] json 変換対象の「名前確定」JSON
 *	@return std::string 変換結果の「名前確定」パケット
 */
-JSONRecvPacket_ConfirmName ConfirmNameJsonConverter::from_json_to_packet(std::string json) const
+JSONRecvPacket_ConfirmName ConfirmNameJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_ConfirmName confirm_name_pkt;
 	picojson::object root_obj = parse_json(json);
@@ -28,7 +28,7 @@ JSONRecvPacket_ConfirmName ConfirmNameJsonConverter::from_json_to_packet(std::st
 *	@param[in] pkt 変換対象の「名前確定」パケット
 *	@return std::string 変換結果の「名前確定」JSON
 */
-std::string ConfirmNameJsonConverter::from_packet_to_json(JSONRecvPacket_ConfirmName pkt) const
+std::string ConfirmNameJsonConverter::from_packet_to_json(const JSONRecvPacket_ConfirmName& pkt) const
 {
 	// クライアント側で「名前確定」パケットから「名前確定」JSONに変換する必要がないため、Do Nothing
 	// 変換する必要が生じたら適宜実装する
