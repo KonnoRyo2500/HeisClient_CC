@@ -19,7 +19,7 @@ class CAIBase
 // メンバ関数
 public:
 	// コンストラクタ
-	explicit CAIBase(CCommander* commander);
+	explicit CAIBase(CCommander commander);
 
 	// メイン処理
 	virtual void AI_main(const JSONRecvPacket_Board& board_pkt) = 0;
@@ -27,5 +27,5 @@ public:
 // メンバ変数
 protected:
 	//! 兵士を操作するための司令官
-	CCommander* m_commander;
+	CCommander m_commander;
 };

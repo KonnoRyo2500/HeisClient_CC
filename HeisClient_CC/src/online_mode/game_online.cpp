@@ -17,6 +17,7 @@
 #include "confirm_name_json_converter.h"
 #include "online_setting_file.h"
 #include "path.h"
+#include "log.h"
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
@@ -57,12 +58,12 @@ void CGameOnline::play_game()
 		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->sck_recv());
 		JSONRecvPacket_Result result_pkt;
 
-		// 受信した「盤面」JSONの内容に合うよう，内部のフィールドを更新
-		CBoard::get_instance()->update(board_pkt);
-		m_commander->update();
+		// 受信した「盤面」JSONの内容に基づいて、盤面を構成
+		CBoard board(board_pkt);
 
 		// 盤面を表示
-		CBoard::get_instance()->show();
+		board.show();
+		m_commander = new CCommander(m_team_name, &board);
 
 		// 「盤面」パケットは一旦変数に持っておきたいため，while文の条件部で対戦終了の判定をしない
 		if (board_pkt.finished.get_value()) {
@@ -108,9 +109,6 @@ void CGameOnline::play_game()
 */
 void CGameOnline::initialize_battle(OnlineSetting setting)
 {
-	// 必要なインスタンスの生成
-	CBoard::create_board();
-
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_sck = new CClientSocket();
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
@@ -163,9 +161,8 @@ void CGameOnline::name_register(OnlineSetting setting)
 	CAIFactory ai_factory = CAIFactory();
 
 	m_team_name = confirm_name_pkt.your_team.get_value();
-	m_commander = new CCommander(m_team_name);
 	m_ai = ai_factory.create_instance(
-		m_commander,
+		*m_commander,
 		setting.ai_impl
 	);
 	if (m_ai == NULL) {
@@ -182,15 +179,11 @@ void CGameOnline::name_register(OnlineSetting setting)
 */
 void CGameOnline::finalize_battle()
 {
-	delete m_commander;
 	delete m_ai;
 	delete m_sck;
 
-	m_commander = NULL;
 	m_ai = NULL;
 	m_sck = NULL;
-
-	CBoard::delete_board();
 
 	CLog::write(CLog::LogLevel_Information, "インスタンスの削除が完了しました");
 }
@@ -201,8 +194,6 @@ void CGameOnline::finalize_battle()
 */
 bool CGameOnline::judge_win()
 {
-	// 最終状態の盤面を司令官インスタンスに反映する
-	m_commander->update();
 	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
 	return m_commander->get_all_actable_infantry_ids(m_team_name).size() > 0;
 }

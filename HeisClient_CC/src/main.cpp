@@ -10,6 +10,9 @@
 #include "audience_mode.h"
 #include "log.h"
 
+#include <map>
+#include <iostream>
+
 /**
 *	@enum GameMode
 *	ゲームモード

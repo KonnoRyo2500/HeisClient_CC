@@ -14,7 +14,7 @@
 *	@param[in] ai_impl_name AI実装の名前
 *	@return CAIBase* AIインスタンスのアドレス
 */
-CAIBase* CAIFactory::create_instance(CCommander* commander, std::string ai_impl_name) const
+CAIBase* CAIFactory::create_instance(CCommander commander, std::string ai_impl_name) const
 {
 	CAIBase *ai_instance_addr;
 

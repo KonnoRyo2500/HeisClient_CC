@@ -166,6 +166,9 @@
     <ClCompile Include="..\src\AI\ai_factory.cpp" />
     <ClCompile Include="..\src\AI\base\ai_base.cpp" />
     <ClCompile Include="..\src\AI\implementation\sample_ai.cpp" />
+    <ClCompile Include="..\src\board\action_packet_builder.cpp" />
+    <ClCompile Include="..\src\board\board_controller.cpp" />
+    <ClCompile Include="..\src\board\board_observer.cpp" />
     <ClCompile Include="..\src\common\client_socket.cpp" />
     <ClCompile Include="..\src\common\common.cpp">
       <SubType>
@@ -187,7 +190,6 @@
     <ClCompile Include="..\src\JSON\name_json_converter.cpp" />
     <ClCompile Include="..\src\JSON\result_json_converter.cpp" />
     <ClCompile Include="..\src\local_mode\game_local.cpp" />
-    <ClCompile Include="..\src\local_mode\pseudo_server.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\online_mode\audience_mode.cpp" />
     <ClCompile Include="..\src\online_mode\game_online.cpp" />
@@ -201,6 +203,9 @@
     <ClInclude Include="..\src\AI\ai_factory.h" />
     <ClInclude Include="..\src\AI\base\ai_base.h" />
     <ClInclude Include="..\src\AI\implementation\sample_ai.h" />
+    <ClInclude Include="..\src\board\action_packet_builder.h" />
+    <ClInclude Include="..\src\board\board_controller.h" />
+    <ClInclude Include="..\src\board\board_observer.h" />
     <ClInclude Include="..\src\common\client_socket.h" />
     <ClInclude Include="..\src\common\common.h">
       <SubType>
@@ -227,7 +232,6 @@
     <ClInclude Include="..\src\JSON\name_json_converter.h" />
     <ClInclude Include="..\src\JSON\result_json_converter.h" />
     <ClInclude Include="..\src\local_mode\game_local.h" />
-    <ClInclude Include="..\src\local_mode\pseudo_server.h" />
     <ClInclude Include="..\src\online_mode\audience_mode.h" />
     <ClInclude Include="..\src\online_mode\game_online.h" />
     <ClInclude Include="..\src\setting\audience_setting_file.h" />

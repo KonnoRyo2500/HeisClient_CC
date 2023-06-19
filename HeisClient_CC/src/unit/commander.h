@@ -2,69 +2,69 @@
 *	@file		commander.h
 *	@brief		heis 司令官クラス
 *	@author		Ryo Konno
-*	@details	チームの兵士を一元管理し，操作や状態取得を行う．
+*	@details	チームの兵士を一元管理し、操作や状態取得を行う。
 */
 #pragma once
 
 #include "infantry.h"
-#include "log.h"
-#include <vector>
+#include "board_observer.h"
+#include "board_controller.h"
+#include "action_packet_builder.h"
 
-#define INFANTRY_STATUS_ERROR (-1)				// 兵士のステータス取得エラー(指定したIDの兵士がチームの全兵士の中にいないなど)
+#include <vector>
 
 /**
 *	@brief	司令官クラス
+*	@details AIは、このクラスの各種メンバ関数を呼び出すことで、盤面上の兵士を操作できる。
 */
 class CCommander
 {
-	// 構造体，列挙体など
-	public:
-
 	// メンバ関数
-	public:
-		// コンストラクタ
-		explicit CCommander(const std::string& team_name);
+public:
+	// コンストラクタ
+	explicit CCommander(std::string team_name, CBoard* board);
 
-		// デストラクタ
-		~CCommander();
+	// 指定した兵士の位置を取得する
+	BoardPosition get_infantry_position_by_id(std::string id);
+	// 指定した兵士のステータスを取得する
+	InfantryStatus get_infantry_status_by_id(std::string id);
 
-		// 指定したIDを持つ兵士のステータス取得
-		BoardPosition get_position(const std::string& id) const;
-		uint8_t get_action_remain(const std::string& id) const;
-		int8_t get_hp(const std::string& id) const;
+	// 兵士に攻撃を指示する
+	void attack(std::string id, BoardPosition dst);
+	// 兵士に移動を指示する
+	void move(std::string id, BoardPosition dst);
 
-		// 行動(指定したIDを持つ兵士への命令)
-		void attack(const std::string& id, const BoardPosition dst_pos) const;
-		void move(const std::string& id, const BoardPosition dst_pos) const;
-		std::vector<BoardPosition> find_movable_position(const std::string& id) const;
-		std::vector<BoardPosition> find_attackable_position(const std::string& id) const;
+	// 移動可能なすべてのマスを取得する
+	std::vector<BoardPosition> find_movable_position(std::string id);
+	// 攻撃可能なすべてのマスを取得する
+	std::vector<BoardPosition> find_attackable_position(std::string id);
 
-		// 兵士の探索
-		std::vector<std::string> get_all_actable_infantry_ids(const std::string& team_name) const;
-		std::vector<std::string> get_all_movable_infantry_ids(const std::string& team_name) const;
-		std::vector<std::string> get_all_attackable_infantry_ids(const std::string& team_name) const;
+	// 行動可能な兵士のIDを取得する
+	std::vector<std::string> get_all_actable_infantry_ids(std::string team_name);
+	// 移動可能な兵士のIDを取得する
+	std::vector<std::string> get_all_movable_infantry_ids(std::string team_name);
+	// 攻撃可能な兵士のIDを取得する
+	std::vector<std::string> get_all_attackable_infantry_ids(std::string team_name);
 
-		// 盤面にいる全兵士のIDを表示する(デバッグ用)
-		void show_infantry_ids() const;
+	// 「行動」パケットを作成する
+	JSONSendPacket_Action create_action_pkt();
 
-		// 「行動」パケットを作成
-		JSONSendPacket_Action create_action_pkt() const;
-
-		// 兵士の情報を更新
-		void update();
-
-	private:
-		// 兵士の探索
-		CInfantry* search_infantry_by_id(const std::string& id) const;
-		bool is_actable(const CInfantry* infantry) const;
-		bool is_movable(const CInfantry* infantry) const;
-		bool is_attackable(const CInfantry* infantry) const;
+private:
+	// IDから兵士を取得する
+	InfantryWithPos find_infantry_by_id(std::string id);
 
 	// メンバ変数
-	private:
-		//! 自チーム名
-		std::string m_team_name;
+private:
+	//! 自チーム名
+	std::string m_team_name;
 
-		//! 盤面にいる全兵士
-		std::vector<CInfantry*> m_infantries;		
+	//! 盤面
+	CBoard* m_board;
+
+	//! 盤面情報取得クラス
+	CBoardObserver m_observer;
+	//! 盤面操作クラス
+	CBoardController m_controller;
+	//! 「行動」パケット作成クラス
+	CActionPacketBuilder m_builder;
 };

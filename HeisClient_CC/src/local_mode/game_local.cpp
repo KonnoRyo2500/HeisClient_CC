@@ -27,9 +27,6 @@
 */
 void CGameLocal::play_game()
 {
-	bool battle_result;
-
-	CLog::write(CLog::LogLevel_Information, "ローカルモードでゲームを開始しました");
 	CLog::write(CLog::LogLevel_Information, "ローカルモードでゲームを開始しました");
 
 	// 設定ファイルの読み込み
@@ -37,117 +34,197 @@ void CGameLocal::play_game()
 		join({CC_SETTING_DIR, LOCAL_SETTING_FILE_NAME})
 	);
 
-	// 対戦の初期化
-	initialize_battle(setting);
+	// 盤面の作成
+	// ローカルモードではオンラインモードと異なり、JSONに合わせて盤面を作成しない
+	// そのため、盤面は試合前に一度だけ作成しておく
+	JSONRecvPacket_Board board_pkt = create_initial_board_packet(setting);
+	CBoard board(board_pkt);
 
 	// 対戦
-	while (true) {
-		// オンラインモードと同様に，疑似サーバから受け取った「盤面」JSONを基に盤面を更新してから行動する
-		// しかし，「結果」JSONの送信など，不要な処理は行わない
-		BoardJsonConverter board_json_converter;
-		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_pseudo_server->send_board_json(setting));
-
-		// 盤面更新
-		CBoard::get_instance()->update(board_pkt);
-
+	std::string win_team_name = "";
+	while (win_team_name == "") {
 		// 盤面を表示
-		CBoard::get_instance()->show();
+		board.show();
 
 		if (board_pkt.finished.get_value()) {
 			break;
 		}
 
-		if (board_pkt.turn_team.get_value() == setting.my_team_name) {
-			// 自チームのターン
-			m_my_commander->update();
-			m_my_AI->AI_main(board_pkt);
-		}
-		else if(board_pkt.turn_team.get_value() == setting.enemy_team_name) {
-			// 敵チームのターン
-			m_enemy_commander->update();
-			m_enemy_AI->AI_main(board_pkt);
-		}
-		else {
-			throw std::runtime_error(cc_common::format("不正なチーム名が「盤面」JSONの\"turn_team\"フィールドに設定されています(チーム名: %s)"
-				,board_pkt.turn_team.get_value().c_str()));
-		}
+		// AIインスタンスを生成する
+		std::string turn_team = board_pkt.turn_team.get_value();
+		CCommander commander = CCommander(turn_team, &board);
+		std::string ai_impl_name =
+			(turn_team == setting.my_team_name ? setting.my_team_ai_impl : setting.enemy_team_ai_impl);
+		CAIBase* ai = CAIFactory().create_instance(commander, ai_impl_name);
+
+		// AIを1ターン分行動させる
+		ai->AI_main(board_pkt);
+
+		// AIインスタンスを破棄する
+		delete ai;
+		ai = NULL;
+
+		// ターン終了後の処理
+		board_pkt.turn_team.set_value(get_next_turn_team_name(board_pkt, setting));
+		win_team_name = get_winning_team_name(board);
+		reset_infantry_action_remain(board);
 	}
 
-	// 勝敗を判定
-	battle_result = judge_win(setting);
+	// ゲーム終了時の盤面を表示する
+	board.show();
 
-	// 勝敗を表示
-	CLog::write(CLog::LogLevel_Information, battle_result ? "You win!" : "You lose...", true);
-
-	// 対戦終了処理
-	finalize_battle();
-
+	// 勝敗を表示して終了
+	CLog::write(CLog::LogLevel_Information, (win_team_name == setting.my_team_name ? "You win!" : "You lose..."), true);
 	CLog::write(CLog::LogLevel_Information, "ゲームが終了しました");
 }
 
 /* private関数 */
 
 /**
-*	@brief 対戦を初期化する
+*	@brief 最初のターンの「盤面」パケットを作成する
 *	@param[in] setting ローカルモード設定値
+*	@return JSONRecvPacket_Board 最初のターンの「盤面」パケット
 */
-void CGameLocal::initialize_battle(LocalSetting setting)
+JSONRecvPacket_Board CGameLocal::create_initial_board_packet(LocalSetting setting)
 {
-	// 盤面の生成
-	CBoard::create_board();
+	JSONRecvPacket_Board pkt;
 
-	// 各インスタンスの生成
-	m_my_commander = new CCommander(setting.my_team_name);
-	m_enemy_commander = new CCommander(setting.enemy_team_name);
+	pkt.count.set_value(0);
+	pkt.finished.set_value(false);
+	pkt.width.set_value(setting.board_width);
+	pkt.height.set_value(setting.board_height);
+	pkt.players.set_value(
+		std::vector<std::string>{setting.my_team_name, setting.enemy_team_name}
+	);
+	pkt.turn_team.set_value(setting.first_turn_team);
+	pkt.units.set_value(create_units_of_initial_board_packet(setting));
 
-	CAIFactory ai_factory = CAIFactory();
-	m_my_AI = ai_factory.create_instance(m_my_commander, setting.my_team_ai_impl);
-	m_enemy_AI = ai_factory.create_instance(m_enemy_commander, setting.enemy_team_ai_impl);
-	if (m_my_AI == NULL){
-		throw std::runtime_error("自チームのAIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
-	}
-	if (m_enemy_AI == NULL) {
-		throw std::runtime_error("敵チームのAIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
-	}
-
-	m_pseudo_server = new CPseudoServer();
-
-	CLog::write(CLog::LogLevel_Information, "インスタンスの生成が完了しました");
+	return pkt;
 }
 
 /**
-*	@brief 対戦終了後の後処理を行う関数
+*	@brief 最初の「盤面」パケットの"units"要素を作成する
+*	@param[in] setting ローカルモード設定値
+*	@return std::vector<UnitsArrayElem> 最初の「盤面」パケットの"units"要素
 */
-void CGameLocal::finalize_battle()
+std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(LocalSetting setting)
 {
-	// 盤面を削除
-	CBoard::delete_board();
+	std::vector<UnitsArrayElem> units;
+	int serial_number = 1;
 
-	// メンバ変数のメモリ解放
-	delete m_my_commander;
-	delete m_enemy_commander;
-	delete m_my_AI;
-	delete m_enemy_AI;
-	delete m_pseudo_server;
+	// 自チームの兵士情報を作成
+	for (auto& pos : setting.my_team_init_pos) {
+		UnitsArrayElem elem;
+		elem.team.set_value(setting.my_team_name);
+		elem.type.set_value(INFANTRY_UNIT_TYPE);
+		elem.hp.set_value(INFANTRY_INITIAL_HP);
+		elem.unit_id.set_value(
+			// チーム名の先頭2文字 + 連番(0埋め2桁)
+			setting.my_team_name.substr(0, 2) + (serial_number <= 9 ? "0" : "") + std::to_string(serial_number)
+		);
 
-	m_my_commander = NULL;
-	m_enemy_commander = NULL;
-	m_my_AI = NULL;
-	m_enemy_AI = NULL;
-	m_pseudo_server = NULL;
+		LocateObjData locate;
+		locate.x.set_value(pos.x);
+		locate.y.set_value(pos.y);
+		elem.locate.set_value(locate);
 
-	CLog::write(CLog::LogLevel_Information, "インスタンスの削除が完了しました");
+		units.push_back(elem);
+
+		serial_number++;
+	}
+
+	// 敵チームの兵士情報を作成
+	serial_number = 1;
+	for (auto& pos : setting.enemy_team_init_pos) {
+		UnitsArrayElem elem;
+		elem.team.set_value(setting.enemy_team_name);
+		elem.type.set_value(INFANTRY_UNIT_TYPE);
+		elem.hp.set_value(INFANTRY_INITIAL_HP);
+		elem.unit_id.set_value(
+			// チーム名の先頭2文字 + 連番(0埋め2桁)
+			setting.enemy_team_name.substr(0, 2) + (serial_number <= 9 ? "0" : "") + std::to_string(serial_number)
+		);
+
+		LocateObjData locate;
+		locate.x.set_value(pos.x);
+		locate.y.set_value(pos.y);
+		elem.locate.set_value(locate);
+
+		units.push_back(elem);
+
+		serial_number++;
+	}
+
+	return units;
 }
 
 /**
-*	@brief 対戦の決着がついた後，勝敗を決定する関数
-*	@param[in] setting ローカルモード設定値
-*	@return bool 自チームが勝ったか
+*	@brief 盤面上の兵士の行動回数をリセットする
+*	@param[out] board 盤面
 */
-bool CGameLocal::judge_win(LocalSetting setting) const
+void CGameLocal::reset_infantry_action_remain(CBoard& board)
 {
-	// 最終状態の盤面を司令官インスタンスに反映する
-	m_my_commander->update();
-	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
-	return m_my_commander->get_all_actable_infantry_ids(setting.my_team_name).size() > 0;
+	BoardSize size = board.get_size();
+
+	// 盤面上の全兵士を探索し、その行動回数をリセットする
+	for (int y = 0; y < size.height; y++) {
+		for (int x = 0; x < size.width; x++) {
+			Square sq = board.get_square(BoardPosition(x, y));
+			if (!sq.exists) {
+				continue;
+			}
+
+			// 兵士がいたら、同じステータスで行動回数のみがリセットされた兵士に置き換える
+			CInfantry old_infantry = sq.infantry;
+			InfantryStatus old_infantry_status = old_infantry.get_status();
+			InfantryStatus new_infantry_status = InfantryStatus(
+				old_infantry_status.team_name,
+				old_infantry_status.id,
+				old_infantry_status.hp,
+				INFANTRY_ACTION_LIMIT
+			);
+			CInfantry new_infantry = CInfantry(new_infantry_status);
+
+			board.set_infantry(BoardPosition(x, y), new_infantry);
+		}
+	}
+}
+
+/**
+*	@brief 次のターンのチーム名を取得する
+*	@param[in] pkt 現在の「盤面」パケット
+*	@return std::string 次のターンのチーム名
+*/
+std::string CGameLocal::get_next_turn_team_name(JSONRecvPacket_Board pkt, LocalSetting setting)
+{
+	return (pkt.turn_team.get_value() == setting.my_team_name ? setting.enemy_team_name : setting.my_team_name);
+}
+
+/**
+*	@brief 勝利しているチーム名を取得する
+*	@param[in] board 現在の盤面
+*	@return std::string 勝利しているチーム名(どちらも勝利していない場合は空文字列)
+*/
+std::string CGameLocal::get_winning_team_name(CBoard board)
+{
+	BoardSize size = board.get_size();
+	std::vector<std::string> teams; // ここに2つ以上のチーム名が入ったら試合継続中
+
+	// 盤面上の全兵士を探索し、そのチーム名を取得する
+	for (int y = 0; y < size.height; y++) {
+		for (int x = 0; x < size.width; x++) {
+			Square sq = board.get_square(BoardPosition(x, y));
+			if (!sq.exists) {
+				continue;
+			}
+			std::string team_name = sq.infantry.get_status().team_name;
+			if (std::find(teams.begin(), teams.end(), team_name) == teams.end()) {
+				// teams内のチーム名は重複しないようにする
+				teams.push_back(team_name);
+			}
+		}
+	}
+
+	// 1つのチームの兵士しか残っていなければそのチームの勝ち
+	return (teams.size() == 1 ? teams[0] : "");
 }

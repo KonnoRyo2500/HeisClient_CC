@@ -2,301 +2,200 @@
 *	@file		commander.cpp
 *	@brief		heis 司令官クラス
 *	@author		Ryo Konno
-*	@details	チームの兵士を一元管理し，操作や状態取得を行う．
+*	@details	チームの兵士を一元管理し、操作や状態取得を行う。
 */
 
 #include "commander.h"
-#include "board.h"
-#include "common.h"
-#include <algorithm>
 
-/* public関数 */
+#include <iterator>
 
 /**
 *	@brief コンストラクタ
 *	@param[in] team_name チーム名
+*	@param[in] board 盤面
 */
-CCommander::CCommander(const std::string& team_name)
+CCommander::CCommander(std::string team_name, CBoard* board)
 	: m_team_name(team_name)
+	, m_board(board)
+	, m_observer(CBoardObserver())
+	, m_controller(CBoardController())
 {
-	// 処理なし
+	// Do Nothing
 }
 
 /**
-*	@brief デストラクタ
+*	@brief 指定したIDを持つ兵士の位置を取得する
+*	@param[in] id 兵士ID
+*	@return BoardPosition 兵士の位置(指定したIDの兵士が見つからない場合はINVALID_POSITION)
 */
-CCommander::~CCommander()
+BoardPosition CCommander::get_infantry_position_by_id(std::string id)
 {
-	// 処理なし
+	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
+	for (auto& ip : infantries_and_pos) {
+		if (ip.first.get_status().id == id){
+			return ip.second;
+		}
+	}
+
+	return INVALID_POSITION;
 }
 
 /**
-*	@brief 指定したIDを持つ兵士の位置を取得する関数
+*	@brief 指定した兵士のステータスを取得する
+*	@param[in] id 兵士ID
+*	@return InfantryStatus 兵士のステータス
+*/
+InfantryStatus CCommander::get_infantry_status_by_id(std::string id)
+{
+	CInfantry infantry = find_infantry_by_id(id).first;
+	return infantry.get_status();
+}
+
+/**
+*	@brief 兵士に攻撃を指示する
 *	@param[in] id 兵士のID
-*	@return BoardPosition 位置
-*	@throws std::runtime_error 指定したIDの兵士がいない場合
+*	@param[in] dst 攻撃先の座標
 */
-BoardPosition CCommander::get_position(const std::string& id) const
+void CCommander::attack(std::string id, BoardPosition dst)
 {
-	CInfantry* infantry = search_infantry_by_id(id);
+	InfantryWithPos infantry_and_pos = find_infantry_by_id(id);
+	CInfantry infantry = infantry_and_pos.first;
+	BoardPosition pos = infantry_and_pos.second;
+	m_controller.attack(m_board, m_observer, pos, dst);
 
-	if (infantry != NULL) {
-		return infantry->get_position();
-	}
-	throw std::runtime_error("NULLの兵士の位置を取得しようとしています");
+	// のちに「行動」パケットを作成できるようにするため、攻撃先を記録しておく
+	m_builder.add_attack_destination(infantry, dst);
 }
 
 /**
-*	@brief 指定したIDを持つ兵士の残り行動回数を取得する関数
+*	@brief 兵士に移動を指示する
 *	@param[in] id 兵士のID
-*	@return uint8_t 兵士の残り行動回数(指定したIDの兵士がいなければ-1)
+*	@param[in] dst 移動先の座標
 */
-uint8_t CCommander::get_action_remain(const std::string& id) const
+void CCommander::move(std::string id, BoardPosition dst)
 {
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL) {
-		return infantry->get_action_remain();
-	}
-	else {
-		return INFANTRY_STATUS_ERROR;
-	}
+	InfantryWithPos infantry_and_pos = find_infantry_by_id(id);
+	BoardPosition pos = infantry_and_pos.second;
+	m_controller.move(m_board, m_observer, pos, dst);
 }
 
 /**
-*	@brief 指定したIDを持つ兵士のHPを取得する関数
-*	@param[in] id 兵士のID
-*	@return int8_t 兵士のHP(指定したIDの兵士がいなければ-1)
-*/
-int8_t CCommander::get_hp(const std::string& id) const
-{
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL) {
-		return infantry->get_hp();
-	}
-	else {
-		return INFANTRY_STATUS_ERROR;
-	}
-}
-
-/**
-*	@brief 指定したIDの兵士に攻撃を行わせる関数
-*	@param[in] id 兵士のID
-*	@param[in] dst_pos 攻撃先の座標
-*/
-void CCommander::attack(const std::string& id, const BoardPosition dst_pos) const
-{
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL && infantry->get_team_name() == m_team_name) {
-		CLog::write(CLog::LogLevel_Information, cc_common::format(
-			"ID\"%s\"の兵士が，座標(%d, %d)に対して攻撃しました",
-			id.c_str(), dst_pos.x, dst_pos.y));
-		infantry->attack(dst_pos);
-	}
-}
-
-/**
-*	@brief 指定したIDの兵士を移動する関数
-*	@param[in] id 兵士のID
-*	@param[in] dst_pos 移動先の座標
-*/
-void CCommander::move(const std::string& id, const BoardPosition dst_pos) const
-{
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL && infantry->get_team_name() == m_team_name) {
-		CLog::write(CLog::LogLevel_Information, cc_common::format(
-			"ID\"%s\"の兵士が，座標(%d, %d)から(%d, %d)に移動しました",
-			id.c_str(), infantry->get_position().x, infantry->get_position().y, dst_pos.x, dst_pos.y));
-		infantry->move(dst_pos);
-	}
-}
-
-/**
-*	@brief 移動可能なすべてのマスを返す関数
+*	@brief 移動可能なすべてのマスを取得する
 *	@param[in] id 兵士のID
 *	@return std::vector<BoardPosition> 移動可能なマス
 */
-std::vector<BoardPosition> CCommander::find_movable_position(const std::string& id) const
+std::vector<BoardPosition> CCommander::find_movable_position(std::string id)
 {
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL) {
-		return infantry->find_movable_position();
-	}
-	return std::vector<BoardPosition>();
+	BoardPosition pos = find_infantry_by_id(id).second;
+	return m_observer.search_position_to_move(*m_board, pos);
 }
 
 /**
-*	@brief 攻撃可能なすべてのマスを返す関数
+*	@brief 攻撃可能なすべてのマスを取得する
 *	@param[in] id 兵士のID
 *	@return std::vector<BoardPosition> 攻撃可能なマス
 */
-std::vector<BoardPosition> CCommander::find_attackable_position(const std::string& id) const
+std::vector<BoardPosition> CCommander::find_attackable_position(std::string id)
 {
-	CInfantry* infantry = search_infantry_by_id(id);
-
-	if (infantry != NULL) {
-		return infantry->find_attackable_position();
-	}
-	return std::vector<BoardPosition>();
+	BoardPosition pos = find_infantry_by_id(id).second;
+	return m_observer.search_position_to_attack(*m_board, pos);
 }
 
 /**
-*	@brief 行動可能なすべての兵士のIDを取得する関数
-*	@param[in] team_name 取得対象のチーム名
-*	@return std::vector<std::string&> 行動可能な各兵士のID
+*	@brief 行動可能な兵士のIDを取得する
+*	@details 「行動可能」とは、移動もしくは攻撃ができるということを指す。
+*	@param[in] team_name 兵士ID取得対象のチーム名
+*	@return std::vector<std::string> 行動可能な兵士のID
 */
-std::vector<std::string> CCommander::get_all_actable_infantry_ids(const std::string& team_name) const
+std::vector<std::string> CCommander::get_all_actable_infantry_ids(std::string team_name)
 {
-	std::vector<std::string> actable_infantry_ids;
+	std::vector<std::string> movable_ids = get_all_movable_infantry_ids(team_name);
+	std::vector<std::string> attackable_ids = get_all_attackable_infantry_ids(team_name);
+	std::vector<std::string> actable_ids;
 
-	for (CInfantry* infantry : m_infantries) {
-		if (is_actable(infantry) && infantry->get_team_name() == team_name) {
-			actable_infantry_ids.push_back(infantry->get_id());
+	// 移動可能、または攻撃可能な兵士のIDを探す
+	std::copy(movable_ids.begin(), movable_ids.end(), std::back_inserter(actable_ids));
+	for (auto& at_id : attackable_ids) {
+		if (std::find(actable_ids.begin(), actable_ids.end(), at_id) != actable_ids.end()) {
+			actable_ids.push_back(at_id);
 		}
 	}
 
-	return actable_infantry_ids;
+	return actable_ids;
 }
 
 /**
-*	@brief 移動可能なすべての兵士のIDを取得する関数
-*	@param[in] team_name 取得対象のチーム名
-*	@return std::vector<std::string&> 移動可能な各兵士のID
+*	@brief 移動可能な兵士のIDを取得する
+*	@param[in] team_name 兵士ID取得対象のチーム名
+*	@return std::vector<std::string> 移動可能な兵士のID
 */
-std::vector<std::string> CCommander::get_all_movable_infantry_ids(const std::string& team_name) const
+std::vector<std::string> CCommander::get_all_movable_infantry_ids(std::string team_name)
 {
-	std::vector<std::string> movable_infantry_ids;
+	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
+	std::vector<std::string> ids;
+	for (auto& ip : infantries_and_pos) {
+		CInfantry infantry = ip.first;
+		BoardPosition pos = ip.second;
 
-	for (CInfantry* infantry : m_infantries) {
-		if (is_movable(infantry) && infantry->get_team_name() == team_name) {
-			movable_infantry_ids.push_back(infantry->get_id());
+		// 指定されたチーム名で、かつ移動先の座標が存在する場合移動可能
+		bool has_team_name = (infantry.get_status().team_name == team_name);
+		bool has_pos_to_move = (m_observer.search_position_to_move(*m_board, pos).size() >= 1);
+		if (has_team_name && has_pos_to_move) {
+			ids.push_back(infantry.get_status().id);
 		}
 	}
 
-	return movable_infantry_ids;
+	return ids;
 }
 
 /**
-*	@brief 攻撃可能なすべての兵士のIDを取得する関数
-*	@param[in] team_name 取得対象のチーム名
-*	@return std::vector<std::string&> 攻撃可能な各兵士のID
+*	@brief 攻撃可能な兵士のIDを取得する
+*	@param[in] team_name 兵士ID取得対象のチーム名
+*	@return std::vector<std::string> 攻撃可能な兵士のID
 */
-std::vector<std::string> CCommander::get_all_attackable_infantry_ids(const std::string& team_name) const
+std::vector<std::string> CCommander::get_all_attackable_infantry_ids(std::string team_name)
 {
-	std::vector<std::string> attackable_infantry_ids;
+	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
+	std::vector<std::string> ids;
+	for (auto& ip : infantries_and_pos) {
+		CInfantry infantry = ip.first;
+		BoardPosition pos = ip.second;
 
-	for (CInfantry* infantry : m_infantries) {
-		if (is_attackable(infantry) && infantry->get_team_name() == team_name) {
-			attackable_infantry_ids.push_back(infantry->get_id());
+		// 指定されたチーム名で、かつ攻撃先の座標が存在する場合攻撃可能
+		bool has_team_name = (infantry.get_status().team_name == team_name);
+		bool has_pos_to_attack = (m_observer.search_position_to_attack(*m_board, pos).size() >= 1);
+		if (has_team_name && has_pos_to_attack) {
+			ids.push_back(infantry.get_status().id);
 		}
 	}
 
-	return attackable_infantry_ids;
+	return ids;
 }
 
 /**
-*	@brief 自チームの兵士IDをすべて表示する関数
-*	@remark 動作確認・デバッグ用
-*/
-void CCommander::show_infantry_ids() const
-{
-	printf("%s: ", m_team_name.c_str());
-	for (CInfantry* infantry : m_infantries) {
-		printf("%s ", infantry->get_id().c_str());
-	}
-	printf("\n");
-}
-
-/**
-*	@brief 「行動」パケットを作成する関数
+*	@brief 「行動」パケットを作成する
 *	@return JSONSendPacket_Action 「行動」パケット
 */
-JSONSendPacket_Action CCommander::create_action_pkt() const
+JSONSendPacket_Action CCommander::create_action_pkt()
 {
-	JSONSendPacket_Action action_pkt;
-
-	action_pkt.turn_team.set_value(m_team_name);
-	std::vector<ContentsArrayElem> contents = action_pkt.contents.get_value();
-	for (CInfantry* infantry : m_infantries) {
-		contents.push_back(infantry->create_contents_array_elem());
-	}
-	action_pkt.contents.set_value(contents);
+	JSONSendPacket_Action action_pkt = m_builder.build(*m_board, m_team_name);
+	m_builder.clear();
 	return action_pkt;
 }
 
 /**
-*	@brief 盤面にいる兵士から，管理している兵士の情報を更新する関数
+*	@brief IDから兵士と位置を取得する
+*	@param[in] id 兵士ID
+*	@return InfantryWithPos 兵士の実体とその位置
 */
-void CCommander::update()
+InfantryWithPos CCommander::find_infantry_by_id(std::string id)
 {
-	// 古い兵士リストを全削除
-	m_infantries.clear();
-
-	// 盤面にいる兵士をすべて兵士リストに加える
-	CBoard* board = CBoard::get_instance();
-	for (int x = 0; x < board->get_width(); x++) {
-		for (int y = 0; y < board->get_height(); y++) {
-			CInfantry* infantry = board->get_infantry(BoardPosition(x, y));
-			if (infantry != NULL) {
-				m_infantries.push_back(infantry);
-			}
-		}
-	}
-}
-
-/* private関数 */
-/**
-*	@brief 全兵士のリストから，与えられたIDを持つ兵士を探す関数
-*	@param[in] id 兵士のID
-*	@return CInfantry* 与えられたIDを持つ兵士(存在しなければNULL)
-*/
-CInfantry* CCommander::search_infantry_by_id(const std::string& id) const
-{
-	for (auto infantry : m_infantries) {
-		if (infantry->get_id() == id) {
-			return infantry;
+	std::vector<InfantryWithPos> infantries_and_pos = m_observer.fetch_all_infantry_and_position(*m_board);
+	for (auto& ip : infantries_and_pos) {
+		if (ip.first.get_status().id == id) {
+			return ip;
 		}
 	}
 
-	return NULL;
-}
-
-/**
-*	@brief 与えられた兵士が何かしら行動可能かを調べる関数
-*	@param[in] infantry 兵士
-*	@return bool 兵士が行動可能か(true: 何かしらの行動ができる, false: 手詰まりになっている)
-*/
-bool CCommander::is_actable(const CInfantry* infantry) const
-{
-	return is_movable(infantry) || is_attackable(infantry);
-}
-
-/**
-*	@brief 与えられた兵士に移動可能なマスがあるか調べる関数
-*	@param[in] infantry 兵士
-*	@return bool 兵士が移動可能か(true: 移動可能なマスがある, false: 移動可能なマスがない)
-*/
-bool CCommander::is_movable(const CInfantry* infantry) const
-{
-	if (infantry->get_action_remain() <= 0) {
-		return false;
-	}
-	return infantry->find_movable_position().size() != 0;
-}
-
-/**
-*	@brief 与えられた兵士が隣接したマスの兵士に攻撃可能かを調べる関数
-*	@param[in] infantry 兵士
-*	@return bool 兵士が攻撃可能か(true: 攻撃可能な兵士が隣のマスに存在する, false: 攻撃可能な兵士が隣のマスに存在しない)
-*/
-bool CCommander::is_attackable(const CInfantry* infantry) const
-{
-	if (infantry->get_action_remain() <= 0) {
-		return false;
-	}
-	return infantry->find_attackable_position().size() != 0;
+	return std::make_pair(CInfantry(InfantryStatus("", "")), INVALID_POSITION);
 }

@@ -19,5 +19,5 @@ class CAIFactory
 // メンバ関数
 public:
 	// AIインスタンスを生成する
-	CAIBase* create_instance(CCommander* commander, std::string ai_impl_name) const;
+	CAIBase* create_instance(CCommander commander, std::string ai_impl_name) const;
 };

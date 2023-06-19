@@ -15,7 +15,7 @@
 *	@brief コンストラクタ
 *	@param[in] commander 司令官インスタンス
 */
-CSampleAI::CSampleAI(CCommander* commander)
+CSampleAI::CSampleAI(CCommander commander)
 	: CAIBase(commander)
 {
 	// Do Nothing
@@ -29,17 +29,17 @@ void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 {
 	std::string my_team_name = board_pkt.turn_team.get_value();
 
-	while (m_commander->get_all_actable_infantry_ids(my_team_name).size() != 0) {
+	while (m_commander.get_all_actable_infantry_ids(my_team_name).size() != 0) {
 		std::string infantry_id;
 
 		if (sample_decide_action() == Action_Move) {
-			infantry_id = sample_select_next_infantry(m_commander->get_all_movable_infantry_ids(my_team_name));
+			infantry_id = sample_select_next_infantry(m_commander.get_all_movable_infantry_ids(my_team_name));
 			if (infantry_id.size() > 0) {
 				sample_random_move(infantry_id);
 			}
 		}
 		else {
-			infantry_id = sample_select_next_infantry(m_commander->get_all_attackable_infantry_ids(my_team_name));
+			infantry_id = sample_select_next_infantry(m_commander.get_all_attackable_infantry_ids(my_team_name));
 			if (infantry_id.size() > 0) {
 				sample_random_attack(infantry_id);
 			}
@@ -55,13 +55,13 @@ void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 */
 void CSampleAI::sample_random_move(const std::string infantry_id)
 {
-	std::vector<BoardPosition> movable_pos = m_commander->find_movable_position(infantry_id);
+	std::vector<BoardPosition> movable_pos = m_commander.find_movable_position(infantry_id);
 	std::random_device rnd_dev;
 
 	if (movable_pos.size() > 0) {
 		BoardPosition dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
 
-		m_commander->move(infantry_id, dst_pos);
+		m_commander.move(infantry_id, dst_pos);
 	}
 }
 
@@ -71,13 +71,13 @@ void CSampleAI::sample_random_move(const std::string infantry_id)
 */
 void CSampleAI::sample_random_attack(const std::string infantry_id)
 {
-	std::vector<BoardPosition> attackable_pos = m_commander->find_attackable_position(infantry_id);
+	std::vector<BoardPosition> attackable_pos = m_commander.find_attackable_position(infantry_id);
 	std::random_device rnd_dev;
 
 	if (attackable_pos.size() > 0) {
 		BoardPosition dst_pos = attackable_pos.at(rnd_dev() % attackable_pos.size());
 
-		m_commander->attack(infantry_id, dst_pos);
+		m_commander.attack(infantry_id, dst_pos);
 	}
 }
 

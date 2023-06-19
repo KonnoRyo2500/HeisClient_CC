@@ -9,7 +9,6 @@
 #include "game.h"
 #include "commander.h"
 #include "ai_base.h"
-#include "pseudo_server.h"
 #include "log.h"
 #include "setting.h"
 
@@ -19,36 +18,21 @@
 *	@brief	ローカルモード実行クラス
 */
 class CGameLocal : public CGame {
-	// 構造体，列挙体など
-	private:
-
 	// メンバ関数
-	public:
+public:
 		void play_game() override;
 
-	private:
-		// 対戦の初期化
-		void initialize_battle(LocalSetting setting);
+private:
+		// 最初のターンの「盤面」パケットを作成する
+		JSONRecvPacket_Board create_initial_board_packet(LocalSetting setting);
+		// 最初の「盤面」パケットの"units"要素を作成する
+		std::vector<UnitsArrayElem> create_units_of_initial_board_packet(LocalSetting setting);
 
-		// 対戦の終了処理
-		void finalize_battle();
+		// 盤面上の兵士の行動回数をリセットする
+		void reset_infantry_action_remain(CBoard& board);
 
-		// 対戦後の勝敗判定
-		bool judge_win(LocalSetting setting) const;
-
-	// メンバ変数
-	private:
-
-		//! 自分の司令官
-		CCommander* m_my_commander;
-		//! 敵の司令官
-		CCommander* m_enemy_commander;
-
-		//! 自分のAI
-		CAIBase* m_my_AI;
-		//! 敵のAI
-		CAIBase* m_enemy_AI;
-
-		//! 疑似サーバ
-		CPseudoServer* m_pseudo_server;
+		// 次のターンのチーム名を取得する
+		std::string get_next_turn_team_name(JSONRecvPacket_Board pkt, LocalSetting setting);
+		// 勝利しているチーム名を取得する
+		std::string get_winning_team_name(CBoard board);
 };

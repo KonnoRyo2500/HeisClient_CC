@@ -31,7 +31,7 @@ private:
 	// メンバ関数
 public:
 	// コンストラクタ
-	explicit CSampleAI(CCommander* commander);
+	explicit CSampleAI(CCommander commander);
 
 	// メイン処理
 	void AI_main(const JSONRecvPacket_Board& board_pkt);

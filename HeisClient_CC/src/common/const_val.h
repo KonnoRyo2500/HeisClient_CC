@@ -28,6 +28,16 @@ enum Direction {
 };
 
 /**
+*	@def 兵士の駒タイプ
+*/
+#define INFANTRY_UNIT_TYPE "heizu"
+
+/**
 *	@def 兵士の初期HP
 */
 #define INFANTRY_INITIAL_HP (2)
+
+/**
+*	@def 兵士の行動回数
+*/
+#define INFANTRY_ACTION_LIMIT (2)
