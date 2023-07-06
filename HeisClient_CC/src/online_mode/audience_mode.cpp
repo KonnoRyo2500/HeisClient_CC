@@ -35,7 +35,7 @@ void CAudienceMode::play_game()
 	// サーバから受信した文字列を表示("finished"は対戦終了を表す文字列)
 	std::string msg = "";
 	do {
-		msg = m_sck->sck_recv();
+		msg = m_sck->recv();
 		printf("%s\n", msg.c_str());
 	} while (msg != "finished");
 
@@ -54,8 +54,8 @@ void CAudienceMode::play_game()
 void CAudienceMode::initialize_watch(const AudienceSetting& setting)
 {
 	// サーバに接続
-	m_sck = new CClientSocket();
-	m_sck->sck_connect(setting.server_ip_addr, setting.server_port_num);
+	m_sck = new CSocket();
+	m_sck->connect(setting.server_ip_addr, setting.server_port_num);
 }
 
 /**

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "game.h"
-#include "client_socket.h"
+#include "socket.h"
 #include "log.h"
 #include "setting.h"
 
@@ -34,5 +34,5 @@ class CAudienceMode : public CGame {
 	// メンバ変数
 	private:
 		//! TCPソケット
-		CClientSocket *m_sck;
+		CSocket *m_sck;
 };

@@ -169,7 +169,8 @@
     <ClCompile Include="..\src\board\action_packet_builder.cpp" />
     <ClCompile Include="..\src\board\board_controller.cpp" />
     <ClCompile Include="..\src\board\board_observer.cpp" />
-    <ClCompile Include="..\src\common\client_socket.cpp" />
+    <ClCompile Include="..\src\common\linux_socket.cpp" />
+    <ClCompile Include="..\src\common\socket.cpp" />
     <ClCompile Include="..\src\common\common.cpp">
       <SubType>
       </SubType>
@@ -177,12 +178,8 @@
     <ClCompile Include="..\src\common\game.cpp" />
     <ClCompile Include="..\src\common\log.cpp" />
     <ClCompile Include="..\src\common\path.cpp" />
-    <ClCompile Include="..\src\common\server_socket.cpp" />
-    <ClCompile Include="..\src\common\socket_base.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="..\src\board\board.cpp" />
+    <ClCompile Include="..\src\common\windows_socket.cpp" />
     <ClCompile Include="..\src\JSON\action_json_converter.cpp" />
     <ClCompile Include="..\src\JSON\board_json_converter.cpp" />
     <ClCompile Include="..\src\JSON\confirm_name_json_converter.cpp" />
@@ -206,7 +203,8 @@
     <ClInclude Include="..\src\board\action_packet_builder.h" />
     <ClInclude Include="..\src\board\board_controller.h" />
     <ClInclude Include="..\src\board\board_observer.h" />
-    <ClInclude Include="..\src\common\client_socket.h" />
+    <ClInclude Include="..\src\common\linux_socket.h" />
+    <ClInclude Include="..\src\common\socket.h" />
     <ClInclude Include="..\src\common\common.h">
       <SubType>
       </SubType>
@@ -216,13 +214,10 @@
     <ClInclude Include="..\src\common\game.h" />
     <ClInclude Include="..\src\common\log.h" />
     <ClInclude Include="..\src\common\path.h" />
-    <ClInclude Include="..\src\common\server_socket.h" />
     <ClInclude Include="..\src\common\setting_keys.h" />
-    <ClInclude Include="..\src\common\socket_base.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="..\src\board\board.h" />
+    <ClInclude Include="..\src\common\socket_base.h" />
+    <ClInclude Include="..\src\common\windows_socket.h" />
     <ClInclude Include="..\src\JSON\action_json_converter.h" />
     <ClInclude Include="..\src\JSON\board_json_converter.h" />
     <ClInclude Include="..\src\JSON\confirm_name_json_converter.h" />

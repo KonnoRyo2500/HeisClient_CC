@@ -55,7 +55,7 @@ void CGameOnline::play_game()
 		BoardJsonConverter board_json_converter;
 		ActionJsonConverter action_json_converter;
 		ResultJsonConverter result_json_converter;
-		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->sck_recv());
+		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->recv());
 		JSONRecvPacket_Result result_pkt;
 
 		// 受信した「盤面」JSONの内容に基づいて、盤面を構成
@@ -78,10 +78,10 @@ void CGameOnline::play_game()
 		m_ai->AI_main(board_pkt);
 
 		// 「行動」パケットを作成して送信
-		m_sck->sck_send(action_json_converter.from_packet_to_json(m_commander->create_action_pkt()));
+		m_sck->send(action_json_converter.from_packet_to_json(m_commander->create_action_pkt()));
 
 		// 「結果」パケットを受信
-		result_pkt = result_json_converter.from_json_to_packet(m_sck->sck_recv());
+		result_pkt = result_json_converter.from_json_to_packet(m_sck->recv());
 		// 「結果」パケットの内容を表示
 		for (const auto& result_elem : result_pkt.result.get_value()) {
 			CLog::write(CLog::LogLevel_Warning,cc_common::format(
@@ -110,13 +110,13 @@ void CGameOnline::play_game()
 void CGameOnline::initialize_battle(const OnlineSetting& setting)
 {
 	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
-	m_sck = new CClientSocket();
+	m_sck = new CSocket();
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"サーバに接続します(IPアドレス: %s, ポート番号: %d)",
 		setting.server_ip_addr.c_str(), setting.server_port_num));
 
 	// サーバに接続
-	m_sck->sck_connect(setting.server_ip_addr, setting.server_port_num);
+	m_sck->connect(setting.server_ip_addr, setting.server_port_num);
 
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"サーバに接続しました(IPアドレス: %s, ポート番号: %d)",
@@ -129,7 +129,7 @@ void CGameOnline::initialize_battle(const OnlineSetting& setting)
 */
 void CGameOnline::recv_name_request() const
 {
-	std::string received_JSON = m_sck->sck_recv();
+	std::string received_JSON = m_sck->recv();
 	MessageJsonConverter message_json_converter;
 	JSONRecvPacket_Message name_req_msg_pkt = message_json_converter.from_json_to_packet(received_JSON);
 }
@@ -143,7 +143,7 @@ void CGameOnline::name_entry(const std::string& name) const
 	JSONSendPacket_Name name_pkt;
 	NameJsonConverter name_json_converter;
 	name_pkt.team_name.set_value(name);
-	m_sck->sck_send(name_json_converter.from_packet_to_json(name_pkt));
+	m_sck->send(name_json_converter.from_packet_to_json(name_pkt));
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
 		"チーム名をサーバに送信しました(チーム名: %s)",
 		name.c_str()));
@@ -155,7 +155,7 @@ void CGameOnline::name_entry(const std::string& name) const
 */
 void CGameOnline::name_register(const OnlineSetting& setting)
 {
-	std::string received_JSON = m_sck->sck_recv();
+	std::string received_JSON = m_sck->recv();
 	ConfirmNameJsonConverter confirm_name_json_converter;
 	JSONRecvPacket_ConfirmName confirm_name_pkt = confirm_name_json_converter.from_json_to_packet(received_JSON);
 	CAIFactory ai_factory = CAIFactory();

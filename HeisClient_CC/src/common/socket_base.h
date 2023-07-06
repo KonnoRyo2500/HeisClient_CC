@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		socket_base.h
-*	@brief		TCP/IPé€šä¿¡ç”¨ã‚½ã‚±ãƒƒãƒˆåŸºæœ¬ã‚¯ãƒ©ã‚¹
+*	@brief		TCP/IPƒ\ƒPƒbƒgƒx[ƒXƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	å„ç¨®TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®åŸºæœ¬ã¨ãªã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	Šeíƒvƒ‰ƒbƒgƒtƒH[ƒ€‚É‚¨‚¯‚éƒ\ƒPƒbƒgƒNƒ‰ƒX‚Ìƒx[ƒXƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -10,51 +10,41 @@
 #include <string>
 
 /**
-*	@brief ã‚½ã‚±ãƒƒãƒˆåŸºæœ¬ã‚¯ãƒ©ã‚¹
-*	@remark æœ¬ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã™ã‚‹ã“ã¨ã¯éæ¨å¥¨ã€‚æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã‚’åˆ©ç”¨ã™ã‚‹ã“ã¨
+*	@brief TCP/IPƒ\ƒPƒbƒgƒx[ƒXƒNƒ‰ƒX
 */
-class CSocketBase {
-	// æ§‹é€ ä½“ãƒ»åˆ—æŒ™ä½“ãªã©
-	protected:
-		/**
-		*	@enum SocketConstVal
-		*	ã‚½ã‚±ãƒƒãƒˆã«é–¢ã™ã‚‹è«¸å®šæ•°
-		*/
-		enum SocketConstVal {
-			//! å—ä¿¡ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
-			SocketConstVal_RecvBufSize = 1000,
-		};
+class CSocketBase
+{
+	// ƒƒ“ƒo•Ï”
+public:
+	// ƒ†[ƒUƒR[ƒh‚ÅŒÄ‚Î‚ê‚éŠÖ”‚ÍCSocketƒNƒ‰ƒX‚Å’è‹`‚·‚é
 
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
-	public:
-		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-		CSocketBase();
-		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-		virtual ~CSocketBase();
+	// •W€‚Ìƒ\ƒPƒbƒgAPI‚ÆŠÖ”–¼‚ªÕ“Ë‚µ‚È‚¢‚æ‚¤Aƒ\ƒPƒbƒgAPI‚ÌŠÖ”–¼‚Æ‚Í•Ê‚ÌŠÖ”–¼‚É‚·‚é
+	// ƒ\ƒPƒbƒgAPI‚Å‚Í–¼‘O‹óŠÔ‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚¢‰Â”\«‚à‚ ‚é‚½‚ßA–¼‘OÕ“Ë‚ÍŠÖ”–¼‚Ì•ÏX‚Å‰ñ”ğ‚·‚é•K—v‚ª‚ ‚é
 
+	// ƒ\ƒPƒbƒg‚É–¼‘O‚ğ•t‚¯‚é
+	virtual void wrap_bind(const uint16_t dst_port, const std::string& src_addr) = 0;
+	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
+	virtual void wrap_listen() = 0;
+	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚Â
+	virtual void wrap_accept() = 0;
+	// ƒ\ƒPƒbƒg‚ğÚ‘±‚·‚é
+	virtual void wrap_connect(const std::string& addr, const uint16_t port) const = 0;
+	// ƒf[ƒ^‚ğ‘—M‚·‚é
+	virtual void wrap_send(const std::string& data, const char terminal) = 0;
+	// ƒf[ƒ^‚ğóM‚·‚é
+	virtual std::string wrap_recv(const char terminal) = 0;
+	// ƒ\ƒPƒbƒg‚ğ•Â‚¶‚é
+	virtual void wrap_close() = 0;
+	// ƒ\ƒPƒbƒg‚ğì¬‚·‚é
+	virtual int wrap_socket() = 0;
 
-		// é€å—ä¿¡
-		virtual void sck_send(const std::string& data, const char etx = '\n') const;
-		virtual std::string sck_recv(const char etx = '\n');
+	// ‰Šú‰»ˆ—‚ğs‚¤
+	virtual bool initialize() = 0;
+	// I—¹ˆ—‚ğs‚¤
+	virtual bool finalize() = 0;
 
-		// ä¸€éƒ¨ã®æ“ä½œ(bindã‚„acceptãªã©)ã¯ã€æ´¾ç”Ÿã‚¯ãƒ©ã‚¹å´ã§å®šç¾©ã™ã‚‹
-		// TODO: ã“ã®ã‚¯ãƒ©ã‚¹ã«ã™ã¹ã¦ã®æ“ä½œã‚’å®šç¾©ã—ã¦ã—ã¾ã£ã¦ã‚‚ã‚ˆã„ã‹æ¤œè¨ã™ã‚‹
-	protected:
-		// winsockã®åˆæœŸåŒ–å‡¦ç†
-		// çµ‚äº†å‡¦ç†ã¯WSACleanupã‚’å‘¼ã¹ã°æ¸ˆã‚€ã®ã§å®šç¾©ã—ãªã„
-		virtual void initialize_winsock() const;
-
-		// ã‚½ã‚±ãƒƒãƒˆã®ã‚¯ãƒ­ãƒ¼ã‚º
-		virtual void sck_close() const;
-
-		// ã‚½ã‚±ãƒƒãƒˆã®ç”Ÿæˆ
-		virtual void sck_socket();
-
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
-	protected:
-		//! ã‚½ã‚±ãƒƒãƒˆã®å®Ÿä½“
-		int m_sck;
-
-		//! å‰å›ã®å—ä¿¡æ™‚ã«ä½™åˆ†ã«å—ä¿¡ã—ãŸãƒ‡ãƒ¼ã‚¿
-		std::string m_prev_recv_remaind_data;
+	// ƒƒ“ƒo•Ï”
+protected:
+	//! ƒ\ƒPƒbƒg‚ÌÀ‘Ì
+	int m_socket;
 };

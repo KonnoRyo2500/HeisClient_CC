@@ -9,7 +9,7 @@
 #include "game.h"
 #include "commander.h"
 #include "ai_base.h"
-#include "client_socket.h"
+#include "socket.h"
 #include "setting.h"
 #include <string>
 #include <vector>
@@ -48,5 +48,5 @@ class CGameOnline : public CGame {
 		CAIBase* m_ai;
 
 		//! TCPソケット
-		CClientSocket* m_sck;
+		CSocket* m_sck;
 };
