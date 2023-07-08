@@ -1,8 +1,8 @@
 /**
 *	@file		board_observer.cpp
-*	@brief		heis ”Õ–Êî•ñæ“¾ƒNƒ‰ƒX
+*	@brief		heis ç›¤é¢æƒ…å ±å–å¾—ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	”Õ–Êã‚Ì•ºm‚ÉŠÖ‚·‚éŠeíî•ñ‚ğæ“¾‚·‚éB
+*	@details	ç›¤é¢ä¸Šã®å…µå£«ã«é–¢ã™ã‚‹å„ç¨®æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã€‚
 */
 
 #include "board_observer.h"
@@ -11,9 +11,9 @@
 #include <algorithm>
 
 /**
-*	@brief ”Õ–Êã‚Ì‘S•ºm‚ÆˆÊ’u‚ğæ“¾‚·‚é
-*	@param[in] board ”Õ–Ê
-*	@return std::vector<InfantryWithPos> ”Õ–Êã‚Ì‘S•ºm‚Æ‚»‚ÌˆÊ’u
+*	@brief ç›¤é¢ä¸Šã®å…¨å…µå£«ã¨ä½ç½®ã‚’å–å¾—ã™ã‚‹
+*	@param[in] board ç›¤é¢
+*	@return std::vector<InfantryWithPos> ç›¤é¢ä¸Šã®å…¨å…µå£«ã¨ãã®ä½ç½®
 */
 std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(const CBoard& board) const
 {
@@ -36,19 +36,19 @@ std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(con
 }
 
 /**
-*	@brief w’è‚³‚ê‚½ˆÊ’u‚É‚¢‚é•ºm‚ªˆÚ“®‚Å‚«‚éƒ}ƒX‚ğæ“¾‚·‚é
-*	@param[in] board ”Õ–Ê
-*	@param[in] pos æ“¾‘ÎÛ‚Ì•ºm‚ÌˆÊ’u
-*	@return std::vector<BoardPosition> ˆÚ“®‚Å‚«‚éƒ}ƒX(w’è‚µ‚½ID‚Ì•ºm‚ª‚¢‚È‚¢ê‡‚Íí‚É‹ó)
+*	@brief æŒ‡å®šã•ã‚ŒãŸä½ç½®ã«ã„ã‚‹å…µå£«ãŒç§»å‹•ã§ãã‚‹ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
+*	@param[in] board ç›¤é¢
+*	@param[in] pos å–å¾—å¯¾è±¡ã®å…µå£«ã®ä½ç½®
+*	@return std::vector<BoardPosition> ç§»å‹•ã§ãã‚‹ãƒã‚¹(æŒ‡å®šã—ãŸIDã®å…µå£«ãŒã„ãªã„å ´åˆã¯å¸¸ã«ç©º)
 */
 std::vector<BoardPosition> CBoardObserver::search_position_to_move(const CBoard& board, const BoardPosition& pos) const
 {
-	// pos‚©‚çL1‹——£‚ª2ˆÈ“à‚Ìƒ}ƒX‚ğ“¾‚é‚½‚ß‚Ì·•ª
+	// posã‹ã‚‰L1è·é›¢ãŒ2ä»¥å†…ã®ãƒã‚¹ã‚’å¾—ã‚‹ãŸã‚ã®å·®åˆ†
 	std::vector<int> dxs{ 0, -1, 0, 1, -2, -1, 1, 2, -1, 0, 1, 0 };
 	std::vector<int> dys{ 2, 1, 1, 1, 0, 0, 0, 0, -1, -1, -1, -2 };
 	assert(dxs.size() == dys.size());
 
-	// ˆÚ“®‰Â”\‚Èƒ}ƒX‚ğ’Ç‰Á‚µ‚Ä•Ô‚·
+	// ç§»å‹•å¯èƒ½ãªãƒã‚¹ã‚’è¿½åŠ ã—ã¦è¿”ã™
 	std::vector<BoardPosition> pos_to_move;
 	for (size_t i = 0; i < dxs.size(); i++) {
 		BoardPosition dst = BoardPosition(pos.x + dxs[i], pos.y + dys[i]);
@@ -61,14 +61,14 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_move(const CBoard&
 }
 
 /**
-*	@brief w’è‚³‚ê‚½•ºm‚ªUŒ‚‚Å‚«‚éƒ}ƒX‚ğæ“¾‚·‚é
-*	@param[in] board ”Õ–Ê
-*	@param[in] pos æ“¾‘ÎÛ‚Ì•ºm‚ÌˆÊ’u
-*	@return std::vector<BoardPosition> UŒ‚‚Å‚«‚éƒ}ƒX(w’è‚µ‚½ID‚Ì•ºm‚ª‚¢‚È‚¢ê‡‚Íí‚É‹ó)
+*	@brief æŒ‡å®šã•ã‚ŒãŸå…µå£«ãŒæ”»æ’ƒã§ãã‚‹ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
+*	@param[in] board ç›¤é¢
+*	@param[in] pos å–å¾—å¯¾è±¡ã®å…µå£«ã®ä½ç½®
+*	@return std::vector<BoardPosition> æ”»æ’ƒã§ãã‚‹ãƒã‚¹(æŒ‡å®šã—ãŸIDã®å…µå£«ãŒã„ãªã„å ´åˆã¯å¸¸ã«ç©º)
 */
 std::vector<BoardPosition> CBoardObserver::search_position_to_attack(const CBoard& board, const BoardPosition& pos) const
 {
-	// pos‚Ìã‰º¶‰E‚Ìƒ}ƒX‚ğ“¾‚é‚½‚ß‚Ì·•ª
+	// posã®ä¸Šä¸‹å·¦å³ã®ãƒã‚¹ã‚’å¾—ã‚‹ãŸã‚ã®å·®åˆ†
 	std::vector<int> dxs{ 0, 0, -1, 1 };
 	std::vector<int> dys{ -1, 1, 0, 0 };
 	assert(dxs.size() == dys.size());
@@ -86,10 +86,10 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_attack(const CBoar
 }
 
 /**
-*	@brief w’è‚³‚ê‚½À•W‚ª”Õ–Ê‚Ì”ÍˆÍ“à‚É‚ ‚é‚©”»’è‚·‚é
-*	@param[in] board ”Õ–Ê
-*	@param[in] coord À•W
-*	@return coord‚ªboard“à‚É‚ ‚é‚©
+*	@brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ãŒç›¤é¢ã®ç¯„å›²å†…ã«ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
+*	@param[in] board ç›¤é¢
+*	@param[in] coord åº§æ¨™
+*	@return coordãŒboardå†…ã«ã‚ã‚‹ã‹
 */
 bool CBoardObserver::is_coord_in_board(const CBoard& board, const BoardPosition& coord) const
 {
@@ -100,64 +100,64 @@ bool CBoardObserver::is_coord_in_board(const CBoard& board, const BoardPosition&
 }
 
 /**
-*	@brief w’è‚³‚ê‚½ƒ}ƒX‚ÉˆÚ“®‚Å‚«‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
-*	@param[in] board ”Õ–Ê
-*	@param[in] src ˆÚ“®Œ³‚Ìƒ}ƒX
-*	@param[in] dst ˆÚ“®æ‚Ìƒ}ƒX
-*	@return bool ˆÚ“®‚Å‚«‚é‚©‚Ç‚¤‚©
+*	@brief æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã«ç§»å‹•ã§ãã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
+*	@param[in] board ç›¤é¢
+*	@param[in] src ç§»å‹•å…ƒã®ãƒã‚¹
+*	@param[in] dst ç§»å‹•å…ˆã®ãƒã‚¹
+*	@return bool ç§»å‹•ã§ãã‚‹ã‹ã©ã†ã‹
 */
 bool CBoardObserver::can_move(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
 {
-	// 1: dst‚ª”Õ–Êã‚É‘¶İ‚·‚é‚±‚Æ
+	// 1: dstãŒç›¤é¢ä¸Šã«å­˜åœ¨ã™ã‚‹ã“ã¨
 	if (!is_coord_in_board(board, dst)) {
 		return false;
 	}
 
-	// 2: dst‚É•ºm‚ª‚¢‚È‚¢‚±‚Æ
+	// 2: dstã«å…µå£«ãŒã„ãªã„ã“ã¨
 	Square dst_sq = board.get_square(dst);
 	if (dst_sq.exists) {
 		return false;
 	}
 
-	// 3: src‚É•ºm‚ª‚¢‚é‚±‚Æ
+	// 3: srcã«å…µå£«ãŒã„ã‚‹ã“ã¨
 	Square src_sq = board.get_square(src);
 	if (!src_sq.exists) {
 		return false;
 	}
 
-	// 4: •ºm‚ÌˆÚ“®‰ñ”‚ª‘«‚è‚Ä‚¢‚é‚±‚Æ
+	// 4: å…µå£«ã®ç§»å‹•å›æ•°ãŒè¶³ã‚Šã¦ã„ã‚‹ã“ã¨
 	uint8_t action_remain = src_sq.infantry.get_status().action_remain;
 	if (action_remain < src.calc_l1_distance(dst)) {
 		return false;
 	}
 
-	// 5: src‚©‚çdst‚ÉˆÚ“®‚·‚é‚½‚ß‚ÌƒpƒX‚ª‘¶İ‚·‚é‚±‚Æ
+	// 5: srcã‹ã‚‰dstã«ç§»å‹•ã™ã‚‹ãŸã‚ã®ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹ã“ã¨
 	if (!exists_path(board, src, dst)) {
 		return false;
 	}
 
-	// ã‹L1`5‚ğ‚·‚×‚Ä–‚½‚·‚Æ‚«AˆÚ“®‰Â”\
+	// ä¸Šè¨˜1ã€œ5ã‚’ã™ã¹ã¦æº€ãŸã™ã¨ãã€ç§»å‹•å¯èƒ½
 	return true;
 }
 
 /**
-*	@brief w’è‚³‚ê‚½ƒ}ƒX‚ÉˆÚ“®‚·‚é‚½‚ß‚ÌƒpƒX‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©”»’è‚·‚é
-*	@details src‚ğ‹N“_‚É”Õ–Êã‚Ìƒ}ƒX‚ğã‰º¶‰E‚É‚½‚Ç‚Á‚Ä‚¢‚«Adst‚É‚½‚Ç‚è’…‚¯‚ê‚ÎƒpƒX‚ª‘¶İ‚·‚éB‚½‚¾‚µA“r’†‚É“G‚ª‚¢‚éê‡‚Íæ‚Éi‚ß‚¸A–¡•û‚Í’Ê‚è”²‚¯‰Â”\
-*	@param[in] board ”Õ–Ê
-*	@param[in] infantry •ºm‚ÌÀ‘Ì
-*	@param[in] src ˆÚ“®Œ³‚Ìƒ}ƒX
-*	@param[in] dst ˆÚ“®æ‚Ìƒ}ƒX
-*	@return bool src‚©‚çdst‚ÉŠ‚éƒpƒX‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©
+*	@brief æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã«ç§»å‹•ã™ã‚‹ãŸã‚ã®ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹
+*	@details srcã‚’èµ·ç‚¹ã«ç›¤é¢ä¸Šã®ãƒã‚¹ã‚’ä¸Šä¸‹å·¦å³ã«ãŸã©ã£ã¦ã„ãã€dstã«ãŸã©ã‚Šç€ã‘ã‚Œã°ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹ã€‚ãŸã ã—ã€é€”ä¸­ã«æ•µãŒã„ã‚‹å ´åˆã¯å…ˆã«é€²ã‚ãšã€å‘³æ–¹ã¯é€šã‚ŠæŠœã‘å¯èƒ½
+*	@param[in] board ç›¤é¢
+*	@param[in] infantry å…µå£«ã®å®Ÿä½“
+*	@param[in] src ç§»å‹•å…ƒã®ãƒã‚¹
+*	@param[in] dst ç§»å‹•å…ˆã®ãƒã‚¹
+*	@return bool srcã‹ã‚‰dstã«è‡³ã‚‹ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹
 */
 bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
 {
 	Square src_sq = board.get_square(src);
 	Square dst_sq = board.get_square(dst);
-	// src‚É•ºm‚ª‚¢‚È‚¢
+	// srcã«å…µå£«ãŒã„ãªã„
 	if (!src_sq.exists) {
 		return false;
 	}
-	// dst‚É‚·‚Å‚É•ºm‚ª‚¢‚é
+	// dstã«ã™ã§ã«å…µå£«ãŒã„ã‚‹
 	if (dst_sq.exists) {
 		return false;
 	}
@@ -165,12 +165,12 @@ bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, 
 	std::vector<BoardPosition> searching_coords{ src };
 	std::vector<BoardPosition> searched_coords{ src };
 
-	// dst‚É“’B‚·‚é‚Ü‚ÅAƒpƒX‚ğ’Tõ
+	// dstã«åˆ°é”ã™ã‚‹ã¾ã§ã€ãƒ‘ã‚¹ã‚’æ¢ç´¢
 	int max_iteration = src_sq.infantry.get_status().action_remain;
 	for (int i = 0; i < max_iteration; i++) {
 		std::vector<BoardPosition> next_searching_coords;
 		for (auto& sc : searching_coords) {
-			// sc‚Ìã‰º¶‰E‚ğ’Tõ
+			// scã®ä¸Šä¸‹å·¦å³ã‚’æ¢ç´¢
 			std::vector<BoardPosition> around_coords{
 				BoardPosition(sc.x, sc.y - 1),
 				BoardPosition(sc.x, sc.y + 1),
@@ -179,76 +179,76 @@ bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, 
 			};
 
 			for (auto& ac : around_coords) {
-				// ac‚Í‚·‚Å‚É’TõÏ‚İ
+				// acã¯ã™ã§ã«æ¢ç´¢æ¸ˆã¿
 				if (std::find(searched_coords.begin(), searched_coords.end(), ac) != searched_coords.end()) {
 					continue;
 				}
-				// ac‚ª”Õ–Ê‚Ì”ÍˆÍŠO
+				// acãŒç›¤é¢ã®ç¯„å›²å¤–
 				if (!is_coord_in_board(board, ac)) {
 					continue;
 				}
-				// dst‚ÉŠ‚éƒpƒX‚ªŒ©‚Â‚©‚Á‚½
+				// dstã«è‡³ã‚‹ãƒ‘ã‚¹ãŒè¦‹ã¤ã‹ã£ãŸ
 				if (ac == dst) {
 					return true;
 				}
-				// ac‚ª‹ó‚«ƒ}ƒXA‚à‚µ‚­‚Í–¡•û‚Ì‚¢‚éƒ}ƒX‚Å‚ ‚ê‚ÎŸ‰ñ‚Ìsearching_coords‚Æ‚·‚é
+				// acãŒç©ºããƒã‚¹ã€ã‚‚ã—ãã¯å‘³æ–¹ã®ã„ã‚‹ãƒã‚¹ã§ã‚ã‚Œã°æ¬¡å›ã®searching_coordsã¨ã™ã‚‹
 				Square ac_sq = board.get_square(ac);
 				if (!ac_sq.exists || ac_sq.infantry.get_status().team_name == src_sq.infantry.get_status().team_name) {
 					next_searching_coords.push_back(ac);
 				}
 				
-				// ac‚ğ’TõÏ‚İƒ}ƒX‚É‰Á‚¦‚é
+				// acã‚’æ¢ç´¢æ¸ˆã¿ãƒã‚¹ã«åŠ ãˆã‚‹
 				searched_coords.push_back(ac);
 			}
 		}
 
-		// ’Tõ‚µ‚½ƒ}ƒX‚ğ‹N“_‚ÉAŸ‰ñ‚ÌƒpƒX’Tõ‚ğs‚¤
+		// æ¢ç´¢ã—ãŸãƒã‚¹ã‚’èµ·ç‚¹ã«ã€æ¬¡å›ã®ãƒ‘ã‚¹æ¢ç´¢ã‚’è¡Œã†
 		searching_coords = next_searching_coords;
 	}
 
-	// dst‚ÉŠ‚éƒpƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+	// dstã«è‡³ã‚‹ãƒ‘ã‚¹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 	return false;
 }
 
 /**
-*	@brief w’è‚³‚ê‚½ƒ}ƒX‚ÉUŒ‚‚Å‚«‚é‚©‚Ç‚¤‚©”»’è‚·‚é
-*	@param[in] board ”Õ–Ê
-*	@param[in] src ˆÚ“®Œ³‚Ìƒ}ƒX
-*	@param[in] dst ˆÚ“®æ‚Ìƒ}ƒX
-*	@return bool UŒ‚‚Å‚«‚é‚©‚Ç‚¤‚©
+*	@brief æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã«æ”»æ’ƒã§ãã‚‹ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹
+*	@param[in] board ç›¤é¢
+*	@param[in] src ç§»å‹•å…ƒã®ãƒã‚¹
+*	@param[in] dst ç§»å‹•å…ˆã®ãƒã‚¹
+*	@return bool æ”»æ’ƒã§ãã‚‹ã‹ã©ã†ã‹
 */
 bool CBoardObserver::can_attack(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
 {
-	// 1: dst‚ª”Õ–Êã‚É‘¶İ‚·‚é‚±‚Æ
+	// 1: dstãŒç›¤é¢ä¸Šã«å­˜åœ¨ã™ã‚‹ã“ã¨
 	if (!is_coord_in_board(board, dst)) {
 		return false;
 	}
 
-	// 2: dst‚É•ºm‚ª‚¢‚é‚±‚Æ
+	// 2: dstã«å…µå£«ãŒã„ã‚‹ã“ã¨
 	Square dst_sq = board.get_square(dst);
 	if (!dst_sq.exists) {
 		return false;
 	}
 
-	// 3: src‚É•ºm‚ª‚¢‚é‚±‚Æ
+	// 3: srcã«å…µå£«ãŒã„ã‚‹ã“ã¨
 	Square src_sq = board.get_square(src);
 	if (!src_sq.exists) {
 		return false;
 	}
 
-	// 4: •ºm‚ÌˆÚ“®‰ñ”‚ª‘«‚è‚Ä‚¢‚é‚±‚Æ
+	// 4: å…µå£«ã®ç§»å‹•å›æ•°ãŒè¶³ã‚Šã¦ã„ã‚‹ã“ã¨
 	uint8_t action_remain = src_sq.infantry.get_status().action_remain;
 	if (action_remain == 0) {
 		return false;
 	}
 
-	// 5: src‚Ì•ºm‚ÆAdst‚Ì•ºm‚Ìƒ`[ƒ€–¼‚ªˆá‚¤‚±‚Æ
+	// 5: srcã®å…µå£«ã¨ã€dstã®å…µå£«ã®ãƒãƒ¼ãƒ åãŒé•ã†ã“ã¨
 	std::string src_team = src_sq.infantry.get_status().team_name;
 	std::string dst_team = dst_sq.infantry.get_status().team_name;
 	if (src_team == dst_team) {
 		return false;
 	}
 
-	// ã‹L1`5‚ğ‚·‚×‚Ä–‚½‚·‚Æ‚«AUŒ‚‰Â”\
+	// ä¸Šè¨˜1ã€œ5ã‚’ã™ã¹ã¦æº€ãŸã™ã¨ãã€æ”»æ’ƒå¯èƒ½
 	return true;
 }

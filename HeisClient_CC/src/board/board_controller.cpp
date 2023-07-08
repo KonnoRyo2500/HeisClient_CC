@@ -1,8 +1,8 @@
 /**
 *	@file		board_controller.cpp
-*	@brief		heis ”Õ–Ê‘€ìƒNƒ‰ƒX
+*	@brief		heis ç›¤é¢æ“ä½œã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	”Õ–Êã‚Ì•ºm‚ğ‘€ì‚·‚éB
+*	@details	ç›¤é¢ä¸Šã®å…µå£«ã‚’æ“ä½œã™ã‚‹ã€‚
 */
 
 #include "board_controller.h"
@@ -10,40 +10,40 @@
 #include <algorithm>
 
 /**
-*	@brief •ºm‚ÉUŒ‚‚ğw¦‚·‚é
-*	@param[out] board ”Õ–Ê
-*	@param[in] observer ”Õ–Êî•ñæ“¾ƒCƒ“ƒXƒ^ƒ“ƒX
-*	@param[in] src UŒ‚Œ³À•W
-*	@param[in] dst UŒ‚æÀ•W
+*	@brief å…µå£«ã«æ”»æ’ƒã‚’æŒ‡ç¤ºã™ã‚‹
+*	@param[out] board ç›¤é¢
+*	@param[in] observer ç›¤é¢æƒ…å ±å–å¾—ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+*	@param[in] src æ”»æ’ƒå…ƒåº§æ¨™
+*	@param[in] dst æ”»æ’ƒå…ˆåº§æ¨™
 */
 void CBoardController::attack(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const
 {
-	// UŒ‚Œ³‚Ì•ºm‚ğæ“¾
+	// æ”»æ’ƒå…ƒã®å…µå£«ã‚’å–å¾—
 	Square src_sq = board->get_square(src);
 	if (!src_sq.exists) {
-		throw std::runtime_error("UŒ‚Œ³‚Ì•ºm‚ª‚¢‚Ü‚¹‚ñ");
+		throw std::runtime_error("æ”»æ’ƒå…ƒã®å…µå£«ãŒã„ã¾ã›ã‚“");
 	}
 
-	// UŒ‚æ‚Ì•ºm‚ğæ“¾
+	// æ”»æ’ƒå…ˆã®å…µå£«ã‚’å–å¾—
 	Square dst_sq = board->get_square(dst);
 	if (!dst_sq.exists) {
-		throw std::runtime_error("UŒ‚æ‚Ì•ºm‚ª‚¢‚Ü‚¹‚ñ");
+		throw std::runtime_error("æ”»æ’ƒå…ˆã®å…µå£«ãŒã„ã¾ã›ã‚“");
 	}
 
-	// •ºm‚ªs“®‚Å‚«‚é‚©”»’è
+	// å…µå£«ãŒè¡Œå‹•ã§ãã‚‹ã‹åˆ¤å®š
 	CInfantry src_infantry = src_sq.infantry;
 	uint8_t action_remain = src_infantry.get_status().action_remain;
 	if (action_remain == 0) {
-		throw std::runtime_error("•ºm‚Í‚à‚¤s“®‚Å‚«‚Ü‚¹‚ñ");
+		throw std::runtime_error("å…µå£«ã¯ã‚‚ã†è¡Œå‹•ã§ãã¾ã›ã‚“");
 	}
 
-	// UŒ‚‰Â”\‚©‚Ç‚¤‚©‚ğ”»’è
+	// æ”»æ’ƒå¯èƒ½ã‹ã©ã†ã‹ã‚’åˆ¤å®š
 	std::vector<BoardPosition> dsts = observer.search_position_to_attack(*board, src);
 	if (std::find(dsts.begin(), dsts.end(), dst) == dsts.end()) {
-		throw std::runtime_error("w’è‚³‚ê‚½À•W‚ÉUŒ‚‚Å‚«‚Ü‚¹‚ñ");
+		throw std::runtime_error("æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã«æ”»æ’ƒã§ãã¾ã›ã‚“");
 	}
 
-	// UŒ‚‚ğÀ{
+	// æ”»æ’ƒã‚’å®Ÿæ–½
 	CInfantry dst_infantry = dst_sq.infantry;
 	dst_infantry.reduce_hp();
 	if (dst_infantry.is_dead()) {
@@ -53,49 +53,49 @@ void CBoardController::attack(CBoard* board, const CBoardObserver& observer, con
 		board->set_infantry(dst, dst_infantry);
 	}
 
-	// UŒ‚‚µ‚½•ºm‚Í‚»‚êˆÈãs“®‚Å‚«‚È‚¢
+	// æ”»æ’ƒã—ãŸå…µå£«ã¯ãã‚Œä»¥ä¸Šè¡Œå‹•ã§ããªã„
 	src_infantry.reduce_remaining_action(INFANTRY_ACTION_LIMIT);
 	board->set_infantry(src, src_infantry);
 }
 
 /**
-*	@brief •ºm‚ÉˆÚ“®‚ğw¦‚·‚é
-*	@param[out] board ”Õ–Ê
-*	@param[in] observer ”Õ–Êî•ñæ“¾ƒCƒ“ƒXƒ^ƒ“ƒX
-*	@param[in] src ˆÚ“®Œ³À•W
-*	@param[in] dst ˆÚ“®æÀ•W
+*	@brief å…µå£«ã«ç§»å‹•ã‚’æŒ‡ç¤ºã™ã‚‹
+*	@param[out] board ç›¤é¢
+*	@param[in] observer ç›¤é¢æƒ…å ±å–å¾—ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+*	@param[in] src ç§»å‹•å…ƒåº§æ¨™
+*	@param[in] dst ç§»å‹•å…ˆåº§æ¨™
 */
 void CBoardController::move(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const
 {
-	// ˆÚ“®Œ³‚Ì•ºm‚ğæ“¾
+	// ç§»å‹•å…ƒã®å…µå£«ã‚’å–å¾—
 	Square src_sq = board->get_square(src);
 	if (!src_sq.exists) {
-		throw std::runtime_error("ˆÚ“®Œ³‚Ì•ºm‚ª‚¢‚Ü‚¹‚ñ");
+		throw std::runtime_error("ç§»å‹•å…ƒã®å…µå£«ãŒã„ã¾ã›ã‚“");
 	}
 
-	// ˆÚ“®æ‚Ì•ºm‚ğæ“¾
+	// ç§»å‹•å…ˆã®å…µå£«ã‚’å–å¾—
 	Square dst_sq = board->get_square(dst);
 	if (dst_sq.exists) {
-		throw std::runtime_error("ˆÚ“®æ‚É‚·‚Å‚É•ºm‚ª‚¢‚Ü‚·");
+		throw std::runtime_error("ç§»å‹•å…ˆã«ã™ã§ã«å…µå£«ãŒã„ã¾ã™");
 	}
 
-	// s“®‰ñ”‚ª‘«‚è‚Ä‚¢‚é‚©”»’è
+	// è¡Œå‹•å›æ•°ãŒè¶³ã‚Šã¦ã„ã‚‹ã‹åˆ¤å®š
 	CInfantry src_infantry = src_sq.infantry;
 	uint8_t action_remain = src_infantry.get_status().action_remain;
 	if (action_remain < src.calc_l1_distance(dst)) {
-		throw std::runtime_error("w’è‚³‚ê‚½•ºm‚Ìs“®‰ñ”‚ª‘«‚è‚Ü‚¹‚ñ");
+		throw std::runtime_error("æŒ‡å®šã•ã‚ŒãŸå…µå£«ã®è¡Œå‹•å›æ•°ãŒè¶³ã‚Šã¾ã›ã‚“");
 	}
 
-	// ˆÚ“®‰Â”\‚©‚Ç‚¤‚©‚ğ”»’è
+	// ç§»å‹•å¯èƒ½ã‹ã©ã†ã‹ã‚’åˆ¤å®š
 	std::vector<BoardPosition> dsts = observer.search_position_to_move(*board, src);
 	if (std::find(dsts.begin(), dsts.end(), dst) == dsts.end()) {
-		throw std::runtime_error("w’è‚³‚ê‚½À•W‚ÉUŒ‚‚Å‚«‚Ü‚¹‚ñ");
+		throw std::runtime_error("æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã«æ”»æ’ƒã§ãã¾ã›ã‚“");
 	}
 
-	// s“®‰ñ”‚ğŒ¸‚ç‚·
+	// è¡Œå‹•å›æ•°ã‚’æ¸›ã‚‰ã™
 	src_infantry.reduce_remaining_action(src.calc_l1_distance(dst));
 
-	// ˆÚ“®‚ğÀ{
+	// ç§»å‹•ã‚’å®Ÿæ–½
 	board->remove_infantry(src);
 	board->set_infantry(dst, src_infantry);
 }

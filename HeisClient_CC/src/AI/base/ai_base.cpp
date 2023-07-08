@@ -1,15 +1,15 @@
 /**
 *	@file		ai_base.cpp
-*	@brief		heis AIƒx[ƒXƒNƒ‰ƒX
+*	@brief		heis AIãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	heis‘ÎíAI‚Ìƒx[ƒXƒNƒ‰ƒXB
+*	@details	heiså¯¾æˆ¦AIã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include "ai_base.h"
 
 /**
-*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-*	@param[in] commander i—ßŠ¯ƒCƒ“ƒXƒ^ƒ“ƒX
+*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+*	@param[in] commander å¸ä»¤å®˜ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 */
 CAIBase::CAIBase(const CCommander& commander)
 	: m_commander(commander)

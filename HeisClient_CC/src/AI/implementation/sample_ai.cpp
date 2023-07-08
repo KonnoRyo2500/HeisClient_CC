@@ -1,8 +1,8 @@
 /**
 *	@file		sample_ai.cpp
-*	@brief		heis ƒTƒ“ƒvƒ‹AI
+*	@brief		heis ã‚µãƒ³ãƒ—ãƒ«AI
 *	@author		Ryo Konno
-*	@details	AI‚ÌƒTƒ“ƒvƒ‹ŽÀ‘•Bƒ‰ƒ“ƒ_ƒ€‚És“®‚ð‘I‘ð‚·‚éB
+*	@details	AIã®ã‚µãƒ³ãƒ—ãƒ«å®Ÿè£…ã€‚ãƒ©ãƒ³ãƒ€ãƒ ã«è¡Œå‹•ã‚’é¸æŠžã™ã‚‹ã€‚
 */
 
 #include "sample_ai.h"
@@ -12,8 +12,8 @@
 /* public */
 
 /**
-*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-*	@param[in] commander Ži—ßŠ¯ƒCƒ“ƒXƒ^ƒ“ƒX
+*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+*	@param[in] commander å¸ä»¤å®˜ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 */
 CSampleAI::CSampleAI(const CCommander& commander)
 	: CAIBase(commander)
@@ -22,8 +22,8 @@ CSampleAI::CSampleAI(const CCommander& commander)
 }
 
 /**
-*	@brief AI‚ÌƒƒCƒ“ˆ—
-*	@param[in] board_pkt u”Õ–ÊvƒpƒPƒbƒg
+*	@brief AIã®ãƒ¡ã‚¤ãƒ³å‡¦ç†
+*	@param[in] board_pkt ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
 */
 void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 {
@@ -50,8 +50,8 @@ void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 /* private */
 
 /**
-*	@brief •ºŽm‚ðƒ‰ƒ“ƒ_ƒ€‚ÉˆÚ“®‚³‚¹‚éŠÖ”
-*	@param[in] infantry_id s“®‘ÎÛ‚Ì•ºŽm‚ÌID
+*	@brief å…µå£«ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«ç§»å‹•ã•ã›ã‚‹é–¢æ•°
+*	@param[in] infantry_id è¡Œå‹•å¯¾è±¡ã®å…µå£«ã®ID
 */
 void CSampleAI::sample_random_move(const std::string& infantry_id) const
 {
@@ -66,8 +66,8 @@ void CSampleAI::sample_random_move(const std::string& infantry_id) const
 }
 
 /**
-*	@brief •ºŽm‚ðƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚ÉUŒ‚‚³‚¹‚éŠÖ”
-*	@param[in] infantry_id s“®‘ÎÛ‚Ì•ºŽm‚ÌID
+*	@brief å…µå£«ã‚’ãƒ©ãƒ³ãƒ€ãƒ ãªæ–¹å‘ã«æ”»æ’ƒã•ã›ã‚‹é–¢æ•°
+*	@param[in] infantry_id è¡Œå‹•å¯¾è±¡ã®å…µå£«ã®ID
 */
 void CSampleAI::sample_random_attack(const std::string& infantry_id)
 {
@@ -82,9 +82,9 @@ void CSampleAI::sample_random_attack(const std::string& infantry_id)
 }
 
 /**
-*	@brief ŽŸ‚És“®‚·‚é•ºŽm‚ðƒ‰ƒ“ƒ_ƒ€‚É‘I‘ð‚·‚éŠÖ”
-*	@param[in] infantry_ids s“®‰Â”\‚È‚·‚×‚Ä‚Ì•ºŽm‚ÌID
-*	@return std::string ŽŸ‚És“®‚·‚é•ºŽm‚ÌID
+*	@brief æ¬¡ã«è¡Œå‹•ã™ã‚‹å…µå£«ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«é¸æŠžã™ã‚‹é–¢æ•°
+*	@param[in] infantry_ids è¡Œå‹•å¯èƒ½ãªã™ã¹ã¦ã®å…µå£«ã®ID
+*	@return std::string æ¬¡ã«è¡Œå‹•ã™ã‚‹å…µå£«ã®ID
 */
 std::string CSampleAI::sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const
 {
@@ -99,8 +99,8 @@ std::string CSampleAI::sample_select_next_infantry(const std::vector<std::string
 }
 
 /**
-*	@brief •ºŽm‚É‘Î‚µ‚Ä–½—ß‚·‚és“®‚ðŒˆ’è‚·‚éŠÖ”
-*	@return CSampleAI::Action ŽŸ‚Ìs“®
+*	@brief å…µå£«ã«å¯¾ã—ã¦å‘½ä»¤ã™ã‚‹è¡Œå‹•ã‚’æ±ºå®šã™ã‚‹é–¢æ•°
+*	@return CSampleAI::Action æ¬¡ã®è¡Œå‹•
 */
 CSampleAI::Action CSampleAI::sample_decide_action() const
 {

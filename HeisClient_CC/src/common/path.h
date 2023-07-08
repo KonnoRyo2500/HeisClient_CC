@@ -1,8 +1,8 @@
 /**
 *	@file		path.h
-*	@brief		heis ƒpƒX‘€ì
+*	@brief		heis ãƒ‘ã‚¹æ“ä½œ
 *	@author		Ryo Konno
-*	@details	ƒpƒX‘€ì‚Ì‚½‚ß‚ÌŠeíŠÖ”‚ğ’è‹`‚·‚éB
+*	@details	ãƒ‘ã‚¹æ“ä½œã®ãŸã‚ã®å„ç¨®é–¢æ•°ã‚’å®šç¾©ã™ã‚‹ã€‚
 */
 
 #pragma once
@@ -10,25 +10,25 @@
 #include <string>
 #include <vector>
 
-// ƒpƒX•¶š—ñ‚ğŒ‹‡‚·‚é
+// ãƒ‘ã‚¹æ–‡å­—åˆ—ã‚’çµåˆã™ã‚‹
 std::string join(const std::vector<std::string>& paths);
-// CC‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚ğ“¾‚é
+// CCã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å¾—ã‚‹
 std::string build_cc_root_dir();
 
-/* ƒfƒBƒŒƒNƒgƒŠ–¼ */
+/* ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå */
 /**
-*	@def İ’èƒtƒ@ƒCƒ‹‚ÌƒfƒBƒŒƒNƒgƒŠ–¼
+*	@def è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
 */
 #define CC_SETTING_DIR join({build_cc_root_dir(), "setting", "CC"})
 
 #ifdef WIN32
 /**
-*	@def CC‚ÌƒvƒƒWƒFƒNƒgƒfƒBƒŒƒNƒgƒŠ
+*	@def CCã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 */
 #define CC_PROJECT_DIR join({build_cc_root_dir(), "project_win"})
 #else
 /**
-*	@def CC‚ÌƒvƒƒWƒFƒNƒgƒfƒBƒŒƒNƒgƒŠ
+*	@def CCã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 */
 #define CC_PROJECT_DIR join({build_cc_root_dir(), "project_linux"})
 #endif // WIN32

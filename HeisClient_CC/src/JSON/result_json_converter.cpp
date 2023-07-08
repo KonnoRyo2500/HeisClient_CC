@@ -1,30 +1,30 @@
 /**
 *	@file		result_json_converter.cpp
-*	@brief		heis uŒ‹‰ÊvJSON•ÏŠ·ƒNƒ‰ƒX
+*	@brief		heis ã€Œçµæœã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	uŒ‹‰ÊvJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
+*	@details	ã€Œçµæœã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include "result_json_converter.h"
 
 /**
-*	@brief uŒ‹‰ÊvJSON‚©‚çuŒ‹‰ÊvƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
-*	@param[in] json •ÏŠ·‘ÎÛ‚ÌuŒ‹‰ÊvJSON
-*	@return std::string •ÏŠ·Œ‹‰Ê‚ÌuŒ‹‰ÊvƒpƒPƒbƒg
+*	@brief ã€Œçµæœã€JSONã‹ã‚‰ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+*	@param[in] json å¤‰æ›å¯¾è±¡ã®ã€Œçµæœã€JSON
+*	@return std::string å¤‰æ›çµæœã®ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆ
 */
 JSONRecvPacket_Result ResultJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_Result result_pkt;
 	picojson::object root_obj = parse_json(json);
 
-	// "result"”z—ñ‚Ì’l‚ğæ“¾
+	// "result"é…åˆ—ã®å€¤ã‚’å–å¾—
 	std::vector<ResultArrayElem> result;
 	picojson::array result_array = root_obj["result"].get<picojson::array>();
 	for (auto& val : result_array) {
 		ResultArrayElem elem;
 		picojson::object obj = val.get<picojson::object>();
 
-		// "unit_id"‚ÍÈ—ª‚³‚ê‚¤‚é‚½‚ßAJSON‚ÉƒL[‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğ”»’è‚µ‚Ä‚©‚çæ“¾‚·‚é
+		// "unit_id"ã¯çœç•¥ã•ã‚Œã†ã‚‹ãŸã‚ã€JSONã«ã‚­ãƒ¼ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã—ã¦ã‹ã‚‰å–å¾—ã™ã‚‹
 		if (obj.find("unit_id") != obj.end()) {
 			elem.unit_id.set_value(obj["unit_id"].get<std::string>());
 		}
@@ -38,13 +38,13 @@ JSONRecvPacket_Result ResultJsonConverter::from_json_to_packet(const std::string
 }
 
 /**
-*	@brief uŒ‹‰ÊvƒpƒPƒbƒg‚©‚çuŒ‹‰ÊvJSON‚É•ÏŠ·‚·‚é
-*	@param[in] pkt •ÏŠ·‘ÎÛ‚ÌuŒ‹‰ÊvƒpƒPƒbƒg
-*	@return std::string •ÏŠ·Œ‹‰Ê‚ÌuŒ‹‰ÊvJSON
+*	@brief ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œçµæœã€JSONã«å¤‰æ›ã™ã‚‹
+*	@param[in] pkt å¤‰æ›å¯¾è±¡ã®ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@return std::string å¤‰æ›çµæœã®ã€Œçµæœã€JSON
 */
 std::string ResultJsonConverter::from_packet_to_json(const JSONRecvPacket_Result& pkt) const
 {
-	// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚ÅuŒ‹‰ÊvƒpƒPƒbƒg‚©‚çuŒ‹‰ÊvJSON‚É•ÏŠ·‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
-	// •ÏŠ·‚·‚é•K—v‚ª¶‚¶‚½‚ç“K‹XÀ‘•‚·‚é
+	// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã§ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œçµæœã€JSONã«å¤‰æ›ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
+	// å¤‰æ›ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰é©å®œå®Ÿè£…ã™ã‚‹
 	return "";
 }

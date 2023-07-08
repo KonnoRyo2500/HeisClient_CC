@@ -1,8 +1,8 @@
 /**
 *	@file		setting.h
-*	@brief		heis İ’èƒtƒ@ƒCƒ‹\‘¢‘Ì
+*	@brief		heis è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«æ§‹é€ ä½“
 *	@author		Ryo Konno
-*	@details	ŠeíƒQ[ƒ€ƒ‚[ƒh‚Å‚Ìİ’è’l‚ğŠi”[‚·‚é‚½‚ß‚Ì\‘¢‘Ì‚ğ’è‹`‚·‚éB
+*	@details	å„ç¨®ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã§ã®è¨­å®šå€¤ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®æ§‹é€ ä½“ã‚’å®šç¾©ã™ã‚‹ã€‚
 */
 
 #pragma once
@@ -14,51 +14,51 @@
 
 /**
 *	@struct LocalSetting
-*	@brief ƒ[ƒJƒ‹ƒ‚[ƒhİ’è’lŠi”[—p\‘¢‘Ì
+*	@brief ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤æ ¼ç´ç”¨æ§‹é€ ä½“
 */
 struct LocalSetting {
-	//! ©ƒ`[ƒ€–¼
+	//! è‡ªãƒãƒ¼ãƒ å
 	std::string my_team_name;
-	//! “Gƒ`[ƒ€–¼
+	//! æ•µãƒãƒ¼ãƒ å
 	std::string enemy_team_name;
-	//! ©ƒ`[ƒ€‚ÌAIÀ‘•
+	//! è‡ªãƒãƒ¼ãƒ ã®AIå®Ÿè£…
 	std::string my_team_ai_impl;
-	//! “Gƒ`[ƒ€‚ÌAIÀ‘•
+	//! æ•µãƒãƒ¼ãƒ ã®AIå®Ÿè£…
 	std::string enemy_team_ai_impl;
-	//! ”Õ–Ê‚Ì‰¡•
+	//! ç›¤é¢ã®æ¨ªå¹…
 	uint16_t board_width;
-	//! ”Õ–Ê‚Ì‚‚³
+	//! ç›¤é¢ã®é«˜ã•
 	uint16_t board_height;
-	//! ©ƒ`[ƒ€•ºm‚Ì‰ŠúˆÊ’u
+	//! è‡ªãƒãƒ¼ãƒ å…µå£«ã®åˆæœŸä½ç½®
 	std::vector<BoardPosition> my_team_init_pos;
-	//! “Gƒ`[ƒ€•ºm‚Ì‰ŠúˆÊ’u
+	//! æ•µãƒãƒ¼ãƒ å…µå£«ã®åˆæœŸä½ç½®
 	std::vector<BoardPosition> enemy_team_init_pos;
-	//! æU‚Æ‚È‚éƒ`[ƒ€–¼
+	//! å…ˆæ”»ã¨ãªã‚‹ãƒãƒ¼ãƒ å
 	std::string first_turn_team;
 };
 
 /**
 *	@struct OnlineSetting
-*	@brief ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’è’lŠi”[—p\‘¢‘Ì
+*	@brief ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤æ ¼ç´ç”¨æ§‹é€ ä½“
 */
 struct OnlineSetting {
-	//! ƒT[ƒo‚ÌIPƒAƒhƒŒƒX
+	//! ã‚µãƒ¼ãƒã®IPã‚¢ãƒ‰ãƒ¬ã‚¹
 	std::string server_ip_addr;
-	//! ƒT[ƒo‚Ìƒ|[ƒg”Ô†
+	//! ã‚µãƒ¼ãƒã®ãƒãƒ¼ãƒˆç•ªå·
 	uint16_t server_port_num;
-	//! ƒ`[ƒ€–¼
+	//! ãƒãƒ¼ãƒ å
 	std::string team_name;
-	//! AIÀ‘•
+	//! AIå®Ÿè£…
 	std::string ai_impl;
 };
 
 /**
 *	@struct AudienceSetting
-*	@brief ŠÏíƒ‚[ƒhİ’è’lŠi”[—p\‘¢‘Ì
+*	@brief è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤æ ¼ç´ç”¨æ§‹é€ ä½“
 */
 struct AudienceSetting {
-	//! ƒT[ƒo‚ÌIPƒAƒhƒŒƒX
+	//! ã‚µãƒ¼ãƒã®IPã‚¢ãƒ‰ãƒ¬ã‚¹
 	std::string server_ip_addr;
-	//! ƒT[ƒo‚Ìƒ|[ƒg”Ô†
+	//! ã‚µãƒ¼ãƒã®ãƒãƒ¼ãƒˆç•ªå·
 	uint16_t server_port_num;
 };

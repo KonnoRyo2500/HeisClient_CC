@@ -1,36 +1,36 @@
 /**
 *	@file		confirm_name_json_converter.cpp
-*	@brief		heis u–¼‘OŠm’èvJSON•ÏŠ·ƒNƒ‰ƒX
+*	@brief		heis ã€Œåå‰ç¢ºå®šã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	u–¼‘OŠm’èvJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
+*	@details	ã€Œåå‰ç¢ºå®šã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include "confirm_name_json_converter.h"
 
 /**
-*	@brief u–¼‘OŠm’èvJSON‚©‚çu–¼‘OŠm’èvƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
-*	@param[in] json •ÏŠ·‘ÎÛ‚Ìu–¼‘OŠm’èvJSON
-*	@return std::string •ÏŠ·Œ‹‰Ê‚Ìu–¼‘OŠm’èvƒpƒPƒbƒg
+*	@brief ã€Œåå‰ç¢ºå®šã€JSONã‹ã‚‰ã€Œåå‰ç¢ºå®šã€ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+*	@param[in] json å¤‰æ›å¯¾è±¡ã®ã€Œåå‰ç¢ºå®šã€JSON
+*	@return std::string å¤‰æ›çµæœã®ã€Œåå‰ç¢ºå®šã€ãƒ‘ã‚±ãƒƒãƒˆ
 */
 JSONRecvPacket_ConfirmName ConfirmNameJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_ConfirmName confirm_name_pkt;
 	picojson::object root_obj = parse_json(json);
 
-	// ƒ‹[ƒgƒIƒuƒWƒFƒNƒg‚©‚ç’¼Úæ“¾‚Å‚«‚é’l‚ğæ“¾
+	// ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ç›´æ¥å–å¾—ã§ãã‚‹å€¤ã‚’å–å¾—
 	confirm_name_pkt.your_team.set_value(root_obj["your_team"].get<std::string>());
 
 	return confirm_name_pkt;
 }
 
 /**
-*	@brief u–¼‘OŠm’èvƒpƒPƒbƒg‚©‚çu–¼‘OŠm’èvJSON‚É•ÏŠ·‚·‚é
-*	@param[in] pkt •ÏŠ·‘ÎÛ‚Ìu–¼‘OŠm’èvƒpƒPƒbƒg
-*	@return std::string •ÏŠ·Œ‹‰Ê‚Ìu–¼‘OŠm’èvJSON
+*	@brief ã€Œåå‰ç¢ºå®šã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œåå‰ç¢ºå®šã€JSONã«å¤‰æ›ã™ã‚‹
+*	@param[in] pkt å¤‰æ›å¯¾è±¡ã®ã€Œåå‰ç¢ºå®šã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@return std::string å¤‰æ›çµæœã®ã€Œåå‰ç¢ºå®šã€JSON
 */
 std::string ConfirmNameJsonConverter::from_packet_to_json(const JSONRecvPacket_ConfirmName& pkt) const
 {
-	// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Åu–¼‘OŠm’èvƒpƒPƒbƒg‚©‚çu–¼‘OŠm’èvJSON‚É•ÏŠ·‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
-	// •ÏŠ·‚·‚é•K—v‚ª¶‚¶‚½‚ç“K‹XÀ‘•‚·‚é
+	// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã§ã€Œåå‰ç¢ºå®šã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œåå‰ç¢ºå®šã€JSONã«å¤‰æ›ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
+	// å¤‰æ›ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰é©å®œå®Ÿè£…ã™ã‚‹
 	return "";
 }

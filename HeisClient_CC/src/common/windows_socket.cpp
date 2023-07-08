@@ -1,8 +1,8 @@
 /**
 *	@file		windows_socket.cpp
-*	@brief		Windows—pTCP/IPƒ\ƒPƒbƒgƒNƒ‰ƒX
+*	@brief		Windowsç”¨TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	WindowsŠÂ‹«‚É‚¨‚¯‚éƒ\ƒPƒbƒg‚ÌŠeí‘€ì‚ğ’ñ‹Ÿ‚·‚éB
+*	@details	Windowsç’°å¢ƒã«ãŠã‘ã‚‹ã‚½ã‚±ãƒƒãƒˆã®å„ç¨®æ“ä½œã‚’æä¾›ã™ã‚‹ã€‚
 */
 
 #ifdef WIN32
@@ -14,31 +14,31 @@
 
 /**
 *	@def RECV_BUF_SIZE
-*	@brief óMƒoƒbƒtƒ@‚ÌƒTƒCƒY
+*	@brief å—ä¿¡ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
 */
 #define RECV_BUF_SIZE (1000)
 
 /**
-*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-*	@details ‰Šú‰»ˆ—‚Æsocket‚ÌŒÄ‚Ño‚µ‚à“¯‚És‚¤
+*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+*	@details åˆæœŸåŒ–å‡¦ç†ã¨socketã®å‘¼ã³å‡ºã—ã‚‚åŒæ™‚ã«è¡Œã†
 */
 CWindowsSocket::CWindowsSocket()
 {
 	bool initialize_result = initialize();
 	if (!initialize_result) {
-		throw std::runtime_error("ƒ\ƒPƒbƒg‚Ì‰Šú‰»ˆ—‚ª¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("ã‚½ã‚±ãƒƒãƒˆã®åˆæœŸåŒ–å‡¦ç†ãŒå¤±æ•—ã—ã¾ã—ãŸ");
 	}
 
 	m_socket = wrap_socket();
 	if (m_socket < 0) {
-		throw std::runtime_error("ƒ\ƒPƒbƒg‚Ì¶¬‚É¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("ã‚½ã‚±ãƒƒãƒˆã®ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 }
 
 /**
-*	@brief ƒ\ƒPƒbƒg‚É–¼‘O‚ğ•t‚¯‚é
-*	@param[in] dst_port Ú‘±æƒ|[ƒg”Ô†
-*	@param[in] src_addr Ú‘±Œ³IPƒAƒhƒŒƒX
+*	@brief ã‚½ã‚±ãƒƒãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹
+*	@param[in] dst_port æ¥ç¶šå…ˆãƒãƒ¼ãƒˆç•ªå·
+*	@param[in] src_addr æ¥ç¶šå…ƒIPã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 void CWindowsSocket::wrap_bind(const uint16_t dst_port, const std::string& src_addr)
 {
@@ -49,53 +49,53 @@ void CWindowsSocket::wrap_bind(const uint16_t dst_port, const std::string& src_a
 	addr.sin_port = htons(dst_port);
 	ercd = inet_pton(AF_INET, src_addr.c_str(), &addr.sin_addr);
 	if (ercd <= 0) {
-		throw std::runtime_error("w’è‚³‚ê‚½IPƒAƒhƒŒƒX‚Í•s³‚Å‚·");
+		throw std::runtime_error("æŒ‡å®šã•ã‚ŒãŸIPã‚¢ãƒ‰ãƒ¬ã‚¹ã¯ä¸æ­£ã§ã™");
 	}
 
 	ercd = bind(m_socket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 	if (ercd < 0) {
-		throw std::runtime_error("bindƒVƒXƒeƒ€ƒR[ƒ‹‚ÌŒÄ‚Ño‚µ‚É¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("bindã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«ã®å‘¼ã³å‡ºã—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 }
 
 /**
-*	@brief ‘Šè‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
+*	@brief ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å—ã‘ä»˜ã‘ã‚‹
 */
 void CWindowsSocket::wrap_listen()
 {
-	// ŠµK‚É]‚¢Alisten‚Ì‘æ“ñˆø”(backlog)‚Í5‚É‚µ‚Ä‚¨‚­
+	// æ…£ç¿’ã«å¾“ã„ã€listenã®ç¬¬äºŒå¼•æ•°(backlog)ã¯5ã«ã—ã¦ãŠã
 	int ercd = listen(m_socket, 5);
 	if (ercd < 0) {
-		throw std::runtime_error("listenƒVƒXƒeƒ€ƒR[ƒ‹‚ÌŒÄ‚Ño‚µ‚É¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("listenã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«ã®å‘¼ã³å‡ºã—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 }
 
 /**
-*	@brief ‘Šè‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚Â
+*	@brief ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¤
 */
 void CWindowsSocket::wrap_accept()
 {
 	sockaddr_in client_addr_info = { 0 };
 	socklen_t addr_info_len = sizeof(sockaddr_in);
 
-	// ’ÊM—pƒ\ƒPƒbƒgì¬
+	// é€šä¿¡ç”¨ã‚½ã‚±ãƒƒãƒˆä½œæˆ
 	int new_sck = accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr_info), &addr_info_len);
 	if (new_sck < 0) {
-		throw std::runtime_error("acceptƒVƒXƒeƒ€ƒR[ƒ‹‚ÌŒÄ‚Ño‚µ‚É¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("acceptã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«ã®å‘¼ã³å‡ºã—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 
-	// ƒNƒ‰ƒCƒAƒ“ƒg‚Æ‚Í1‘Î1‚ÅÚ‘±‚·‚é‚½‚ßAˆÈ~‚ÌÚ‘±ó‚¯•t‚¯‚Í•s—v
-	// ‚»‚Ì‚½‚ßAŒ³XÚ‘±ó‚¯•t‚¯—p‚¾‚Á‚½ƒ\ƒPƒbƒg‚Í‚±‚±‚Å•Â‚¶‚é
+	// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¨ã¯1å¯¾1ã§æ¥ç¶šã™ã‚‹ãŸã‚ã€ä»¥é™ã®æ¥ç¶šå—ã‘ä»˜ã‘ã¯ä¸è¦
+	// ãã®ãŸã‚ã€å…ƒã€…æ¥ç¶šå—ã‘ä»˜ã‘ç”¨ã ã£ãŸã‚½ã‚±ãƒƒãƒˆã¯ã“ã“ã§é–‰ã˜ã‚‹
 	wrap_close();
 
-	// ˆÈ~Am_socket‚Í’ÊM—pƒ\ƒPƒbƒg‚É‚È‚é
+	// ä»¥é™ã€m_socketã¯é€šä¿¡ç”¨ã‚½ã‚±ãƒƒãƒˆã«ãªã‚‹
 	m_socket = new_sck;
 }
 
 /**
-*	@brief ƒ\ƒPƒbƒg‚ğÚ‘±‚·‚é
-*	@param[in] addr Ú‘±æIPƒAƒhƒŒƒX
-*	@param[in] port Ú‘±æƒ|[ƒg”Ô†
+*	@brief ã‚½ã‚±ãƒƒãƒˆã‚’æ¥ç¶šã™ã‚‹
+*	@param[in] addr æ¥ç¶šå…ˆIPã‚¢ãƒ‰ãƒ¬ã‚¹
+*	@param[in] port æ¥ç¶šå…ˆãƒãƒ¼ãƒˆç•ªå·
 */
 void CWindowsSocket::wrap_connect(const std::string& addr, const uint16_t port) const
 {
@@ -106,19 +106,19 @@ void CWindowsSocket::wrap_connect(const std::string& addr, const uint16_t port) 
 	sa.sin_port = htons(port);
 	ercd = inet_pton(AF_INET, addr.c_str(), &sa.sin_addr);
 	if (ercd <= 0) {
-		throw std::runtime_error("inet_ptonƒVƒXƒeƒ€ƒR[ƒ‹‚ÌŒÄ‚Ño‚µ‚É¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("inet_ptonã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«ã®å‘¼ã³å‡ºã—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 
 	ercd = connect(m_socket, reinterpret_cast<sockaddr*>(&sa), sizeof(sa));
 	if (ercd < 0) {
-		throw std::runtime_error("connectƒVƒXƒeƒ€ƒR[ƒ‹‚ÌŒÄ‚Ño‚µ‚É¸”s‚µ‚Ü‚µ‚½");
+		throw std::runtime_error("connectã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«ã®å‘¼ã³å‡ºã—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 	}
 }
 
 /**
-*	@brief ƒf[ƒ^‚ğ‘—M‚·‚é
-*	@param[in] data ‘—M‚·‚éƒf[ƒ^
-*	@param[in] terminal I’[•¶š(È—ª‚Í•t—^‚µ‚È‚¢)
+*	@brief ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹
+*	@param[in] data é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
+*	@param[in] terminal çµ‚ç«¯æ–‡å­—(çœç•¥æ™‚ã¯ä»˜ä¸ã—ãªã„)
 */
 void CWindowsSocket::wrap_send(const std::string& data, const char terminal)
 {
@@ -127,26 +127,26 @@ void CWindowsSocket::wrap_send(const std::string& data, const char terminal)
 
 	if (sent_size < send_data.size()) {
 		if (sent_size < 0) {
-			throw std::runtime_error("sendƒVƒXƒeƒ€ƒR[ƒ‹‚ÌŒÄ‚Ño‚µ‚É¸”s‚µ‚Ü‚µ‚½");
+			throw std::runtime_error("sendã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒ¼ãƒ«ã®å‘¼ã³å‡ºã—ã«å¤±æ•—ã—ã¾ã—ãŸ");
 		}
-		fprintf(stderr, "Œx: •sŠ®‘S‚Èƒf[ƒ^‚ª‘—M‚³‚ê‚Ü‚µ‚½(%zuƒoƒCƒg’†%zuƒoƒCƒg‚ª‘—M‚³‚ê‚Ü‚µ‚½)\n", send_data.size(), sent_size);
+		fprintf(stderr, "è­¦å‘Š: ä¸å®Œå…¨ãªãƒ‡ãƒ¼ã‚¿ãŒé€ä¿¡ã•ã‚Œã¾ã—ãŸ(%zuãƒã‚¤ãƒˆä¸­%zuãƒã‚¤ãƒˆãŒé€ä¿¡ã•ã‚Œã¾ã—ãŸ)\n", send_data.size(), sent_size);
 	}
 }
 
 /**
-*	@brief ƒf[ƒ^‚ğóM‚·‚é
-*	@param[in] terminal I’[•¶š(È—ª‚Í•t—^‚µ‚È‚¢)
+*	@brief ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã™ã‚‹
+*	@param[in] terminal çµ‚ç«¯æ–‡å­—(çœç•¥æ™‚ã¯ä»˜ä¸ã—ãªã„)
 */
 std::string CWindowsSocket::wrap_recv(const char terminal)
 {
 	std::string recv_data = "";
 
 	while(true) {
-		// ƒ\ƒPƒbƒg‚Ì“à•”ƒoƒbƒtƒ@‚ğPEEK‚·‚é
+		// ã‚½ã‚±ãƒƒãƒˆã®å†…éƒ¨ãƒãƒƒãƒ•ã‚¡ã‚’PEEKã™ã‚‹
 		char peek_buf[RECV_BUF_SIZE] = { 0 };
 		recv(m_socket, peek_buf, sizeof(peek_buf) - 1, MSG_PEEK);
 
-		// PEEK‚µ‚½ƒoƒbƒtƒ@‚©‚çI’[•¶š‚ğ’T‚·
+		// PEEKã—ãŸãƒãƒƒãƒ•ã‚¡ã‹ã‚‰çµ‚ç«¯æ–‡å­—ã‚’æ¢ã™
 		int terminal_idx = -1;
 		for (int i = 0; i < RECV_BUF_SIZE - 1; i++) {
 			if (peek_buf[i] == terminal) {
@@ -155,8 +155,8 @@ std::string CWindowsSocket::wrap_recv(const char terminal)
 			}
 		}
 		
-		// I’[•¶š‚ª‚ ‚ê‚ÎA‚»‚ÌˆÊ’u‚Ü‚Åƒf[ƒ^‚ğóM‚µ‚Äˆ—I—¹
-		// –³‚¯‚ê‚ÎAbuf‚ÌÅ‘åƒTƒCƒY•ª‚¾‚¯ƒf[ƒ^‚ğóM‚µAÄ“xPEEK + óM‚·‚é
+		// çµ‚ç«¯æ–‡å­—ãŒã‚ã‚Œã°ã€ãã®ä½ç½®ã¾ã§ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ã¦å‡¦ç†çµ‚äº†
+		// ç„¡ã‘ã‚Œã°ã€bufã®æœ€å¤§ã‚µã‚¤ã‚ºåˆ†ã ã‘ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã—ã€å†åº¦PEEK + å—ä¿¡ã™ã‚‹
 		char buf[RECV_BUF_SIZE] = { 0 };
 		if (terminal_idx != -1) {
 			recv(m_socket, buf, terminal_idx + 1, 0);
@@ -173,7 +173,7 @@ std::string CWindowsSocket::wrap_recv(const char terminal)
 }
 
 /**
-*	@brief ƒ\ƒPƒbƒg‚ğ•Â‚¶‚é
+*	@brief ã‚½ã‚±ãƒƒãƒˆã‚’é–‰ã˜ã‚‹
 */
 void CWindowsSocket::wrap_close()
 {
@@ -181,8 +181,8 @@ void CWindowsSocket::wrap_close()
 }
 
 /**
-*	@brief ƒ\ƒPƒbƒg‚ğì¬‚·‚é
-*	@details TCP/IP’ÊM—p‚Ìƒ\ƒPƒbƒg‚ğì¬‚·‚é
+*	@brief ã‚½ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
+*	@details TCP/IPé€šä¿¡ç”¨ã®ã‚½ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
 */
 int CWindowsSocket::wrap_socket()
 {
@@ -190,8 +190,8 @@ int CWindowsSocket::wrap_socket()
 }
 
 /**
-*	@brief ‰Šú‰»ˆ—‚ğs‚¤
-*	@return bool ‰Šú‰»ˆ—‚ª¬Œ÷‚µ‚½‚©
+*	@brief åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†
+*	@return bool åˆæœŸåŒ–å‡¦ç†ãŒæˆåŠŸã—ãŸã‹
 */
 bool CWindowsSocket::initialize()
 {
@@ -201,8 +201,8 @@ bool CWindowsSocket::initialize()
 }
 
 /**
-*	@brief I—¹ˆ—‚ğs‚¤
-*	@return bool I—¹ˆ—‚ª¬Œ÷‚µ‚½‚©
+*	@brief çµ‚äº†å‡¦ç†ã‚’è¡Œã†
+*	@return bool çµ‚äº†å‡¦ç†ãŒæˆåŠŸã—ãŸã‹
 */
 bool CWindowsSocket::finalize()
 {

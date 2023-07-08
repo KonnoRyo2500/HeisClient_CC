@@ -1,8 +1,8 @@
 /**
 *	@file		board_observer.h
-*	@brief		heis ”Õ–Êî•ñæ“¾ƒNƒ‰ƒX
+*	@brief		heis ç›¤é¢æƒ…å ±å–å¾—ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	”Õ–Êã‚Ì•ºm‚ÉŠÖ‚·‚éŠeíî•ñ‚ğæ“¾‚·‚éB
+*	@details	ç›¤é¢ä¸Šã®å…µå£«ã«é–¢ã™ã‚‹å„ç¨®æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã€‚
 */
 
 #pragma once
@@ -14,34 +14,34 @@
 #include <string>
 
 /**
-*	@brief •ºm‚ÌÀ‘Ì‚ÆêŠ‚ğ•\‚·Œ^
+*	@brief å…µå£«ã®å®Ÿä½“ã¨å ´æ‰€ã‚’è¡¨ã™å‹
 */
 typedef std::pair<CInfantry, BoardPosition> InfantryWithPos;
 
 /**
-*	@brief ”Õ–Êî•ñæ“¾ƒNƒ‰ƒX
+*	@brief ç›¤é¢æƒ…å ±å–å¾—ã‚¯ãƒ©ã‚¹
 */
 class CBoardObserver
 {
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 public:
-	// ”Õ–Êã‚Ì‘S•ºm‚ğæ“¾‚·‚é
+	// ç›¤é¢ä¸Šã®å…¨å…µå£«ã‚’å–å¾—ã™ã‚‹
 	std::vector<InfantryWithPos> fetch_all_infantry_and_position(const CBoard& board) const;
 
-	// w’è‚³‚ê‚½•ºm‚ªˆÚ“®‚Å‚«‚éƒ}ƒX‚ğæ“¾‚·‚é
+	// æŒ‡å®šã•ã‚ŒãŸå…µå£«ãŒç§»å‹•ã§ãã‚‹ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
 	std::vector<BoardPosition> search_position_to_move(const CBoard& board, const BoardPosition& pos) const;
-	// w’è‚³‚ê‚½•ºm‚ªUŒ‚‚Å‚«‚éƒ}ƒX‚ğæ“¾‚·‚é
+	// æŒ‡å®šã•ã‚ŒãŸå…µå£«ãŒæ”»æ’ƒã§ãã‚‹ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
 	std::vector<BoardPosition> search_position_to_attack(const CBoard& board, const BoardPosition& pos) const;
 
 private:
-	// w’è‚³‚ê‚½À•W‚ª”Õ–Ê‚Ì”ÍˆÍ“à‚É‚ ‚é‚©”»’è‚·‚é
+	// æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ãŒç›¤é¢ã®ç¯„å›²å†…ã«ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
 	bool is_coord_in_board(const CBoard& board, const BoardPosition& coord) const;
 
-	// w’è‚³‚ê‚½ƒ}ƒX‚ÉˆÚ“®‚Å‚«‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+	// æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã«ç§»å‹•ã§ãã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
 	bool can_move(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const;
-	// w’è‚³‚ê‚½ƒ}ƒX‚ÉˆÚ“®‚·‚é‚½‚ß‚ÌƒpƒX‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©”»’è‚·‚é
+	// æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã«ç§»å‹•ã™ã‚‹ãŸã‚ã®ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹
 	bool exists_path(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const;
 
-	// w’è‚³‚ê‚½ƒ}ƒX‚ÉUŒ‚‚Å‚«‚é‚©‚Ç‚¤‚©”»’è‚·‚é
+	// æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã«æ”»æ’ƒã§ãã‚‹ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹
 	bool can_attack(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const;
 };

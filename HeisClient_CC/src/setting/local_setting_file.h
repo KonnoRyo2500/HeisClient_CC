@@ -1,8 +1,8 @@
 /**
 *	@file		local_setting_file.h
-*	@brief		heis ƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
+*	@brief		heis ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	ƒ[ƒJƒ‹ƒ‚[ƒh‚Ìİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éƒNƒ‰ƒXB
+*	@details	ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #pragma once
@@ -12,19 +12,19 @@
 #include "setting.h"
 
 /**
-*	@brief	ƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
+*	@brief	ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
 */
 class CLocalSettingFile : public CSettingFileBase<LocalSetting>
 {
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 public:
-	// İ’è’l‚ğƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+	// è¨­å®šå€¤ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
 	LocalSetting load(const std::string& path) const;
-	// İ’è’l‚ğƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
+	// è¨­å®šå€¤ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
 	void save(const std::string& path, const LocalSetting& setting) const;
 
 private:
-	// Še•ºm‚Ì‰ŠúˆÊ’u‚Ìî•ñ‚ğA”Õ–Êã‚ÌˆÊ’u‚ğ•\‚·\‘¢‘Ì‚É•ÏŠ·‚·‚é
+	// å„å…µå£«ã®åˆæœŸä½ç½®ã®æƒ…å ±ã‚’ã€ç›¤é¢ä¸Šã®ä½ç½®ã‚’è¡¨ã™æ§‹é€ ä½“ã«å¤‰æ›ã™ã‚‹
 	std::vector<BoardPosition> build_init_positions(
 		const std::vector<std::string>& init_x_from_csv,
 		const std::vector<std::string>& init_y_from_csv

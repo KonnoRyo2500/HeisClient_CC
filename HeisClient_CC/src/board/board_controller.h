@@ -1,8 +1,8 @@
 /**
 *	@file		board_controller.h
-*	@brief		heis �Ֆʑ���N���X
+*	@brief		heis 盤面操作クラス
 *	@author		Ryo Konno
-*	@details	�Ֆʏ�̕��m�𑀍삷��B
+*	@details	盤面上の兵士を操作する。
 */
 
 #pragma once
@@ -14,14 +14,14 @@
 #include <string>
 
 /**
-*	@brief �Ֆʑ���N���X
+*	@brief 盤面操作クラス
 */
 class CBoardController
 {
-	// �����o�֐�
+	// メンバ関数
 public:
-	// ���m�ɍU�����w������
+	// 兵士に攻撃を指示する
 	void attack(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const;
-	// ���m�Ɉړ����w������
+	// 兵士に移動を指示する
 	void move(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const;
 };

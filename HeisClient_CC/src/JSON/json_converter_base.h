@@ -1,8 +1,8 @@
 /**
 *	@file		json_converter_base.h
-*	@brief		heis JSON•ÏŠ·ƒx[ƒXƒNƒ‰ƒX
+*	@brief		heis JSONå¤‰æ›ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	ŠeíJSON‰ğÍƒNƒ‰ƒX(JSON <-> ƒpƒPƒbƒg‚Ì‘ŠŒİ•ÏŠ·‚ğs‚¤ƒNƒ‰ƒX)‚Ìƒx[ƒXƒNƒ‰ƒXB
+*	@details	å„ç¨®JSONè§£æã‚¯ãƒ©ã‚¹(JSON <-> ãƒ‘ã‚±ãƒƒãƒˆã®ç›¸äº’å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹)ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #pragma once
@@ -11,29 +11,29 @@
 #include "common.h"
 
 /**
-*	@brief	JSON‰ğÍƒx[ƒXƒNƒ‰ƒX
-*	@tparam PacketType æ‚èˆµ‚¤JSONƒpƒPƒbƒg‚ÌŒ^
+*	@brief	JSONè§£æãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
+*	@tparam PacketType å–ã‚Šæ‰±ã†JSONãƒ‘ã‚±ãƒƒãƒˆã®å‹
 */
 template <typename PacketType>
 class JsonConverterBase
 {
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 public:
-	// JSON•¶š—ñ‚©‚çƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
+	// JSONæ–‡å­—åˆ—ã‹ã‚‰ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
 	virtual PacketType from_json_to_packet(const std::string& json) const = 0;
-	// ƒpƒPƒbƒg‚©‚çJSON•¶š—ñ‚É•ÏŠ·‚·‚é
+	// ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰JSONæ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
 	virtual std::string from_packet_to_json(const PacketType& pkt) const = 0;
 
 protected:
-	// JSON•¶š—ñ‚ğƒp[ƒX‚·‚é
+	// JSONæ–‡å­—åˆ—ã‚’ãƒ‘ãƒ¼ã‚¹ã™ã‚‹
 	picojson::object parse_json(const std::string& json) const;
 };
 
 /**
-*	@brief	JSON‚ğƒp[ƒX‚·‚é
-*	@tparam PacketType æ‚èˆµ‚¤JSONƒpƒPƒbƒg‚ÌŒ^
-*	@param[in] json ƒp[ƒX‘ÎÛ‚ÌJSON
-*	@return picojson::object ƒp[ƒX‚³‚ê‚½JSONƒIƒuƒWƒFƒNƒg
+*	@brief	JSONã‚’ãƒ‘ãƒ¼ã‚¹ã™ã‚‹
+*	@tparam PacketType å–ã‚Šæ‰±ã†JSONãƒ‘ã‚±ãƒƒãƒˆã®å‹
+*	@param[in] json ãƒ‘ãƒ¼ã‚¹å¯¾è±¡ã®JSON
+*	@return picojson::object ãƒ‘ãƒ¼ã‚¹ã•ã‚ŒãŸJSONã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 template <typename PacketType>
 picojson::object JsonConverterBase<PacketType>::parse_json(const std::string& json) const
@@ -41,9 +41,9 @@ picojson::object JsonConverterBase<PacketType>::parse_json(const std::string& js
 	picojson::value parsed_JSON_val;
 	std::string errmsg = picojson::parse(parsed_JSON_val, json);
 	if (errmsg.size() > 0) {
-		throw std::runtime_error(cc_common::format("JSON‚Ìƒp[ƒX‚É¸”s‚µ‚Ü‚µ‚½(ƒGƒ‰[“à—e: %s)", errmsg.c_str()));
+		throw std::runtime_error(cc_common::format("JSONã®ãƒ‘ãƒ¼ã‚¹ã«å¤±æ•—ã—ã¾ã—ãŸ(ã‚¨ãƒ©ãƒ¼å†…å®¹: %s)", errmsg.c_str()));
 	}
 
-	// JSON -> ƒf[ƒ^‚Ö‚Ì•ÏŠ·‚ğs‚¢‚â‚·‚­‚·‚é‚½‚ßCpicojson::value -> picojson::object‚Ö‚Ì•ÏŠ·‚ğs‚¤
+	// JSON -> ãƒ‡ãƒ¼ã‚¿ã¸ã®å¤‰æ›ã‚’è¡Œã„ã‚„ã™ãã™ã‚‹ãŸã‚ï¼Œpicojson::value -> picojson::objectã¸ã®å¤‰æ›ã‚’è¡Œã†
 	return parsed_JSON_val.get<picojson::object>();
 }

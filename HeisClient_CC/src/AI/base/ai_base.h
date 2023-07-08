@@ -1,8 +1,8 @@
 /**
 *	@file		ai_base.h
-*	@brief		heis AIƒx[ƒXƒNƒ‰ƒX
+*	@brief		heis AIãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	heis‘ÎíAI‚Ìƒx[ƒXƒNƒ‰ƒXB
+*	@details	heiså¯¾æˆ¦AIã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #pragma once
@@ -10,22 +10,22 @@
 #include "commander.h"
 
 /**
-*	@brief	AIƒx[ƒXƒNƒ‰ƒX
-*	@detail	heis‘ÎíAI‚Ìƒx[ƒXƒNƒ‰ƒXBƒ†[ƒU‚ÍA‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚ÄAI‚ğÀ‘•‚·‚é
-*	@remark ‚±‚ÌƒNƒ‰ƒX‚ÍƒCƒ“ƒXƒ^ƒ“ƒX‰»‚Å‚«‚È‚¢(’ŠÛƒNƒ‰ƒX)
+*	@brief	AIãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
+*	@detail	heiså¯¾æˆ¦AIã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚ãƒ¦ãƒ¼ã‚¶ã¯ã€ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ã¦AIã‚’å®Ÿè£…ã™ã‚‹
+*	@remark ã“ã®ã‚¯ãƒ©ã‚¹ã¯ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã§ããªã„(æŠ½è±¡ã‚¯ãƒ©ã‚¹)
 */
 class CAIBase
 {
-// ƒƒ“ƒoŠÖ”
+// ãƒ¡ãƒ³ãƒé–¢æ•°
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	explicit CAIBase(const CCommander& commander);
 
-	// ƒƒCƒ“ˆ—
+	// ãƒ¡ã‚¤ãƒ³å‡¦ç†
 	virtual void AI_main(const JSONRecvPacket_Board& board_pkt) = 0;
 
-// ƒƒ“ƒo•Ï”
+// ãƒ¡ãƒ³ãƒå¤‰æ•°
 protected:
-	//! •ºm‚ğ‘€ì‚·‚é‚½‚ß‚Ìi—ßŠ¯
+	//! å…µå£«ã‚’æ“ä½œã™ã‚‹ãŸã‚ã®å¸ä»¤å®˜
 	CCommander m_commander;
 };
