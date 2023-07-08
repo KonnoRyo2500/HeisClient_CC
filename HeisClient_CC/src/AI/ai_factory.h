@@ -1,8 +1,8 @@
 /**
 *	@file		ai_factory.h
-*	@brief		heis AIãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ã‚¯ãƒ©ã‚¹
+*	@brief		heis AIƒtƒ@ƒNƒgƒŠ[ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	å„ç¨®AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	ŠeíAIƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚½‚ß‚Ìƒtƒ@ƒNƒgƒŠ[ƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -12,12 +12,12 @@
 #include <map>
 
 /**
-*	@brief	AIãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ã‚¯ãƒ©ã‚¹
+*	@brief	AIƒtƒ@ƒNƒgƒŠ[ƒNƒ‰ƒX
 */
 class CAIFactory
 {
-// ãƒ¡ãƒ³ãƒé–¢æ•°
+// ƒƒ“ƒoŠÖ”
 public:
-	// AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
+	// AIƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é
 	CAIBase* create_instance(const CCommander& commander, const std::string& ai_impl_name) const;
 };

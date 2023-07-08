@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		infantry.h
-*	@brief		heis å…µå£«ã‚¯ãƒ©ã‚¹
+*	@brief		heis •ºmƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	heisã®ãƒ¦ãƒ‹ãƒƒãƒˆã®1ã¤ã§ã‚ã‚‹å…µå£«ãƒ¦ãƒ‹ãƒƒãƒˆã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	heis‚Ìƒ†ƒjƒbƒg‚Ì1‚Â‚Å‚ ‚é•ºmƒ†ƒjƒbƒg‚ğ’è‹`‚·‚éD
 */
 #pragma once
 
@@ -15,16 +15,16 @@
 
 /**
 *	@struct InfantryStatus
-*	@brief å…µå£«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+*	@brief •ºm‚ÌƒXƒe[ƒ^ƒX
 */
 struct InfantryStatus
 {
 	/**
-	*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	*	@param[in] team_name ãƒãƒ¼ãƒ å
+	*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	*	@param[in] team_name ƒ`[ƒ€–¼
 	*	@param[in] id ID
-	*	@param[in] hp åˆæœŸHP
-	*	@param[in] action_remain åˆæœŸæ®‹ã‚Šè¡Œå‹•å›æ•°
+	*	@param[in] hp ‰ŠúHP
+	*	@param[in] action_remain ‰Šúc‚ès“®‰ñ”
 	*/
 	explicit InfantryStatus(
 		const std::string& team_name,
@@ -40,42 +40,42 @@ struct InfantryStatus
 		// Do Nothing
 	}
 
-	//! ãƒãƒ¼ãƒ å
+	//! ƒ`[ƒ€–¼
 	std::string team_name;
 	//! ID
 	std::string id;
-	//! æ®‹ã‚Šè¡Œå‹•å›æ•°
+	//! c‚ès“®‰ñ”
 	uint8_t action_remain;
 	//! HP
 	uint8_t hp;
 };
 
 /**
-*	@brief	å…µå£«ã‚¯ãƒ©ã‚¹
+*	@brief	•ºmƒNƒ‰ƒX
 */
 class CInfantry
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 	public:
-		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 		explicit CInfantry(const InfantryStatus& init_status);
 
-		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		// ƒfƒXƒgƒ‰ƒNƒ^
 		~CInfantry();
 
-		// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã™ã‚‹
+		// ƒXƒe[ƒ^ƒX‚ğæ“¾‚·‚é
 		InfantryStatus get_status() const;
 
-		// HPã‚’1æ¸›ã‚‰ã™
+		// HP‚ğ1Œ¸‚ç‚·
 		void reduce_hp();
-		// è¡Œå‹•å›æ•°ã‚’æŒ‡å®šã•ã‚ŒãŸå›æ•°æ¸›ã‚‰ã™
+		// s“®‰ñ”‚ğw’è‚³‚ê‚½‰ñ”Œ¸‚ç‚·
 		void reduce_remaining_action(const uint8_t n_reduce);
 
-		// æ­»ã‚“ã§ã„ã‚‹ã‹ã©ã†ã‹ã®åˆ¤å®š
+		// €‚ñ‚Å‚¢‚é‚©‚Ç‚¤‚©‚Ì”»’è
 		bool is_dead() const;
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 	private:
-		//! ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+		//! Œ»İ‚ÌƒXƒe[ƒ^ƒX
 		InfantryStatus m_status;
 };

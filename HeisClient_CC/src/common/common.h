@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		common.h
-*	@brief		heis å…±é€šå‡¦ç†
+*	@brief		heis ‹¤’Êˆ—
 *	@author		Ryo Konno
-*	@details	CCå†…ã§å…±é€šã—ã¦ä½¿ç”¨ã™ã‚‹å‡¦ç†ã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	CC“à‚Å‹¤’Ê‚µ‚Äg—p‚·‚éˆ—‚ğ’è‹`‚·‚éD
 */
 #pragma once
 
@@ -11,20 +11,20 @@
 #include <string>
 #include <vector>
 
-//! å…±é€šå‡¦ç†ãƒ»ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+//! ‹¤’Êˆ—Eƒf[ƒ^\‘¢
 namespace cc_common {
-	/* æ–‡å­—åˆ—å‡¦ç† */
-	// æ–‡å­—åˆ—ã®åˆ†å‰²
+	/* •¶š—ñˆ— */
+	// •¶š—ñ‚Ì•ªŠ„
 	std::vector<std::string> split_string(const std::string& str, const std::string& delim);
-	// æ–‡å­—åˆ—ã®åˆ‡ã‚Šå–ã‚Š
+	// •¶š—ñ‚ÌØ‚èæ‚è
 	std::string cut_string(std::string& str, const size_t begin_pos, const size_t end_pos = SIZE_MAX);
 
-	/* ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•° */
+	/* ƒeƒ“ƒvƒŒ[ƒgŠÖ” */
 	/**
-	*	@brief ç‰¹å®šã®æ–‡å­—ã‚„æ–‡å­—åˆ—ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹åˆ¤å®šã™ã‚‹é–¢æ•°
-	*	@param[in] str æ–‡å­—åˆ—
-	*	@param[in] target æ¤œç´¢ã™ã‚‹æ–‡å­— or æ–‡å­—åˆ—
-	*	@return bool strã«targetãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹(å«ã¾ã‚Œã¦ã„ã‚Œã°true)
+	*	@brief “Á’è‚Ì•¶š‚â•¶š—ñ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©”»’è‚·‚éŠÖ”
+	*	@param[in] str •¶š—ñ
+	*	@param[in] target ŒŸõ‚·‚é•¶š or •¶š—ñ
+	*	@return bool str‚Étarget‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©(ŠÜ‚Ü‚ê‚Ä‚¢‚ê‚Îtrue)
 	*/
 	template<typename T>
 	bool contains(const std::string& str, const T& target)
@@ -33,15 +33,15 @@ namespace cc_common {
 	}
 
 	/**
-	*	@brief ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæ–‡å­—åˆ—ã‚’å±•é–‹ã™ã‚‹é–¢æ•°
-	*	@param[in] fmt ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæ–‡å­—åˆ—
-	*	@param[in] args fmtã«ä¸ãˆã‚‹å¼•æ•°
-	*	@return std::string fmtã‚’å±•é–‹ã—ãŸæ–‡å­—åˆ—
+	*	@brief ƒtƒH[ƒ}ƒbƒg•¶š—ñ‚ğ“WŠJ‚·‚éŠÖ”
+	*	@param[in] fmt ƒtƒH[ƒ}ƒbƒg•¶š—ñ
+	*	@param[in] args fmt‚É—^‚¦‚éˆø”
+	*	@return std::string fmt‚ğ“WŠJ‚µ‚½•¶š—ñ
 	*/
 	template<typename ... Args>
 	std::string format(const std::string& fmt, Args ... args)
 	{
-		// å±•é–‹å¾Œã®æ–‡å­—åˆ—é•·ã‚’å¾—ã‚‹(+1ã¯NULLæ–‡å­—ã®åˆ†)
+		// “WŠJŒã‚Ì•¶š—ñ’·‚ğ“¾‚é(+1‚ÍNULL•¶š‚Ì•ª)
 		size_t expand_len = std::snprintf(NULL, 0, fmt.c_str(), args ...) + 1;
 		std::vector<char> expand_str(expand_len);
 

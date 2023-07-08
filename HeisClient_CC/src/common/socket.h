@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		socket.h
-*	@brief		TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹
+*	@brief		TCP/IPƒ\ƒPƒbƒgƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«ä¾ã‚‰ãªã„TCP/IPã‚½ã‚±ãƒƒãƒˆæ“ä½œã‚’æä¾›ã™ã‚‹ã€‚
+*	@details	ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ÉˆË‚ç‚È‚¢TCP/IPƒ\ƒPƒbƒg‘€ì‚ğ’ñ‹Ÿ‚·‚éB
 */
 
 #pragma once
@@ -12,35 +12,35 @@
 #include <string>
 
 /**
-*	@brief	TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹
+*	@brief	TCP/IPƒ\ƒPƒbƒgƒNƒ‰ƒX
 */
 class CSocket
 {
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 public:
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	explicit CSocket();
 
-	// ã‚½ã‚±ãƒƒãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹
+	// ƒ\ƒPƒbƒg‚É–¼‘O‚ğ•t‚¯‚é
 	void bind(const uint16_t dst_port, const std::string& src_addr);
-	// ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å—ã‘ä»˜ã‘ã‚‹
+	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
 	void listen();
-	// ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¤
+	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚Â
 	void accept();
-	// ã‚½ã‚±ãƒƒãƒˆã‚’æ¥ç¶šã™ã‚‹
+	// ƒ\ƒPƒbƒg‚ğÚ‘±‚·‚é
 	void connect(const std::string& addr, const uint16_t port) const;
-	// ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹
+	// ƒf[ƒ^‚ğ‘—M‚·‚é
 	void send(const std::string& data, const char terminal = '\0');
-	// ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã™ã‚‹
+	// ƒf[ƒ^‚ğóM‚·‚é
 	std::string recv(const char terminal = '\0');
-	// ã‚½ã‚±ãƒƒãƒˆã‚’é–‰ã˜ã‚‹
+	// ƒ\ƒPƒbƒg‚ğ•Â‚¶‚é
 	void close();
 
-	// socketã¯CSocketBaseã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å‘¼ã°ã‚Œã‚‹
-	// å®šç¾©ã‚‚ã€CSocketBaseã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã§ã•ã‚Œã¦ã„ã‚‹
+	// socket‚ÍCSocketBaseƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÅŒÄ‚Î‚ê‚é
+	// ’è‹`‚àACSocketBaseƒNƒ‰ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚Å‚³‚ê‚Ä‚¢‚é
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 private:
-	//! ã‚½ã‚±ãƒƒãƒˆã®å®Ÿä½“
+	//! ƒ\ƒPƒbƒg‚ÌÀ‘Ì
 	CSocketBase* m_socket;
 };

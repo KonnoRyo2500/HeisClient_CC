@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		JSON_data_packet.h
-*	@brief		heis JSONãƒ‡ãƒ¼ã‚¿ç®¡ç†ç”¨ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief		heis JSONƒf[ƒ^ŠÇ——pƒpƒPƒbƒg
 *	@author		Ryo Konno
-*	@details	CCã¨ã‚µãƒ¼ãƒé–“ã§ã‚„ã‚Šå–ã‚Šã•ã‚Œã‚‹JSONã‹ã‚‰å¾—ã‚‰ã‚Œã‚‹æƒ…å ±ã‚’å–ã‚Šæ‰±ã†ãŸã‚ã®æ§‹é€ ä½“(ãƒ‘ã‚±ãƒƒãƒˆ)ã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	CC‚ÆƒT[ƒoŠÔ‚Å‚â‚èæ‚è‚³‚ê‚éJSON‚©‚ç“¾‚ç‚ê‚éî•ñ‚ğæ‚èˆµ‚¤‚½‚ß‚Ì\‘¢‘Ì(ƒpƒPƒbƒg)‚ğ’è‹`‚·‚éD
 */
 #pragma once
 
@@ -12,168 +12,168 @@
 
 /**
 *	@struct JsonElement
-*	@brief JSONã®è¦ç´ 
+*	@brief JSON‚Ì—v‘f
 */
 template <typename T>
 struct JsonElement
 {
-// ãƒ¡ãƒ³ãƒé–¢æ•°
+// ƒƒ“ƒoŠÖ”
 public:
-	// å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+	// ’l‚ğƒZƒbƒg‚·‚é
 	void set_value(T value) {
 		this->value = value;
 		exists_value = true;
 	}
-	// å€¤ã‚’å–å¾—ã™ã‚‹
+	// ’l‚ğæ“¾‚·‚é
 	T get_value() const {
 		return value;
 	}
-	// å€¤ãŒå­˜åœ¨ã™ã‚‹ã‹
+	// ’l‚ª‘¶İ‚·‚é‚©
 	bool exists() const {
 		return exists_value;
 	}
 	
-// ãƒ¡ãƒ³ãƒå¤‰æ•°
+// ƒƒ“ƒo•Ï”
 private:
 	T value;
 	bool exists_value = false;
 };
 
-/* ä»¥ä¸‹ã®ãƒ‘ã‚±ãƒƒãƒˆã®æ§‹é€ ã¯ï¼Œé€šä¿¡ä»•æ§˜æ›¸ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹JSONã®ä»•æ§˜ã«åŸºã¥ã */
+/* ˆÈ‰º‚ÌƒpƒPƒbƒg‚Ì\‘¢‚ÍC’ÊMd—l‘‚Å’è‹`‚³‚ê‚Ä‚¢‚éJSON‚Ìd—l‚ÉŠî‚Ã‚­ */
 
-/* å„ç¨®ãƒ‘ã‚±ãƒƒãƒˆã®è¦ç´  */
+/* ŠeíƒpƒPƒbƒg‚Ì—v‘f */
 
 /**
 *	@struct	ContentsArrayElem
-*	@brief ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆ -> contents(é…åˆ—)ã®è¦ç´ 
+*	@brief us“®vƒpƒPƒbƒg -> contents(”z—ñ)‚Ì—v‘f
 */
 struct ContentsArrayElem {
-	//! "unit_id"ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€¤
+	//! "unit_id"ƒtƒB[ƒ‹ƒh‚Ì’l
 	JsonElement<std::string> unit_id;
-	//! "to"."x"ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€¤
+	//! "to"."x"ƒtƒB[ƒ‹ƒh‚Ì’l
 	JsonElement<uint16_t> to_x;
-	//! "to"."y"ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€¤
+	//! "to"."y"ƒtƒB[ƒ‹ƒh‚Ì’l
 	JsonElement<uint16_t> to_y;
-	//! "atk"."x"ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€¤
+	//! "atk"."x"ƒtƒB[ƒ‹ƒh‚Ì’l
 	JsonElement<uint16_t> atk_x;
-	//! "atk"."y"ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€¤
+	//! "atk"."y"ƒtƒB[ƒ‹ƒh‚Ì’l
 	JsonElement<uint16_t> atk_y;
 };
  
 /**
 *	@struct LocateObjData
-*	@brief ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ -> units -> locate(ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)ã®ãƒ‡ãƒ¼ã‚¿
+*	@brief u”Õ–ÊvƒpƒPƒbƒg -> units -> locate(ƒIƒuƒWƒFƒNƒg)‚Ìƒf[ƒ^
 */
 struct LocateObjData {
-	//! "x"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "x"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<uint16_t> x;
-	//! "y"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "y"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<uint16_t> y;
 };
 
 /**
 *	@struct UnitsArrayElem
-*	@brief ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ -> unitsã®è¦ç´ 
+*	@brief u”Õ–ÊvƒpƒPƒbƒg -> units‚Ì—v‘f
 */
 struct UnitsArrayElem {
-	//! "type"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "type"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> type;
-	//! "unit_id"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "unit_id"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> unit_id;
-	//! "locate"(ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)
+	//! "locate"(ƒIƒuƒWƒFƒNƒg)
 	JsonElement<LocateObjData> locate;
-	//! "hp"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "hp"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<int8_t> hp;
-	//! "team"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "team"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> team;
 };
 
 /**
 *	@struct ResultArrayElem
-*	@brief ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆ -> resultã®è¦ç´ 
+*	@brief uŒ‹‰ÊvƒpƒPƒbƒg -> result‚Ì—v‘f
 */
 struct ResultArrayElem {
-	//! "unit_id"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰, çœç•¥å¯èƒ½)
+	//! "unit_id"(ƒtƒB[ƒ‹ƒh, È—ª‰Â”\)
 	JsonElement<std::string> unit_id;
-	//! "error"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "error"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> error;
 };
 
-/* ã‚µãƒ¼ãƒã«é€ä¿¡ã™ã‚‹JSONã‚’ä½œæˆã™ã‚‹ãŸã‚ã®ãƒ‘ã‚±ãƒƒãƒˆ */
+/* ƒT[ƒo‚É‘—M‚·‚éJSON‚ğì¬‚·‚é‚½‚ß‚ÌƒpƒPƒbƒg */
  
 /**
 *	@struct JSONSendPacket_Name
-*	@brief ã€Œåå‰ã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@details ã€Œåå‰ã€JSONã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief u–¼‘OvƒpƒPƒbƒg
+*	@details u–¼‘OvJSON‚Ìî•ñ‚ğŠi”[‚·‚éƒpƒPƒbƒg
 */
 struct JSONSendPacket_Name {
-	//! "team_name"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "team_name"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> team_name;
 };
 
 /**
 *	@struct JSONSendPacket_Action
-*	@brief ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@details ã€Œè¡Œå‹•ã€JSONã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief us“®vƒpƒPƒbƒg
+*	@details us“®vJSON‚Ìî•ñ‚ğŠi”[‚·‚éƒpƒPƒbƒg
 */
 struct JSONSendPacket_Action {
-	//! "turn_team"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "turn_team"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> turn_team;
-	//! "contents"(é…åˆ—)
+	//! "contents"(”z—ñ)
 	JsonElement<std::vector<ContentsArrayElem>> contents;
 };
 
-/* ã‚µãƒ¼ãƒã‹ã‚‰å—ä¿¡ã—ãŸJSONã®ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ */
+/* ƒT[ƒo‚©‚çóM‚µ‚½JSON‚Ìƒf[ƒ^‚ğŠi”[‚·‚éƒpƒPƒbƒg */
 
-// ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
+// u”Õ–ÊvƒpƒPƒbƒg
 /**
 *	@struct JSONRecvPacket_Board
-*	@brief ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@details ã€Œç›¤é¢ã€JSONã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief u”Õ–ÊvƒpƒPƒbƒg
+*	@details u”Õ–ÊvJSON‚Ìî•ñ‚ğŠi”[‚·‚éƒpƒPƒbƒg
 */
 struct JSONRecvPacket_Board {
-	//! "width"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "width"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<uint16_t> width;
-	//! "height"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "height"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<uint16_t> height;
-	//! "turn_team"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "turn_team"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> turn_team;
-	//! "players"(é…åˆ—)
+	//! "players"(”z—ñ)
 	JsonElement<std::vector<std::string>> players;
-	//! "finished"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "finished"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<bool> finished;
-	//! "count"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "count"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<uint32_t> count;
-	//! "units"(é…åˆ—)
+	//! "units"(”z—ñ)
 	JsonElement<std::vector<UnitsArrayElem>> units;
 };
 
 /**
 *	@struct JSONRecvPacket_ConfirmName
-*	@brief ã€Œåå‰ç¢ºå®šã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@details ã€Œåå‰ç¢ºå®šã€JSONã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief u–¼‘OŠm’èvƒpƒPƒbƒg
+*	@details u–¼‘OŠm’èvJSON‚Ìî•ñ‚ğŠi”[‚·‚éƒpƒPƒbƒg
 */
 struct JSONRecvPacket_ConfirmName {
-	//! "your_team"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "your_team"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> your_team;
 };
 
 /**
 *	@struct JSONRecvPacket_Result
-*	@brief ã€Œçµæœã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@details ã€Œçµæœã€JSONã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief uŒ‹‰ÊvƒpƒPƒbƒg
+*	@details uŒ‹‰ÊvJSON‚Ìî•ñ‚ğŠi”[‚·‚éƒpƒPƒbƒg
 */
 struct JSONRecvPacket_Result {
-	//! "result"(é…åˆ—)
+	//! "result"(”z—ñ)
 	JsonElement<std::vector<ResultArrayElem>> result;
 };
 
 /**
 *	@struct JSONRecvPacket_Message
-*	@brief ã€Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@details ã€Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€JSONã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief uƒƒbƒZ[ƒWvƒpƒPƒbƒg
+*	@details uƒƒbƒZ[ƒWvJSON‚Ìî•ñ‚ğŠi”[‚·‚éƒpƒPƒbƒg
 */
 struct JSONRecvPacket_Message {
-	//! "message"(ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰)
+	//! "message"(ƒtƒB[ƒ‹ƒh)
 	JsonElement<std::string> message;
 };

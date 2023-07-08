@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		game_local.cpp
-*	@brief		heis ã‚²ãƒ¼ãƒ (ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰)é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒQ[ƒ€(ƒ[ƒJƒ‹ƒ‚[ƒh)isŠÇ—ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ã§heisã®ã‚²ãƒ¼ãƒ ã‚’å®Ÿè¡Œã™ã‚‹ï¼
+*	@details	ƒ[ƒJƒ‹ƒ‚[ƒh‚Åheis‚ÌƒQ[ƒ€‚ğÀs‚·‚éD
 */
 
 #include "game_local.h"
@@ -16,74 +16,74 @@
 
 /**
 *	@def LOCAL_SETTING_FILE_NAME
-*	@brief ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
+*	@brief ƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚Ì–¼‘O
 */
 #define LOCAL_SETTING_FILE_NAME "local_setting.csv"
 
-/* publicé–¢æ•° */
+/* publicŠÖ” */
 
 /**
-*	@brief ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰å®Ÿè¡Œãƒ¡ã‚¤ãƒ³å‡¦ç†
+*	@brief ƒ[ƒJƒ‹ƒ‚[ƒhÀsƒƒCƒ“ˆ—
 */
 void CGameLocal::play_game()
 {
-	CLog::write(CLog::LogLevel_Information, "ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ã§ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ƒ[ƒJƒ‹ƒ‚[ƒh‚ÅƒQ[ƒ€‚ğŠJn‚µ‚Ü‚µ‚½");
 
-	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
+	// İ’èƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	LocalSetting setting = CLocalSettingFile().load(
 		join({CC_SETTING_DIR, LOCAL_SETTING_FILE_NAME})
 	);
 
-	// ç›¤é¢ã®ä½œæˆ
-	// ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ã§ã¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã¨ç•°ãªã‚Šã€JSONã«åˆã‚ã›ã¦ç›¤é¢ã‚’ä½œæˆã—ãªã„
-	// ãã®ãŸã‚ã€ç›¤é¢ã¯è©¦åˆå‰ã«ä¸€åº¦ã ã‘ä½œæˆã—ã¦ãŠã
+	// ”Õ–Ê‚Ìì¬
+	// ƒ[ƒJƒ‹ƒ‚[ƒh‚Å‚ÍƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚ÆˆÙ‚È‚èAJSON‚É‡‚í‚¹‚Ä”Õ–Ê‚ğì¬‚µ‚È‚¢
+	// ‚»‚Ì‚½‚ßA”Õ–Ê‚Í‡‘O‚Éˆê“x‚¾‚¯ì¬‚µ‚Ä‚¨‚­
 	JSONRecvPacket_Board board_pkt = create_initial_board_packet(setting);
 	CBoard board(board_pkt);
 
-	// å¯¾æˆ¦
+	// ‘Îí
 	std::string win_team_name = "";
 	while (win_team_name == "") {
-		// ç›¤é¢ã‚’è¡¨ç¤º
+		// ”Õ–Ê‚ğ•\¦
 		board.show();
 
 		if (board_pkt.finished.get_value()) {
 			break;
 		}
 
-		// AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
+		// AIƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é
 		std::string turn_team = board_pkt.turn_team.get_value();
 		CCommander commander = CCommander(turn_team, &board);
 		std::string ai_impl_name =
 			(turn_team == setting.my_team_name ? setting.my_team_ai_impl : setting.enemy_team_ai_impl);
 		CAIBase* ai = CAIFactory().create_instance(commander, ai_impl_name);
 
-		// AIã‚’1ã‚¿ãƒ¼ãƒ³åˆ†è¡Œå‹•ã•ã›ã‚‹
+		// AI‚ğ1ƒ^[ƒ“•ªs“®‚³‚¹‚é
 		ai->AI_main(board_pkt);
 
-		// AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç ´æ£„ã™ã‚‹
+		// AIƒCƒ“ƒXƒ^ƒ“ƒX‚ğ”jŠü‚·‚é
 		delete ai;
 		ai = NULL;
 
-		// ã‚¿ãƒ¼ãƒ³çµ‚äº†å¾Œã®å‡¦ç†
+		// ƒ^[ƒ“I—¹Œã‚Ìˆ—
 		board_pkt.turn_team.set_value(get_next_turn_team_name(board_pkt, setting));
 		win_team_name = get_winning_team_name(board);
 		reset_infantry_action_remain(board);
 	}
 
-	// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚ã®ç›¤é¢ã‚’è¡¨ç¤ºã™ã‚‹
+	// ƒQ[ƒ€I—¹‚Ì”Õ–Ê‚ğ•\¦‚·‚é
 	board.show();
 
-	// å‹æ•—ã‚’è¡¨ç¤ºã—ã¦çµ‚äº†
+	// Ÿ”s‚ğ•\¦‚µ‚ÄI—¹
 	CLog::write(CLog::LogLevel_Information, (win_team_name == setting.my_team_name ? "You win!" : "You lose..."), true);
-	CLog::write(CLog::LogLevel_Information, "ã‚²ãƒ¼ãƒ ãŒçµ‚äº†ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ƒQ[ƒ€‚ªI—¹‚µ‚Ü‚µ‚½");
 }
 
-/* privateé–¢æ•° */
+/* privateŠÖ” */
 
 /**
-*	@brief æœ€åˆã®ã‚¿ãƒ¼ãƒ³ã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
-*	@param[in] setting ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤
-*	@return JSONRecvPacket_Board æœ€åˆã®ã‚¿ãƒ¼ãƒ³ã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief Å‰‚Ìƒ^[ƒ“‚Ìu”Õ–ÊvƒpƒPƒbƒg‚ğì¬‚·‚é
+*	@param[in] setting ƒ[ƒJƒ‹ƒ‚[ƒhİ’è’l
+*	@return JSONRecvPacket_Board Å‰‚Ìƒ^[ƒ“‚Ìu”Õ–ÊvƒpƒPƒbƒg
 */
 JSONRecvPacket_Board CGameLocal::create_initial_board_packet(const LocalSetting& setting) const
 {
@@ -103,23 +103,23 @@ JSONRecvPacket_Board CGameLocal::create_initial_board_packet(const LocalSetting&
 }
 
 /**
-*	@brief æœ€åˆã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã®"units"è¦ç´ ã‚’ä½œæˆã™ã‚‹
-*	@param[in] setting ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤
-*	@return std::vector<UnitsArrayElem> æœ€åˆã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã®"units"è¦ç´ 
+*	@brief Å‰‚Ìu”Õ–ÊvƒpƒPƒbƒg‚Ì"units"—v‘f‚ğì¬‚·‚é
+*	@param[in] setting ƒ[ƒJƒ‹ƒ‚[ƒhİ’è’l
+*	@return std::vector<UnitsArrayElem> Å‰‚Ìu”Õ–ÊvƒpƒPƒbƒg‚Ì"units"—v‘f
 */
 std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(const LocalSetting& setting) const
 {
 	std::vector<UnitsArrayElem> units;
 	int serial_number = 1;
 
-	// è‡ªãƒãƒ¼ãƒ ã®å…µå£«æƒ…å ±ã‚’ä½œæˆ
+	// ©ƒ`[ƒ€‚Ì•ºmî•ñ‚ğì¬
 	for (auto& pos : setting.my_team_init_pos) {
 		UnitsArrayElem elem;
 		elem.team.set_value(setting.my_team_name);
 		elem.type.set_value(INFANTRY_UNIT_TYPE);
 		elem.hp.set_value(INFANTRY_INITIAL_HP);
 		elem.unit_id.set_value(
-			// ãƒãƒ¼ãƒ åã®å…ˆé ­2æ–‡å­— + é€£ç•ª(0åŸ‹ã‚2æ¡)
+			// ƒ`[ƒ€–¼‚Ìæ“ª2•¶š + ˜A”Ô(0–„‚ß2Œ…)
 			setting.my_team_name.substr(0, 2) + (serial_number <= 9 ? "0" : "") + std::to_string(serial_number)
 		);
 
@@ -133,7 +133,7 @@ std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(con
 		serial_number++;
 	}
 
-	// æ•µãƒãƒ¼ãƒ ã®å…µå£«æƒ…å ±ã‚’ä½œæˆ
+	// “Gƒ`[ƒ€‚Ì•ºmî•ñ‚ğì¬
 	serial_number = 1;
 	for (auto& pos : setting.enemy_team_init_pos) {
 		UnitsArrayElem elem;
@@ -141,7 +141,7 @@ std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(con
 		elem.type.set_value(INFANTRY_UNIT_TYPE);
 		elem.hp.set_value(INFANTRY_INITIAL_HP);
 		elem.unit_id.set_value(
-			// ãƒãƒ¼ãƒ åã®å…ˆé ­2æ–‡å­— + é€£ç•ª(0åŸ‹ã‚2æ¡)
+			// ƒ`[ƒ€–¼‚Ìæ“ª2•¶š + ˜A”Ô(0–„‚ß2Œ…)
 			setting.enemy_team_name.substr(0, 2) + (serial_number <= 9 ? "0" : "") + std::to_string(serial_number)
 		);
 
@@ -159,14 +159,14 @@ std::vector<UnitsArrayElem> CGameLocal::create_units_of_initial_board_packet(con
 }
 
 /**
-*	@brief ç›¤é¢ä¸Šã®å…µå£«ã®è¡Œå‹•å›æ•°ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
-*	@param[out] board ç›¤é¢
+*	@brief ”Õ–Êã‚Ì•ºm‚Ìs“®‰ñ”‚ğƒŠƒZƒbƒg‚·‚é
+*	@param[out] board ”Õ–Ê
 */
 void CGameLocal::reset_infantry_action_remain(CBoard& board) const
 {
 	BoardSize size = board.get_size();
 
-	// ç›¤é¢ä¸Šã®å…¨å…µå£«ã‚’æ¢ç´¢ã—ã€ãã®è¡Œå‹•å›æ•°ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
+	// ”Õ–Êã‚Ì‘S•ºm‚ğ’Tõ‚µA‚»‚Ìs“®‰ñ”‚ğƒŠƒZƒbƒg‚·‚é
 	for (int y = 0; y < size.height; y++) {
 		for (int x = 0; x < size.width; x++) {
 			Square sq = board.get_square(BoardPosition(x, y));
@@ -174,7 +174,7 @@ void CGameLocal::reset_infantry_action_remain(CBoard& board) const
 				continue;
 			}
 
-			// å…µå£«ãŒã„ãŸã‚‰ã€åŒã˜ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã§è¡Œå‹•å›æ•°ã®ã¿ãŒãƒªã‚»ãƒƒãƒˆã•ã‚ŒãŸå…µå£«ã«ç½®ãæ›ãˆã‚‹
+			// •ºm‚ª‚¢‚½‚çA“¯‚¶ƒXƒe[ƒ^ƒX‚Ås“®‰ñ”‚Ì‚İ‚ªƒŠƒZƒbƒg‚³‚ê‚½•ºm‚É’u‚«Š·‚¦‚é
 			CInfantry old_infantry = sq.infantry;
 			InfantryStatus old_infantry_status = old_infantry.get_status();
 			InfantryStatus new_infantry_status = InfantryStatus(
@@ -191,9 +191,9 @@ void CGameLocal::reset_infantry_action_remain(CBoard& board) const
 }
 
 /**
-*	@brief æ¬¡ã®ã‚¿ãƒ¼ãƒ³ã®ãƒãƒ¼ãƒ åã‚’å–å¾—ã™ã‚‹
-*	@param[in] pkt ç¾åœ¨ã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
-*	@return std::string æ¬¡ã®ã‚¿ãƒ¼ãƒ³ã®ãƒãƒ¼ãƒ å
+*	@brief Ÿ‚Ìƒ^[ƒ“‚Ìƒ`[ƒ€–¼‚ğæ“¾‚·‚é
+*	@param[in] pkt Œ»İ‚Ìu”Õ–ÊvƒpƒPƒbƒg
+*	@return std::string Ÿ‚Ìƒ^[ƒ“‚Ìƒ`[ƒ€–¼
 */
 std::string CGameLocal::get_next_turn_team_name(const JSONRecvPacket_Board& pkt, const LocalSetting& setting) const
 {
@@ -201,16 +201,16 @@ std::string CGameLocal::get_next_turn_team_name(const JSONRecvPacket_Board& pkt,
 }
 
 /**
-*	@brief å‹åˆ©ã—ã¦ã„ã‚‹ãƒãƒ¼ãƒ åã‚’å–å¾—ã™ã‚‹
-*	@param[in] board ç¾åœ¨ã®ç›¤é¢
-*	@return std::string å‹åˆ©ã—ã¦ã„ã‚‹ãƒãƒ¼ãƒ å(ã©ã¡ã‚‰ã‚‚å‹åˆ©ã—ã¦ã„ãªã„å ´åˆã¯ç©ºæ–‡å­—åˆ—)
+*	@brief Ÿ—˜‚µ‚Ä‚¢‚éƒ`[ƒ€–¼‚ğæ“¾‚·‚é
+*	@param[in] board Œ»İ‚Ì”Õ–Ê
+*	@return std::string Ÿ—˜‚µ‚Ä‚¢‚éƒ`[ƒ€–¼(‚Ç‚¿‚ç‚àŸ—˜‚µ‚Ä‚¢‚È‚¢ê‡‚Í‹ó•¶š—ñ)
 */
 std::string CGameLocal::get_winning_team_name(const CBoard& board) const
 {
 	BoardSize size = board.get_size();
-	std::vector<std::string> teams; // ã“ã“ã«2ã¤ä»¥ä¸Šã®ãƒãƒ¼ãƒ åãŒå…¥ã£ãŸã‚‰è©¦åˆç¶™ç¶šä¸­
+	std::vector<std::string> teams; // ‚±‚±‚É2‚ÂˆÈã‚Ìƒ`[ƒ€–¼‚ª“ü‚Á‚½‚ç‡Œp‘±’†
 
-	// ç›¤é¢ä¸Šã®å…¨å…µå£«ã‚’æ¢ç´¢ã—ã€ãã®ãƒãƒ¼ãƒ åã‚’å–å¾—ã™ã‚‹
+	// ”Õ–Êã‚Ì‘S•ºm‚ğ’Tõ‚µA‚»‚Ìƒ`[ƒ€–¼‚ğæ“¾‚·‚é
 	for (int y = 0; y < size.height; y++) {
 		for (int x = 0; x < size.width; x++) {
 			Square sq = board.get_square(BoardPosition(x, y));
@@ -219,12 +219,12 @@ std::string CGameLocal::get_winning_team_name(const CBoard& board) const
 			}
 			std::string team_name = sq.infantry.get_status().team_name;
 			if (std::find(teams.begin(), teams.end(), team_name) == teams.end()) {
-				// teamså†…ã®ãƒãƒ¼ãƒ åã¯é‡è¤‡ã—ãªã„ã‚ˆã†ã«ã™ã‚‹
+				// teams“à‚Ìƒ`[ƒ€–¼‚Íd•¡‚µ‚È‚¢‚æ‚¤‚É‚·‚é
 				teams.push_back(team_name);
 			}
 		}
 	}
 
-	// 1ã¤ã®ãƒãƒ¼ãƒ ã®å…µå£«ã—ã‹æ®‹ã£ã¦ã„ãªã‘ã‚Œã°ãã®ãƒãƒ¼ãƒ ã®å‹ã¡
+	// 1‚Â‚Ìƒ`[ƒ€‚Ì•ºm‚µ‚©c‚Á‚Ä‚¢‚È‚¯‚ê‚Î‚»‚Ìƒ`[ƒ€‚ÌŸ‚¿
 	return (teams.size() == 1 ? teams[0] : "");
 }

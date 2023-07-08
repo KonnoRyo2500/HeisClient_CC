@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		socket.cpp
-*	@brief		TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹
+*	@brief		TCP/IPƒ\ƒPƒbƒgƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«ä¾ã‚‰ãªã„TCP/IPã‚½ã‚±ãƒƒãƒˆæ“ä½œã‚’æä¾›ã™ã‚‹ã€‚
+*	@details	ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ÉˆË‚ç‚È‚¢TCP/IPƒ\ƒPƒbƒg‘€ì‚ğ’ñ‹Ÿ‚·‚éB
 */
 
 #include "socket.h"
@@ -13,13 +13,13 @@
 #include <assert.h>
 
 /**
-*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-*	@details socketå‡¦ç†ãŒè¡Œã‚ã‚Œã‚‹
-*	@throws runtime_error OSãŒã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ãªã„å ´åˆ
+*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+*	@details socketˆ—‚ªs‚í‚ê‚é
+*	@throws runtime_error OS‚ªƒTƒ|[ƒg‚³‚ê‚Ä‚¢‚È‚¢ê‡
 */
 CSocket::CSocket()
 {
-	// ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«å¿œã˜ã¦ã€ã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã™ã‚‹
+	// ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚É‰‚¶‚ÄAƒ\ƒPƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚·‚é
 #if defined(WIN32)
 	m_socket = new CWindowsSocket();
 #elif defined(__linux)
@@ -29,14 +29,14 @@ CSocket::CSocket()
 #endif
 
 	if (m_socket == NULL) {
-		throw std::runtime_error("ã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã¯ãŠä½¿ã„ã®OSã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã›ã‚“");
+		throw std::runtime_error("ƒ\ƒPƒbƒgƒNƒ‰ƒX‚Í‚¨g‚¢‚ÌOS‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚Ü‚¹‚ñ");
 	}
 }
 
 /**
-*	@brief ã‚½ã‚±ãƒƒãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹
-*	@param[in] dst_port æ¥ç¶šå…ˆãƒãƒ¼ãƒˆç•ªå·
-*	@param[in] src_addr æ¥ç¶šå…ƒIPã‚¢ãƒ‰ãƒ¬ã‚¹
+*	@brief ƒ\ƒPƒbƒg‚É–¼‘O‚ğ•t‚¯‚é
+*	@param[in] dst_port Ú‘±æƒ|[ƒg”Ô†
+*	@param[in] src_addr Ú‘±Œ³IPƒAƒhƒŒƒX
 */
 void CSocket::bind(const uint16_t dst_port, const std::string& src_addr)
 {
@@ -45,7 +45,7 @@ void CSocket::bind(const uint16_t dst_port, const std::string& src_addr)
 }
 
 /**
-*	@brief ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å—ã‘ä»˜ã‘ã‚‹
+*	@brief ‘Šè‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
 */
 void CSocket::listen()
 {
@@ -54,7 +54,7 @@ void CSocket::listen()
 }
 
 /**
-*	@brief ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¤
+*	@brief ‘Šè‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚Â
 */
 void CSocket::accept()
 {
@@ -63,9 +63,9 @@ void CSocket::accept()
 }
 
 /**
-*	@brief ã‚½ã‚±ãƒƒãƒˆã‚’æ¥ç¶šã™ã‚‹
-*	@param[in] addr æ¥ç¶šå…ˆIPã‚¢ãƒ‰ãƒ¬ã‚¹
-*	@param[in] port æ¥ç¶šå…ˆãƒãƒ¼ãƒˆç•ªå·
+*	@brief ƒ\ƒPƒbƒg‚ğÚ‘±‚·‚é
+*	@param[in] addr Ú‘±æIPƒAƒhƒŒƒX
+*	@param[in] port Ú‘±æƒ|[ƒg”Ô†
 */
 void CSocket::connect(const std::string& addr, const uint16_t port) const
 {
@@ -74,9 +74,9 @@ void CSocket::connect(const std::string& addr, const uint16_t port) const
 }
 
 /**
-*	@brief ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹
-*	@param[in] data é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
-*	@param[in] terminal çµ‚ç«¯æ–‡å­—(çœç•¥æ™‚ã¯ä»˜ä¸ã—ãªã„)
+*	@brief ƒf[ƒ^‚ğ‘—M‚·‚é
+*	@param[in] data ‘—M‚·‚éƒf[ƒ^
+*	@param[in] terminal I’[•¶š(È—ª‚Í•t—^‚µ‚È‚¢)
 */
 void CSocket::send(const std::string& data, const char terminal)
 {
@@ -85,8 +85,8 @@ void CSocket::send(const std::string& data, const char terminal)
 }
 
 /**
-*	@brief ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã™ã‚‹
-*	@param[in] terminal çµ‚ç«¯æ–‡å­—(çœç•¥æ™‚ã¯ä»˜ä¸ã—ãªã„)
+*	@brief ƒf[ƒ^‚ğóM‚·‚é
+*	@param[in] terminal I’[•¶š(È—ª‚Í•t—^‚µ‚È‚¢)
 */
 std::string CSocket::recv(const char terminal)
 {
@@ -95,21 +95,21 @@ std::string CSocket::recv(const char terminal)
 }
 
 /**
-*	@brief ã‚½ã‚±ãƒƒãƒˆã‚’é–‰ã˜ã‚‹
+*	@brief ƒ\ƒPƒbƒg‚ğ•Â‚¶‚é
 */
 void CSocket::close()
 {
 	assert(m_socket != NULL);
 	m_socket->wrap_close();
 
-	// ã‚½ã‚±ãƒƒãƒˆã®çµ‚äº†å‡¦ç†ã‚„ç ´æ£„ã‚‚ã“ã“ã§è¡Œã†
-	// ã‚½ã‚±ãƒƒãƒˆã®çµ‚äº†å‡¦ç†
+	// ƒ\ƒPƒbƒg‚ÌI—¹ˆ—‚â”jŠü‚à‚±‚±‚Ås‚¤
+	// ƒ\ƒPƒbƒg‚ÌI—¹ˆ—
 	bool finalize_result = m_socket->finalize();
 	if (!finalize_result) {
-		throw std::runtime_error("ã‚½ã‚±ãƒƒãƒˆã®çµ‚äº†å‡¦ç†ã«å¤±æ•—ã—ã¾ã—ãŸ");
+		throw std::runtime_error("ƒ\ƒPƒbƒg‚ÌI—¹ˆ—‚É¸”s‚µ‚Ü‚µ‚½");
 	}
 
-	// ã‚½ã‚±ãƒƒãƒˆã®ç ´æ£„
+	// ƒ\ƒPƒbƒg‚Ì”jŠü
 	delete m_socket;
 	m_socket = NULL;
 }

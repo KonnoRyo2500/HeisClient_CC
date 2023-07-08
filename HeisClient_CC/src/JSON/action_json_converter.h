@@ -1,8 +1,8 @@
 /**
 *	@file		action_json_converter.h
-*	@brief		heis ã€Œè¡Œå‹•ã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
+*	@brief		heis us“®vJSON•ÏŠ·ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã€Œè¡Œå‹•ã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	us“®vJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "JSON_data_packet.h"
 
 /**
-*	@brief	ã€Œè¡Œå‹•ã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
+*	@brief	us“®vJSON•ÏŠ·ƒNƒ‰ƒX
 */
 class ActionJsonConverter : public JsonConverterBase<JSONSendPacket_Action>
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// JSONæ–‡å­—åˆ—ã‹ã‚‰ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+	// JSON•¶š—ñ‚©‚çƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
 	JSONSendPacket_Action from_json_to_packet(const std::string& json) const;
-	// ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰JSONæ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+	// ƒpƒPƒbƒg‚©‚çJSON•¶š—ñ‚É•ÏŠ·‚·‚é
 	std::string from_packet_to_json(const JSONSendPacket_Action& pkt) const;
 };

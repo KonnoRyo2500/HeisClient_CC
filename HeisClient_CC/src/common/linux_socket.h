@@ -1,8 +1,8 @@
 /**
 *	@file		linux_socket.h
-*	@brief		Linuxç”¨TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹
+*	@brief		Linux—pTCP/IPƒ\ƒPƒbƒgƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	Linuxç’°å¢ƒã«ãŠã‘ã‚‹ã‚½ã‚±ãƒƒãƒˆã®å„ç¨®æ“ä½œã‚’æä¾›ã™ã‚‹ã€‚
+*	@details	LinuxŠÂ‹«‚É‚¨‚¯‚éƒ\ƒPƒbƒg‚ÌŠeí‘€ì‚ğ’ñ‹Ÿ‚·‚éB
 */
 
 #pragma once
@@ -12,35 +12,35 @@
 #include "socket_base.h"
 
 /**
-*	@brief Linuxç”¨TCP/IPã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹
+*	@brief Linux—pTCP/IPƒ\ƒPƒbƒgƒNƒ‰ƒX
 */
 class CLinuxSocket : public CSocketBase
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	CLinuxSocket();
 
-	// ã‚½ã‚±ãƒƒãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹
+	// ƒ\ƒPƒbƒg‚É–¼‘O‚ğ•t‚¯‚é
 	void wrap_bind(const uint16_t dst_port, const std::string& src_addr);
-	// ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å—ã‘ä»˜ã‘ã‚‹
+	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
 	void wrap_listen();
-	// ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¤
+	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚Â
 	void wrap_accept();
-	// ã‚½ã‚±ãƒƒãƒˆã‚’æ¥ç¶šã™ã‚‹
+	// ƒ\ƒPƒbƒg‚ğÚ‘±‚·‚é
 	void wrap_connect(const std::string& addr, const uint16_t port) const;
-	// ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹
+	// ƒf[ƒ^‚ğ‘—M‚·‚é
 	void wrap_send(const std::string& data, const char terminal);
-	// ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã™ã‚‹
+	// ƒf[ƒ^‚ğóM‚·‚é
 	std::string wrap_recv(const char terminal);
-	// ã‚½ã‚±ãƒƒãƒˆã‚’é–‰ã˜ã‚‹
+	// ƒ\ƒPƒbƒg‚ğ•Â‚¶‚é
 	void wrap_close();
-	// ã‚½ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
+	// ƒ\ƒPƒbƒg‚ğì¬‚·‚é
 	int wrap_socket();
 
-	// åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†
+	// ‰Šú‰»ˆ—‚ğs‚¤
 	bool initialize();
-	// çµ‚äº†å‡¦ç†ã‚’è¡Œã†
+	// I—¹ˆ—‚ğs‚¤
 	bool finalize();
 };
 

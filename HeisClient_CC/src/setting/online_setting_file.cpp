@@ -1,24 +1,24 @@
 /**
 *	@file		online_setting_file.cpp
-*	@brief		heis ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚Ìİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éƒNƒ‰ƒXB
 */
 
 #include "online_setting_file.h"
 #include "setting_keys.h"
 
 /**
-*	@brief è¨­å®šå€¤ã‚’ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
-*	@param[in] path ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@return OnlineSetting èª­ã¿è¾¼ã¾ã‚ŒãŸè¨­å®šå€¤
+*	@brief İ’è’l‚ğƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+*	@param[in] path ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@return OnlineSetting “Ç‚İ‚Ü‚ê‚½İ’è’l
 */
 OnlineSetting COnlineSettingFile::load(const std::string& path) const
 {
-	// CSVã®èª­ã¿è¾¼ã¿
+	// CSV‚Ì“Ç‚İ‚İ
 	CsvRecords records = parse_csv(path);
 
-	// è¨­å®šå€¤ã‚’è¨­å®šå€¤æ§‹é€ ä½“ã«æ ¼ç´ã™ã‚‹
+	// İ’è’l‚ğİ’è’l\‘¢‘Ì‚ÉŠi”[‚·‚é
 	OnlineSetting setting;
 
 	setting.server_ip_addr = records[ONLINE_SETTING_KEY_SVR_ADDR][0];
@@ -30,12 +30,12 @@ OnlineSetting COnlineSettingFile::load(const std::string& path) const
 }
 
 /**
-*	@brief è¨­å®šå€¤ã‚’ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
-*	@param[in] path ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@param[in] setting æ›¸ãè¾¼ã‚€è¨­å®šå€¤
+*	@brief İ’è’l‚ğƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
+*	@param[in] path ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@param[in] setting ‘‚«‚Şİ’è’l
 */
 void COnlineSettingFile::save(const std::string& path, const OnlineSetting& setting) const
 {
-	// ç¾æ™‚ç‚¹ã§ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«è¨­å®šå€¤ã‚’ä¿å­˜ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
-	// ä¿å­˜ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰ã€é©å®œå®Ÿè£…ã™ã‚‹
+	// Œ»“_‚ÅƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚Éİ’è’l‚ğ•Û‘¶‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
+	// •Û‘¶‚·‚é•K—v‚ª¶‚¶‚½‚çA“K‹XÀ‘•‚·‚é
 }

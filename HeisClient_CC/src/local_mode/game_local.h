@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		game_local.h
-*	@brief		heis ã‚²ãƒ¼ãƒ (ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰)é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒQ[ƒ€(ƒ[ƒJƒ‹ƒ‚[ƒh)isŠÇ—ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ã§heisã®ã‚²ãƒ¼ãƒ ã‚’å®Ÿè¡Œã™ã‚‹ï¼
+*	@details	ƒ[ƒJƒ‹ƒ‚[ƒh‚Åheis‚ÌƒQ[ƒ€‚ğÀs‚·‚éD
 */
 #pragma once
 
@@ -15,24 +15,24 @@
 #include <string>
 
 /**
-*	@brief	ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰å®Ÿè¡Œã‚¯ãƒ©ã‚¹
+*	@brief	ƒ[ƒJƒ‹ƒ‚[ƒhÀsƒNƒ‰ƒX
 */
 class CGameLocal : public CGame {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
 		void play_game() override;
 
 private:
-		// æœ€åˆã®ã‚¿ãƒ¼ãƒ³ã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
+		// Å‰‚Ìƒ^[ƒ“‚Ìu”Õ–ÊvƒpƒPƒbƒg‚ğì¬‚·‚é
 		JSONRecvPacket_Board create_initial_board_packet(const LocalSetting& setting) const;
-		// æœ€åˆã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã®"units"è¦ç´ ã‚’ä½œæˆã™ã‚‹
+		// Å‰‚Ìu”Õ–ÊvƒpƒPƒbƒg‚Ì"units"—v‘f‚ğì¬‚·‚é
 		std::vector<UnitsArrayElem> create_units_of_initial_board_packet(const LocalSetting& setting) const;
 
-		// ç›¤é¢ä¸Šã®å…µå£«ã®è¡Œå‹•å›æ•°ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
+		// ”Õ–Êã‚Ì•ºm‚Ìs“®‰ñ”‚ğƒŠƒZƒbƒg‚·‚é
 		void reset_infantry_action_remain(CBoard& board) const;
 
-		// æ¬¡ã®ã‚¿ãƒ¼ãƒ³ã®ãƒãƒ¼ãƒ åã‚’å–å¾—ã™ã‚‹
+		// Ÿ‚Ìƒ^[ƒ“‚Ìƒ`[ƒ€–¼‚ğæ“¾‚·‚é
 		std::string get_next_turn_team_name(const JSONRecvPacket_Board& pkt, const LocalSetting& setting) const;
-		// å‹åˆ©ã—ã¦ã„ã‚‹ãƒãƒ¼ãƒ åã‚’å–å¾—ã™ã‚‹
+		// Ÿ—˜‚µ‚Ä‚¢‚éƒ`[ƒ€–¼‚ğæ“¾‚·‚é
 		std::string get_winning_team_name(const CBoard& board) const;
 };

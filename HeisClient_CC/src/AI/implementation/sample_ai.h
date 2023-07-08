@@ -1,8 +1,8 @@
 /**
 *	@file		sample_ai.h
-*	@brief		heis ã‚µãƒ³ãƒ—ãƒ«AI
+*	@brief		heis ƒTƒ“ƒvƒ‹AI
 *	@author		Ryo Konno
-*	@details	AIã®ã‚µãƒ³ãƒ—ãƒ«å®Ÿè£…ã€‚ãƒ©ãƒ³ãƒ€ãƒ ã«è¡Œå‹•ã‚’é¸æŠã™ã‚‹ã€‚
+*	@details	AI‚ÌƒTƒ“ƒvƒ‹À‘•Bƒ‰ƒ“ƒ_ƒ€‚És“®‚ğ‘I‘ğ‚·‚éB
 */
 
 #pragma once
@@ -10,39 +10,39 @@
 #include "ai_base.h"
 
 /**
-*	@brief ã‚µãƒ³ãƒ—ãƒ«AIã‚¯ãƒ©ã‚¹
-*	@details ã‚µãƒ³ãƒ—ãƒ«å®Ÿè£…ã®AIã€‚ãƒ©ãƒ³ãƒ€ãƒ ã«è¡Œå‹•ã‚’é¸æŠã—ã¾ã™ã€‚AIå®Ÿè£…ã®éš›ã®å‚è€ƒã¨ã—ã¦ãŠä½¿ã„ãã ã•ã„ã€‚
+*	@brief ƒTƒ“ƒvƒ‹AIƒNƒ‰ƒX
+*	@details ƒTƒ“ƒvƒ‹À‘•‚ÌAIBƒ‰ƒ“ƒ_ƒ€‚És“®‚ğ‘I‘ğ‚µ‚Ü‚·BAIÀ‘•‚ÌÛ‚ÌQl‚Æ‚µ‚Ä‚¨g‚¢‚­‚¾‚³‚¢B
 */
 class CSampleAI : public CAIBase
 {
-	// æ§‹é€ ä½“ãƒ»åˆ—æŒ™ä½“ãªã©
+	// \‘¢‘ÌE—ñ‹“‘Ì‚È‚Ç
 private:
 	/**
 	*	@enum Action
-	*	è¡Œå‹•ã®ç¨®é¡
+	*	s“®‚Ìí—Ş
 	*/
 	enum Action {
-		//! ç§»å‹•
+		//! ˆÚ“®
 		Action_Move,
-		//! æ”»æ’ƒ
+		//! UŒ‚
 		Action_Attack,
 	};
 
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	explicit CSampleAI(const CCommander& commander);
 
-	// ãƒ¡ã‚¤ãƒ³å‡¦ç†
+	// ƒƒCƒ“ˆ—
 	void AI_main(const JSONRecvPacket_Board& board_pkt);
 
 private:
-	// ãƒ©ãƒ³ãƒ€ãƒ ãªæ–¹å‘ã«ç§»å‹•ã™ã‚‹
+	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚ÉˆÚ“®‚·‚é
 	void sample_random_move(const std::string& infantry_id) const;
-	// ãƒ©ãƒ³ãƒ€ãƒ ãªæ–¹å‘ã«æ”»æ’ƒã™ã‚‹
+	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚ÉUŒ‚‚·‚é
 	void sample_random_attack(const std::string& infantry_id);
-	// æ¬¡ã«è¡Œå‹•ã™ã‚‹å…µå£«ã‚’é¸æŠã™ã‚‹
+	// Ÿ‚És“®‚·‚é•ºm‚ğ‘I‘ğ‚·‚é
 	std::string sample_select_next_infantry(const std::vector<std::string>& infantry_ids) const;
-	// å…µå£«ãŒã©ã®è¡Œå‹•ã‚’ã™ã‚‹ã‹é¸æŠã™ã‚‹
+	// •ºm‚ª‚Ç‚Ìs“®‚ğ‚·‚é‚©‘I‘ğ‚·‚é
 	Action sample_decide_action() const;
 };

@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		commander.h
-*	@brief		heis å¸ä»¤å®˜ã‚¯ãƒ©ã‚¹
+*	@brief		heis i—ßŠ¯ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒãƒ¼ãƒ ã®å…µå£«ã‚’ä¸€å…ƒç®¡ç†ã—ã€æ“ä½œã‚„çŠ¶æ…‹å–å¾—ã‚’è¡Œã†ã€‚
+*	@details	ƒ`[ƒ€‚Ì•ºm‚ğˆêŒ³ŠÇ—‚µA‘€ì‚âó‘Ôæ“¾‚ğs‚¤B
 */
 #pragma once
 
@@ -14,57 +14,57 @@
 #include <vector>
 
 /**
-*	@brief	å¸ä»¤å®˜ã‚¯ãƒ©ã‚¹
-*	@details AIã¯ã€ã“ã®ã‚¯ãƒ©ã‚¹ã®å„ç¨®ãƒ¡ãƒ³ãƒé–¢æ•°ã‚’å‘¼ã³å‡ºã™ã“ã¨ã§ã€ç›¤é¢ä¸Šã®å…µå£«ã‚’æ“ä½œã§ãã‚‹ã€‚
+*	@brief	i—ßŠ¯ƒNƒ‰ƒX
+*	@details AI‚ÍA‚±‚ÌƒNƒ‰ƒX‚ÌŠeíƒƒ“ƒoŠÖ”‚ğŒÄ‚Ño‚·‚±‚Æ‚ÅA”Õ–Êã‚Ì•ºm‚ğ‘€ì‚Å‚«‚éB
 */
 class CCommander
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	explicit CCommander(const std::string& team_name, CBoard* board);
 
-	// æŒ‡å®šã—ãŸå…µå£«ã®ä½ç½®ã‚’å–å¾—ã™ã‚‹
+	// w’è‚µ‚½•ºm‚ÌˆÊ’u‚ğæ“¾‚·‚é
 	BoardPosition get_infantry_position_by_id(const std::string& id) const;
-	// æŒ‡å®šã—ãŸå…µå£«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã™ã‚‹
+	// w’è‚µ‚½•ºm‚ÌƒXƒe[ƒ^ƒX‚ğæ“¾‚·‚é
 	InfantryStatus get_infantry_status_by_id(const std::string& id) const;
 
-	// å…µå£«ã«æ”»æ’ƒã‚’æŒ‡ç¤ºã™ã‚‹
+	// •ºm‚ÉUŒ‚‚ğw¦‚·‚é
 	void attack(const std::string& id, const BoardPosition& dst);
-	// å…µå£«ã«ç§»å‹•ã‚’æŒ‡ç¤ºã™ã‚‹
+	// •ºm‚ÉˆÚ“®‚ğw¦‚·‚é
 	void move(const std::string& id, const BoardPosition& dst) const;
 
-	// ç§»å‹•å¯èƒ½ãªã™ã¹ã¦ã®ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
+	// ˆÚ“®‰Â”\‚È‚·‚×‚Ä‚Ìƒ}ƒX‚ğæ“¾‚·‚é
 	std::vector<BoardPosition> find_movable_position(const std::string& id) const;
-	// æ”»æ’ƒå¯èƒ½ãªã™ã¹ã¦ã®ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
+	// UŒ‚‰Â”\‚È‚·‚×‚Ä‚Ìƒ}ƒX‚ğæ“¾‚·‚é
 	std::vector<BoardPosition> find_attackable_position(const std::string& id) const;
 
-	// è¡Œå‹•å¯èƒ½ãªå…µå£«ã®IDã‚’å–å¾—ã™ã‚‹
+	// s“®‰Â”\‚È•ºm‚ÌID‚ğæ“¾‚·‚é
 	std::vector<std::string> get_all_actable_infantry_ids(const std::string& team_name) const;
-	// ç§»å‹•å¯èƒ½ãªå…µå£«ã®IDã‚’å–å¾—ã™ã‚‹
+	// ˆÚ“®‰Â”\‚È•ºm‚ÌID‚ğæ“¾‚·‚é
 	std::vector<std::string> get_all_movable_infantry_ids(const std::string& team_name) const;
-	// æ”»æ’ƒå¯èƒ½ãªå…µå£«ã®IDã‚’å–å¾—ã™ã‚‹
+	// UŒ‚‰Â”\‚È•ºm‚ÌID‚ğæ“¾‚·‚é
 	std::vector<std::string> get_all_attackable_infantry_ids(const std::string& team_name) const;
 
-	// ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
+	// us“®vƒpƒPƒbƒg‚ğì¬‚·‚é
 	JSONSendPacket_Action create_action_pkt();
 
 private:
-	// IDã‹ã‚‰å…µå£«ã‚’å–å¾—ã™ã‚‹
+	// ID‚©‚ç•ºm‚ğæ“¾‚·‚é
 	InfantryWithPos find_infantry_by_id(const std::string& id) const;
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 private:
-	//! è‡ªãƒãƒ¼ãƒ å
+	//! ©ƒ`[ƒ€–¼
 	std::string m_team_name;
 
-	//! ç›¤é¢
+	//! ”Õ–Ê
 	CBoard* m_board;
 
-	//! ç›¤é¢æƒ…å ±å–å¾—ã‚¯ãƒ©ã‚¹
+	//! ”Õ–Êî•ñæ“¾ƒNƒ‰ƒX
 	CBoardObserver m_observer;
-	//! ç›¤é¢æ“ä½œã‚¯ãƒ©ã‚¹
+	//! ”Õ–Ê‘€ìƒNƒ‰ƒX
 	CBoardController m_controller;
-	//! ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆä½œæˆã‚¯ãƒ©ã‚¹
+	//! us“®vƒpƒPƒbƒgì¬ƒNƒ‰ƒX
 	CActionPacketBuilder m_builder;
 };

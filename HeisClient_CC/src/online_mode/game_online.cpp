@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		game_online.cpp
-*	@brief		heis ã‚²ãƒ¼ãƒ (ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰)é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒQ[ƒ€(ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh)isŠÇ—ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§heisã®ã‚²ãƒ¼ãƒ ã‚’å®Ÿè¡Œã™ã‚‹ï¼Ž
+*	@details	ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚Åheis‚ÌƒQ[ƒ€‚ðŽÀs‚·‚éD
 */
 #include "game_online.h"
 #include "const_val.h"
@@ -21,111 +21,111 @@
 
 /**
 *	@def ONLINE_SETTING_FILE_NAME
-*	@brief ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
+*	@brief ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhÝ’èƒtƒ@ƒCƒ‹‚Ì–¼‘O
 */
 #define ONLINE_SETTING_FILE_NAME "online_setting.csv"
 
-/* publicé–¢æ•° */
+/* publicŠÖ” */
 
 /**
-*	@brief heis ã‚²ãƒ¼ãƒ å®Ÿè¡Œãƒ¡ã‚¤ãƒ³å‡¦ç†
+*	@brief heis ƒQ[ƒ€ŽÀsƒƒCƒ“ˆ—
 */
 void CGameOnline::play_game()
 {
-	CLog::write(CLog::LogLevel_Information, "ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã—ã¾ã—ãŸ");
-	CLog::write(CLog::LogLevel_Information, "ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚ÅƒQ[ƒ€‚ðŠJŽn‚µ‚Ü‚µ‚½");
+	CLog::write(CLog::LogLevel_Information, "ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚ÅƒQ[ƒ€‚ðŠJŽn‚µ‚Ü‚µ‚½");
 
 	bool battle_result;
 
-	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
+	// Ý’èƒtƒ@ƒCƒ‹‚Ì“Ç‚Ýž‚Ý
 	OnlineSetting setting = COnlineSettingFile().load(
 		join({CC_SETTING_DIR, ONLINE_SETTING_FILE_NAME})
 	);
 
-	// å¯¾æˆ¦ã®æº–å‚™
+	// ‘Îí‚Ì€”õ
 	initialize_battle(setting);
 
 	recv_name_request();
 	name_entry(setting.team_name);
 	name_register(setting);
 
-	// å¯¾æˆ¦
+	// ‘Îí
 	while (true) {
-		// ã‚µãƒ¼ãƒã‹ã‚‰å—ä¿¡ã™ã‚‹JSONã‹ã‚‰ç”Ÿæˆã™ã‚‹ãƒ‘ã‚±ãƒƒãƒˆ(ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã¯ã“ã“ã§ç”Ÿæˆã§ãã‚‹)
+		// ƒT[ƒo‚©‚çŽóM‚·‚éJSON‚©‚ç¶¬‚·‚éƒpƒPƒbƒg(u”Õ–ÊvƒpƒPƒbƒg‚Í‚±‚±‚Å¶¬‚Å‚«‚é)
 		BoardJsonConverter board_json_converter;
 		ActionJsonConverter action_json_converter;
 		ResultJsonConverter result_json_converter;
 		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->recv());
 		JSONRecvPacket_Result result_pkt;
 
-		// å—ä¿¡ã—ãŸã€Œç›¤é¢ã€JSONã®å†…å®¹ã«åŸºã¥ã„ã¦ã€ç›¤é¢ã‚’æ§‹æˆ
+		// ŽóM‚µ‚½u”Õ–ÊvJSON‚Ì“à—e‚ÉŠî‚Ã‚¢‚ÄA”Õ–Ê‚ð\¬
 		CBoard board(board_pkt);
 
-		// ç›¤é¢ã‚’è¡¨ç¤º
+		// ”Õ–Ê‚ð•\Ž¦
 		board.show();
 		m_commander = new CCommander(m_team_name, &board);
 
-		// ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã¯ä¸€æ—¦å¤‰æ•°ã«æŒã£ã¦ãŠããŸã„ãŸã‚ï¼Œwhileæ–‡ã®æ¡ä»¶éƒ¨ã§å¯¾æˆ¦çµ‚äº†ã®åˆ¤å®šã‚’ã—ãªã„
+		// u”Õ–ÊvƒpƒPƒbƒg‚Íˆê’U•Ï”‚ÉŽ‚Á‚Ä‚¨‚«‚½‚¢‚½‚ßCwhile•¶‚ÌðŒ•”‚Å‘ÎíI—¹‚Ì”»’è‚ð‚µ‚È‚¢
 		if (board_pkt.finished.get_value()) {
 			break;
 		}
-		// è‡ªåˆ†ã®ã‚¿ãƒ¼ãƒ³ã§ãªã‘ã‚Œã°ï¼Œæ¬¡ã®ã€Œç›¤é¢ã€JSONå—ä¿¡ã¾ã§å¾…ã¤
+		// Ž©•ª‚Ìƒ^[ƒ“‚Å‚È‚¯‚ê‚ÎCŽŸ‚Ìu”Õ–ÊvJSONŽóM‚Ü‚Å‘Ò‚Â
 		if (board_pkt.turn_team.get_value() != m_team_name) {
 			continue;
 		}
 
-		// ãƒ¦ãƒ¼ã‚¶AIã®è¡Œå‹•
+		// ƒ†[ƒUAI‚Ìs“®
 		m_ai->AI_main(board_pkt);
 
-		// ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã—ã¦é€ä¿¡
+		// us“®vƒpƒPƒbƒg‚ðì¬‚µ‚Ä‘—M
 		m_sck->send(action_json_converter.from_packet_to_json(m_commander->create_action_pkt()));
 
-		// ã€Œçµæžœã€ãƒ‘ã‚±ãƒƒãƒˆã‚’å—ä¿¡
+		// uŒ‹‰ÊvƒpƒPƒbƒg‚ðŽóM
 		result_pkt = result_json_converter.from_json_to_packet(m_sck->recv());
-		// ã€Œçµæžœã€ãƒ‘ã‚±ãƒƒãƒˆã®å†…å®¹ã‚’è¡¨ç¤º
+		// uŒ‹‰ÊvƒpƒPƒbƒg‚Ì“à—e‚ð•\Ž¦
 		for (const auto& result_elem : result_pkt.result.get_value()) {
 			CLog::write(CLog::LogLevel_Warning,cc_common::format(
-				"ã‚µãƒ¼ãƒã‹ã‚‰ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒé€ä¿¡ã•ã‚Œã¾ã—ãŸ(ã‚¨ãƒ©ãƒ¼å†…å®¹: %s, å¯¾è±¡å…µå£«ID: %s)",
+				"ƒT[ƒo‚©‚çƒGƒ‰[ƒƒbƒZ[ƒW‚ª‘—M‚³‚ê‚Ü‚µ‚½(ƒGƒ‰[“à—e: %s, ‘ÎÛ•ºŽmID: %s)",
 				result_elem.error.get_value().c_str(), 
-				result_elem.unit_id.exists() ? result_elem.unit_id.get_value().c_str() : "ãªã—"));
+				result_elem.unit_id.exists() ? result_elem.unit_id.get_value().c_str() : "‚È‚µ"));
 		}
 	}
 
-	// å¯¾æˆ¦çµ‚äº†
+	// ‘ÎíI—¹
 	battle_result = judge_win();
 	finalize_battle();
 
-	// å‹æ•—ã‚’è¡¨ç¤º
+	// Ÿ”s‚ð•\Ž¦
 	CLog::write(CLog::LogLevel_Information, battle_result ? "You win!" : "You lose...", true);
-	CLog::write(CLog::LogLevel_Information, "ã‚²ãƒ¼ãƒ ãŒçµ‚äº†ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ƒQ[ƒ€‚ªI—¹‚µ‚Ü‚µ‚½");
 }
 
-/* privateé–¢æ•° */
+/* privateŠÖ” */
 
 /**
-*	@brief å¯¾æˆ¦ã‚’é–‹å§‹ã™ã‚‹å‰ã®æº–å‚™ã‚’è¡Œã†é–¢æ•°
-*	@param[in] setting ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤
-*	@remark ã“ã®é–¢æ•°ã§ã¯ï¼Œåå‰ç¢ºå®šå‰ã«ç”Ÿæˆã§ãã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
+*	@brief ‘Îí‚ðŠJŽn‚·‚é‘O‚Ì€”õ‚ðs‚¤ŠÖ”
+*	@param[in] setting ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhÝ’è’l
+*	@remark ‚±‚ÌŠÖ”‚Å‚ÍC–¼‘OŠm’è‘O‚É¶¬‚Å‚«‚éƒCƒ“ƒXƒ^ƒ“ƒX‚ð¶¬‚·‚é
 */
 void CGameOnline::initialize_battle(const OnlineSetting& setting)
 {
-	// m_commander, m_aiã®ç”Ÿæˆã«ã¤ã„ã¦ã¯ï¼Œåå‰ç¢ºå®šå¾Œã«è¡Œã†å¿…è¦ãŒã‚ã‚‹ãŸã‚ï¼Œname_registeré–¢æ•°ã§è¡Œã†
+	// m_commander, m_ai‚Ì¶¬‚É‚Â‚¢‚Ä‚ÍC–¼‘OŠm’èŒã‚És‚¤•K—v‚ª‚ ‚é‚½‚ßCname_registerŠÖ”‚Ås‚¤
 	m_sck = new CSocket();
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
-		"ã‚µãƒ¼ãƒã«æŽ¥ç¶šã—ã¾ã™(IPã‚¢ãƒ‰ãƒ¬ã‚¹: %s, ãƒãƒ¼ãƒˆç•ªå·: %d)",
+		"ƒT[ƒo‚ÉÚ‘±‚µ‚Ü‚·(IPƒAƒhƒŒƒX: %s, ƒ|[ƒg”Ô†: %d)",
 		setting.server_ip_addr.c_str(), setting.server_port_num));
 
-	// ã‚µãƒ¼ãƒã«æŽ¥ç¶š
+	// ƒT[ƒo‚ÉÚ‘±
 	m_sck->connect(setting.server_ip_addr, setting.server_port_num);
 
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
-		"ã‚µãƒ¼ãƒã«æŽ¥ç¶šã—ã¾ã—ãŸ(IPã‚¢ãƒ‰ãƒ¬ã‚¹: %s, ãƒãƒ¼ãƒˆç•ªå·: %d)",
+		"ƒT[ƒo‚ÉÚ‘±‚µ‚Ü‚µ‚½(IPƒAƒhƒŒƒX: %s, ƒ|[ƒg”Ô†: %d)",
 		setting.server_ip_addr.c_str(), setting.server_port_num));
-	CLog::write(CLog::LogLevel_Information, "ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ç”ŸæˆãŒå®Œäº†ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì¶¬‚ªŠ®—¹‚µ‚Ü‚µ‚½");
 }
 
 /**
-*	@brief ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰ï¼Œåå‰è¦æ±‚ã‚’å—ä¿¡ã™ã‚‹é–¢æ•°
+*	@brief ƒT[ƒo[‚©‚çC–¼‘O—v‹‚ðŽóM‚·‚éŠÖ”
 */
 void CGameOnline::recv_name_request() const
 {
@@ -135,8 +135,8 @@ void CGameOnline::recv_name_request() const
 }
 
 /**
-*	@brief æŒ‡å®šã•ã‚ŒãŸåå‰ã‚’ã‚µãƒ¼ãƒãƒ¼ã«é€ã‚‹é–¢æ•°
-*	@param[in] name åå‰
+*	@brief Žw’è‚³‚ê‚½–¼‘O‚ðƒT[ƒo[‚É‘—‚éŠÖ”
+*	@param[in] name –¼‘O
 */
 void CGameOnline::name_entry(const std::string& name) const
 {
@@ -145,13 +145,13 @@ void CGameOnline::name_entry(const std::string& name) const
 	name_pkt.team_name.set_value(name);
 	m_sck->send(name_json_converter.from_packet_to_json(name_pkt));
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
-		"ãƒãƒ¼ãƒ åã‚’ã‚µãƒ¼ãƒã«é€ä¿¡ã—ã¾ã—ãŸ(ãƒãƒ¼ãƒ å: %s)",
+		"ƒ`[ƒ€–¼‚ðƒT[ƒo‚É‘—M‚µ‚Ü‚µ‚½(ƒ`[ƒ€–¼: %s)",
 		name.c_str()));
 }
 
 /**
-*	@brief ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰å—ä¿¡ã—ãŸåå‰ã‚’ãƒãƒ¼ãƒ åã¨ã—ã¦ç™»éŒ²ã™ã‚‹é–¢æ•°
-*	@param[in] setting ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤
+*	@brief ƒT[ƒo[‚©‚çŽóM‚µ‚½–¼‘O‚ðƒ`[ƒ€–¼‚Æ‚µ‚Ä“o˜^‚·‚éŠÖ”
+*	@param[in] setting ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhÝ’è’l
 */
 void CGameOnline::name_register(const OnlineSetting& setting)
 {
@@ -166,16 +166,16 @@ void CGameOnline::name_register(const OnlineSetting& setting)
 		setting.ai_impl
 	);
 	if (m_ai == NULL) {
-		throw std::runtime_error("AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚AIå®Ÿè£…ã®è¨­å®šã‚’ã”ç¢ºèªãã ã•ã„");
+		throw std::runtime_error("AIƒCƒ“ƒXƒ^ƒ“ƒX¶¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½BAIŽÀ‘•‚ÌÝ’è‚ð‚²Šm”F‚­‚¾‚³‚¢");
 	}
 
 	CLog::write(CLog::LogLevel_Information, cc_common::format(
-		"ãƒãƒ¼ãƒ åãŒç¢ºå®šã—ã¾ã—ãŸ(ãƒãƒ¼ãƒ å: %s)",
+		"ƒ`[ƒ€–¼‚ªŠm’è‚µ‚Ü‚µ‚½(ƒ`[ƒ€–¼: %s)",
 		m_team_name.c_str()));
 }
 
 /**
-*	@brief å¯¾æˆ¦çµ‚äº†å¾Œã®å¾Œå‡¦ç†ã‚’è¡Œã†é–¢æ•°
+*	@brief ‘ÎíI—¹Œã‚ÌŒãˆ—‚ðs‚¤ŠÖ”
 */
 void CGameOnline::finalize_battle()
 {
@@ -185,15 +185,15 @@ void CGameOnline::finalize_battle()
 	m_ai = NULL;
 	m_sck = NULL;
 
-	CLog::write(CLog::LogLevel_Information, "ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å‰Šé™¤ãŒå®Œäº†ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìíœ‚ªŠ®—¹‚µ‚Ü‚µ‚½");
 }
 
 /**
-*	@brief å¯¾æˆ¦ã®æ±ºç€ãŒã¤ã„ãŸå¾Œï¼Œç›¤é¢ã®çŠ¶æ…‹ã‹ã‚‰å‹æ•—ã‚’æ±ºå®šã™ã‚‹é–¢æ•°
-*	@return bool å‹æ•—(true: è‡ªãƒãƒ¼ãƒ ã®å‹ã¡, false: è‡ªãƒãƒ¼ãƒ ã®è² ã‘)
+*	@brief ‘Îí‚ÌŒˆ’…‚ª‚Â‚¢‚½ŒãC”Õ–Ê‚Ìó‘Ô‚©‚çŸ”s‚ðŒˆ’è‚·‚éŠÖ”
+*	@return bool Ÿ”s(true: Ž©ƒ`[ƒ€‚ÌŸ‚¿, false: Ž©ƒ`[ƒ€‚Ì•‰‚¯)
 */
 bool CGameOnline::judge_win() const
 {
-	// è‡ªãƒãƒ¼ãƒ ãŒå‹ã£ã¦ã„ã‚Œã°ï¼Œæ•µã®å…µå£«ã¯ã„ãªã„ã®ã§ï¼Œå°‘ãªãã¨ã‚‚1äººã®å…µå£«ã¯ç§»å‹•ã§ãã‚‹
+	// Ž©ƒ`[ƒ€‚ªŸ‚Á‚Ä‚¢‚ê‚ÎC“G‚Ì•ºŽm‚Í‚¢‚È‚¢‚Ì‚ÅC­‚È‚­‚Æ‚à1l‚Ì•ºŽm‚ÍˆÚ“®‚Å‚«‚é
 	return m_commander->get_all_actable_infantry_ids(m_team_name).size() > 0;
 }

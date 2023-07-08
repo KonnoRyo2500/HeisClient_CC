@@ -1,17 +1,17 @@
 /**
 *	@file		action_packet_builder.cpp
-*	@brief		heis ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆä½œæˆã‚¯ãƒ©ã‚¹
+*	@brief		heis us“®vƒpƒPƒbƒgì¬ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ç›¤é¢ä¸Šã®å…µå£«ã‹ã‚‰ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ã€‚
+*	@details	”Õ–Êã‚Ì•ºm‚©‚çus“®vƒpƒPƒbƒg‚ğì¬‚·‚éB
 */
 
 #include "action_packet_builder.h"
 
 /**
-*	@brief ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
-*	@param[in] board ç›¤é¢
-*	@param[in] team_name ãƒãƒ¼ãƒ å
-*	@return JSONSendPacket_Action ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief us“®vƒpƒPƒbƒg‚ğì¬‚·‚é
+*	@param[in] board ”Õ–Ê
+*	@param[in] team_name ƒ`[ƒ€–¼
+*	@return JSONSendPacket_Action us“®vƒpƒPƒbƒg
 */
 JSONSendPacket_Action CActionPacketBuilder::build(const CBoard& board, const std::string& team_name) const
 {
@@ -45,9 +45,9 @@ JSONSendPacket_Action CActionPacketBuilder::build(const CBoard& board, const std
 }
 
 /**
-*	@brief å…µå£«ãŒæ”»æ’ƒã—ãŸåº§æ¨™ã‚’è¿½åŠ ã™ã‚‹
-*	@param[in] infantry æ”»æ’ƒã—ãŸå…µå£«
-*	@param[in] atk_dst æ”»æ’ƒå…ˆåº§æ¨™
+*	@brief •ºm‚ªUŒ‚‚µ‚½À•W‚ğ’Ç‰Á‚·‚é
+*	@param[in] infantry UŒ‚‚µ‚½•ºm
+*	@param[in] atk_dst UŒ‚æÀ•W
 */
 void CActionPacketBuilder::add_attack_destination(const CInfantry& infantry, const BoardPosition& atk_dst)
 {
@@ -56,7 +56,7 @@ void CActionPacketBuilder::add_attack_destination(const CInfantry& infantry, con
 }
 
 /**
-*	@brief å†…éƒ¨çŠ¶æ…‹ã‚’åˆæœŸåŒ–ã™ã‚‹
+*	@brief “à•”ó‘Ô‚ğ‰Šú‰»‚·‚é
 */
 void CActionPacketBuilder::clear()
 {
@@ -64,9 +64,9 @@ void CActionPacketBuilder::clear()
 }
 
 /**
-*	@brief ã‚‚ã—å…µå£«ãŒæ”»æ’ƒæ¸ˆã¿ãªã‚‰ã°ã€æ”»æ’ƒå…ˆã®åº§æ¨™ã‚’è¿”ã™
-*	@param[in] id å…µå£«ID
-*	@return BoardPosition æ”»æ’ƒå…ˆã®åº§æ¨™(æ”»æ’ƒæ¸ˆã¿ã§ãªã‘ã‚Œã°INVALID_POSITION)
+*	@brief ‚à‚µ•ºm‚ªUŒ‚Ï‚İ‚È‚ç‚ÎAUŒ‚æ‚ÌÀ•W‚ğ•Ô‚·
+*	@param[in] id •ºmID
+*	@return BoardPosition UŒ‚æ‚ÌÀ•W(UŒ‚Ï‚İ‚Å‚È‚¯‚ê‚ÎINVALID_POSITION)
 */
 BoardPosition CActionPacketBuilder::find_attack_destination_if_attacked(const std::string& id) const
 {

@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		audience_mode.h
-*	@brief		heis è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰ã‚¯ãƒ©ã‚¹
+*	@brief		heis ŠÏíƒ‚[ƒhƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	heisã®å¯¾æˆ¦ã‚’è¦³æˆ¦ã™ã‚‹ï¼
+*	@details	heis‚Ì‘Îí‚ğŠÏí‚·‚éD
 */
 #pragma once
 
@@ -12,27 +12,27 @@
 #include "setting.h"
 
 /**
-*	@brief	è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰ã‚¯ãƒ©ã‚¹
-*	@remark ä»–ã®ãƒ¢ãƒ¼ãƒ‰ã¨åŒæ§˜ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–ã‚Šæ‰±ã„ãŸã„ãŸã‚ï¼ŒCGameã‚¯ãƒ©ã‚¹ã®æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã¨ã™ã‚‹
+*	@brief	ŠÏíƒ‚[ƒhƒNƒ‰ƒX
+*	@remark ‘¼‚Ìƒ‚[ƒh‚Æ“¯—l‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ‚èˆµ‚¢‚½‚¢‚½‚ßCCGameƒNƒ‰ƒX‚Ì”h¶ƒNƒ‰ƒX‚Æ‚·‚é
 */
 class CAudienceMode : public CGame {
-	// æ§‹é€ ä½“ï¼Œåˆ—æŒ™ä½“ãªã©
+	// \‘¢‘ÌC—ñ‹“‘Ì‚È‚Ç
 	private:
 
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 	public:
-		// è¦³æˆ¦ãƒ¡ã‚¤ãƒ³å‡¦ç†
+		// ŠÏíƒƒCƒ“ˆ—
 		void play_game() override;
 
 	private:
-		// è¦³æˆ¦ã®åˆæœŸåŒ–
+		// ŠÏí‚Ì‰Šú‰»
 		void initialize_watch(const AudienceSetting& setting);
 
-		// è¦³æˆ¦ã®çµ‚äº†å‡¦ç†
+		// ŠÏí‚ÌI—¹ˆ—
 		void finalize_watch();
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 	private:
-		//! TCPã‚½ã‚±ãƒƒãƒˆ
+		//! TCPƒ\ƒPƒbƒg
 		CSocket *m_sck;
 };

@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		game_online.h
-*	@brief		heis ã‚²ãƒ¼ãƒ (ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰)é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒQ[ƒ€(ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh)isŠÇ—ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§heisã®ã‚²ãƒ¼ãƒ ã‚’å®Ÿè¡Œã™ã‚‹ï¼
+*	@details	ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚Åheis‚ÌƒQ[ƒ€‚ğÀs‚·‚éD
 */
 #pragma once
 
@@ -15,38 +15,38 @@
 #include <vector>
 
 /**
-*	@brief	ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰å®Ÿè¡Œã‚¯ãƒ©ã‚¹
+*	@brief	ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhÀsƒNƒ‰ƒX
 */
 class CGameOnline : public CGame {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 	public:
-		// å¯¾æˆ¦é–‹å§‹
+		// ‘ÎíŠJn
 		void play_game() override;
 		
 	private:
-		// å¯¾æˆ¦é–‹å§‹å‰å‡¦ç†
+		// ‘ÎíŠJn‘Oˆ—
 		void initialize_battle(const OnlineSetting& setting);
 		void recv_name_request() const;
 		void name_entry(const std::string& name) const;
 		void name_register(const OnlineSetting& setting);
 
-		// å¯¾æˆ¦çµ‚äº†å¾Œå‡¦ç†
+		// ‘ÎíI—¹Œãˆ—
 		void finalize_battle();
 
-		// å¯¾æˆ¦å¾Œã®å‹æ•—åˆ¤å®š
+		// ‘ÎíŒã‚ÌŸ”s”»’è
 		bool judge_win() const;
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 	private:
-		//! è‡ªãƒãƒ¼ãƒ å
+		//! ©ƒ`[ƒ€–¼
 		std::string m_team_name;
 
-		//! å¸ä»¤å®˜
+		//! i—ßŠ¯
 		CCommander* m_commander;
 
 		//! AI
 		CAIBase* m_ai;
 
-		//! TCPã‚½ã‚±ãƒƒãƒˆ
+		//! TCPƒ\ƒPƒbƒg
 		CSocket* m_sck;
 };

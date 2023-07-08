@@ -1,8 +1,8 @@
 /**
 *	@file		message_json_converter.h
-*	@brief		heis ã€Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
+*	@brief		heis uƒƒbƒZ[ƒWvJSON•ÏŠ·ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã€Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	uƒƒbƒZ[ƒWvJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "JSON_data_packet.h"
 
 /**
-*	@brief	ã€Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
+*	@brief	uƒƒbƒZ[ƒWvJSON•ÏŠ·ƒNƒ‰ƒX
 */
 class MessageJsonConverter : JsonConverterBase<JSONRecvPacket_Message>
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// JSONæ–‡å­—åˆ—ã‹ã‚‰ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+	// JSON•¶š—ñ‚©‚çƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
 	JSONRecvPacket_Message from_json_to_packet(const std::string& json) const;
-	// ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰JSONæ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+	// ƒpƒPƒbƒg‚©‚çJSON•¶š—ñ‚É•ÏŠ·‚·‚é
 	std::string from_packet_to_json(const JSONRecvPacket_Message& pkt) const;
 };

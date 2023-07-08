@@ -1,43 +1,43 @@
-ï»¿// heis å„ç¨®å®šæ•°
+// heis Šeí’è”
 // Author: Ryo Konno
 /**
 *	@file		const_val.h
-*	@brief		heis å„ç¨®å®šæ•°
+*	@brief		heis Šeí’è”
 *	@author		Ryo Konno
-*	@details	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ä¸­ã§å…±é€šã—ã¦ä½¿ã†å®šæ•°ã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	ƒvƒƒOƒ‰ƒ€’†‚Å‹¤’Ê‚µ‚Äg‚¤’è”‚ğ’è‹`‚·‚éD
 */
 #pragma once
 
 #include<string>
 
-/* å…¨ãƒ¢ãƒ¼ãƒ‰å…±é€šã§ä½¿ç”¨ã™ã‚‹å®šæ•° */
+/* ‘Sƒ‚[ƒh‹¤’Ê‚Åg—p‚·‚é’è” */
 
 /**
 *	@enum Direction
-*	æ–¹å‘(ä¸Šä¸‹å·¦å³)
+*	•ûŒü(ã‰º¶‰E)
 */
 enum Direction {
-	//! ä¸Š
+	//! ã
 	Direction_Up,
-	//! ä¸‹
+	//! ‰º
 	Direction_Down,
-	//! å·¦
+	//! ¶
 	Direction_Left,
-	//! å³
+	//! ‰E
 	Direction_Right,
 };
 
 /**
-*	@def å…µå£«ã®é§’ã‚¿ã‚¤ãƒ—
+*	@def •ºm‚Ì‹îƒ^ƒCƒv
 */
 #define INFANTRY_UNIT_TYPE "heizu"
 
 /**
-*	@def å…µå£«ã®åˆæœŸHP
+*	@def •ºm‚Ì‰ŠúHP
 */
 #define INFANTRY_INITIAL_HP (2)
 
 /**
-*	@def å…µå£«ã®è¡Œå‹•å›æ•°
+*	@def •ºm‚Ìs“®‰ñ”
 */
 #define INFANTRY_ACTION_LIMIT (2)

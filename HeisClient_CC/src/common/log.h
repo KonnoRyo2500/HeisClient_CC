@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		log.h
-*	@brief		heis ãƒ­ã‚°å‡ºåŠ›ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒƒOo—ÍƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹ãŸã‚ã®æ“ä½œã‚’æä¾›ã™ã‚‹ï¼
+*	@details	ƒƒO‚ğo—Í‚·‚é‚½‚ß‚Ì‘€ì‚ğ’ñ‹Ÿ‚·‚éD
 */
 #pragma once
 
@@ -10,40 +10,40 @@
 #include <fstream>
 
 /**
-*	@brief	ãƒ­ã‚°å‡ºåŠ›ã‚¯ãƒ©ã‚¹
-*	@remark ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã—ãªãã¦ã‚‚ãƒ­ã‚°è¨˜éŒ²ãŒã§ãã‚‹ã‚ˆã†ã€staticã‚¯ãƒ©ã‚¹ã¨ã™ã‚‹
+*	@brief	ƒƒOo—ÍƒNƒ‰ƒX
+*	@remark ƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚µ‚È‚­‚Ä‚àƒƒO‹L˜^‚ª‚Å‚«‚é‚æ‚¤AstaticƒNƒ‰ƒX‚Æ‚·‚é
 */
 class CLog
 {
-	// æ§‹é€ ä½“ï¼Œåˆ—æŒ™ä½“ãªã©
+	// \‘¢‘ÌC—ñ‹“‘Ì‚È‚Ç
 	public:
 		/**
 		*	@enum LogLevel
-		*	ãƒ­ã‚°ã®ç¨®é¡
+		*	ƒƒO‚Ìí—Ş
 		*/
 		enum LogLevel {
-			//! æƒ…å ±
+			//! î•ñ
 			LogLevel_Information,
-			//! è­¦å‘Š
+			//! Œx
 			LogLevel_Warning,
-			//! ã‚¨ãƒ©ãƒ¼
+			//! ƒGƒ‰[
 			LogLevel_Error,
 		};
 
-	// ã‚¯ãƒ©ã‚¹é–¢æ•°
+	// ƒNƒ‰ƒXŠÖ”
 public:
-	// ãƒ­ã‚°è¨˜éŒ²ã‚’é–‹å§‹ã™ã‚‹
+	// ƒƒO‹L˜^‚ğŠJn‚·‚é
 	static void start_logging();
-	// ãƒ­ã‚°è¨˜éŒ²ã‚’çµ‚äº†ã™ã‚‹
+	// ƒƒO‹L˜^‚ğI—¹‚·‚é
 	static void end_logging();
-	// ãƒ­ã‚°ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ ã™ã‚‹
+	// ƒƒO‚ÉƒƒbƒZ[ƒW‚ğ’Ç‰Á‚·‚é
 	static void write(LogLevel level, const std::string& msg, bool output_to_console = false);
 
 private:
-	// ç¾åœ¨æ—¥æ™‚ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹
+	// Œ»İ“ú‚ğ•\‚·•¶š—ñ‚ğì¬‚·‚é
 	static std::string build_current_datetime_str(const std::string& format);
 
-	// ã‚¯ãƒ©ã‚¹å¤‰æ•°
+	// ƒNƒ‰ƒX•Ï”
 private:
 	static std::ofstream *m_log;
 };

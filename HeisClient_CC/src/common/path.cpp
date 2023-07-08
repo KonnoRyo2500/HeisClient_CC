@@ -1,8 +1,8 @@
 /**
 *	@file		path.cpp
-*	@brief		heis ãƒ‘ã‚¹æ“ä½œ
+*	@brief		heis ƒpƒX‘€ì
 *	@author		Ryo Konno
-*	@details	ãƒ‘ã‚¹æ“ä½œã®ãŸã‚ã®å„ç¨®é–¢æ•°ã‚’å®šç¾©ã™ã‚‹ã€‚
+*	@details	ƒpƒX‘€ì‚Ì‚½‚ß‚ÌŠeíŠÖ”‚ğ’è‹`‚·‚éB
 */
 
 #include "path.h"
@@ -17,9 +17,9 @@
 #include <filesystem>
 
 /**
-*	@brief ãƒ‘ã‚¹æ–‡å­—åˆ—ã‚’çµåˆã™ã‚‹
-*	@param[in] paths ãƒ‘ã‚¹æ–‡å­—åˆ—
-*	@return std::string çµåˆå¾Œã®ãƒ‘ã‚¹æ–‡å­—åˆ—
+*	@brief ƒpƒX•¶š—ñ‚ğŒ‹‡‚·‚é
+*	@param[in] paths ƒpƒX•¶š—ñ
+*	@return std::string Œ‹‡Œã‚ÌƒpƒX•¶š—ñ
 */
 std::string join(const std::vector<std::string>& paths)
 {
@@ -35,8 +35,8 @@ std::string join(const std::vector<std::string>& paths)
 
 
 /**
-*	@brief å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¿”ã™é–¢æ•°
-*	@return std::string å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+*	@brief Àsƒtƒ@ƒCƒ‹‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ•Ô‚·ŠÖ”
+*	@return std::string Àsƒtƒ@ƒCƒ‹‚ÌƒfƒBƒŒƒNƒgƒŠ
 */
 std::string build_cc_root_dir()
 {
@@ -57,7 +57,7 @@ std::string build_cc_root_dir()
 		return root_dir;
 	}
 	else {
-		throw std::runtime_error("å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ");
+		throw std::runtime_error("Àsƒtƒ@ƒCƒ‹‚ÌƒpƒXæ“¾‚É¸”s‚µ‚Ü‚µ‚½");
 	}
 #endif
 }

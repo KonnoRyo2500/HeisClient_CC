@@ -1,16 +1,16 @@
-﻿/**
+/**
 *	@file		game.cpp
-*	@brief		heis ゲーム基本クラス
+*	@brief		heis �Q�[����{�N���X
 *	@author		Ryo Konno
-*	@details	各種ゲームモードの基本となる操作を定義する．各ゲームモードクラスは，このクラスを継承して作成する．
+*	@details	�e��Q�[�����[�h�̊�{�ƂȂ鑀����`����D�e�Q�[�����[�h�N���X�́C���̃N���X���p�����č쐬����D
 */
 
 #include "game.h"
 
-/* public関数 */
+/* public�֐� */
 
 /**
-*	@brief コンストラクタ
+*	@brief �R���X�g���N�^
 */
 CGame::CGame()
 {
@@ -18,7 +18,7 @@ CGame::CGame()
 }
 
 /**
-*	@brief デストラクタ
+*	@brief �f�X�g���N�^
 */
 CGame::~CGame()
 {

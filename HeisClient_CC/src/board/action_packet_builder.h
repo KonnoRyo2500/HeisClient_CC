@@ -1,8 +1,8 @@
 /**
 *	@file		action_packet_builder.h
-*	@brief		heis ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆä½œæˆã‚¯ãƒ©ã‚¹
+*	@brief		heis us“®vƒpƒPƒbƒgì¬ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ç›¤é¢ä¸Šã®å…µå£«ã‹ã‚‰ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ã€‚
+*	@details	”Õ–Êã‚Ì•ºm‚©‚çus“®vƒpƒPƒbƒg‚ğì¬‚·‚éB
 */
 
 #pragma once
@@ -11,27 +11,27 @@
 #include "board.h"
 
 /**
-*	@brief ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆä½œæˆã‚¯ãƒ©ã‚¹
+*	@brief us“®vƒpƒPƒbƒgì¬ƒNƒ‰ƒX
 */
 class CActionPacketBuilder
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
+	// us“®vƒpƒPƒbƒg‚ğì¬‚·‚é
 	JSONSendPacket_Action build(const CBoard& board, const std::string& team_name) const;
 
-	// å…µå£«ãŒæ”»æ’ƒã—ãŸåº§æ¨™ã‚’è¿½åŠ ã™ã‚‹
+	// •ºm‚ªUŒ‚‚µ‚½À•W‚ğ’Ç‰Á‚·‚é
 	void add_attack_destination(const CInfantry& infantry, const BoardPosition& atk_dst);
 
-	// å†…éƒ¨çŠ¶æ…‹ã‚’åˆæœŸåŒ–ã™ã‚‹
+	// “à•”ó‘Ô‚ğ‰Šú‰»‚·‚é
 	void clear();
 
 private:
-	// ã‚‚ã—å…µå£«ãŒæ”»æ’ƒæ¸ˆã¿ãªã‚‰ã°ã€æ”»æ’ƒå…ˆã®åº§æ¨™ã‚’è¿”ã™
+	// ‚à‚µ•ºm‚ªUŒ‚Ï‚İ‚È‚ç‚ÎAUŒ‚æ‚ÌÀ•W‚ğ•Ô‚·
 	BoardPosition find_attack_destination_if_attacked(const std::string& id) const;
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 private:
-	//! æ”»æ’ƒå…ˆã®åº§æ¨™(IDã¨åº§æ¨™ã®ãƒšã‚¢)
+	//! UŒ‚æ‚ÌÀ•W(ID‚ÆÀ•W‚ÌƒyƒA)
 	std::vector<std::pair<std::string, BoardPosition>> m_attack_destinations;
 };

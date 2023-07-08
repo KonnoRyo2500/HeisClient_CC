@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		board.h
-*	@brief		heis ç›¤é¢ã‚¯ãƒ©ã‚¹
+*	@brief		heis ”Õ–ÊƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	heisã®å„ç¨®ãƒ¦ãƒ‹ãƒƒãƒˆãŒé…ç½®ã•ã‚Œã‚‹ç›¤é¢ã®å®šç¾©ãŠã‚ˆã³ãã‚Œã«å¯¾ã™ã‚‹æ“ä½œã‚’æä¾›ã™ã‚‹ï¼
+*	@details	heis‚ÌŠeíƒ†ƒjƒbƒg‚ª”z’u‚³‚ê‚é”Õ–Ê‚Ì’è‹`‚¨‚æ‚Ñ‚»‚ê‚É‘Î‚·‚é‘€ì‚ğ’ñ‹Ÿ‚·‚éD
 */
 #pragma once
 
@@ -14,14 +14,14 @@
 
 /**
 *	@struct Square
-*	@brief ç›¤é¢ã®å„ãƒã‚¹ç›®
+*	@brief ”Õ–Ê‚ÌŠeƒ}ƒX–Ú
 */
 struct Square
 {
 	/**
-	*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	*	@param[in] infantry å…µå£«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
-	*	@param[in] exists å…µå£«ãŒå®Ÿåœ¨ã™ã‚‹ã‹ã©ã†ã‹
+	*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	*	@param[in] infantry •ºm‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+	*	@param[in] exists •ºm‚ªÀİ‚·‚é‚©‚Ç‚¤‚©
 	*/
 	Square(const CInfantry& infantry, bool exists)
 		: infantry(infantry)
@@ -30,63 +30,63 @@ struct Square
 		// Do Nothing
 	}
 
-	//! å…µå£«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	//! •ºm‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	CInfantry infantry;
-	//! å…µå£«ãŒå®Ÿåœ¨ã™ã‚‹ã‹ã©ã†ã‹
+	//! •ºm‚ªÀİ‚·‚é‚©‚Ç‚¤‚©
 	bool exists;
 };
 
 /**
 *	@struct BoardSize
-*	@brief ç›¤é¢ã®ã‚µã‚¤ã‚º
+*	@brief ”Õ–Ê‚ÌƒTƒCƒY
 */
 struct BoardSize
 {
-	//! å¹…
+	//! •
 	size_t width;
-	//! é«˜ã•
+	//! ‚‚³
 	size_t height;
 };
 
 /**
-*	@brief ç›¤é¢ã®å„è¡Œã‚’è¡¨ã™å‹
+*	@brief ”Õ–Ê‚ÌŠes‚ğ•\‚·Œ^
 */
 typedef std::vector<Square> Row;
 /**
-*	@brief ç›¤é¢ã‚’è¡¨ã™å‹(2æ¬¡å…ƒé…åˆ—)
+*	@brief ”Õ–Ê‚ğ•\‚·Œ^(2ŸŒ³”z—ñ)
 */
 typedef std::vector<Row> Grid;
 
 /**
-*	@brief	ç›¤é¢ã‚¯ãƒ©ã‚¹
+*	@brief	”Õ–ÊƒNƒ‰ƒX
 */
 class CBoard
 {
-	/* æ³¨) åº§æ¨™ã¯ï¼Œæœ€ã‚‚å·¦ä¸Šã®ãƒã‚¹ã‚’(0, 0)ã¨ã™ã‚‹ */
+	/* ’) À•W‚ÍCÅ‚à¶ã‚Ìƒ}ƒX‚ğ(0, 0)‚Æ‚·‚é */
 
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	explicit CBoard(const JSONRecvPacket_Board& pkt);
 
-	// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒfƒXƒgƒ‰ƒNƒ^
 	~CBoard();
 
-	// ãƒã‚¹ç›®ã‚’å–å¾—ã™ã‚‹
+	// ƒ}ƒX–Ú‚ğæ“¾‚·‚é
 	Square get_square(const BoardPosition& pos) const;
-	// å…µå£«ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+	// •ºm‚ğƒZƒbƒg‚·‚é
 	void set_infantry(const BoardPosition& pos, const CInfantry& infantry);
-	// å…µå£«ã‚’å‰Šé™¤ã™ã‚‹
+	// •ºm‚ğíœ‚·‚é
 	void remove_infantry(const BoardPosition& pos);
 
-	// ç›¤é¢ã®ã‚µã‚¤ã‚ºã‚’å–å¾—ã™ã‚‹
+	// ”Õ–Ê‚ÌƒTƒCƒY‚ğæ“¾‚·‚é
 	BoardSize get_size() const;
 
-	// ãƒ‡ãƒãƒƒã‚°ï¼Œå‹•ä½œç¢ºèªç”¨
+	// ƒfƒoƒbƒOC“®ìŠm”F—p
 	void show() const;
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 private:
-	//! ç›¤é¢ã®å®Ÿä½“
+	//! ”Õ–Ê‚ÌÀ‘Ì
 	Grid m_grid;
 };

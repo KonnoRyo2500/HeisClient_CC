@@ -1,8 +1,8 @@
 /**
 *	@file		confirm_name_json_converter.h
-*	@brief		heis ã€Œåå‰ç¢ºå®šã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
+*	@brief		heis u–¼‘OŠm’èvJSON•ÏŠ·ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã€Œåå‰ç¢ºå®šã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	u–¼‘OŠm’èvJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "JSON_data_packet.h"
 
 /**
-*	@brief	ã€Œåå‰ç¢ºå®šã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
+*	@brief	u–¼‘OŠm’èvJSON•ÏŠ·ƒNƒ‰ƒX
 */
 class ConfirmNameJsonConverter : JsonConverterBase<JSONRecvPacket_ConfirmName>
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// JSONæ–‡å­—åˆ—ã‹ã‚‰ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+	// JSON•¶š—ñ‚©‚çƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
 	JSONRecvPacket_ConfirmName from_json_to_packet(const std::string& json) const;
-	// ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰JSONæ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+	// ƒpƒPƒbƒg‚©‚çJSON•¶š—ñ‚É•ÏŠ·‚·‚é
 	std::string from_packet_to_json(const JSONRecvPacket_ConfirmName& pkt) const;
 };

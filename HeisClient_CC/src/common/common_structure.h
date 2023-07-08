@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		common_structure.h
-*	@brief		heis å…±é€šãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+*	@brief		heis ‹¤’Êƒf[ƒ^\‘¢
 *	@author		Ryo Konno
-*	@details	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ä¸­ã§å…±é€šã—ã¦ä½¿ã†æ§‹é€ ä½“ã‚„ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	ƒvƒƒOƒ‰ƒ€’†‚Å‹¤’Ê‚µ‚Äg‚¤\‘¢‘Ì‚âƒNƒ‰ƒX‚ğ’è‹`‚·‚éD
 */
 #pragma once
 
@@ -11,22 +11,22 @@
 
 /**
 *	@def INVALID_POSITION
-*	@brief ä¸æ­£ãªåº§æ¨™
+*	@brief •s³‚ÈÀ•W
 */
 #define INVALID_POSITION BoardPosition(-1, -1)
 
 /**
 *	@struct BoardPosition
-*	@brief ç›¤é¢ä¸Šã®ä½ç½®
+*	@brief ”Õ–Êã‚ÌˆÊ’u
 */
 struct BoardPosition
 {	
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
 	/**
-	*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	*	@param[in] x xåº§æ¨™
-	*	@param[in] y yåº§æ¨™
+	*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	*	@param[in] x xÀ•W
+	*	@param[in] y yÀ•W
 	*/
 	explicit BoardPosition(const int x,  const int y)
 		: x(x)
@@ -35,35 +35,35 @@ public:
 		// Do Nothing
 	}
 	/**
-	*	@brief æŒ‡å®šã•ã‚ŒãŸç‚¹ã¨ã®L1è·é›¢ã‚’è¨ˆç®—ã™ã‚‹
-	*	@param[in] dst L1åº§æ¨™ã‚’è¨ˆç®—ã™ã‚‹ç‚¹
-	*	@return uint32_t è‡ªèº«ã¨dstã¨ã®L1åº§æ¨™
+	*	@brief w’è‚³‚ê‚½“_‚Æ‚ÌL1‹——£‚ğŒvZ‚·‚é
+	*	@param[in] dst L1À•W‚ğŒvZ‚·‚é“_
+	*	@return uint32_t ©g‚Ædst‚Æ‚ÌL1À•W
 	*/
 	uint32_t calc_l1_distance(const BoardPosition& dst) const
 	{
 		return std::abs(this->x - dst.x) + std::abs(this->y - dst.y);
 	}
 	/**
-	*	@brief æ¯”è¼ƒæ¼”ç®—å­(==)
-	*	@param[in] dst å³è¾º
+	*	@brief ”äŠr‰‰Zq(==)
+	*	@param[in] dst ‰E•Ó
 	*/
 	bool operator==(const BoardPosition& dst) const
 	{
 		return x == dst.x && y == dst.y;
 	}
 	/**
-	*	@brief æ¯”è¼ƒæ¼”ç®—å­(!=)
-	*	@param[in] dst å³è¾º
+	*	@brief ”äŠr‰‰Zq(!=)
+	*	@param[in] dst ‰E•Ó
 	*/
 	bool operator!=(const BoardPosition& dst) const
 	{
 		return x != dst.x || y != dst.y;
 	}
 
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 public:
-	//! xåº§æ¨™
+	//! xÀ•W
 	int x;
-	//! yåº§æ¨™
+	//! yÀ•W
 	int y;
 };

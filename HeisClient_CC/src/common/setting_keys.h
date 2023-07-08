@@ -1,112 +1,112 @@
-ï»¿/**
+/**
 *	@file		setting_keys.h
-*	@brief		heis è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚­ãƒ¼ä¸€è¦§
+*	@brief		heis İ’èƒtƒ@ƒCƒ‹ƒL[ˆê——
 *	@author		Ryo Konno
-*	@details	è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®å„ã‚­ãƒ¼ã‚’è¡¨ã™å®šæ•°ãƒã‚¯ãƒ­ã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	İ’èƒtƒ@ƒCƒ‹‚ÌŠeƒL[‚ğ•\‚·’è”ƒ}ƒNƒ‚ğ’è‹`‚·‚éD
 */
 #pragma once
 
-/* è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰ç”¨ */
+/* ŠÏíƒ‚[ƒh—p */
 /**
 *	@def AUDIENCE_SETTING_KEY_SVR_ADDR
-*	@brief ã‚µãƒ¼ãƒã®IPã‚¢ãƒ‰ãƒ¬ã‚¹
+*	@brief ƒT[ƒo‚ÌIPƒAƒhƒŒƒX
 */
 #define AUDIENCE_SETTING_KEY_SVR_ADDR "server_ip_addr"
 
 /**
 *	@def AUDIENCE_SETTING_KEY_SVR_PORT
-*	@brief ã‚µãƒ¼ãƒã®ãƒãƒ¼ãƒˆç•ªå·
+*	@brief ƒT[ƒo‚Ìƒ|[ƒg”Ô†
 */
 #define AUDIENCE_SETTING_KEY_SVR_PORT "server_port_num"
 
-/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ç”¨ */
+/* ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh—p */
 /**
 *	@def ONLINE_SETTING_KEY_SVR_ADDR
-*	@brief ã‚µãƒ¼ãƒã®IPã‚¢ãƒ‰ãƒ¬ã‚¹
+*	@brief ƒT[ƒo‚ÌIPƒAƒhƒŒƒX
 */
 #define ONLINE_SETTING_KEY_SVR_ADDR "server_ip_addr"
 
 /**
 *	@def ONLINE_SETTING_KEY_SVR_PORT
-*	@brief ã‚µãƒ¼ãƒã®ãƒãƒ¼ãƒˆç•ªå·
+*	@brief ƒT[ƒo‚Ìƒ|[ƒg”Ô†
 */
 #define ONLINE_SETTING_KEY_SVR_PORT "server_port_num"
 
 /**
 *	@def ONLINE_SETTING_KEY_TEAM_NAME
-*	@brief åå‰è¦æ±‚ã§ï¼Œã‚µãƒ¼ãƒã«ä¼ãˆã‚‹ãƒãƒ¼ãƒ å
+*	@brief –¼‘O—v‹‚ÅCƒT[ƒo‚É“`‚¦‚éƒ`[ƒ€–¼
 */
 #define ONLINE_SETTING_KEY_TEAM_NAME "team_name"
 
 /**
 *	@def ONLINE_SETTING_KEY_AI_IMPL
-*	@brief ã‚²ãƒ¼ãƒ ã§åˆ©ç”¨ã™ã‚‹AIã®å®Ÿè£…æ–¹å¼
+*	@brief ƒQ[ƒ€‚Å—˜—p‚·‚éAI‚ÌÀ‘••û®
 */
 #define ONLINE_SETTING_KEY_AI_IMPL "ai_implementation"
 
-/* ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ç”¨ */
+/* ƒ[ƒJƒ‹ƒ‚[ƒh—p */
 /**
 *	@def LOCAL_SETTING_KEY_BOARD_WIDTH
-*	@brief ç›¤é¢ã®å¹…
+*	@brief ”Õ–Ê‚Ì•
 */
 #define LOCAL_SETTING_KEY_BOARD_WIDTH "board_width"
 
 /**
 *	@def LOCAL_SETTING_KEY_BOARD_HEIGHT
-*	@brief ç›¤é¢ã®é«˜ã•
+*	@brief ”Õ–Ê‚Ì‚‚³
 */
 #define LOCAL_SETTING_KEY_BOARD_HEIGHT "board_height"
 
 /**
 *	@def LOCAL_SETTING_KEY_MY_NAME
-*	@brief è‡ªãƒãƒ¼ãƒ ã®åå‰
+*	@brief ©ƒ`[ƒ€‚Ì–¼‘O
 */
 #define LOCAL_SETTING_KEY_MY_NAME "my_team_name"
 
 /**
 *	@def LOCAL_SETTING_KEY_ENEMY_NAME
-*	@brief æ•µãƒãƒ¼ãƒ ã®åå‰
+*	@brief “Gƒ`[ƒ€‚Ì–¼‘O
 */
 #define LOCAL_SETTING_KEY_ENEMY_NAME "enemy_team_name"
 
 /**
 *	@def LOCAL_SETTING_KEY_MY_AI_IMPL
-*	@brief è‡ªãƒãƒ¼ãƒ ã§åˆ©ç”¨ã™ã‚‹AIã®å®Ÿè£…æ–¹å¼
+*	@brief ©ƒ`[ƒ€‚Å—˜—p‚·‚éAI‚ÌÀ‘••û®
 */
 #define LOCAL_SETTING_KEY_MY_AI_IMPL "my_ai_implementation"
 
 /**
 *	@def LOCAL_SETTING_KEY_ENEMY_AI_IMPL
-*	@brief æ•µãƒãƒ¼ãƒ ã§åˆ©ç”¨ã™ã‚‹AIã®å®Ÿè£…æ–¹å¼
+*	@brief “Gƒ`[ƒ€‚Å—˜—p‚·‚éAI‚ÌÀ‘••û®
 */
 #define LOCAL_SETTING_KEY_ENEMY_AI_IMPL "enemy_ai_implementation"
 
 /**
 *	@def LOCAL_SETTING_KEY_MY_INIT_COORD_X
-*	@brief è‡ªãƒãƒ¼ãƒ ã®å…µå£«åˆæœŸä½ç½®ã®xåº§æ¨™
+*	@brief ©ƒ`[ƒ€‚Ì•ºm‰ŠúˆÊ’u‚ÌxÀ•W
 */
 #define LOCAL_SETTING_KEY_MY_INIT_COORD_X "my_infantries_init_x_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_MY_INIT_COORD_Y
-*	@brief è‡ªãƒãƒ¼ãƒ ã®å…µå£«åˆæœŸä½ç½®ã®yåº§æ¨™
+*	@brief ©ƒ`[ƒ€‚Ì•ºm‰ŠúˆÊ’u‚ÌyÀ•W
 */
 #define LOCAL_SETTING_KEY_MY_INIT_COORD_Y "my_infantries_init_y_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X
-*	@brief æ•µãƒãƒ¼ãƒ ã®å…µå£«åˆæœŸä½ç½®ã®xåº§æ¨™
+*	@brief “Gƒ`[ƒ€‚Ì•ºm‰ŠúˆÊ’u‚ÌxÀ•W
 */
 #define LOCAL_SETTING_KEY_ENEMY_INIT_COORD_X "enemy_infantries_init_x_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y
-*	@brief æ•µãƒãƒ¼ãƒ ã®å…µå£«åˆæœŸä½ç½®ã®yåº§æ¨™
+*	@brief “Gƒ`[ƒ€‚Ì•ºm‰ŠúˆÊ’u‚ÌyÀ•W
 */
 #define LOCAL_SETTING_KEY_ENEMY_INIT_COORD_Y "enemy_infantries_init_y_coodinate"
 
 /**
 *	@def LOCAL_SETTING_KEY_FIRST_TEAM
-*	@brief å…ˆæ”»ã¨ãªã‚‹ãƒãƒ¼ãƒ å
+*	@brief æU‚Æ‚È‚éƒ`[ƒ€–¼
 */
 #define LOCAL_SETTING_KEY_FIRST_TEAM "first_turn_team"

@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		log.cpp
-*	@brief		heis ãƒ­ã‚°å‡ºåŠ›ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒƒOo—ÍƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹ãŸã‚ã®æ“ä½œã‚’æä¾›ã™ã‚‹ï¼
+*	@details	ƒƒO‚ğo—Í‚·‚é‚½‚ß‚Ì‘€ì‚ğ’ñ‹Ÿ‚·‚éD
 */
 
 #include "log.h"
@@ -12,29 +12,29 @@
 #include <assert.h>
 #include <filesystem>
 
-// staticãƒ¡ãƒ³ãƒå¤‰æ•°ã®å®šç¾©
+// staticƒƒ“ƒo•Ï”‚Ì’è‹`
 std::ofstream *CLog::m_log = NULL;
 
-/* publicé–¢æ•° */
+/* publicŠÖ” */
 
 /**
-*	@brief ãƒ­ã‚°è¨˜éŒ²ã‚’é–‹å§‹ã™ã‚‹
+*	@brief ƒƒO‹L˜^‚ğŠJn‚·‚é
 */
 void CLog::start_logging()
 {
-	// ç¾åœ¨æ—¥æ™‚ãŒãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«åã«å«ã¾ã‚Œã‚‹ãŸã‚ã€æ—¢å­˜ã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã¨åå‰ãŒè¢«ã£ã¦ã—ã¾ã†ã“ã¨ã¯ç¾å®Ÿçš„ã«èµ·ã“ã‚Šãˆãªã„
+	// Œ»İ“ú‚ªƒƒOƒtƒ@ƒCƒ‹–¼‚ÉŠÜ‚Ü‚ê‚é‚½‚ßAŠù‘¶‚ÌƒƒOƒtƒ@ƒCƒ‹‚Æ–¼‘O‚ª”í‚Á‚Ä‚µ‚Ü‚¤‚±‚Æ‚ÍŒ»À“I‚É‹N‚±‚è‚¦‚È‚¢
 	std::string log_file_name = "log" + build_current_datetime_str("_%Y_%m_%d_%H_%M_%S") + ".log";
 	std::string log_path = join({ CC_PROJECT_DIR, "log", log_file_name });
 
-	// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
+	// ƒƒOƒtƒ@ƒCƒ‹‚Ìì¬
 	m_log = new std::ofstream(log_path, std::ios::app);
 	if (m_log->fail()) {
-		throw std::runtime_error("ãƒ­ã‚°è¨˜éŒ²ã®é–‹å§‹ã«å¤±æ•—ã—ã¾ã—ãŸ");
+		throw std::runtime_error("ƒƒO‹L˜^‚ÌŠJn‚É¸”s‚µ‚Ü‚µ‚½");
 	}
 }
 
 /**
-*	@brief ãƒ­ã‚°è¨˜éŒ²ã‚’çµ‚äº†ã™ã‚‹
+*	@brief ƒƒO‹L˜^‚ğI—¹‚·‚é
 */
 void CLog::end_logging()
 {
@@ -43,52 +43,52 @@ void CLog::end_logging()
 }
 
 /**
-*	@brief ãƒ­ã‚°ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ ã™ã‚‹
-*	@param[in] level ãƒ­ã‚°ã®ãƒ¬ãƒ™ãƒ«(é‡è¦åº¦)
-*	@param[in] msg è¿½åŠ ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
-*	@param[in] output_to_console ãƒ­ã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«è¡¨ç¤ºã™ã‚‹ã‹(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯false(ç„¡åŠ¹))
+*	@brief ƒƒO‚ÉƒƒbƒZ[ƒW‚ğ’Ç‰Á‚·‚é
+*	@param[in] level ƒƒO‚ÌƒŒƒxƒ‹(d—v“x)
+*	@param[in] msg ’Ç‰Á‚·‚éƒƒbƒZ[ƒW
+*	@param[in] output_to_console ƒƒOƒƒbƒZ[ƒW‚ğƒRƒ“ƒ\[ƒ‹‚É•\¦‚·‚é‚©(ƒfƒtƒHƒ‹ƒg‚Å‚Ífalse(–³Œø))
 */
 void CLog::write(LogLevel level, const std::string& msg, bool output_to_console)
 {
-	// ãƒ­ã‚°è¨˜éŒ²ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„
+	// ƒƒO‹L˜^‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢
 	assert(m_log != NULL);
 
-	// ãƒ­ã‚°ã®ãƒ˜ãƒƒãƒ€ã‚’ä½œæˆã™ã‚‹
+	// ƒƒO‚Ìƒwƒbƒ_‚ğì¬‚·‚é
 	std::string log_header = "";
-	// æ›¸ãè¾¼ã¿æ—¥æ™‚
+	// ‘‚«‚İ“ú
 	log_header += build_current_datetime_str("%Y/%m/%d %H:%M:%S ");
 
-	// ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«
+	// ƒƒOƒŒƒxƒ‹
 	switch (level)
 	{
 	case CLog::LogLevel_Information:
-		log_header += "[æƒ…å ±]";
+		log_header += "[î•ñ]";
 		break;
 	case CLog::LogLevel_Warning:
-		log_header += "[è­¦å‘Š]";
+		log_header += "[Œx]";
 		break;
 	case CLog::LogLevel_Error:
-		log_header += "[ã‚¨ãƒ©ãƒ¼]";
+		log_header += "[ƒGƒ‰[]";
 		break;
 	default:
-		log_header += "[æœªå®šç¾©!]";
+		log_header += "[–¢’è‹`!]";
 		break;
 	}
 
-	// ãƒ­ã‚°ã«è¿½è¨˜ã™ã‚‹
+	// ƒƒO‚É’Ç‹L‚·‚é
 	*m_log << log_header << " " << msg << std::endl;
 
-	// å¿…è¦ãŒã‚ã‚Œã°ã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«ã‚‚å‡ºåŠ›ã™ã‚‹
-	// ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã¯
+	// •K—v‚ª‚ ‚ê‚ÎAƒƒbƒZ[ƒW‚ğƒRƒ“ƒ\[ƒ‹‚É‚ào—Í‚·‚é
+	// ƒwƒbƒ_•”•ª‚Í
 	if (output_to_console) {
 		printf("%s\n", msg.c_str());
 	}
 }
 
 /**
-*	@brief ç¾åœ¨æ—¥æ™‚ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹
-*	@param[in] format æ—¥æ™‚ã‚’æŒ‡å®šã™ã‚‹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæ–‡å­—åˆ—(strftimeå½¢å¼)
-*	@return std::string ç¾åœ¨æ—¥æ™‚ã‚’è¡¨ã™æ–‡å­—åˆ—
+*	@brief Œ»İ“ú‚ğ•\‚·•¶š—ñ‚ğì¬‚·‚é
+*	@param[in] format “ú‚ğw’è‚·‚éƒtƒH[ƒ}ƒbƒg•¶š—ñ(strftimeŒ`®)
+*	@return std::string Œ»İ“ú‚ğ•\‚·•¶š—ñ
 */
 std::string CLog::build_current_datetime_str(const std::string& format)
 {
@@ -96,7 +96,7 @@ std::string CLog::build_current_datetime_str(const std::string& format)
 	std::time_t currnt_time = std::time(nullptr);
 
 	if (strftime(datetime, sizeof(datetime), format.c_str(), std::localtime(&currnt_time)) == 0) {
-		throw std::runtime_error("ãƒ­ã‚°ç”¨ã®ç¾åœ¨æ—¥æ™‚ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ");
+		throw std::runtime_error("ƒƒO—p‚ÌŒ»İ“ú‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½");
 	}
 	return std::string(datetime);
 }

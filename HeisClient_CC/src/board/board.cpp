@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		board.cpp
-*	@brief		heis ç›¤é¢ã‚¯ãƒ©ã‚¹
+*	@brief		heis ”Õ–ÊƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	heisã®å„ç¨®ãƒ¦ãƒ‹ãƒƒãƒˆãŒé…ç½®ã•ã‚Œã‚‹ç›¤é¢ã®å®šç¾©ãŠã‚ˆã³ãã‚Œã«å¯¾ã™ã‚‹æ“ä½œã‚’æä¾›ã™ã‚‹ï¼
+*	@details	heis‚ÌŠeíƒ†ƒjƒbƒg‚ª”z’u‚³‚ê‚é”Õ–Ê‚Ì’è‹`‚¨‚æ‚Ñ‚»‚ê‚É‘Î‚·‚é‘€ì‚ğ’ñ‹Ÿ‚·‚éD
 */
 #include "board.h"
 #include "common.h"
@@ -10,21 +10,21 @@
 
 /**
 *	@def EMPTY_SQUARE
-*	@brief ç©ºããƒã‚¹
+*	@brief ‹ó‚«ƒ}ƒX
 */
 #define EMPTY_SQUARE Square(CInfantry(InfantryStatus("", "")), false)
 
 /**
-*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-*	@param[in] pkt ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+*	@param[in] pkt u”Õ–ÊvƒpƒPƒbƒg
 */
 CBoard::CBoard(const JSONRecvPacket_Board& pkt)
 {
-	// ã™ã¹ã¦ç©ºã®ç›¤é¢ã‚’ä½œæˆã™ã‚‹
+	// ‚·‚×‚Ä‹ó‚Ì”Õ–Ê‚ğì¬‚·‚é
 	Row row(pkt.width.get_value(), EMPTY_SQUARE);
 	m_grid = std::vector(pkt.height.get_value(), row);
 
-	// ç›¤é¢ã«å…µå£«ã‚’é…ç½®ã™ã‚‹
+	// ”Õ–Ê‚É•ºm‚ğ”z’u‚·‚é
 	std::vector<UnitsArrayElem> units = pkt.units.get_value();
 	for (auto& unit : units) {
 		BoardPosition infantry_pos = BoardPosition(
@@ -43,7 +43,7 @@ CBoard::CBoard(const JSONRecvPacket_Board& pkt)
 }
 
 /**
-*	@brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+*	@brief ƒfƒXƒgƒ‰ƒNƒ^
 */
 CBoard::~CBoard()
 {
@@ -51,9 +51,9 @@ CBoard::~CBoard()
 }
 
 /**
-*	@brief ãƒã‚¹ç›®ã‚’å–å¾—ã™ã‚‹
-*	@param[in] pos å–å¾—ã—ãŸã„ãƒã‚¹ç›®ã®åº§æ¨™
-*	@return Square ãƒã‚¹ç›®
+*	@brief ƒ}ƒX–Ú‚ğæ“¾‚·‚é
+*	@param[in] pos æ“¾‚µ‚½‚¢ƒ}ƒX–Ú‚ÌÀ•W
+*	@return Square ƒ}ƒX–Ú
 */
 Square CBoard::get_square(const BoardPosition& pos) const
 {
@@ -61,9 +61,9 @@ Square CBoard::get_square(const BoardPosition& pos) const
 }
 
 /**
-*	@brief å…µå£«ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
-*	@param[in] pos å…µå£«ã‚’ã‚»ãƒƒãƒˆã™ã‚‹åº§æ¨™
-*	@param[in] infantry ã‚»ãƒƒãƒˆã™ã‚‹å…µå£«
+*	@brief •ºm‚ğƒZƒbƒg‚·‚é
+*	@param[in] pos •ºm‚ğƒZƒbƒg‚·‚éÀ•W
+*	@param[in] infantry ƒZƒbƒg‚·‚é•ºm
 */
 void CBoard::set_infantry(const BoardPosition& pos, const CInfantry& infantry)
 {
@@ -71,9 +71,9 @@ void CBoard::set_infantry(const BoardPosition& pos, const CInfantry& infantry)
 }
 
 /**
-*	@brief å…µå£«ã‚’å‰Šé™¤ã™ã‚‹
-*	@param[in] pos å‰Šé™¤ã™ã‚‹å…µå£«ã®ã„ã‚‹åº§æ¨™
-*	@remark æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã«å…µå£«ãŒã„ãªã„å ´åˆã§ã‚‚ã‚¨ãƒ©ãƒ¼ã«ã¯ã—ãªã„
+*	@brief •ºm‚ğíœ‚·‚é
+*	@param[in] pos íœ‚·‚é•ºm‚Ì‚¢‚éÀ•W
+*	@remark w’è‚³‚ê‚½À•W‚É•ºm‚ª‚¢‚È‚¢ê‡‚Å‚àƒGƒ‰[‚É‚Í‚µ‚È‚¢
 */
 void CBoard::remove_infantry(const BoardPosition& pos)
 {
@@ -84,8 +84,8 @@ void CBoard::remove_infantry(const BoardPosition& pos)
 }
 
 /**
-*	@brief ç›¤é¢ã®ã‚µã‚¤ã‚ºã‚’å–å¾—ã™ã‚‹
-*	@return BoardSize ç›¤é¢ã®ã‚µã‚¤ã‚º
+*	@brief ”Õ–Ê‚ÌƒTƒCƒY‚ğæ“¾‚·‚é
+*	@return BoardSize ”Õ–Ê‚ÌƒTƒCƒY
 */
 BoardSize CBoard::get_size() const
 {
@@ -96,7 +96,7 @@ BoardSize CBoard::get_size() const
 }
 
 /**
-*	@brief ç›¤é¢ã‚’ç”»é¢ã«è¡¨ç¤ºã™ã‚‹é–¢æ•°
+*	@brief ”Õ–Ê‚ğ‰æ–Ê‚É•\¦‚·‚éŠÖ”
 */
 void CBoard::show() const
 {
@@ -119,6 +119,6 @@ void CBoard::show() const
 	}
 	show_str += "\n";
 
-	// ãƒ­ã‚°ã®å…ˆé ­æƒ…å ±ã«ã‚ˆã‚Šï¼Œç›¤é¢ãŒå´©ã‚Œã¦è¦‹ãˆã‚‹ã®ã‚’é˜²ããŸã‚ï¼Œå…ˆé ­ã«æ”¹è¡Œã‚’å…¥ã‚Œã¦ãŠã
+	// ƒƒO‚Ìæ“ªî•ñ‚É‚æ‚èC”Õ–Ê‚ª•ö‚ê‚ÄŒ©‚¦‚é‚Ì‚ğ–h‚®‚½‚ßCæ“ª‚É‰üs‚ğ“ü‚ê‚Ä‚¨‚­
 	CLog::write(CLog::LogLevel_Information, "\n" + show_str, true);
 }

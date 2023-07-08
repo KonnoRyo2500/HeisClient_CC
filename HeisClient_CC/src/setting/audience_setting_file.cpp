@@ -1,24 +1,24 @@
 /**
 *	@file		audience_setting_file.cpp
-*	@brief		heis è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
+*	@brief		heis ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éƒNƒ‰ƒXB
 */
 
 #include "audience_setting_file.h"
 #include "setting_keys.h"
 
 /**
-*	@brief è¨­å®šå€¤ã‚’è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
-*	@param[in] path è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@return OnlineSetting èª­ã¿è¾¼ã¾ã‚ŒãŸè¨­å®šå€¤
+*	@brief İ’è’l‚ğŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+*	@param[in] path ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@return OnlineSetting “Ç‚İ‚Ü‚ê‚½İ’è’l
 */
 AudienceSetting CAudienceSettingFile::load(const std::string& path) const
 {
-	// CSVã®èª­ã¿è¾¼ã¿
+	// CSV‚Ì“Ç‚İ‚İ
 	CsvRecords records = parse_csv(path);
 
-	// è¨­å®šå€¤ã‚’è¨­å®šå€¤æ§‹é€ ä½“ã«æ ¼ç´ã™ã‚‹
+	// İ’è’l‚ğİ’è’l\‘¢‘Ì‚ÉŠi”[‚·‚é
 	AudienceSetting setting;
 
 	setting.server_ip_addr = records[AUDIENCE_SETTING_KEY_SVR_ADDR][0];
@@ -28,12 +28,12 @@ AudienceSetting CAudienceSettingFile::load(const std::string& path) const
 }
 
 /**
-*	@brief è¨­å®šå€¤ã‚’è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
-*	@param[in] path è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@param[in] setting æ›¸ãè¾¼ã‚€è¨­å®šå€¤
+*	@brief İ’è’l‚ğŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
+*	@param[in] path ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@param[in] setting ‘‚«‚Şİ’è’l
 */
 void CAudienceSettingFile::save(const std::string& path, const AudienceSetting& setting) const
 {
-	// ç¾æ™‚ç‚¹ã§è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«è¨­å®šå€¤ã‚’ä¿å­˜ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
-	// ä¿å­˜ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰ã€é©å®œå®Ÿè£…ã™ã‚‹
+	// Œ»“_‚ÅŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚Éİ’è’l‚ğ•Û‘¶‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
+	// •Û‘¶‚·‚é•K—v‚ª¶‚¶‚½‚çA“K‹XÀ‘•‚·‚é
 }

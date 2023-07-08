@@ -1,21 +1,21 @@
-ï»¿/**
+/**
 *	@file		infantry.cpp
-*	@brief		heis å…µå£«ã‚¯ãƒ©ã‚¹
+*	@brief		heis •ºmƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	heisã®ãƒ¦ãƒ‹ãƒƒãƒˆã®1ã¤ã§ã‚ã‚‹å…µå£«ãƒ¦ãƒ‹ãƒƒãƒˆã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	heis‚Ìƒ†ƒjƒbƒg‚Ì1‚Â‚Å‚ ‚é•ºmƒ†ƒjƒbƒg‚ğ’è‹`‚·‚éD
 */
 #include "infantry.h"
 #include "board.h"
 #include <stdexcept>
 #include <queue>
 
-/* publicé–¢æ•° */
+/* publicŠÖ” */
 
 /**
-*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-*	@param[in] team_name æ‰€å±ãƒãƒ¼ãƒ å
+*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+*	@param[in] team_name Š‘®ƒ`[ƒ€–¼
 *	@param[in] id ID
-*	@param[in] hp åˆæœŸHP(ã€Œç›¤é¢ã€JSONã‹ã‚‰å†é…ç½®ã™ã‚‹éš›ã«ä½¿ç”¨ã™ã‚‹)
+*	@param[in] hp ‰ŠúHP(u”Õ–ÊvJSON‚©‚çÄ”z’u‚·‚éÛ‚Ég—p‚·‚é)
 */
 CInfantry::CInfantry(const InfantryStatus& init_status)
 	: m_status(init_status)
@@ -24,7 +24,7 @@ CInfantry::CInfantry(const InfantryStatus& init_status)
 }
 
 /**
-*	@brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+*	@brief ƒfƒXƒgƒ‰ƒNƒ^
 */
 CInfantry::~CInfantry()
 {
@@ -32,8 +32,8 @@ CInfantry::~CInfantry()
 }
 
 /**
-*	@brief ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã™ã‚‹
-*	@return InfantryStatus ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+*	@brief Œ»İ‚ÌƒXƒe[ƒ^ƒX‚ğæ“¾‚·‚é
+*	@return InfantryStatus Œ»İ‚ÌƒXƒe[ƒ^ƒX
 */
 InfantryStatus CInfantry::get_status() const
 {
@@ -41,8 +41,8 @@ InfantryStatus CInfantry::get_status() const
 }
 
 /**
-*	@brief HPã‚’1æ¸›ã‚‰ã™
-*	@remark ã™ã§ã«HPãŒ0ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
+*	@brief HP‚ğ1Œ¸‚ç‚·
+*	@remark ‚·‚Å‚ÉHP‚ª0‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
 */
 void CInfantry::reduce_hp()
 {
@@ -52,9 +52,9 @@ void CInfantry::reduce_hp()
 }
 
 /**
-*	@brief è¡Œå‹•å›æ•°ã‚’æŒ‡å®šã•ã‚ŒãŸå›æ•°æ¸›ã‚‰ã™
-*	@param[in] n_reduce è¡Œå‹•å›æ•°ã®æ¸›å°‘åˆ†
-*	@remark è¡Œå‹•å›æ•°ã¯0ä»¥ä¸‹ã«ã¯ãªã‚‰ãªã„
+*	@brief s“®‰ñ”‚ğw’è‚³‚ê‚½‰ñ”Œ¸‚ç‚·
+*	@param[in] n_reduce s“®‰ñ”‚ÌŒ¸­•ª
+*	@remark s“®‰ñ”‚Í0ˆÈ‰º‚É‚Í‚È‚ç‚È‚¢
 */
 void CInfantry::reduce_remaining_action(uint8_t n_reduce)
 {
@@ -67,8 +67,8 @@ void CInfantry::reduce_remaining_action(uint8_t n_reduce)
 }
 
 /**
-*	@brief è‡ªåˆ†ãŒæ­»ã‚“ã§ã„ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹
-*	@return bool è‡ªåˆ†ãŒæ­»ã‚“ã§ã„ã‚‹ã‹
+*	@brief ©•ª‚ª€‚ñ‚Å‚¢‚é‚©‚ğ”»’è‚·‚é
+*	@return bool ©•ª‚ª€‚ñ‚Å‚¢‚é‚©
 */
 bool CInfantry::is_dead() const
 {

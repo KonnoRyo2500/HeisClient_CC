@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		audience_mode.cpp
-*	@brief		heis è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰ã‚¯ãƒ©ã‚¹
+*	@brief		heis ŠÏíƒ‚[ƒhƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	heisã®å¯¾æˆ¦ã‚’è¦³æˆ¦ã™ã‚‹ï¼
+*	@details	heis‚Ì‘Îí‚ğŠÏí‚·‚éD
 */
 
 #include "audience_mode.h"
@@ -12,58 +12,58 @@
 
 /**
 *	@def AUDIENCE_SETTING_FILE_NAME
-*	@brief è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
+*	@brief ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚Ì–¼‘O
 */
 #define AUDIENCE_SETTING_FILE_NAME "audience_setting.csv"
 
-/* publicé–¢æ•° */
+/* publicŠÖ” */
 /**
-*	@brief è¦³æˆ¦ãƒ¡ã‚¤ãƒ³å‡¦ç†
+*	@brief ŠÏíƒƒCƒ“ˆ—
 */
 void CAudienceMode::play_game()
 {
-	CLog::write(CLog::LogLevel_Information, "è¦³æˆ¦ã‚’é–‹å§‹ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ŠÏí‚ğŠJn‚µ‚Ü‚µ‚½");
 
-	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
+	// İ’èƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	AudienceSetting setting = CAudienceSettingFile().load(
 		join({CC_SETTING_DIR, AUDIENCE_SETTING_FILE_NAME})
 	);
 
-	// è¦³æˆ¦é–‹å§‹
+	// ŠÏíŠJn
 	initialize_watch(setting);
 
-	// ã‚µãƒ¼ãƒã‹ã‚‰å—ä¿¡ã—ãŸæ–‡å­—åˆ—ã‚’è¡¨ç¤º("finished"ã¯å¯¾æˆ¦çµ‚äº†ã‚’è¡¨ã™æ–‡å­—åˆ—)
+	// ƒT[ƒo‚©‚çóM‚µ‚½•¶š—ñ‚ğ•\¦("finished"‚Í‘ÎíI—¹‚ğ•\‚·•¶š—ñ)
 	std::string msg = "";
 	do {
 		msg = m_sck->recv();
 		printf("%s\n", msg.c_str());
 	} while (msg != "finished");
 
-	// è¦³æˆ¦çµ‚äº†
+	// ŠÏíI—¹
 	finalize_watch();
 
-	CLog::write(CLog::LogLevel_Information, "è¦³æˆ¦ãŒçµ‚äº†ã—ã¾ã—ãŸ");
+	CLog::write(CLog::LogLevel_Information, "ŠÏí‚ªI—¹‚µ‚Ü‚µ‚½");
 }
 
-/* privateé–¢æ•° */
+/* privateŠÖ” */
 
 /**
-*	@brief è¦³æˆ¦ã®åˆæœŸåŒ–ã‚’è¡Œã†é–¢æ•°
-*	@param[in] setting è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šå€¤
+*	@brief ŠÏí‚Ì‰Šú‰»‚ğs‚¤ŠÖ”
+*	@param[in] setting ŠÏíƒ‚[ƒhİ’è’l
 */
 void CAudienceMode::initialize_watch(const AudienceSetting& setting)
 {
-	// ã‚µãƒ¼ãƒã«æ¥ç¶š
+	// ƒT[ƒo‚ÉÚ‘±
 	m_sck = new CSocket();
 	m_sck->connect(setting.server_ip_addr, setting.server_port_num);
 }
 
 /**
-*	@brief è¦³æˆ¦ã®çµ‚äº†å‡¦ç†ã‚’è¡Œã†é–¢æ•°
+*	@brief ŠÏí‚ÌI—¹ˆ—‚ğs‚¤ŠÖ”
 */
 void CAudienceMode::finalize_watch()
 {
-	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç ´æ£„
+	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ”jŠü
 	delete m_sck;
 	m_sck = NULL;
 }

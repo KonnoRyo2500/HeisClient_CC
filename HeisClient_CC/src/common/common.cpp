@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		common.cpp
-*	@brief		heis å…±é€šå‡¦ç†
+*	@brief		heis ‹¤’Êˆ—
 *	@author		Ryo Konno
-*	@details	CCå†…ã§å…±é€šã—ã¦ä½¿ç”¨ã™ã‚‹å‡¦ç†ã‚’å®šç¾©ã™ã‚‹ï¼
+*	@details	CC“à‚Å‹¤’Ê‚µ‚Äg—p‚·‚éˆ—‚ğ’è‹`‚·‚éD
 */
 
 #include <climits>
@@ -15,27 +15,27 @@
 
 #include "common.h"
 
-/* staticé–¢æ•° */
-//! åˆ¶å¾¡æ–‡å­—ã®å‰Šé™¤
+/* staticŠÖ” */
+//! §Œä•¶š‚Ìíœ
 static void erase_control_letter(std::string& str);
-//! å…ˆé ­åŒºåˆ‡ã‚Šæ–‡å­—ã®å‰Šé™¤
+//! æ“ª‹æØ‚è•¶š‚Ìíœ
 static void erase_first_delimiters(std::string& str, const std::string& delim);
-//! å…ˆé ­ãƒˆãƒ¼ã‚¯ãƒ³ã®å‰Šé™¤
+//! æ“ªƒg[ƒNƒ“‚Ìíœ
 static void erase_first_token(std::string& str, const std::string& delim);
-//! å…ˆé ­ãƒˆãƒ¼ã‚¯ãƒ³ã®å–å¾—
+//! æ“ªƒg[ƒNƒ“‚Ìæ“¾
 static std::string get_first_token(const std::string& str, const std::string& delim);
-//! éƒ¨åˆ†æ–‡å­—åˆ—å‰Šé™¤
+//! •”•ª•¶š—ñíœ
 static void erase_substring(std::string& str, const std::string& erase_str);
 
 /**
-*	@brief æ–‡å­—åˆ—ã‚’ãƒˆãƒ¼ã‚¯ãƒ³åˆ—ã«åˆ†å‰²ã™ã‚‹é–¢æ•°
-*	@param[in] str åˆ†å‰²å…ƒã®æ–‡å­—åˆ—
-*	@param[in] delim åŒºåˆ‡ã‚Šæ–‡å­—
-*	@return std::vector<std::string> ãƒˆãƒ¼ã‚¯ãƒ³åˆ—
+*	@brief •¶š—ñ‚ğƒg[ƒNƒ“—ñ‚É•ªŠ„‚·‚éŠÖ”
+*	@param[in] str •ªŠ„Œ³‚Ì•¶š—ñ
+*	@param[in] delim ‹æØ‚è•¶š
+*	@return std::vector<std::string> ƒg[ƒNƒ“—ñ
 */
 std::vector<std::string> cc_common::split_string(const std::string& str, const std::string& delim)
 {
-	// å…ƒã®æ–‡å­—åˆ—ã¯æ®‹ã—ã¦ãŠããŸã„ãŸã‚ï¼Œæ–‡å­—åˆ—ã®è¤‡è£½ã‚’ã“ã“ã§ä½œã£ã¦ãŠã
+	// Œ³‚Ì•¶š—ñ‚Íc‚µ‚Ä‚¨‚«‚½‚¢‚½‚ßC•¶š—ñ‚Ì•¡»‚ğ‚±‚±‚Åì‚Á‚Ä‚¨‚­
 	std::string str_work(str);
 	std::vector<std::string> tokens;
 
@@ -43,14 +43,14 @@ std::vector<std::string> cc_common::split_string(const std::string& str, const s
 	while (str_work.size() > 0) {
 		std::string token;
 
-		// åŒºåˆ‡ã‚Šæ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹
+		// ‹æØ‚è•¶š‚ğíœ‚·‚é
 		erase_first_delimiters(str_work, delim);
 
-		// ãƒˆãƒ¼ã‚¯ãƒ³ã‚’1ã¤åˆ‡ã‚Šå‡ºã™
+		// ƒg[ƒNƒ“‚ğ1‚ÂØ‚èo‚·
 		token = get_first_token(str_work, delim);
 		erase_first_token(str_work, delim);
 
-		// ãƒˆãƒ¼ã‚¯ãƒ³åˆ—ã«è¿½åŠ 
+		// ƒg[ƒNƒ“—ñ‚É’Ç‰Á
 		if (token.size() > 0) {
 			tokens.push_back(token);
 		}
@@ -59,22 +59,22 @@ std::vector<std::string> cc_common::split_string(const std::string& str, const s
 }
 
 /**
-*	@brief ç‰¹å®šã®ç¯„å›²ã®æ–‡å­—åˆ—ã‚’åˆ‡ã‚Šå–ã£ã¦è¿”ã™é–¢æ•°
-*	@param[in] str æ–‡å­—åˆ—
-*	@param[in] begin_pos åˆ‡ã‚Šå–ã‚‹ç¯„å›²ã®å§‹ç«¯ä½ç½®(0å§‹ã¾ã‚Š)
-*	@param[in] end_pos åˆ‡ã‚Šå–ã‚‹ç¯„å›²ã®çµ‚ç«¯ä½ç½®(0å§‹ã¾ã‚Š, çœç•¥å¯ã€‚çœç•¥ã—ãŸã‚Šã€strã®çµ‚ç«¯ã‚ˆã‚Šå¾Œã‚ã‚’æŒ‡å®šã—ãŸå ´åˆã¯strã®çµ‚ç«¯)
+*	@brief “Á’è‚Ì”ÍˆÍ‚Ì•¶š—ñ‚ğØ‚èæ‚Á‚Ä•Ô‚·ŠÖ”
+*	@param[in] str •¶š—ñ
+*	@param[in] begin_pos Ø‚èæ‚é”ÍˆÍ‚Ìn’[ˆÊ’u(0n‚Ü‚è)
+*	@param[in] end_pos Ø‚èæ‚é”ÍˆÍ‚ÌI’[ˆÊ’u(0n‚Ü‚è, È—ª‰ÂBÈ—ª‚µ‚½‚èAstr‚ÌI’[‚æ‚èŒã‚ë‚ğw’è‚µ‚½ê‡‚Ístr‚ÌI’[)
 */
 std::string cc_common::cut_string(std::string& str, const size_t begin_pos, const size_t end_pos)
 {
-	// å¼•æ•°ã®ãƒã‚§ãƒƒã‚¯
+	// ˆø”‚Ìƒ`ƒFƒbƒN
 	if (begin_pos >= str.size()) {
-		throw std::runtime_error(cc_common::format("åˆ‡ã‚Šå–ã‚Šã®é–‹å§‹ä½ç½®ãŒæ–‡å­—åˆ—ä¸­ã«ã‚ã‚Šã¾ã›ã‚“(æ–‡å­—åˆ—ã®é•·ã•: %zu, é–‹å§‹ä½ç½®: %zu)", str.size(), begin_pos));
+		throw std::runtime_error(cc_common::format("Ø‚èæ‚è‚ÌŠJnˆÊ’u‚ª•¶š—ñ’†‚É‚ ‚è‚Ü‚¹‚ñ(•¶š—ñ‚Ì’·‚³: %zu, ŠJnˆÊ’u: %zu)", str.size(), begin_pos));
 	}
 	if (begin_pos > end_pos) {
-		throw std::runtime_error(cc_common::format("é–‹å§‹ä½ç½®ãŒçµ‚ç«¯ä½ç½®ã‚ˆã‚Šã‚‚å¾Œã‚ã«ã‚ã‚Šã¾ã™(é–‹å§‹ä½ç½®: %zu, çµ‚ç«¯ä½ç½®: %zu)", begin_pos, end_pos));
+		throw std::runtime_error(cc_common::format("ŠJnˆÊ’u‚ªI’[ˆÊ’u‚æ‚è‚àŒã‚ë‚É‚ ‚è‚Ü‚·(ŠJnˆÊ’u: %zu, I’[ˆÊ’u: %zu)", begin_pos, end_pos));
 	}
 
-	// æ–‡å­—åˆ—ã®åˆ‡ã‚Šå–ã‚Š
+	// •¶š—ñ‚ÌØ‚èæ‚è
 	std::string ret;
 	if (end_pos >= str.size()) {
 		ret = str.substr(begin_pos);
@@ -88,19 +88,19 @@ std::string cc_common::cut_string(std::string& str, const size_t begin_pos, cons
 	return ret;
 }
 
-/* éå…¬é–‹é–¢æ•° */
+/* ”ñŒöŠJŠÖ” */
 /**
-*	@brief æ–‡å­—åˆ—ä¸­ã®åˆ¶å¾¡æ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
-*	@param[out] str åˆ¶å¾¡æ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹å¯¾è±¡ã®æ–‡å­—åˆ—
+*	@brief •¶š—ñ’†‚Ì§Œä•¶š‚ğíœ‚·‚éŠÖ”
+*	@param[out] str §Œä•¶š‚ğíœ‚·‚é‘ÎÛ‚Ì•¶š—ñ
 */
 static void erase_control_letter(std::string& str)
 {
-	// å‰Šé™¤ã™ã‚‹åˆ¶å¾¡æ–‡å­—ä¸€è¦§
+	// íœ‚·‚é§Œä•¶šˆê——
 	const std::vector<std::string> ctl_code_list = {
 		// BOM(UTF-8)
 		/*
-		  ã“ã®å‡¦ç†ã«ã‚ˆã‚Šï¼ŒSJISã§ã€Œ*ï½»ï½¿ã€(*ã¯2ãƒã‚¤ãƒˆç›®ãŒ0xEFã®æ–‡å­—)ã‚’å«ã‚€æ–‡å­—åˆ—ã¯ä¸æ­£ãªæ–‡å­—åˆ—ã«ãªã‚‹ãŒï¼Œ
-		  ãã®ã‚ˆã†ãªæ–‡å­—åˆ—ã‚’å«ã‚€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯ãƒ¦ãƒ¼ã‚¶ãŒé‹ç”¨ã«ã‚ˆã‚Šã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã«è¨˜è¿°ã—ãªã„ã‚‚ã®ã¨ã™ã‚‹ï¼
+		  ‚±‚Ìˆ—‚É‚æ‚èCSJIS‚Åu*»¿v(*‚Í2ƒoƒCƒg–Ú‚ª0xEF‚Ì•¶š)‚ğŠÜ‚Ş•¶š—ñ‚Í•s³‚È•¶š—ñ‚É‚È‚é‚ªC
+		  ‚»‚Ì‚æ‚¤‚È•¶š—ñ‚ğŠÜ‚ŞƒAƒNƒVƒ‡ƒ“‚Íƒ†[ƒU‚ª‰^—p‚É‚æ‚èƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚É‹Lq‚µ‚È‚¢‚à‚Ì‚Æ‚·‚éD
 		*/
 		"\xEF\xBB\xBF",
 		// CR
@@ -115,17 +115,17 @@ static void erase_control_letter(std::string& str)
 }
 
 /**
-*	@brief æ–‡å­—åˆ—ã®å…ˆé ­ã«ã‚ã‚‹åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
-*	@param[out] str åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã‚’å‰Šé™¤ã™ã‚‹å¯¾è±¡ã®æ–‡å­—åˆ—
-*	@param[in] delim åŒºåˆ‡ã‚Šæ–‡å­—
+*	@brief •¶š—ñ‚Ìæ“ª‚É‚ ‚é‹æØ‚è•¶š—ñ‚ğíœ‚·‚éŠÖ”
+*	@param[out] str ‹æØ‚è•¶š—ñ‚ğíœ‚·‚é‘ÎÛ‚Ì•¶š—ñ
+*	@param[in] delim ‹æØ‚è•¶š
 */
 static void erase_first_delimiters(std::string& str, const std::string& delim)
 {
-	// æ¬¡ã«å‡ºç¾ã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã®å…ˆé ­ä½ç½®
+	// Ÿ‚ÉoŒ»‚·‚éƒg[ƒNƒ“‚Ìæ“ªˆÊ’u
 	size_t next_token_pos = str.find_first_not_of(delim);
 
 	if (next_token_pos == std::string::npos) {
-		// åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã®å¾Œã‚ã«ãƒˆãƒ¼ã‚¯ãƒ³ãŒãªã‘ã‚Œã°ï¼Œåˆ†å‰²çµ‚äº†
+		// ‹æØ‚è•¶š—ñ‚ÌŒã‚ë‚Éƒg[ƒNƒ“‚ª‚È‚¯‚ê‚ÎC•ªŠ„I—¹
 		str.clear();
 		return;
 	}
@@ -133,17 +133,17 @@ static void erase_first_delimiters(std::string& str, const std::string& delim)
 }
 
 /**
-*	@brief æ–‡å­—åˆ—ã®å…ˆé ­ã«ã‚ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
-*	@param[out] str ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å‰Šé™¤ã™ã‚‹å¯¾è±¡ã®æ–‡å­—åˆ—
-*	@param[in] delim åŒºåˆ‡ã‚Šæ–‡å­—
+*	@brief •¶š—ñ‚Ìæ“ª‚É‚ ‚éƒg[ƒNƒ“‚ğíœ‚·‚éŠÖ”
+*	@param[out] str ƒg[ƒNƒ“‚ğíœ‚·‚é‘ÎÛ‚Ì•¶š—ñ
+*	@param[in] delim ‹æØ‚è•¶š
 */
 static void erase_first_token(std::string& str, const std::string& delim)
 {
-	// æ¬¡ã«å‡ºç¾ã™ã‚‹åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã®å…ˆé ­ä½ç½®
+	// Ÿ‚ÉoŒ»‚·‚é‹æØ‚è•¶š—ñ‚Ìæ“ªˆÊ’u
 	size_t next_delims_pos = str.find_first_of(delim);
 
 	if (next_delims_pos == std::string::npos) {
-		// ãƒˆãƒ¼ã‚¯ãƒ³ã®å¾Œã‚ã«åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ãŒãªã‘ã‚Œã°ï¼Œãã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å‰Šé™¤ã—åˆ†å‰²çµ‚äº†
+		// ƒg[ƒNƒ“‚ÌŒã‚ë‚É‹æØ‚è•¶š—ñ‚ª‚È‚¯‚ê‚ÎC‚»‚Ìƒg[ƒNƒ“‚ğíœ‚µ•ªŠ„I—¹
 		str.clear();
 		return;
 	}
@@ -151,31 +151,31 @@ static void erase_first_token(std::string& str, const std::string& delim)
 }
 
 /**
-*	@brief æ–‡å­—åˆ—ã®å…ˆé ­ã«ã‚ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å–å¾—ã™ã‚‹é–¢æ•°
-*	@param[out] str ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å‰Šé™¤ã™ã‚‹å¯¾è±¡ã®æ–‡å­—åˆ—
-*	@param[in] delim åŒºåˆ‡ã‚Šæ–‡å­—
-*	@return std::string å–å¾—ã—ãŸãƒˆãƒ¼ã‚¯ãƒ³
+*	@brief •¶š—ñ‚Ìæ“ª‚É‚ ‚éƒg[ƒNƒ“‚ğæ“¾‚·‚éŠÖ”
+*	@param[out] str ƒg[ƒNƒ“‚ğíœ‚·‚é‘ÎÛ‚Ì•¶š—ñ
+*	@param[in] delim ‹æØ‚è•¶š
+*	@return std::string æ“¾‚µ‚½ƒg[ƒNƒ“
 */
 static std::string get_first_token(const std::string& str, const std::string& delim)
 {
-	// æ¬¡ã«å‡ºç¾ã™ã‚‹åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã®å…ˆé ­ä½ç½®
+	// Ÿ‚ÉoŒ»‚·‚é‹æØ‚è•¶š—ñ‚Ìæ“ªˆÊ’u
 	size_t next_delims_pos = str.find_first_of(delim);
 
 	if (next_delims_pos == std::string::npos) {
-		// ãƒˆãƒ¼ã‚¯ãƒ³ã®å¾Œã‚ã«åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ãŒãªã‘ã‚Œã°ï¼Œæ–‡å­—åˆ—å…¨ä½“ãŒãƒˆãƒ¼ã‚¯ãƒ³ã«ãªã‚‹
+		// ƒg[ƒNƒ“‚ÌŒã‚ë‚É‹æØ‚è•¶š—ñ‚ª‚È‚¯‚ê‚ÎC•¶š—ñ‘S‘Ì‚ªƒg[ƒNƒ“‚É‚È‚é
 		return str;
 	}
 	return str.substr(0, next_delims_pos);
 }
 
 /**
-*	@brief æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’ï¼Œæ–‡å­—åˆ—ä¸­ã‹ã‚‰å‰Šé™¤ã™ã‚‹é–¢æ•°
-*	@param[out] str åŠ å·¥å¯¾è±¡ã®æ–‡å­—åˆ—
-*	@param[in] erase_str å‰Šé™¤ã™ã‚‹æ–‡å­—åˆ—
+*	@brief w’è‚³‚ê‚½•¶š—ñ‚ğC•¶š—ñ’†‚©‚çíœ‚·‚éŠÖ”
+*	@param[out] str ‰ÁH‘ÎÛ‚Ì•¶š—ñ
+*	@param[in] erase_str íœ‚·‚é•¶š—ñ
 */
 static void erase_substring(std::string& str, const std::string& erase_str)
 {
-	// TODO: replaceã‚’ä½¿ãˆã‚Œã°ï¼Œã“ã®é–¢æ•°ã¯ä¸è¦ã«ãªã‚‹ã‹ã‚‚?
+	// TODO: replace‚ğg‚¦‚ê‚ÎC‚±‚ÌŠÖ”‚Í•s—v‚É‚È‚é‚©‚à?
 	size_t substr_pos = str.find(erase_str);
 	while (substr_pos != std::string::npos) {
 		str.erase(substr_pos, erase_str.size());

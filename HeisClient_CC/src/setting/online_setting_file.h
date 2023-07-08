@@ -1,8 +1,8 @@
 /**
 *	@file		online_setting_file.h
-*	@brief		heis ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh‚Ìİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -12,14 +12,14 @@
 #include "setting.h"
 
 /**
-*	@brief	ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
+*	@brief	ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
 */
 class COnlineSettingFile : public CSettingFileBase<OnlineSetting>
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// è¨­å®šå€¤ã‚’ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+	// İ’è’l‚ğƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
 	OnlineSetting load(const std::string& path) const;
-	// è¨­å®šå€¤ã‚’ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
+	// İ’è’l‚ğƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
 	void save(const std::string& path, const OnlineSetting& setting) const;
 };

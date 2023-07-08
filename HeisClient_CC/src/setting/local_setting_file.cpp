@@ -1,24 +1,24 @@
 /**
 *	@file		local_setting_file.cpp
-*	@brief		heis ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
+*	@brief		heis ƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	ƒ[ƒJƒ‹ƒ‚[ƒh‚Ìİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éƒNƒ‰ƒXB
 */
 
 #include "local_setting_file.h"
 #include "setting_keys.h"
 
 /**
-*	@brief è¨­å®šå€¤ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
-*	@param[in] path ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@return LocalSetting èª­ã¿è¾¼ã¾ã‚ŒãŸè¨­å®šå€¤
+*	@brief İ’è’l‚ğƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+*	@param[in] path ƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@return LocalSetting “Ç‚İ‚Ü‚ê‚½İ’è’l
 */
 LocalSetting CLocalSettingFile::load(const std::string& path) const
 {
-	// CSVã®èª­ã¿è¾¼ã¿
+	// CSV‚Ì“Ç‚İ‚İ
 	CsvRecords records = parse_csv(path);
 
-	// è¨­å®šå€¤ã‚’è¨­å®šå€¤æ§‹é€ ä½“ã«æ ¼ç´ã™ã‚‹
+	// İ’è’l‚ğİ’è’l\‘¢‘Ì‚ÉŠi”[‚·‚é
 	LocalSetting setting;
 
 	setting.my_team_name = records[LOCAL_SETTING_KEY_MY_NAME][0];
@@ -41,33 +41,33 @@ LocalSetting CLocalSettingFile::load(const std::string& path) const
 }
 
 /**
-*	@brief è¨­å®šå€¤ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
-*	@param[in] path ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@param[in] setting æ›¸ãè¾¼ã‚€è¨­å®šå€¤
+*	@brief İ’è’l‚ğƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
+*	@param[in] path ƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@param[in] setting ‘‚«‚Şİ’è’l
 */
 void CLocalSettingFile::save(const std::string& path, const LocalSetting& setting) const
 {
-	// ç¾æ™‚ç‚¹ã§ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«è¨­å®šå€¤ã‚’ä¿å­˜ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
-	// ä¿å­˜ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰ã€é©å®œå®Ÿè£…ã™ã‚‹
+	// Œ»“_‚Åƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚Éİ’è’l‚ğ•Û‘¶‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
+	// •Û‘¶‚·‚é•K—v‚ª¶‚¶‚½‚çA“K‹XÀ‘•‚·‚é
 }
 
 /**
-*	@brief å„å…µå£«ã®åˆæœŸä½ç½®ã®æƒ…å ±ã‚’ã€ç›¤é¢ä¸Šã®ä½ç½®ã‚’è¡¨ã™æ§‹é€ ä½“ã«å¤‰æ›ã™ã‚‹
-*	@param[in] init_x_from_csv å„å…µå£«ã®xåº§æ¨™
-*	@param[in] init_y_from_csv å„å…µå£«ã®yåº§æ¨™
-*	@return std::vector<BoardPosition> å„å…µå£«ã®åˆæœŸä½ç½®
+*	@brief Še•ºm‚Ì‰ŠúˆÊ’u‚Ìî•ñ‚ğA”Õ–Êã‚ÌˆÊ’u‚ğ•\‚·\‘¢‘Ì‚É•ÏŠ·‚·‚é
+*	@param[in] init_x_from_csv Še•ºm‚ÌxÀ•W
+*	@param[in] init_y_from_csv Še•ºm‚ÌyÀ•W
+*	@return std::vector<BoardPosition> Še•ºm‚Ì‰ŠúˆÊ’u
 */
 std::vector<BoardPosition> CLocalSettingFile::build_init_positions(
 	const std::vector<std::string>& init_x_from_csv,
 	const std::vector<std::string>& init_y_from_csv
 ) const
 {
-	// xåº§æ¨™ãƒ»yåº§æ¨™ã®æ•°ãŒåŒã˜ã§ãªã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼
+	// xÀ•WEyÀ•W‚Ì”‚ª“¯‚¶‚Å‚È‚¯‚ê‚ÎƒGƒ‰[
 	if (init_x_from_csv.size() != init_y_from_csv.size()) {
-		throw std::runtime_error("å…µå£«ã®åˆæœŸé…ç½®åº§æ¨™ã®xåº§æ¨™ãƒ»yåº§æ¨™ã¯ãã‚Œãã‚ŒåŒã˜æ•°ã ã‘è¨­å®šã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™");
+		throw std::runtime_error("•ºm‚Ì‰Šú”z’uÀ•W‚ÌxÀ•WEyÀ•W‚Í‚»‚ê‚¼‚ê“¯‚¶”‚¾‚¯İ’è‚·‚é•K—v‚ª‚ ‚è‚Ü‚·");
 	}
 
-	// æŒ‡å®šã•ã‚ŒãŸxåº§æ¨™ãƒ»yåº§æ¨™ã‚’ç›¤é¢ä¸Šã®ä½ç½®ã«å¤‰æ›ã™ã‚‹
+	// w’è‚³‚ê‚½xÀ•WEyÀ•W‚ğ”Õ–Êã‚ÌˆÊ’u‚É•ÏŠ·‚·‚é
 	std::vector<BoardPosition> init_positions;
 	for (int i = 0; i < init_x_from_csv.size(); i++) {
 		BoardPosition pos = BoardPosition(

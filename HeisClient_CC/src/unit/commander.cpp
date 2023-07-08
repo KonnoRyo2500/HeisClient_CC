@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		commander.cpp
-*	@brief		heis å¸ä»¤å®˜ã‚¯ãƒ©ã‚¹
+*	@brief		heis i—ßŠ¯ƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	ãƒãƒ¼ãƒ ã®å…µå£«ã‚’ä¸€å…ƒç®¡ç†ã—ã€æ“ä½œã‚„çŠ¶æ…‹å–å¾—ã‚’è¡Œã†ã€‚
+*	@details	ƒ`[ƒ€‚Ì•ºm‚ğˆêŒ³ŠÇ—‚µA‘€ì‚âó‘Ôæ“¾‚ğs‚¤B
 */
 
 #include "commander.h"
@@ -11,9 +11,9 @@
 #include <algorithm>
 
 /**
-*	@brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-*	@param[in] team_name ãƒãƒ¼ãƒ å
-*	@param[in] board ç›¤é¢
+*	@brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+*	@param[in] team_name ƒ`[ƒ€–¼
+*	@param[in] board ”Õ–Ê
 */
 CCommander::CCommander(const std::string& team_name, CBoard* board)
 	: m_team_name(team_name)
@@ -25,9 +25,9 @@ CCommander::CCommander(const std::string& team_name, CBoard* board)
 }
 
 /**
-*	@brief æŒ‡å®šã—ãŸIDã‚’æŒã¤å…µå£«ã®ä½ç½®ã‚’å–å¾—ã™ã‚‹
-*	@param[in] id å…µå£«ID
-*	@return BoardPosition å…µå£«ã®ä½ç½®(æŒ‡å®šã—ãŸIDã®å…µå£«ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯INVALID_POSITION)
+*	@brief w’è‚µ‚½ID‚ğ‚Â•ºm‚ÌˆÊ’u‚ğæ“¾‚·‚é
+*	@param[in] id •ºmID
+*	@return BoardPosition •ºm‚ÌˆÊ’u(w’è‚µ‚½ID‚Ì•ºm‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍINVALID_POSITION)
 */
 BoardPosition CCommander::get_infantry_position_by_id(const std::string& id) const
 {
@@ -42,9 +42,9 @@ BoardPosition CCommander::get_infantry_position_by_id(const std::string& id) con
 }
 
 /**
-*	@brief æŒ‡å®šã—ãŸå…µå£«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã™ã‚‹
-*	@param[in] id å…µå£«ID
-*	@return InfantryStatus å…µå£«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+*	@brief w’è‚µ‚½•ºm‚ÌƒXƒe[ƒ^ƒX‚ğæ“¾‚·‚é
+*	@param[in] id •ºmID
+*	@return InfantryStatus •ºm‚ÌƒXƒe[ƒ^ƒX
 */
 InfantryStatus CCommander::get_infantry_status_by_id(const std::string& id) const
 {
@@ -53,9 +53,9 @@ InfantryStatus CCommander::get_infantry_status_by_id(const std::string& id) cons
 }
 
 /**
-*	@brief å…µå£«ã«æ”»æ’ƒã‚’æŒ‡ç¤ºã™ã‚‹
-*	@param[in] id å…µå£«ã®ID
-*	@param[in] dst æ”»æ’ƒå…ˆã®åº§æ¨™
+*	@brief •ºm‚ÉUŒ‚‚ğw¦‚·‚é
+*	@param[in] id •ºm‚ÌID
+*	@param[in] dst UŒ‚æ‚ÌÀ•W
 */
 void CCommander::attack(const std::string& id, const BoardPosition& dst)
 {
@@ -64,14 +64,14 @@ void CCommander::attack(const std::string& id, const BoardPosition& dst)
 	BoardPosition pos = infantry_and_pos.second;
 	m_controller.attack(m_board, m_observer, pos, dst);
 
-	// ã®ã¡ã«ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ãŸã‚ã€æ”»æ’ƒå…ˆã‚’è¨˜éŒ²ã—ã¦ãŠã
+	// ‚Ì‚¿‚Éus“®vƒpƒPƒbƒg‚ğì¬‚Å‚«‚é‚æ‚¤‚É‚·‚é‚½‚ßAUŒ‚æ‚ğ‹L˜^‚µ‚Ä‚¨‚­
 	m_builder.add_attack_destination(infantry, dst);
 }
 
 /**
-*	@brief å…µå£«ã«ç§»å‹•ã‚’æŒ‡ç¤ºã™ã‚‹
-*	@param[in] id å…µå£«ã®ID
-*	@param[in] dst ç§»å‹•å…ˆã®åº§æ¨™
+*	@brief •ºm‚ÉˆÚ“®‚ğw¦‚·‚é
+*	@param[in] id •ºm‚ÌID
+*	@param[in] dst ˆÚ“®æ‚ÌÀ•W
 */
 void CCommander::move(const std::string& id, const BoardPosition& dst) const
 {
@@ -81,9 +81,9 @@ void CCommander::move(const std::string& id, const BoardPosition& dst) const
 }
 
 /**
-*	@brief ç§»å‹•å¯èƒ½ãªã™ã¹ã¦ã®ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
-*	@param[in] id å…µå£«ã®ID
-*	@return std::vector<BoardPosition> ç§»å‹•å¯èƒ½ãªãƒã‚¹
+*	@brief ˆÚ“®‰Â”\‚È‚·‚×‚Ä‚Ìƒ}ƒX‚ğæ“¾‚·‚é
+*	@param[in] id •ºm‚ÌID
+*	@return std::vector<BoardPosition> ˆÚ“®‰Â”\‚Èƒ}ƒX
 */
 std::vector<BoardPosition> CCommander::find_movable_position(const std::string& id) const
 {
@@ -92,9 +92,9 @@ std::vector<BoardPosition> CCommander::find_movable_position(const std::string& 
 }
 
 /**
-*	@brief æ”»æ’ƒå¯èƒ½ãªã™ã¹ã¦ã®ãƒã‚¹ã‚’å–å¾—ã™ã‚‹
-*	@param[in] id å…µå£«ã®ID
-*	@return std::vector<BoardPosition> æ”»æ’ƒå¯èƒ½ãªãƒã‚¹
+*	@brief UŒ‚‰Â”\‚È‚·‚×‚Ä‚Ìƒ}ƒX‚ğæ“¾‚·‚é
+*	@param[in] id •ºm‚ÌID
+*	@return std::vector<BoardPosition> UŒ‚‰Â”\‚Èƒ}ƒX
 */
 std::vector<BoardPosition> CCommander::find_attackable_position(const std::string& id) const
 {
@@ -103,10 +103,10 @@ std::vector<BoardPosition> CCommander::find_attackable_position(const std::strin
 }
 
 /**
-*	@brief è¡Œå‹•å¯èƒ½ãªå…µå£«ã®IDã‚’å–å¾—ã™ã‚‹
-*	@details ã€Œè¡Œå‹•å¯èƒ½ã€ã¨ã¯ã€ç§»å‹•ã‚‚ã—ãã¯æ”»æ’ƒãŒã§ãã‚‹ã¨ã„ã†ã“ã¨ã‚’æŒ‡ã™ã€‚
-*	@param[in] team_name å…µå£«IDå–å¾—å¯¾è±¡ã®ãƒãƒ¼ãƒ å
-*	@return std::vector<std::string> è¡Œå‹•å¯èƒ½ãªå…µå£«ã®ID
+*	@brief s“®‰Â”\‚È•ºm‚ÌID‚ğæ“¾‚·‚é
+*	@details us“®‰Â”\v‚Æ‚ÍAˆÚ“®‚à‚µ‚­‚ÍUŒ‚‚ª‚Å‚«‚é‚Æ‚¢‚¤‚±‚Æ‚ğw‚·B
+*	@param[in] team_name •ºmIDæ“¾‘ÎÛ‚Ìƒ`[ƒ€–¼
+*	@return std::vector<std::string> s“®‰Â”\‚È•ºm‚ÌID
 */
 std::vector<std::string> CCommander::get_all_actable_infantry_ids(const std::string& team_name) const
 {
@@ -114,7 +114,7 @@ std::vector<std::string> CCommander::get_all_actable_infantry_ids(const std::str
 	std::vector<std::string> attackable_ids = get_all_attackable_infantry_ids(team_name);
 	std::vector<std::string> actable_ids;
 
-	// ç§»å‹•å¯èƒ½ã€ã¾ãŸã¯æ”»æ’ƒå¯èƒ½ãªå…µå£«ã®IDã‚’æ¢ã™
+	// ˆÚ“®‰Â”\A‚Ü‚½‚ÍUŒ‚‰Â”\‚È•ºm‚ÌID‚ğ’T‚·
 	std::copy(movable_ids.begin(), movable_ids.end(), std::back_inserter(actable_ids));
 	for (auto& at_id : attackable_ids) {
 		if (std::find(actable_ids.begin(), actable_ids.end(), at_id) != actable_ids.end()) {
@@ -126,9 +126,9 @@ std::vector<std::string> CCommander::get_all_actable_infantry_ids(const std::str
 }
 
 /**
-*	@brief ç§»å‹•å¯èƒ½ãªå…µå£«ã®IDã‚’å–å¾—ã™ã‚‹
-*	@param[in] team_name å…µå£«IDå–å¾—å¯¾è±¡ã®ãƒãƒ¼ãƒ å
-*	@return std::vector<std::string> ç§»å‹•å¯èƒ½ãªå…µå£«ã®ID
+*	@brief ˆÚ“®‰Â”\‚È•ºm‚ÌID‚ğæ“¾‚·‚é
+*	@param[in] team_name •ºmIDæ“¾‘ÎÛ‚Ìƒ`[ƒ€–¼
+*	@return std::vector<std::string> ˆÚ“®‰Â”\‚È•ºm‚ÌID
 */
 std::vector<std::string> CCommander::get_all_movable_infantry_ids(const std::string& team_name) const
 {
@@ -138,7 +138,7 @@ std::vector<std::string> CCommander::get_all_movable_infantry_ids(const std::str
 		CInfantry infantry = ip.first;
 		BoardPosition pos = ip.second;
 
-		// æŒ‡å®šã•ã‚ŒãŸãƒãƒ¼ãƒ åã§ã€ã‹ã¤ç§»å‹•å…ˆã®åº§æ¨™ãŒå­˜åœ¨ã™ã‚‹å ´åˆç§»å‹•å¯èƒ½
+		// w’è‚³‚ê‚½ƒ`[ƒ€–¼‚ÅA‚©‚ÂˆÚ“®æ‚ÌÀ•W‚ª‘¶İ‚·‚éê‡ˆÚ“®‰Â”\
 		bool has_team_name = (infantry.get_status().team_name == team_name);
 		bool has_pos_to_move = (m_observer.search_position_to_move(*m_board, pos).size() >= 1);
 		if (has_team_name && has_pos_to_move) {
@@ -150,9 +150,9 @@ std::vector<std::string> CCommander::get_all_movable_infantry_ids(const std::str
 }
 
 /**
-*	@brief æ”»æ’ƒå¯èƒ½ãªå…µå£«ã®IDã‚’å–å¾—ã™ã‚‹
-*	@param[in] team_name å…µå£«IDå–å¾—å¯¾è±¡ã®ãƒãƒ¼ãƒ å
-*	@return std::vector<std::string> æ”»æ’ƒå¯èƒ½ãªå…µå£«ã®ID
+*	@brief UŒ‚‰Â”\‚È•ºm‚ÌID‚ğæ“¾‚·‚é
+*	@param[in] team_name •ºmIDæ“¾‘ÎÛ‚Ìƒ`[ƒ€–¼
+*	@return std::vector<std::string> UŒ‚‰Â”\‚È•ºm‚ÌID
 */
 std::vector<std::string> CCommander::get_all_attackable_infantry_ids(const std::string& team_name) const
 {
@@ -162,7 +162,7 @@ std::vector<std::string> CCommander::get_all_attackable_infantry_ids(const std::
 		CInfantry infantry = ip.first;
 		BoardPosition pos = ip.second;
 
-		// æŒ‡å®šã•ã‚ŒãŸãƒãƒ¼ãƒ åã§ã€ã‹ã¤æ”»æ’ƒå…ˆã®åº§æ¨™ãŒå­˜åœ¨ã™ã‚‹å ´åˆæ”»æ’ƒå¯èƒ½
+		// w’è‚³‚ê‚½ƒ`[ƒ€–¼‚ÅA‚©‚ÂUŒ‚æ‚ÌÀ•W‚ª‘¶İ‚·‚éê‡UŒ‚‰Â”\
 		bool has_team_name = (infantry.get_status().team_name == team_name);
 		bool has_pos_to_attack = (m_observer.search_position_to_attack(*m_board, pos).size() >= 1);
 		if (has_team_name && has_pos_to_attack) {
@@ -174,8 +174,8 @@ std::vector<std::string> CCommander::get_all_attackable_infantry_ids(const std::
 }
 
 /**
-*	@brief ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
-*	@return JSONSendPacket_Action ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@brief us“®vƒpƒPƒbƒg‚ğì¬‚·‚é
+*	@return JSONSendPacket_Action us“®vƒpƒPƒbƒg
 */
 JSONSendPacket_Action CCommander::create_action_pkt()
 {
@@ -185,9 +185,9 @@ JSONSendPacket_Action CCommander::create_action_pkt()
 }
 
 /**
-*	@brief IDã‹ã‚‰å…µå£«ã¨ä½ç½®ã‚’å–å¾—ã™ã‚‹
-*	@param[in] id å…µå£«ID
-*	@return InfantryWithPos å…µå£«ã®å®Ÿä½“ã¨ãã®ä½ç½®
+*	@brief ID‚©‚ç•ºm‚ÆˆÊ’u‚ğæ“¾‚·‚é
+*	@param[in] id •ºmID
+*	@return InfantryWithPos •ºm‚ÌÀ‘Ì‚Æ‚»‚ÌˆÊ’u
 */
 InfantryWithPos CCommander::find_infantry_by_id(const std::string& id) const
 {

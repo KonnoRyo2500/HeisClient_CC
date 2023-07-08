@@ -1,8 +1,8 @@
-ï»¿/**
+/**
 *	@file		main.cpp
-*	@brief		heis ãƒ¡ã‚¤ãƒ³å‡¦ç†
+*	@brief		heis ƒƒCƒ“ˆ—
 *	@author		Ryo Konno
-*	@details	ãƒ¡ã‚¤ãƒ³é–¢æ•°ã‚’å®šç¾©ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ï¼
+*	@details	ƒƒCƒ“ŠÖ”‚ğ’è‹`‚·‚éƒtƒ@ƒCƒ‹D
 */
 
 #include "game_local.h"
@@ -15,43 +15,43 @@
 
 /**
 *	@enum GameMode
-*	ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰
+*	ƒQ[ƒ€ƒ‚[ƒh
 */
 enum GameMode {
-	//! ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰
+	//! ƒ[ƒJƒ‹ƒ‚[ƒh
 	GameMode_Local,
-	//! ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰
+	//! ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh
 	GameMode_Online,
-	//! è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰
+	//! ŠÏíƒ‚[ƒh
 	GameMode_Audience,
 };
 
-/* staticé–¢æ•° */
-//! ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã‚’é¸æŠã™ã‚‹
+/* staticŠÖ” */
+//! ƒQ[ƒ€ƒ‚[ƒh‚ğ‘I‘ğ‚·‚é
 static GameMode ask_game_mode();
-//! ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã™ã‚‹
+//! ƒQ[ƒ€‚ğŠJn‚·‚é
 static void start_game(const GameMode mode);
 
 /**
-*	@brief ãƒ¡ã‚¤ãƒ³é–¢æ•°
+*	@brief ƒƒCƒ“ŠÖ”
 */
 int main()
 {
 	try {
-		// å„ç¨®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹
+		// ŠeíƒƒOƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
 		CLog::start_logging();
 
-		// å¯¾æˆ¦ã‚’å®Ÿè¡Œ
-		CLog::write(CLog::LogLevel_Information, "CCã®å®Ÿè¡ŒãŒé–‹å§‹ã•ã‚Œã¾ã—ãŸ");
+		// ‘Îí‚ğÀs
+		CLog::write(CLog::LogLevel_Information, "CC‚ÌÀs‚ªŠJn‚³‚ê‚Ü‚µ‚½");
 		start_game(ask_game_mode());
-		CLog::write(CLog::LogLevel_Information, "CCã®å®Ÿè¡ŒãŒæ­£å¸¸ã«å®Œäº†ã—ã¾ã—ãŸ");
+		CLog::write(CLog::LogLevel_Information, "CC‚ÌÀs‚ª³í‚ÉŠ®—¹‚µ‚Ü‚µ‚½");
 
-		// ãƒ­ã‚°ã®è¨˜éŒ²ã‚’çµ‚äº†
+		// ƒƒO‚Ì‹L˜^‚ğI—¹
 		CLog::end_logging();
 	}
 	catch (const std::exception& e) {
-		// ãƒ­ã‚°ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæ­£å¸¸ã«ä½œæˆã§ãã¦ã„ãªã„å¯èƒ½æ€§ã‚‚ã‚ã‚‹ãŸã‚ã€ã‚³ãƒ³ã‚½ãƒ¼ãƒ«å‡ºåŠ›ã«ã™ã‚‹
-		fprintf(stderr, "CCã®å®Ÿè¡Œä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ(å†…å®¹: %s)\n", e.what());
+		// ƒƒO‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª³í‚Éì¬‚Å‚«‚Ä‚¢‚È‚¢‰Â”\«‚à‚ ‚é‚½‚ßAƒRƒ“ƒ\[ƒ‹o—Í‚É‚·‚é
+		fprintf(stderr, "CC‚ÌÀs’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½(“à—e: %s)\n", e.what());
 		return EXIT_FAILURE;
 	}
 
@@ -59,12 +59,12 @@ int main()
 }
 
 /**
-*	@brief ãƒ¦ãƒ¼ã‚¶ã«ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã‚’é¸æŠã•ã›ã‚‹é–¢æ•°
-*	@return GameMode é¸æŠã—ãŸã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰
+*	@brief ƒ†[ƒU‚ÉƒQ[ƒ€ƒ‚[ƒh‚ğ‘I‘ğ‚³‚¹‚éŠÖ”
+*	@return GameMode ‘I‘ğ‚µ‚½ƒQ[ƒ€ƒ‚[ƒh
 */
 static GameMode ask_game_mode()
 {
-	// ãƒ¦ãƒ¼ã‚¶ãŒé¸æŠã—ãŸå€¤ã¨ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã¨ã®å¯¾å¿œè¡¨
+	// ƒ†[ƒU‚ª‘I‘ğ‚µ‚½’l‚ÆƒQ[ƒ€ƒ‚[ƒh‚Æ‚Ì‘Î‰•\
 	static const std::map<int, GameMode> selected_value_to_mode = {
 		{1, GameMode_Local},
 		{2, GameMode_Online},
@@ -73,15 +73,15 @@ static GameMode ask_game_mode()
 	auto it = selected_value_to_mode.end();
 
 	while (it == selected_value_to_mode.end()) {
-		// ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ãŒç¢ºå®šã™ã‚‹ã¾ã§é¸æŠã‚’ç¶šè¡Œã™ã‚‹
+		// ƒQ[ƒ€ƒ‚[ƒh‚ªŠm’è‚·‚é‚Ü‚Å‘I‘ğ‚ğ‘±s‚·‚é
 		try {
 			std::string user_input_buf;
-			printf("ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„(1: ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰, 2: ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰, 3: è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰)\n");
+			printf("ƒQ[ƒ€ƒ‚[ƒh‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢(1: ƒ[ƒJƒ‹ƒ‚[ƒh, 2: ƒIƒ“ƒ‰ƒCƒ“ƒ‚[ƒh, 3: ŠÏíƒ‚[ƒh)\n");
 			std::cin >> user_input_buf;
 			it = selected_value_to_mode.find(stoi(user_input_buf));
 		}
 		catch (const std::exception& e) {
-			printf("å…¥åŠ›ã•ã‚ŒãŸã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã¯å—ç†ã§ãã¾ã›ã‚“(ç†ç”±: %s)\n", e.what());
+			printf("“ü—Í‚³‚ê‚½ƒQ[ƒ€ƒ‚[ƒh‚Íó—‚Å‚«‚Ü‚¹‚ñ(——R: %s)\n", e.what());
 			continue;
 		}
 	}
@@ -90,8 +90,8 @@ static GameMode ask_game_mode()
 }
 
 /**
-*	@brief æŒ‡å®šã—ãŸãƒ¢ãƒ¼ãƒ‰ã§ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã™ã‚‹é–¢æ•°
-*	@param[in] mode ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰
+*	@brief w’è‚µ‚½ƒ‚[ƒh‚ÅƒQ[ƒ€‚ğŠJn‚·‚éŠÖ”
+*	@param[in] mode ƒQ[ƒ€ƒ‚[ƒh
 */
 static void start_game(const GameMode mode)
 {
@@ -108,7 +108,7 @@ static void start_game(const GameMode mode)
 			game = new CAudienceMode();
 			break;
 		default:
-			throw std::runtime_error("ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ãŒä¸æ­£ã§ã™");
+			throw std::runtime_error("ƒQ[ƒ€ƒ‚[ƒh‚ª•s³‚Å‚·");
 	}
 	game->play_game();
 

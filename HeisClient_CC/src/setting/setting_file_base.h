@@ -1,8 +1,8 @@
 /**
 *	@file		setting_file_base.h
-*	@brief		heis è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
+*	@brief		heis İ’èƒtƒ@ƒCƒ‹ƒx[ƒXƒNƒ‰ƒX
 *	@author		Ryo Konno
-*	@details	CSVå½¢å¼ã®è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹å„ç¨®ã‚¯ãƒ©ã‚¹ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
+*	@details	CSVŒ`®‚Ìİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éŠeíƒNƒ‰ƒX‚Ìƒx[ƒXƒNƒ‰ƒXB
 */
 
 #pragma once
@@ -15,34 +15,34 @@
 #include "common.h"
 
 /**
-*	@brief æ§‹é€ åŒ–ã•ã‚ŒãŸCSVãƒ¬ã‚³ãƒ¼ãƒ‰ã®å‹
+*	@brief \‘¢‰»‚³‚ê‚½CSVƒŒƒR[ƒh‚ÌŒ^
 */
 typedef std::map<std::string, std::vector<std::string>> CsvRecords;
 
 /**
-*	@brief	è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
-*	@tparam SettingType è¨­å®šå€¤ã‚¯ãƒ©ã‚¹ã®å‹
+*	@brief	İ’èƒtƒ@ƒCƒ‹ƒx[ƒXƒNƒ‰ƒX
+*	@tparam SettingType İ’è’lƒNƒ‰ƒX‚ÌŒ^
 */
 template <typename SettingType>
 class CSettingFileBase
 {
-	// ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ƒƒ“ƒoŠÖ”
 public:
-	// è¨­å®šå€¤ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+	// İ’è’l‚ğƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
 	virtual SettingType load(const std::string& path) const = 0;
-	// è¨­å®šå€¤ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
+	// İ’è’l‚ğƒ[ƒJƒ‹ƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
 	virtual void save(const std::string& path, const SettingType& setting) const = 0;
 
 protected:
-	// CSVãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸­èº«ã‚’ãƒ‘ãƒ¼ã‚¹ã™ã‚‹
+	// CSVƒtƒ@ƒCƒ‹‚Ì’†g‚ğƒp[ƒX‚·‚é
 	CsvRecords parse_csv(const std::string& path) const;
 };
 
 /**
-*	@brief CSVãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‹ã‚‰å„è¡Œã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’èª­ã¿è¾¼ã¿ã€ãã®ä¸­èº«ã‚’ãƒ‘ãƒ¼ã‚¹ã™ã‚‹
-*	@tparam SettingType è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹ã®å‹
-*	@param[in] path CSVãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-*	@return CsvRecords æ§‹é€ åŒ–ã•ã‚ŒãŸCSVãƒ¬ã‚³ãƒ¼ãƒ‰
+*	@brief CSVƒtƒ@ƒCƒ‹‚ğ‚©‚çŠes‚ÌƒŒƒR[ƒh‚ğ“Ç‚İ‚İA‚»‚Ì’†g‚ğƒp[ƒX‚·‚é
+*	@tparam SettingType İ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX‚ÌŒ^
+*	@param[in] path CSVƒtƒ@ƒCƒ‹‚ÌƒpƒX
+*	@return CsvRecords \‘¢‰»‚³‚ê‚½CSVƒŒƒR[ƒh
 */
 template <typename SettingType>
 CsvRecords CSettingFileBase<SettingType>::parse_csv(const std::string& path) const
@@ -50,25 +50,25 @@ CsvRecords CSettingFileBase<SettingType>::parse_csv(const std::string& path) con
 	std::ifstream in_stream(path);
 	CsvRecords records;
 
-	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ãŸ
+	// İ’èƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚½
 	if (in_stream.fail()) {
-		throw std::runtime_error(cc_common::format("è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«%sã®ã‚ªãƒ¼ãƒ—ãƒ³ã«å¤±æ•—ã—ã¾ã—ãŸ", path.c_str()));
+		throw std::runtime_error(cc_common::format("İ’èƒtƒ@ƒCƒ‹%s‚ÌƒI[ƒvƒ“‚É¸”s‚µ‚Ü‚µ‚½", path.c_str()));
 	}
 
-	// å„è¡Œã‚’ãƒ‘ãƒ¼ã‚¹ã™ã‚‹
+	// Šes‚ğƒp[ƒX‚·‚é
 	std::string csv_line;
 	while (std::getline(in_stream, csv_line)) {
 		std::vector<std::string> parsed_line = cc_common::split_string(csv_line, ",");
 
-		// ã‚­ãƒ¼åã¨æœ€ä½1å€‹ä»¥ä¸Šã®å€¤ãŒ1è¡Œã«å­˜åœ¨ã—ãªã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼
+		// ƒL[–¼‚ÆÅ’á1ŒÂˆÈã‚Ì’l‚ª1s‚É‘¶İ‚µ‚È‚¯‚ê‚ÎƒGƒ‰[
 		if (parsed_line.empty()) {
-			throw std::runtime_error("è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«ç©ºè¡ŒãŒã‚ã‚Šã¾ã™");
+			throw std::runtime_error("İ’èƒtƒ@ƒCƒ‹‚É‹ós‚ª‚ ‚è‚Ü‚·");
 		}
 		if (parsed_line.size() == 1) {
-			throw std::runtime_error("è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«å€¤ãŒæ¬ æã—ã¦ã„ã‚‹è¡ŒãŒã‚ã‚Šã¾ã™");
+			throw std::runtime_error("İ’èƒtƒ@ƒCƒ‹‚É’l‚ªŒ‡‘¹‚µ‚Ä‚¢‚és‚ª‚ ‚è‚Ü‚·");
 		}
 
-		// ãƒ‘ãƒ¼ã‚¹ã—ãŸè¡Œã‹ã‚‰å¾—ã‚‰ã‚ŒãŸã‚­ãƒ¼ã¨å€¤ã‚’ã€æ§‹é€ åŒ–æ¸ˆã¿CSVãƒ¬ã‚³ãƒ¼ãƒ‰(records)ã«è¿½åŠ 
+		// ƒp[ƒX‚µ‚½s‚©‚ç“¾‚ç‚ê‚½ƒL[‚Æ’l‚ğA\‘¢‰»Ï‚İCSVƒŒƒR[ƒh(records)‚É’Ç‰Á
 		std::string key = parsed_line[0];
 		std::vector<std::string> values(parsed_line.size() - 1);
 		std::copy(
