@@ -177,6 +177,23 @@ std::string CLinuxSocket::wrap_recv(const char terminal)
 }
 
 /**
+*	@brief ソケットを閉じる
+*/
+void CLinuxSocket::wrap_close()
+{
+	close(m_socket);
+}
+
+/**
+*	@brief ソケットを作成する
+*	@details TCP/IP通信用のソケットを作成する
+*/
+int CLinuxSocket::wrap_socket()
+{
+	return socket(AF_INET, SOCK_STREAM, 0);
+}
+
+/**
 *	@brief 初期化処理を行う
 *	@return bool 初期化処理が成功したか
 */

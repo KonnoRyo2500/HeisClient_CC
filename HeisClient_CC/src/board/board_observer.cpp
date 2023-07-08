@@ -8,6 +8,7 @@
 #include "board_observer.h"
 
 #include <assert.h>
+#include <algorithm>
 
 /**
 *	@brief ”Õ–Êã‚Ì‘S•ºm‚ÆˆÊ’u‚ğæ“¾‚·‚é

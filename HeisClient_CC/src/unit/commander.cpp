@@ -8,6 +8,7 @@
 #include "commander.h"
 
 #include <iterator>
+#include <algorithm>
 
 /**
 *	@brief コンストラクタ

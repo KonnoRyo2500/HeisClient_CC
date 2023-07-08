@@ -7,6 +7,8 @@
 
 #include "board_controller.h"
 
+#include <algorithm>
+
 /**
 *	@brief •ºm‚ÉUŒ‚‚ğw¦‚·‚é
 *	@param[out] board ”Õ–Ê
