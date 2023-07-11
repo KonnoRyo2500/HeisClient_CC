@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;$(SolutionDir)..\src\AI\base;$(SolutionDir)..\src\AI\implementation;$(SolutionDir)..\src\setting;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;$(SolutionDir)..\src\AI\base;$(SolutionDir)..\src\AI\implementation;$(SolutionDir)..\src\setting;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -112,7 +112,7 @@
       <Optimization>Custom</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -129,7 +129,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -148,7 +148,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\common;$(SolutionDir)..\src\unit;$(SolutionDir)..\src\board;$(SolutionDir)..\src\JSON;$(SolutionDir)..\src\local_mode;$(SolutionDir)..\src\online_mode;$(SolutionDir)..\src\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -163,79 +163,74 @@
     <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AI\ai_base.cpp" />
     <ClCompile Include="..\src\AI\ai_factory.cpp" />
-    <ClCompile Include="..\src\AI\base\ai_base.cpp" />
-    <ClCompile Include="..\src\AI\implementation\sample_ai.cpp" />
-    <ClCompile Include="..\src\board\action_packet_builder.cpp" />
-    <ClCompile Include="..\src\board\board_controller.cpp" />
-    <ClCompile Include="..\src\board\board_observer.cpp" />
-    <ClCompile Include="..\src\common\linux_socket.cpp" />
-    <ClCompile Include="..\src\common\socket.cpp" />
-    <ClCompile Include="..\src\common\common.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="..\src\common\game.cpp" />
-    <ClCompile Include="..\src\common\log.cpp" />
-    <ClCompile Include="..\src\common\path.cpp" />
-    <ClCompile Include="..\src\board\board.cpp" />
-    <ClCompile Include="..\src\common\windows_socket.cpp" />
-    <ClCompile Include="..\src\JSON\action_json_converter.cpp" />
-    <ClCompile Include="..\src\JSON\board_json_converter.cpp" />
-    <ClCompile Include="..\src\JSON\confirm_name_json_converter.cpp" />
-    <ClCompile Include="..\src\JSON\message_json_converter.cpp" />
-    <ClCompile Include="..\src\JSON\name_json_converter.cpp" />
-    <ClCompile Include="..\src\JSON\result_json_converter.cpp" />
-    <ClCompile Include="..\src\local_mode\game_local.cpp" />
+    <ClCompile Include="..\src\AI\sample_ai.cpp" />
+    <ClCompile Include="..\src\com\JSON\converter\action_json_converter.cpp" />
+    <ClCompile Include="..\src\com\JSON\converter\board_json_converter.cpp" />
+    <ClCompile Include="..\src\com\JSON\converter\confirm_name_json_converter.cpp" />
+    <ClCompile Include="..\src\com\JSON\converter\message_json_converter.cpp" />
+    <ClCompile Include="..\src\com\JSON\converter\name_json_converter.cpp" />
+    <ClCompile Include="..\src\com\JSON\converter\result_json_converter.cpp" />
+    <ClCompile Include="..\src\com\socket\linux_socket.cpp" />
+    <ClCompile Include="..\src\com\socket\socket.cpp" />
+    <ClCompile Include="..\src\com\socket\windows_socket.cpp" />
+    <ClCompile Include="..\src\core\board\action_packet_builder.cpp" />
+    <ClCompile Include="..\src\core\board\board.cpp" />
+    <ClCompile Include="..\src\core\board\board_controller.cpp" />
+    <ClCompile Include="..\src\core\board\board_observer.cpp" />
+    <ClCompile Include="..\src\core\unit\commander.cpp" />
+    <ClCompile Include="..\src\core\unit\infantry.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\online_mode\audience_mode.cpp" />
-    <ClCompile Include="..\src\online_mode\game_online.cpp" />
-    <ClCompile Include="..\src\setting\audience_setting_file.cpp" />
-    <ClCompile Include="..\src\setting\local_setting_file.cpp" />
-    <ClCompile Include="..\src\setting\online_setting_file.cpp" />
-    <ClCompile Include="..\src\unit\commander.cpp" />
-    <ClCompile Include="..\src\unit\infantry.cpp" />
+    <ClCompile Include="..\src\mode\audience_mode.cpp" />
+    <ClCompile Include="..\src\mode\game.cpp" />
+    <ClCompile Include="..\src\mode\game_local.cpp" />
+    <ClCompile Include="..\src\mode\game_online.cpp" />
+    <ClCompile Include="..\src\system\log\log.cpp" />
+    <ClCompile Include="..\src\system\setting\audience_setting_file.cpp" />
+    <ClCompile Include="..\src\system\setting\local_setting_file.cpp" />
+    <ClCompile Include="..\src\system\setting\online_setting_file.cpp" />
+    <ClCompile Include="..\src\utils\common.cpp" />
+    <ClCompile Include="..\src\utils\path.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\AI\ai_base.h" />
     <ClInclude Include="..\src\AI\ai_factory.h" />
-    <ClInclude Include="..\src\AI\base\ai_base.h" />
-    <ClInclude Include="..\src\AI\implementation\sample_ai.h" />
-    <ClInclude Include="..\src\board\action_packet_builder.h" />
-    <ClInclude Include="..\src\board\board_controller.h" />
-    <ClInclude Include="..\src\board\board_observer.h" />
-    <ClInclude Include="..\src\common\linux_socket.h" />
-    <ClInclude Include="..\src\common\socket.h" />
-    <ClInclude Include="..\src\common\common.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="..\src\common\common_structure.h" />
-    <ClInclude Include="..\src\common\const_val.h" />
-    <ClInclude Include="..\src\common\game.h" />
-    <ClInclude Include="..\src\common\log.h" />
-    <ClInclude Include="..\src\common\path.h" />
-    <ClInclude Include="..\src\common\setting_keys.h" />
-    <ClInclude Include="..\src\board\board.h" />
-    <ClInclude Include="..\src\common\socket_base.h" />
-    <ClInclude Include="..\src\common\windows_socket.h" />
-    <ClInclude Include="..\src\JSON\action_json_converter.h" />
-    <ClInclude Include="..\src\JSON\board_json_converter.h" />
-    <ClInclude Include="..\src\JSON\confirm_name_json_converter.h" />
-    <ClInclude Include="..\src\JSON\json_converter_base.h" />
-    <ClInclude Include="..\src\JSON\JSON_data_packet.h" />
-    <ClInclude Include="..\src\JSON\message_json_converter.h" />
-    <ClInclude Include="..\src\JSON\name_json_converter.h" />
-    <ClInclude Include="..\src\JSON\result_json_converter.h" />
-    <ClInclude Include="..\src\local_mode\game_local.h" />
-    <ClInclude Include="..\src\online_mode\audience_mode.h" />
-    <ClInclude Include="..\src\online_mode\game_online.h" />
-    <ClInclude Include="..\src\setting\audience_setting_file.h" />
-    <ClInclude Include="..\src\setting\local_setting_file.h" />
-    <ClInclude Include="..\src\setting\online_setting_file.h" />
-    <ClInclude Include="..\src\setting\setting.h" />
-    <ClInclude Include="..\src\setting\setting_file_base.h" />
-    <ClInclude Include="..\src\unit\commander.h" />
-    <ClInclude Include="..\src\unit\infantry.h" />
+    <ClInclude Include="..\src\AI\sample_ai.h" />
+    <ClInclude Include="..\src\com\JSON\converter\action_json_converter.h" />
+    <ClInclude Include="..\src\com\JSON\converter\board_json_converter.h" />
+    <ClInclude Include="..\src\com\JSON\converter\confirm_name_json_converter.h" />
+    <ClInclude Include="..\src\com\JSON\converter\json_converter_base.h" />
+    <ClInclude Include="..\src\com\JSON\converter\message_json_converter.h" />
+    <ClInclude Include="..\src\com\JSON\converter\name_json_converter.h" />
+    <ClInclude Include="..\src\com\JSON\converter\result_json_converter.h" />
+    <ClInclude Include="..\src\com\JSON\packet\JSON_data_packet.h" />
+    <ClInclude Include="..\src\com\JSON\parser\picojson.h" />
+    <ClInclude Include="..\src\com\socket\linux_socket.h" />
+    <ClInclude Include="..\src\com\socket\socket.h" />
+    <ClInclude Include="..\src\com\socket\socket_base.h" />
+    <ClInclude Include="..\src\com\socket\windows_socket.h" />
+    <ClInclude Include="..\src\core\board\action_packet_builder.h" />
+    <ClInclude Include="..\src\core\board\board.h" />
+    <ClInclude Include="..\src\core\board\board_controller.h" />
+    <ClInclude Include="..\src\core\board\board_observer.h" />
+    <ClInclude Include="..\src\core\board\common_structure.h" />
+    <ClInclude Include="..\src\core\unit\commander.h" />
+    <ClInclude Include="..\src\core\unit\infantry.h" />
+    <ClInclude Include="..\src\mode\audience_mode.h" />
+    <ClInclude Include="..\src\mode\game.h" />
+    <ClInclude Include="..\src\mode\game_local.h" />
+    <ClInclude Include="..\src\mode\game_online.h" />
+    <ClInclude Include="..\src\system\log\log.h" />
+    <ClInclude Include="..\src\system\setting\audience_setting_file.h" />
+    <ClInclude Include="..\src\system\setting\local_setting_file.h" />
+    <ClInclude Include="..\src\system\setting\online_setting_file.h" />
+    <ClInclude Include="..\src\system\setting\setting.h" />
+    <ClInclude Include="..\src\system\setting\setting_file_base.h" />
+    <ClInclude Include="..\src\system\setting\setting_keys.h" />
+    <ClInclude Include="..\src\utils\common.h" />
+    <ClInclude Include="..\src\utils\const_val.h" />
+    <ClInclude Include="..\src\utils\path.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
