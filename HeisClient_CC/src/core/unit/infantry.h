@@ -6,12 +6,29 @@
 */
 #pragma once
 
-#include "const_val.h"
-#include "common_structure.h"
+#include "coodinate_2d.h"
 #include "JSON_data_packet.h"
 
 #include <string>
 #include <vector>
+
+/**
+*	@def INFANTRY_UNIT_TYPE
+*	@brief 兵士の駒タイプ
+*/
+#define INFANTRY_UNIT_TYPE "heizu"
+
+/**
+*	@def INFANTRY_INITIAL_HP
+*	@brief 兵士の初期HP
+*/
+#define INFANTRY_INITIAL_HP (2)
+
+/**
+*	@def INFANTRY_ACTION_LIMIT
+*	@brief 兵士の行動回数
+*/
+#define INFANTRY_ACTION_LIMIT (2)
 
 /**
 *	@struct InfantryStatus

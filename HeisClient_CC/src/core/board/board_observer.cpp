@@ -22,12 +22,12 @@ std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(con
 
 	for (size_t y = 0; y < size.height; y++) {
 		for (size_t x = 0; x < size.width; x++) {
-			Square sq = board.get_square(BoardPosition(x, y));
+			Square sq = board.get_square(Coordinate2D(x, y));
 			if (!sq.exists) {
 				continue;
 			}
 			
-			BoardPosition pos = BoardPosition(x, y);
+			Coordinate2D pos = Coordinate2D(x, y);
 			infantries_and_positions.push_back(std::make_pair(sq.infantry, pos));
 		}
 	}
@@ -39,9 +39,9 @@ std::vector<InfantryWithPos> CBoardObserver::fetch_all_infantry_and_position(con
 *	@brief 指定された位置にいる兵士が移動できるマスを取得する
 *	@param[in] board 盤面
 *	@param[in] pos 取得対象の兵士の位置
-*	@return std::vector<BoardPosition> 移動できるマス(指定したIDの兵士がいない場合は常に空)
+*	@return std::vector<Coordinate2D> 移動できるマス(指定したIDの兵士がいない場合は常に空)
 */
-std::vector<BoardPosition> CBoardObserver::search_position_to_move(const CBoard& board, const BoardPosition& pos) const
+std::vector<Coordinate2D> CBoardObserver::search_position_to_move(const CBoard& board, const Coordinate2D& pos) const
 {
 	// posからL1距離が2以内のマスを得るための差分
 	std::vector<int> dxs{ 0, -1, 0, 1, -2, -1, 1, 2, -1, 0, 1, 0 };
@@ -49,9 +49,9 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_move(const CBoard&
 	assert(dxs.size() == dys.size());
 
 	// 移動可能なマスを追加して返す
-	std::vector<BoardPosition> pos_to_move;
+	std::vector<Coordinate2D> pos_to_move;
 	for (size_t i = 0; i < dxs.size(); i++) {
-		BoardPosition dst = BoardPosition(pos.x + dxs[i], pos.y + dys[i]);
+		Coordinate2D dst = Coordinate2D(pos.x + dxs[i], pos.y + dys[i]);
 		if (can_move(board, pos, dst)) {
 			pos_to_move.push_back(dst);
 		}
@@ -64,19 +64,19 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_move(const CBoard&
 *	@brief 指定された兵士が攻撃できるマスを取得する
 *	@param[in] board 盤面
 *	@param[in] pos 取得対象の兵士の位置
-*	@return std::vector<BoardPosition> 攻撃できるマス(指定したIDの兵士がいない場合は常に空)
+*	@return std::vector<Coordinate2D> 攻撃できるマス(指定したIDの兵士がいない場合は常に空)
 */
-std::vector<BoardPosition> CBoardObserver::search_position_to_attack(const CBoard& board, const BoardPosition& pos) const
+std::vector<Coordinate2D> CBoardObserver::search_position_to_attack(const CBoard& board, const Coordinate2D& pos) const
 {
 	// posの上下左右のマスを得るための差分
 	std::vector<int> dxs{ 0, 0, -1, 1 };
 	std::vector<int> dys{ -1, 1, 0, 0 };
 	assert(dxs.size() == dys.size());
 
-	std::vector<BoardPosition> pos_to_attack;
+	std::vector<Coordinate2D> pos_to_attack;
 	Square src_sq = board.get_square(pos);
 	for (size_t i = 0; i < dxs.size(); i++) {
-		BoardPosition dst = BoardPosition(pos.x + dxs[i], pos.y + dys[i]);
+		Coordinate2D dst = Coordinate2D(pos.x + dxs[i], pos.y + dys[i]);
 		if (can_attack(board, pos, dst)) {
 			pos_to_attack.push_back(dst);
 		}
@@ -91,7 +91,7 @@ std::vector<BoardPosition> CBoardObserver::search_position_to_attack(const CBoar
 *	@param[in] coord 座標
 *	@return coordがboard内にあるか
 */
-bool CBoardObserver::is_coord_in_board(const CBoard& board, const BoardPosition& coord) const
+bool CBoardObserver::is_coord_in_board(const CBoard& board, const Coordinate2D& coord) const
 {
 	BoardSize size = board.get_size();
 	return
@@ -106,7 +106,7 @@ bool CBoardObserver::is_coord_in_board(const CBoard& board, const BoardPosition&
 *	@param[in] dst 移動先のマス
 *	@return bool 移動できるかどうか
 */
-bool CBoardObserver::can_move(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
+bool CBoardObserver::can_move(const CBoard& board, const Coordinate2D& src, const Coordinate2D& dst) const
 {
 	// 1: dstが盤面上に存在すること
 	if (!is_coord_in_board(board, dst)) {
@@ -149,7 +149,7 @@ bool CBoardObserver::can_move(const CBoard& board, const BoardPosition& src, con
 *	@param[in] dst 移動先のマス
 *	@return bool srcからdstに至るパスが存在するかどうか
 */
-bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
+bool CBoardObserver::exists_path(const CBoard& board, const Coordinate2D& src, const Coordinate2D& dst) const
 {
 	Square src_sq = board.get_square(src);
 	Square dst_sq = board.get_square(dst);
@@ -162,20 +162,20 @@ bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, 
 		return false;
 	}
 
-	std::vector<BoardPosition> searching_coords{ src };
-	std::vector<BoardPosition> searched_coords{ src };
+	std::vector<Coordinate2D> searching_coords{ src };
+	std::vector<Coordinate2D> searched_coords{ src };
 
 	// dstに到達するまで、パスを探索
 	int max_iteration = src_sq.infantry.get_status().action_remain;
 	for (int i = 0; i < max_iteration; i++) {
-		std::vector<BoardPosition> next_searching_coords;
+		std::vector<Coordinate2D> next_searching_coords;
 		for (auto& sc : searching_coords) {
 			// scの上下左右を探索
-			std::vector<BoardPosition> around_coords{
-				BoardPosition(sc.x, sc.y - 1),
-				BoardPosition(sc.x, sc.y + 1),
-				BoardPosition(sc.x - 1, sc.y),
-				BoardPosition(sc.x + 1, sc.y)
+			std::vector<Coordinate2D> around_coords{
+				Coordinate2D(sc.x, sc.y - 1),
+				Coordinate2D(sc.x, sc.y + 1),
+				Coordinate2D(sc.x - 1, sc.y),
+				Coordinate2D(sc.x + 1, sc.y)
 			};
 
 			for (auto& ac : around_coords) {
@@ -217,7 +217,7 @@ bool CBoardObserver::exists_path(const CBoard& board, const BoardPosition& src, 
 *	@param[in] dst 移動先のマス
 *	@return bool 攻撃できるかどうか
 */
-bool CBoardObserver::can_attack(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const
+bool CBoardObserver::can_attack(const CBoard& board, const Coordinate2D& src, const Coordinate2D& dst) const
 {
 	// 1: dstが盤面上に存在すること
 	if (!is_coord_in_board(board, dst)) {

@@ -7,12 +7,12 @@
 
 #pragma once
 
+#include "string_utils.h"
+
 #include <string>
 #include <map>
 #include <vector>
 #include <fstream>
-
-#include "common.h"
 
 /**
 *	@brief 構造化されたCSVレコードの型
@@ -52,13 +52,24 @@ CsvRecords CSettingFileBase<SettingType>::parse_csv(const std::string& path) con
 
 	// 設定ファイルの読み込みに失敗した
 	if (in_stream.fail()) {
-		throw std::runtime_error(cc_common::format("設定ファイル%sのオープンに失敗しました", path.c_str()));
+		throw std::runtime_error(
+			CStringUtil::format(
+				"設定ファイル%sのオープンに失敗しました",
+				path.c_str()
+			)
+		);
 	}
 
 	// 各行をパースする
 	std::string csv_line;
 	while (std::getline(in_stream, csv_line)) {
-		std::vector<std::string> parsed_line = cc_common::split_string(csv_line, ",");
+		// UNIX環境, かつ設定ファイルがCRLFの時の対策
+		// 上記の場合、そのままだとcsv_lineの末尾にCRが付くため、これを削除する
+		if (csv_line[csv_line.size() - 1] == '\r') {
+			csv_line.erase(csv_line.size() - 1);
+		}
+
+		std::vector<std::string> parsed_line = CStringUtil::split(csv_line, ',');
 
 		// キー名と最低1個以上の値が1行に存在しなければエラー
 		if (parsed_line.empty()) {

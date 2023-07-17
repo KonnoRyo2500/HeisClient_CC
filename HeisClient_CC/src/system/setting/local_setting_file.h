@@ -8,7 +8,7 @@
 #pragma once
 
 #include "setting_file_base.h"
-#include "common_structure.h"
+#include "coodinate_2d.h"
 #include "setting.h"
 
 /**
@@ -25,7 +25,7 @@ public:
 
 private:
 	// 各兵士の初期位置の情報を、盤面上の位置を表す構造体に変換する
-	std::vector<BoardPosition> build_init_positions(
+	std::vector<Coordinate2D> build_init_positions(
 		const std::vector<std::string>& init_x_from_csv,
 		const std::vector<std::string>& init_y_from_csv
 	) const;

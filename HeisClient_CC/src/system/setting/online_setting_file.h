@@ -8,7 +8,6 @@
 #pragma once
 
 #include "setting_file_base.h"
-#include "common_structure.h"
 #include "setting.h"
 
 /**

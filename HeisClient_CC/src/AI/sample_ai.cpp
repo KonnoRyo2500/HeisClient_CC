@@ -55,11 +55,11 @@ void CSampleAI::AI_main(const JSONRecvPacket_Board& board_pkt)
 */
 void CSampleAI::sample_random_move(const std::string& infantry_id) const
 {
-	std::vector<BoardPosition> movable_pos = m_commander.find_movable_position(infantry_id);
+	std::vector<Coordinate2D> movable_pos = m_commander.find_movable_position(infantry_id);
 	std::random_device rnd_dev;
 
 	if (movable_pos.size() > 0) {
-		BoardPosition dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
+		Coordinate2D dst_pos = movable_pos.at(rnd_dev() % movable_pos.size());
 
 		m_commander.move(infantry_id, dst_pos);
 	}
@@ -71,11 +71,11 @@ void CSampleAI::sample_random_move(const std::string& infantry_id) const
 */
 void CSampleAI::sample_random_attack(const std::string& infantry_id)
 {
-	std::vector<BoardPosition> attackable_pos = m_commander.find_attackable_position(infantry_id);
+	std::vector<Coordinate2D> attackable_pos = m_commander.find_attackable_position(infantry_id);
 	std::random_device rnd_dev;
 
 	if (attackable_pos.size() > 0) {
-		BoardPosition dst_pos = attackable_pos.at(rnd_dev() % attackable_pos.size());
+		Coordinate2D dst_pos = attackable_pos.at(rnd_dev() % attackable_pos.size());
 
 		m_commander.attack(infantry_id, dst_pos);
 	}

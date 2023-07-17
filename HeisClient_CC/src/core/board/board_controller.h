@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "common_structure.h"
+#include "coodinate_2d.h"
 #include "board.h"
 #include "board_observer.h"
 
@@ -21,7 +21,7 @@ class CBoardController
 	// ƒƒ“ƒoŠÖ”
 public:
 	// •ºm‚ÉUŒ‚‚ğw¦‚·‚é
-	void attack(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const;
+	void attack(CBoard* board, const CBoardObserver& observer, const Coordinate2D& src, const Coordinate2D& dst) const;
 	// •ºm‚ÉˆÚ“®‚ğw¦‚·‚é
-	void move(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const;
+	void move(CBoard* board, const CBoardObserver& observer, const Coordinate2D& src, const Coordinate2D& dst) const;
 };

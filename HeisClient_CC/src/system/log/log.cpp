@@ -7,7 +7,6 @@
 
 #include "log.h"
 #include "path.h"
-#include "common.h"
 
 #include <assert.h>
 #include <filesystem>

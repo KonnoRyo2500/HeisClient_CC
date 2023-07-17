@@ -16,7 +16,7 @@
 *	@param[in] src UŒ‚Œ³À•W
 *	@param[in] dst UŒ‚æÀ•W
 */
-void CBoardController::attack(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const
+void CBoardController::attack(CBoard* board, const CBoardObserver& observer, const Coordinate2D& src, const Coordinate2D& dst) const
 {
 	// UŒ‚Œ³‚Ì•ºm‚ğæ“¾
 	Square src_sq = board->get_square(src);
@@ -38,7 +38,7 @@ void CBoardController::attack(CBoard* board, const CBoardObserver& observer, con
 	}
 
 	// UŒ‚‰Â”\‚©‚Ç‚¤‚©‚ğ”»’è
-	std::vector<BoardPosition> dsts = observer.search_position_to_attack(*board, src);
+	std::vector<Coordinate2D> dsts = observer.search_position_to_attack(*board, src);
 	if (std::find(dsts.begin(), dsts.end(), dst) == dsts.end()) {
 		throw std::runtime_error("w’è‚³‚ê‚½À•W‚ÉUŒ‚‚Å‚«‚Ü‚¹‚ñ");
 	}
@@ -65,7 +65,7 @@ void CBoardController::attack(CBoard* board, const CBoardObserver& observer, con
 *	@param[in] src ˆÚ“®Œ³À•W
 *	@param[in] dst ˆÚ“®æÀ•W
 */
-void CBoardController::move(CBoard* board, const CBoardObserver& observer, const BoardPosition& src, const BoardPosition& dst) const
+void CBoardController::move(CBoard* board, const CBoardObserver& observer, const Coordinate2D& src, const Coordinate2D& dst) const
 {
 	// ˆÚ“®Œ³‚Ì•ºm‚ğæ“¾
 	Square src_sq = board->get_square(src);
@@ -87,7 +87,7 @@ void CBoardController::move(CBoard* board, const CBoardObserver& observer, const
 	}
 
 	// ˆÚ“®‰Â”\‚©‚Ç‚¤‚©‚ğ”»’è
-	std::vector<BoardPosition> dsts = observer.search_position_to_move(*board, src);
+	std::vector<Coordinate2D> dsts = observer.search_position_to_move(*board, src);
 	if (std::find(dsts.begin(), dsts.end(), dst) == dsts.end()) {
 		throw std::runtime_error("w’è‚³‚ê‚½À•W‚ÉUŒ‚‚Å‚«‚Ü‚¹‚ñ");
 	}

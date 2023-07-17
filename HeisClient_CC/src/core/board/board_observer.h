@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "common_structure.h"
+#include "coodinate_2d.h"
 #include "board.h"
 
 #include <vector>
@@ -16,7 +16,7 @@
 /**
 *	@brief 兵士の実体と場所を表す型
 */
-typedef std::pair<CInfantry, BoardPosition> InfantryWithPos;
+typedef std::pair<CInfantry, Coordinate2D> InfantryWithPos;
 
 /**
 *	@brief 盤面情報取得クラス
@@ -29,19 +29,19 @@ public:
 	std::vector<InfantryWithPos> fetch_all_infantry_and_position(const CBoard& board) const;
 
 	// 指定された兵士が移動できるマスを取得する
-	std::vector<BoardPosition> search_position_to_move(const CBoard& board, const BoardPosition& pos) const;
+	std::vector<Coordinate2D> search_position_to_move(const CBoard& board, const Coordinate2D& pos) const;
 	// 指定された兵士が攻撃できるマスを取得する
-	std::vector<BoardPosition> search_position_to_attack(const CBoard& board, const BoardPosition& pos) const;
+	std::vector<Coordinate2D> search_position_to_attack(const CBoard& board, const Coordinate2D& pos) const;
 
 private:
 	// 指定された座標が盤面の範囲内にあるか判定する
-	bool is_coord_in_board(const CBoard& board, const BoardPosition& coord) const;
+	bool is_coord_in_board(const CBoard& board, const Coordinate2D& coord) const;
 
 	// 指定されたマスに移動できるかどうかを判定する
-	bool can_move(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const;
+	bool can_move(const CBoard& board, const Coordinate2D& src, const Coordinate2D& dst) const;
 	// 指定されたマスに移動するためのパスが存在するかどうか判定する
-	bool exists_path(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const;
+	bool exists_path(const CBoard& board, const Coordinate2D& src, const Coordinate2D& dst) const;
 
 	// 指定されたマスに攻撃できるかどうか判定する
-	bool can_attack(const CBoard& board, const BoardPosition& src, const BoardPosition& dst) const;
+	bool can_attack(const CBoard& board, const Coordinate2D& src, const Coordinate2D& dst) const;
 };

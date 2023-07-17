@@ -1,5 +1,5 @@
 /**
-*	@file		common_structure.h
+*	@file		coodinate_2d.h
 *	@brief		heis 共通データ構造
 *	@author		Ryo Konno
 *	@details	プログラム中で共通して使う構造体やクラスを定義する．
@@ -10,16 +10,16 @@
 #include <cmath>
 
 /**
-*	@def INVALID_POSITION
+*	@def INVALID_COODINATE
 *	@brief 不正な座標
 */
-#define INVALID_POSITION BoardPosition(-1, -1)
+#define INVALID_COODINATE Coordinate2D(-1, -1)
 
 /**
-*	@struct BoardPosition
-*	@brief 盤面上の位置
+*	@struct Coordinate2D
+*	@brief 盤面上の座標
 */
-struct BoardPosition
+struct Coordinate2D
 {	
 	// メンバ関数
 public:
@@ -28,7 +28,7 @@ public:
 	*	@param[in] x x座標
 	*	@param[in] y y座標
 	*/
-	explicit BoardPosition(const int x,  const int y)
+	explicit Coordinate2D(const int x,  const int y)
 		: x(x)
 		, y(y)
 	{
@@ -39,23 +39,25 @@ public:
 	*	@param[in] dst L1座標を計算する点
 	*	@return uint32_t 自身とdstとのL1座標
 	*/
-	uint32_t calc_l1_distance(const BoardPosition& dst) const
+	uint32_t calc_l1_distance(const Coordinate2D& dst) const
 	{
 		return std::abs(this->x - dst.x) + std::abs(this->y - dst.y);
 	}
 	/**
 	*	@brief 比較演算子(==)
 	*	@param[in] dst 右辺
+	*	@return bool 演算子の演算結果
 	*/
-	bool operator==(const BoardPosition& dst) const
+	bool operator==(const Coordinate2D& dst) const
 	{
 		return x == dst.x && y == dst.y;
 	}
 	/**
 	*	@brief 比較演算子(!=)
 	*	@param[in] dst 右辺
+	*	@return bool 演算子の演算結果
 	*/
-	bool operator!=(const BoardPosition& dst) const
+	bool operator!=(const Coordinate2D& dst) const
 	{
 		return x != dst.x || y != dst.y;
 	}

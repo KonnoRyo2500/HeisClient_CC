@@ -25,19 +25,19 @@ public:
 	explicit CCommander(const std::string& team_name, CBoard* board);
 
 	// 指定した兵士の位置を取得する
-	BoardPosition get_infantry_position_by_id(const std::string& id) const;
+	Coordinate2D get_infantry_position_by_id(const std::string& id) const;
 	// 指定した兵士のステータスを取得する
 	InfantryStatus get_infantry_status_by_id(const std::string& id) const;
 
 	// 兵士に攻撃を指示する
-	void attack(const std::string& id, const BoardPosition& dst);
+	void attack(const std::string& id, const Coordinate2D& dst);
 	// 兵士に移動を指示する
-	void move(const std::string& id, const BoardPosition& dst) const;
+	void move(const std::string& id, const Coordinate2D& dst) const;
 
 	// 移動可能なすべてのマスを取得する
-	std::vector<BoardPosition> find_movable_position(const std::string& id) const;
+	std::vector<Coordinate2D> find_movable_position(const std::string& id) const;
 	// 攻撃可能なすべてのマスを取得する
-	std::vector<BoardPosition> find_attackable_position(const std::string& id) const;
+	std::vector<Coordinate2D> find_attackable_position(const std::string& id) const;
 
 	// 行動可能な兵士のIDを取得する
 	std::vector<std::string> get_all_actable_infantry_ids(const std::string& team_name) const;

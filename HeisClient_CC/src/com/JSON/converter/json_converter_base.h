@@ -8,7 +8,7 @@
 #pragma once
 
 #include "picojson.h"
-#include "common.h"
+#include "string_utils.h"
 
 /**
 *	@brief	JSON解析ベースクラス
@@ -41,7 +41,7 @@ picojson::object JsonConverterBase<PacketType>::parse_json(const std::string& js
 	picojson::value parsed_JSON_val;
 	std::string errmsg = picojson::parse(parsed_JSON_val, json);
 	if (errmsg.size() > 0) {
-		throw std::runtime_error(cc_common::format("JSONのパースに失敗しました(エラー内容: %s)", errmsg.c_str()));
+		throw std::runtime_error(CStringUtil::format("JSONのパースに失敗しました(エラー内容: %s)", errmsg.c_str()));
 	}
 
 	// JSON -> データへの変換を行いやすくするため，picojson::value -> picojson::objectへの変換を行う

@@ -8,7 +8,6 @@
 #include "game_local.h"
 #include "board.h"
 #include "setting_keys.h"
-#include "common.h"
 #include "ai_factory.h"
 #include "board_json_converter.h"
 #include "local_setting_file.h"
@@ -169,7 +168,7 @@ void CGameLocal::reset_infantry_action_remain(CBoard& board) const
 	// 盤面上の全兵士を探索し、その行動回数をリセットする
 	for (int y = 0; y < size.height; y++) {
 		for (int x = 0; x < size.width; x++) {
-			Square sq = board.get_square(BoardPosition(x, y));
+			Square sq = board.get_square(Coordinate2D(x, y));
 			if (!sq.exists) {
 				continue;
 			}
@@ -185,7 +184,7 @@ void CGameLocal::reset_infantry_action_remain(CBoard& board) const
 			);
 			CInfantry new_infantry = CInfantry(new_infantry_status);
 
-			board.set_infantry(BoardPosition(x, y), new_infantry);
+			board.set_infantry(Coordinate2D(x, y), new_infantry);
 		}
 	}
 }
@@ -213,7 +212,7 @@ std::string CGameLocal::get_winning_team_name(const CBoard& board) const
 	// 盤面上の全兵士を探索し、そのチーム名を取得する
 	for (int y = 0; y < size.height; y++) {
 		for (int x = 0; x < size.width; x++) {
-			Square sq = board.get_square(BoardPosition(x, y));
+			Square sq = board.get_square(Coordinate2D(x, y));
 			if (!sq.exists) {
 				continue;
 			}

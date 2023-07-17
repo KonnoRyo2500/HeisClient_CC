@@ -21,17 +21,17 @@ public:
 	JSONSendPacket_Action build(const CBoard& board, const std::string& team_name) const;
 
 	// •ºm‚ªUŒ‚‚µ‚½À•W‚ğ’Ç‰Á‚·‚é
-	void add_attack_destination(const CInfantry& infantry, const BoardPosition& atk_dst);
+	void add_attack_destination(const CInfantry& infantry, const Coordinate2D& atk_dst);
 
 	// “à•”ó‘Ô‚ğ‰Šú‰»‚·‚é
 	void clear();
 
 private:
 	// ‚à‚µ•ºm‚ªUŒ‚Ï‚İ‚È‚ç‚ÎAUŒ‚æ‚ÌÀ•W‚ğ•Ô‚·
-	BoardPosition find_attack_destination_if_attacked(const std::string& id) const;
+	Coordinate2D find_attack_destination_if_attacked(const std::string& id) const;
 
 	// ƒƒ“ƒo•Ï”
 private:
 	//! UŒ‚æ‚ÌÀ•W(ID‚ÆÀ•W‚ÌƒyƒA)
-	std::vector<std::pair<std::string, BoardPosition>> m_attack_destinations;
+	std::vector<std::pair<std::string, Coordinate2D>> m_attack_destinations;
 };

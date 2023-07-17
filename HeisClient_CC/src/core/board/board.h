@@ -73,11 +73,11 @@ public:
 	~CBoard();
 
 	// マス目を取得する
-	Square get_square(const BoardPosition& pos) const;
+	Square get_square(const Coordinate2D& pos) const;
 	// 兵士をセットする
-	void set_infantry(const BoardPosition& pos, const CInfantry& infantry);
+	void set_infantry(const Coordinate2D& pos, const CInfantry& infantry);
 	// 兵士を削除する
-	void remove_infantry(const BoardPosition& pos);
+	void remove_infantry(const Coordinate2D& pos);
 
 	// 盤面のサイズを取得する
 	BoardSize get_size() const;

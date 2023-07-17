@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "common_structure.h"
+#include "coodinate_2d.h"
 
 /**
 *	@struct LocalSetting
@@ -30,9 +30,9 @@ struct LocalSetting {
 	//! 盤面の高さ
 	uint16_t board_height;
 	//! 自チーム兵士の初期位置
-	std::vector<BoardPosition> my_team_init_pos;
+	std::vector<Coordinate2D> my_team_init_pos;
 	//! 敵チーム兵士の初期位置
-	std::vector<BoardPosition> enemy_team_init_pos;
+	std::vector<Coordinate2D> enemy_team_init_pos;
 	//! 先攻となるチーム名
 	std::string first_turn_team;
 };

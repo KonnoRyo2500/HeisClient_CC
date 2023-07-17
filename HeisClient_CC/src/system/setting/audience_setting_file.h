@@ -8,7 +8,7 @@
 #pragma once
 
 #include "setting_file_base.h"
-#include "common_structure.h"
+#include "coodinate_2d.h"
 #include "setting.h"
 
 /**

@@ -55,9 +55,9 @@ void CLocalSettingFile::save(const std::string& path, const LocalSetting& settin
 *	@brief 各兵士の初期位置の情報を、盤面上の位置を表す構造体に変換する
 *	@param[in] init_x_from_csv 各兵士のx座標
 *	@param[in] init_y_from_csv 各兵士のy座標
-*	@return std::vector<BoardPosition> 各兵士の初期位置
+*	@return std::vector<Coordinate2D> 各兵士の初期位置
 */
-std::vector<BoardPosition> CLocalSettingFile::build_init_positions(
+std::vector<Coordinate2D> CLocalSettingFile::build_init_positions(
 	const std::vector<std::string>& init_x_from_csv,
 	const std::vector<std::string>& init_y_from_csv
 ) const
@@ -68,9 +68,9 @@ std::vector<BoardPosition> CLocalSettingFile::build_init_positions(
 	}
 
 	// 指定されたx座標・y座標を盤面上の位置に変換する
-	std::vector<BoardPosition> init_positions;
+	std::vector<Coordinate2D> init_positions;
 	for (int i = 0; i < init_x_from_csv.size(); i++) {
-		BoardPosition pos = BoardPosition(
+		Coordinate2D pos = Coordinate2D(
 			atoi(init_x_from_csv[i].c_str()),
 			atoi(init_y_from_csv[i].c_str())
 		);

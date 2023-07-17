@@ -5,7 +5,6 @@
 *	@details	heisの各種ユニットが配置される盤面の定義およびそれに対する操作を提供する．
 */
 #include "board.h"
-#include "common.h"
 #include "log.h"
 
 /**
@@ -27,7 +26,7 @@ CBoard::CBoard(const JSONRecvPacket_Board& pkt)
 	// 盤面に兵士を配置する
 	std::vector<UnitsArrayElem> units = pkt.units.get_value();
 	for (auto& unit : units) {
-		BoardPosition infantry_pos = BoardPosition(
+		Coordinate2D infantry_pos = Coordinate2D(
 			unit.locate.get_value().x.get_value(),
 			unit.locate.get_value().y.get_value()
 		);
@@ -55,7 +54,7 @@ CBoard::~CBoard()
 *	@param[in] pos 取得したいマス目の座標
 *	@return Square マス目
 */
-Square CBoard::get_square(const BoardPosition& pos) const
+Square CBoard::get_square(const Coordinate2D& pos) const
 {
 	return m_grid[pos.y][pos.x];
 }
@@ -65,7 +64,7 @@ Square CBoard::get_square(const BoardPosition& pos) const
 *	@param[in] pos 兵士をセットする座標
 *	@param[in] infantry セットする兵士
 */
-void CBoard::set_infantry(const BoardPosition& pos, const CInfantry& infantry)
+void CBoard::set_infantry(const Coordinate2D& pos, const CInfantry& infantry)
 {
 	m_grid[pos.y][pos.x] = Square(infantry, true);
 }
@@ -75,7 +74,7 @@ void CBoard::set_infantry(const BoardPosition& pos, const CInfantry& infantry)
 *	@param[in] pos 削除する兵士のいる座標
 *	@remark 指定された座標に兵士がいない場合でもエラーにはしない
 */
-void CBoard::remove_infantry(const BoardPosition& pos)
+void CBoard::remove_infantry(const Coordinate2D& pos)
 {
 	if (!get_square(pos).exists) {
 		return;
@@ -105,7 +104,7 @@ void CBoard::show() const
 
 	for (size_t y = 0; y < size.height; y++) {
 		for (size_t x = 0; x < size.width; x++) {
-			Square sq = get_square(BoardPosition(x, y));
+			Square sq = get_square(Coordinate2D(x, y));
 
 			if (!sq.exists) {
 				show_str += "----";
