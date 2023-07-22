@@ -115,6 +115,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,6 +133,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +153,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\AI;$(SolutionDir)..\src\com\JSON\converter;$(SolutionDir)..\src\com\JSON\packet;$(SolutionDir)..\src\com\JSON\parser;$(SolutionDir)..\src\com\socket;$(SolutionDir)..\src\core\board;$(SolutionDir)..\src\core\unit;$(SolutionDir)..\src\mode;$(SolutionDir)..\src\system\log;$(SolutionDir)..\src\system\setting;$(SolutionDir)..\src\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;CC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
