@@ -12,23 +12,39 @@
 
 // パス文字列を結合する
 std::string join(const std::vector<std::string>& paths);
-// CCのルートディレクトリを得る
-std::string build_cc_root_dir();
+// 実行ファイルのディレクトリを得る
+std::string build_exe_dir();
 
 /* ディレクトリ名 */
-/**
-*	@def 設定ファイルのディレクトリ名
-*/
-#define CC_SETTING_DIR join({build_cc_root_dir(), "setting", "CC"})
-
 #ifdef WIN32
 /**
-*	@def CCのプロジェクトディレクトリ
+*	@def CC_ROOT_DIR
+*	@brief CCのルートディレクトリ
 */
-#define CC_PROJECT_DIR join({build_cc_root_dir(), "project_win"})
+#define CC_ROOT_DIR join({build_exe_dir(), "..", "..", "..", "..", ".."})
+
+/**
+*	@def CC_PROJECT_DIR
+*	@brief CCのプロジェクトディレクトリ
+*/
+#define CC_PROJECT_DIR join({CC_ROOT_DIR, "project_win"})
 #else
 /**
-*	@def CCのプロジェクトディレクトリ
+*	@def CC_ROOT_DIR
+*	@brief CCのルートディレクトリ
 */
-#define CC_PROJECT_DIR join({build_cc_root_dir(), "project_linux"})
+#define CC_ROOT_DIR join({build_exe_dir(), "..", "..", ".."})
+
+/**
+*	@def CC_PROJECT_DIR
+*	@brief CCのプロジェクトディレクトリ
+*/
+#define CC_PROJECT_DIR join({CC_ROOT_DIR, "project_linux"})
 #endif // WIN32
+
+/**
+*	@def CC_SETTING_DIR
+*	@brief 設定ファイルのディレクトリ名
+*/
+#define CC_SETTING_DIR join({CC_ROOT_DIR, "setting", "CC"})
+

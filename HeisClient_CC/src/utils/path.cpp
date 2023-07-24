@@ -38,23 +38,21 @@ std::string join(const std::vector<std::string>& paths)
 *	@brief 実行ファイルのディレクトリを返す関数
 *	@return std::string 実行ファイルのディレクトリ
 */
-std::string build_cc_root_dir()
+std::string build_exe_dir()
 {
 #ifdef WIN32
 	char exe_path_c[MAX_PATH] = { 0 };
 
 	GetModuleFileName(NULL, exe_path_c, sizeof(exe_path_c));
-	std::string exe_path_s = std::string(exe_path_c);// <root>\project_win\bin\Debug or Release\x86 or x64\HeisClient_CC.exe
-	std::string root_dir = join({exe_path_s, "..", "..", "..", "..", ".."});
+	std::string exe_path_s = std::string(exe_path_c);
 
-	return root_dir;
+	return exe_path_s;
 #else
 	char exe_path_c[PATH_MAX] = { 0 };
 
 	if (readlink("/proc/self/exe", exe_path_c, sizeof(exe_path_c) - 1) > 0) {
-		std::string exe_path_s = std::string(exe_path_c); // <root>\project_linux\bin\HeisClient_CC
-		std::string root_dir = join({exe_path_s, "..", "..", ".."});
-		return root_dir;
+		std::string exe_path_s = std::string(exe_path_c);
+		return exe_path_s;
 	}
 	else {
 		throw std::runtime_error("実行ファイルのパス取得に失敗しました");
