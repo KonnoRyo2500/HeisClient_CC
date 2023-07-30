@@ -46,5 +46,16 @@ std::string build_exe_dir();
 *	@def CC_SETTING_DIR
 *	@brief 設定ファイルのディレクトリ名
 */
-#define CC_SETTING_DIR join({CC_ROOT_DIR, "setting", "CC"})
+#define CC_SETTING_DIR join({CC_ROOT_DIR, "setting"})
 
+/**
+*	@def PS_SETTING_DIR
+*	@brief PSの設定ファイルディレクトリ
+*/
+#define PS_SETTING_DIR join({build_exe_dir(), "..", "..", "setting"})
+
+/**
+*	@def PS_SCENARIO_DIR
+*	@brief PSのシナリオファイルディレクトリ
+*/
+#define PS_SCENARIO_DIR join({build_exe_dir(), "..", "..", "scenario"})

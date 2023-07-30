@@ -1,14 +1,38 @@
-ï»¿// heisã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç”¨ç–‘ä¼¼ã‚µãƒ¼ãƒ è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚­ãƒ¼ä¸€è¦§
-// Author: Ryo Konno
+/**
+*	@file		ps_setting_keys.h
+*	@brief		heis İ’èƒtƒ@ƒCƒ‹ƒL[ˆê——
+*	@author		Ryo Konno
+*	@details	İ’èƒtƒ@ƒCƒ‹‚ÌŠeƒL[‚ğ•\‚·’è”ƒ}ƒNƒ‚ğ’è‹`‚·‚éB
+*/
+
 #pragma once
 
-// ã‚·ãƒŠãƒªã‚ªãƒ•ã‚¡ã‚¤ãƒ«å
-#define KEY_SCENARIO_NAME "scenario_file_name"
-// å…ˆæ”»ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¡å—ã‘ã‚‹ãƒãƒ¼ãƒˆç•ªå·
-#define KEY_LISTEN_PORT_FIRST "listen_port_num_first"
-// å¾Œæ”»ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¡å—ã‘ã‚‹ãƒãƒ¼ãƒˆç•ªå·
-#define KEY_LISTEN_PORT_SECOND "listen_port_num_second"
-// å…ˆæ”»ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¡å—ã‘ã‚‹IPã‚¢ãƒ‰ãƒ¬ã‚¹
-#define KEY_LISTEN_IP_FIRST "listen_ip_addr_first"
-// å…ˆæ”»ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¡å—ã‘ã‚‹IPã‚¢ãƒ‰ãƒ¬ã‚¹
-#define KEY_LISTEN_IP_SECOND "listen_ip_addr_second"
+/**
+*	@def PS_SETTING_KEY_SCENARIO_NAME
+*	@brief ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹–¼
+*/
+#define PS_SETTING_KEY_SCENARIO_NAME "scenario_file_name"
+
+/**
+*	@def PS_SETTING_KEY_LISTEN_PORT_FIRST
+*	@brief æU‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚¿ó‚¯‚éƒ|[ƒg”Ô†
+*/
+#define PS_SETTING_KEY_LISTEN_PORT_FIRST "listen_port_num_first"
+
+/**
+*	@def PS_SETTING_KEY_LISTEN_PORT_SECOND
+*	@brief ŒãU‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚¿ó‚¯‚éƒ|[ƒg”Ô†
+*/
+#define PS_SETTING_KEY_LISTEN_PORT_SECOND "listen_port_num_second"
+
+/**
+*	@def PS_SETTING_KEY_LISTEN_ADDR_FIRST
+*	@brief æU‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚¿ó‚¯‚éIPƒAƒhƒŒƒX
+*/
+#define PS_SETTING_KEY_LISTEN_ADDR_FIRST "listen_addr_first"
+
+/**
+*	@def PS_SETTING_KEY_LISTEN_ADDR_SECOND
+*	@brief ŒãU‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚¿ó‚¯‚éIPƒAƒhƒŒƒX
+*/
+#define PS_SETTING_KEY_LISTEN_ADDR_SECOND "listen_addr_second"

@@ -1,80 +1,93 @@
-ï»¿// heisã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç”¨ç–‘ä¼¼ã‚µãƒ¼ãƒ ãƒ¡ã‚¤ãƒ³å‡¦ç†
-// Author: Ryo Konno
-
-#include "scenario_reader.h"
-#include "JSON_sender.h"
-#include "JSON_receiver.h"
-#include "server_socket.h"
-#include "setting_file_reader.h"
-#include "ps_setting_keys.h"
-
-#define SETTING_FILE_NAME "heis_ps_setting.conf"
-
-/*
-	ãƒ¡ã‚¤ãƒ³é–¢æ•°
+/**
+*	@file		main.cpp
+*	@brief		PS ƒƒCƒ“ˆ—
+*	@author		Ryo Konno
+*	@details	PS‚ÌƒƒCƒ“ˆ—‚ğ’è‹`‚·‚éB
 */
-int main(int argc, char **argv)
+
+#include "path.h"
+#include "ps_setting_file.h"
+#include "socket.h"
+#include "scenario_file.h"
+#include "command_executor_factory.h"
+
+#include <stdexcept>
+
+/**
+*	@def PS_SETTING_FILE_NAME
+*	@brief PSİ’èƒtƒ@ƒCƒ‹‚Ì–¼‘O
+*/
+#define PS_SETTING_FILE_NAME "ps_setting.csv"
+
+/**
+*	@brief ƒƒCƒ“ˆ—
+*/
+int main()
 {
 	try{
-		CSettingFileReader setting_reader(
-			cc_common::get_setting_dir()
-			+ cc_common::get_separator_char()
-			+ SETTING_FILE_NAME
+		// İ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+		PsSetting setting = CPsSettingFile().load(
+			join({PS_SETTING_DIR, PS_SETTING_FILE_NAME})
 		);
-		const std::string scenario_file_name = setting_reader.get_value<std::string>(KEY_SCENARIO_NAME);
-		CScenarioReader scenario_reader(scenario_file_name);
-		CScenarioReader::ActionType act_type;
-		CJsonSender json_sender;
-		CJsonReceiver json_reader;
-		CServerSocket next_com_sck;
-		CServerSocket com_sck_to_first, com_sck_to_second;
-		
-		// ã‚½ã‚±ãƒƒãƒˆã®åˆæœŸåŒ–
-		std::string first_ip = setting_reader.get_value<std::string>(KEY_LISTEN_IP_FIRST);
-		std::string second_ip = setting_reader.get_value<std::string>(KEY_LISTEN_IP_SECOND);
-		uint16_t first_port = setting_reader.get_value<uint16_t>(KEY_LISTEN_PORT_FIRST);
-		uint16_t second_port = setting_reader.get_value<uint16_t>(KEY_LISTEN_PORT_SECOND);
 
-		printf("CCã‚’IPã‚¢ãƒ‰ãƒ¬ã‚¹: %s, ãƒãƒ¼ãƒˆç•ªå·: %dã«æ¥ç¶šã—ã¦ãã ã•ã„\n", first_ip.c_str(), first_port);
-		com_sck_to_first.sck_bind(first_port, first_ip);
-		com_sck_to_first.sck_listen();
-		com_sck_to_first.sck_accept();
+		// æUƒNƒ‰ƒCƒAƒ“ƒg‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
+		CSocket socket_first, socket_second;
+		printf(
+			"CC‚ğIPƒAƒhƒŒƒX: %s, ƒ|[ƒg”Ô†: %d‚ÉÚ‘±‚µ‚Ä‚­‚¾‚³‚¢\n",
+			setting.listen_addr_first.c_str(),
+			setting.listen_port_num_first
+		);
+		socket_first.bind(
+			setting.listen_port_num_first,
+			setting.listen_addr_first
+		);
+		socket_first.listen();
+		socket_first.accept();
 
-		printf("CCã‚’IPã‚¢ãƒ‰ãƒ¬ã‚¹: %s, ãƒãƒ¼ãƒˆç•ªå·: %dã«æ¥ç¶šã—ã¦ãã ã•ã„\n", second_ip.c_str(), second_port);
-		com_sck_to_second.sck_bind(second_port, second_ip);
-		com_sck_to_second.sck_listen();
-		com_sck_to_second.sck_accept();
-		
-		while((act_type = scenario_reader.get_next_aciton_type()) != CScenarioReader::ActionType_AllActionDone){
-			next_com_sck = (scenario_reader.get_turn_order() == CScenarioReader::TurnOrder_First ? com_sck_to_first : com_sck_to_second);
-			switch(act_type){
-				case CScenarioReader::ActionType_PrintRecvMessage:
-					printf("Receive Print\n");
-					json_reader.recv_JSON_and_print(next_com_sck);
-					break;
-				case CScenarioReader::ActionType_WriteRecvMessage:
-					printf("Receive Write\n");
-					json_reader.recv_JSON_and_write_file(next_com_sck, scenario_reader.get_filename_to_write_recv_msg());
-					break;
-				case CScenarioReader::ActionType_SendMessage:
-					printf("message: %s\n", scenario_reader.get_message_to_send().c_str());
-					json_sender.send_JSON(next_com_sck, scenario_reader.get_message_to_send());
-					break;
-				case CScenarioReader::ActionType_SendFileContents:
-					printf("filename: %s\n", scenario_reader.get_filename_to_send().c_str());
-					json_sender.send_JSON_from_file(next_com_sck, scenario_reader.get_filename_to_send());
-					break;
-				case CScenarioReader::ActionType_None:
-					printf("Empty Line\n");
-					break;
-				default:
-					printf("Invalid action\n");
-					break;
+		// ŒãUƒNƒ‰ƒCƒAƒ“ƒg‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
+		printf(
+			"CC‚ğIPƒAƒhƒŒƒX: %s, ƒ|[ƒg”Ô†: %d‚ÉÚ‘±‚µ‚Ä‚­‚¾‚³‚¢\n",
+			setting.listen_addr_second.c_str(),
+			setting.listen_port_num_second
+		);
+		socket_second.bind(
+			setting.listen_port_num_second,
+			setting.listen_addr_second
+		);
+		socket_second.listen();
+		socket_second.accept();
+
+		// ƒVƒiƒŠƒIƒtƒ@ƒCƒ‹‚©‚çƒRƒ}ƒ“ƒh‚ğ“Ç‚İ‚Ş
+		printf("ƒRƒ}ƒ“ƒhÀsŠJn\n");
+		std::vector<std::vector<std::string>> commands = CScenarioFile().load(
+			join({PS_SCENARIO_DIR, setting.scenario_file_name})
+		);
+
+		// ŠeƒRƒ}ƒ“ƒh‚ÌÀs
+		CCommandExecutorFactory factory = CCommandExecutorFactory();
+		for (auto& cmd : commands) {
+			CCommandExecutorBase* executor = factory.create_instance(
+				cmd[0],
+				socket_first,
+				socket_second
+			);
+
+			if (executor == NULL) {
+				fprintf(stderr, "ƒRƒ}ƒ“ƒh %s ‚Í–¢’è‹`‚Å‚·\n", cmd[0].c_str());
+				continue;
 			}
+
+			executor->execute(cmd);
+
+			delete executor;
+			executor = NULL;
 		}
+		printf("ƒRƒ}ƒ“ƒh‚ÌÀs‚ªŠ®—¹‚µ‚Ü‚µ‚½\n");
 	}
 	catch(std::exception& e){
-		printf("exception: %s\n", e.what());
+		fprintf(stderr, "PS‚ÌÀs’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½(“à—e: %s)\n", e.what());
+		return EXIT_FAILURE;
 	}
+
 	return EXIT_SUCCESS;
 }
