@@ -33,19 +33,13 @@ class CGameOnline : public CGame {
 		// 対戦終了後処理
 		void finalize_battle();
 
-		// 対戦後の勝敗判定
-		bool judge_win() const;
+		// 勝敗を判定する
+		bool judge_win(const CBoard& board) const;
 
 	// メンバ変数
 	private:
 		//! 自チーム名
 		std::string m_team_name;
-
-		//! 司令官
-		CCommander* m_commander;
-
-		//! AI
-		CAIBase* m_ai;
 
 		//! TCPソケット
 		CSocket* m_sck;

@@ -58,7 +58,7 @@ std::string ActionJsonConverter::from_packet_to_json(const JSONSendPacket_Action
 		contents_obj.insert(std::make_pair("unit_id", content.unit_id.get_value()));
 		contents.push_back(picojson::value(contents_obj));
 	}
-	action_obj.insert(std::make_pair("contents", "x"));
+	action_obj.insert(std::make_pair("contents", contents));
 
 	return picojson::value(action_obj).serialize();
 }

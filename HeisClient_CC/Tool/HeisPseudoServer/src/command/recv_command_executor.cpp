@@ -58,7 +58,7 @@ std::string CRecvCommandExecutor::recv_json(const std::string& from)
 	}
 
 	// JSON‚ğóM
-	std::string json = target_socket.recv();
+	std::string json = target_socket.recv('\n');
 
 	return json;
 }

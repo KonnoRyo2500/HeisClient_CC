@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 #include <fstream>
+#include <regex>
 
 /**
 *	@brief コマンドを実行する
@@ -65,7 +66,6 @@ std::string CSendCommandExecutor::load_json(const std::vector<std::string>& comm
 *	@param[in] filename ファイル名
 *	@return std::string 読み込んだJSON
 *	@remark JSONファイルは、setting/filesディレクトリから読み込まれる
-*	@remark JSONは、1ファイルにつき1つ、1行で書かれている想定
 */
 std::string CSendCommandExecutor::load_json_from_file(const std::string& filename)
 {
@@ -84,7 +84,7 @@ std::string CSendCommandExecutor::load_json_from_file(const std::string& filenam
 
 	// JSONを読み込む
 	std::string json;
-	std::getline(ifs, json);
+	std::getline(ifs, json, '\0');
 
 	return json;
 }
@@ -109,6 +109,9 @@ void CSendCommandExecutor::send_json(const std::string& to, const std::string& j
 		throw std::runtime_error("sendコマンド: 未定義の送信先です");
 	}
 
+	// 改行文字(\n)はheis通信における終端文字なので、JSON途中にある場合は削除する
+	std::string newline_deleted_json = std::regex_replace(json, std::regex("\n"), "");
+
 	// JSONを送信
-	target_socket.send(json);
+	target_socket.send(newline_deleted_json, '\n');
 }

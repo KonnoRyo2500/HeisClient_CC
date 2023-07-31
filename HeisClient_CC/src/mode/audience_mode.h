@@ -23,16 +23,4 @@ class CAudienceMode : public CGame {
 	public:
 		// 観戦メイン処理
 		void play_game() override;
-
-	private:
-		// 観戦の初期化
-		void initialize_watch(const AudienceSetting& setting);
-
-		// 観戦の終了処理
-		void finalize_watch();
-
-	// メンバ変数
-	private:
-		//! TCPソケット
-		CSocket *m_sck;
 };

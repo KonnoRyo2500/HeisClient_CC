@@ -21,6 +21,7 @@ JSONSendPacket_Action CActionPacketBuilder::build(const CBoard& board, const std
 
 	// contents
 	BoardSize size = board.get_size();
+	std::vector<ContentsArrayElem> contents;
 	for (size_t y = 0; y < size.height; y++) {
 		for (size_t x = 0; x < size.width; x++) {
 			Square sq = board.get_square(Coordinate2D(x, y));
@@ -38,8 +39,15 @@ JSONSendPacket_Action CActionPacketBuilder::build(const CBoard& board, const std
 				elem.atk_x.set_value(atk_dst.x);
 				elem.atk_y.set_value(atk_dst.y);
 			}
+			else {
+				elem.atk_x.set_value((uint16_t)x);
+				elem.atk_y.set_value((uint16_t)y);
+			}
+
+			contents.push_back(elem);
 		}
 	}
+	action_pkt.contents.set_value(contents);
 
 	return action_pkt;
 }

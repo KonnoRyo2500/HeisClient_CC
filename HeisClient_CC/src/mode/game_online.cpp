@@ -24,16 +24,12 @@
 */
 #define ONLINE_SETTING_FILE_NAME "online_setting.csv"
 
-/* public関数 */
-
 /**
 *	@brief heis ゲーム実行メイン処理
 */
 void CGameOnline::play_game()
 {
 	CLog::write(CLog::LogLevel_Information, "オンラインモードでゲームを開始しました");
-
-	bool battle_result;
 
 	// 設定ファイルの読み込み
 	OnlineSetting setting = COnlineSettingFile().load(
@@ -43,28 +39,30 @@ void CGameOnline::play_game()
 	// 対戦の準備
 	initialize_battle(setting);
 
+	// 名前登録
 	recv_name_request();
 	name_entry(setting.team_name);
 	name_register(setting);
 
 	// 対戦
+	BoardJsonConverter board_json_converter;
+	ActionJsonConverter action_json_converter;
+	ResultJsonConverter result_json_converter;
+	CAIFactory factory = CAIFactory();
+	bool is_my_team_won;
 	while (true) {
-		// サーバから受信するJSONから生成するパケット(「盤面」パケットはここで生成できる)
-		BoardJsonConverter board_json_converter;
-		ActionJsonConverter action_json_converter;
-		ResultJsonConverter result_json_converter;
-		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->recv());
-		JSONRecvPacket_Result result_pkt;
+		// サーバから受け取った「盤面」JSONから、「盤面」パケットを作成
+		JSONRecvPacket_Board board_pkt = board_json_converter.from_json_to_packet(m_sck->recv('\n'));
 
 		// 受信した「盤面」JSONの内容に基づいて、盤面を構成
 		CBoard board(board_pkt);
 
 		// 盤面を表示
 		board.show();
-		m_commander = new CCommander(m_team_name, &board);
 
 		// 「盤面」パケットは一旦変数に持っておきたいため，while文の条件部で対戦終了の判定をしない
 		if (board_pkt.finished.get_value()) {
+			is_my_team_won = judge_win(board);
 			break;
 		}
 		// 自分のターンでなければ，次の「盤面」JSON受信まで待つ
@@ -72,14 +70,22 @@ void CGameOnline::play_game()
 			continue;
 		}
 
+		// AIと司令官インスタンスを作成
+		CCommander commander = CCommander(m_team_name, &board);
+		CAIBase* ai = factory.create_instance(commander, setting.ai_impl);
+
 		// ユーザAIの行動
-		m_ai->AI_main(board_pkt);
+		ai->AI_main(board_pkt);
+
+		// AIインスタンスを破棄
+		delete ai;
+		ai = NULL;
 
 		// 「行動」パケットを作成して送信
-		m_sck->send(action_json_converter.from_packet_to_json(m_commander->create_action_pkt()));
+		m_sck->send(action_json_converter.from_packet_to_json(commander.create_action_pkt()), '\n');
 
 		// 「結果」パケットを受信
-		result_pkt = result_json_converter.from_json_to_packet(m_sck->recv());
+		JSONRecvPacket_Result result_pkt = result_json_converter.from_json_to_packet(m_sck->recv('\n'));
 		// 「結果」パケットの内容を表示
 		for (const auto& result_elem : result_pkt.result.get_value()) {
 			CLog::write(
@@ -94,15 +100,12 @@ void CGameOnline::play_game()
 	}
 
 	// 対戦終了
-	battle_result = judge_win();
 	finalize_battle();
 
 	// 勝敗を表示
-	CLog::write(CLog::LogLevel_Information, battle_result ? "You win!" : "You lose...", true);
+	CLog::write(CLog::LogLevel_Information, is_my_team_won ? "You win!" : "You lose...", true);
 	CLog::write(CLog::LogLevel_Information, "ゲームが終了しました");
 }
-
-/* private関数 */
 
 /**
 *	@brief 対戦を開始する前の準備を行う関数
@@ -111,7 +114,6 @@ void CGameOnline::play_game()
 */
 void CGameOnline::initialize_battle(const OnlineSetting& setting)
 {
-	// m_commander, m_aiの生成については，名前確定後に行う必要があるため，name_register関数で行う
 	m_sck = new CSocket();
 	CLog::write(
 		CLog::LogLevel_Information,
@@ -133,7 +135,6 @@ void CGameOnline::initialize_battle(const OnlineSetting& setting)
 			setting.server_port_num
 		)
 	);
-	CLog::write(CLog::LogLevel_Information, "インスタンスの生成が完了しました");
 }
 
 /**
@@ -141,9 +142,8 @@ void CGameOnline::initialize_battle(const OnlineSetting& setting)
 */
 void CGameOnline::recv_name_request() const
 {
-	std::string received_JSON = m_sck->recv();
-	MessageJsonConverter message_json_converter;
-	JSONRecvPacket_Message name_req_msg_pkt = message_json_converter.from_json_to_packet(received_JSON);
+	// 受信したJSONは特に使用しないため、現状では破棄する実装とする
+	m_sck->recv('\n');
 }
 
 /**
@@ -153,9 +153,9 @@ void CGameOnline::recv_name_request() const
 void CGameOnline::name_entry(const std::string& name) const
 {
 	JSONSendPacket_Name name_pkt;
-	NameJsonConverter name_json_converter;
 	name_pkt.team_name.set_value(name);
-	m_sck->send(name_json_converter.from_packet_to_json(name_pkt));
+	m_sck->send(NameJsonConverter().from_packet_to_json(name_pkt), '\n');
+
 	CLog::write(
 		CLog::LogLevel_Information,
 		CStringUtil::format(
@@ -171,19 +171,10 @@ void CGameOnline::name_entry(const std::string& name) const
 */
 void CGameOnline::name_register(const OnlineSetting& setting)
 {
-	std::string received_JSON = m_sck->recv();
-	ConfirmNameJsonConverter confirm_name_json_converter;
-	JSONRecvPacket_ConfirmName confirm_name_pkt = confirm_name_json_converter.from_json_to_packet(received_JSON);
-	CAIFactory ai_factory = CAIFactory();
+	std::string confirm_name_json = m_sck->recv('\n');
+	JSONRecvPacket_ConfirmName confirm_name_pkt = ConfirmNameJsonConverter().from_json_to_packet(confirm_name_json);
 
 	m_team_name = confirm_name_pkt.your_team.get_value();
-	m_ai = ai_factory.create_instance(
-		*m_commander,
-		setting.ai_impl
-	);
-	if (m_ai == NULL) {
-		throw std::runtime_error("AIインスタンス生成に失敗しました。AI実装の設定をご確認ください");
-	}
 
 	CLog::write(
 		CLog::LogLevel_Information,
@@ -199,21 +190,32 @@ void CGameOnline::name_register(const OnlineSetting& setting)
 */
 void CGameOnline::finalize_battle()
 {
-	delete m_ai;
 	delete m_sck;
 
-	m_ai = NULL;
 	m_sck = NULL;
 
 	CLog::write(CLog::LogLevel_Information, "インスタンスの削除が完了しました");
 }
 
 /**
-*	@brief 対戦の決着がついた後，盤面の状態から勝敗を決定する関数
-*	@return bool 勝敗(true: 自チームの勝ち, false: 自チームの負け)
+*	@brief 勝敗を判定する
+*	@param[in] board 勝敗確定時の盤面
+*	@return bool 自チームが勝っているか
 */
-bool CGameOnline::judge_win() const
+bool CGameOnline::judge_win(const CBoard& board) const
 {
-	// 自チームが勝っていれば，敵の兵士はいないので，少なくとも1人の兵士は移動できる
-	return m_commander->get_all_actable_infantry_ids(m_team_name).size() > 0;
+	BoardSize size = board.get_size();
+	for (size_t y = 0; y < size.height; y++) {
+		for (size_t x = 0; x < size.width; x++) {
+			Square sq = board.get_square(Coordinate2D(x, y));
+			if (!sq.exists) {
+				continue;
+			}
+
+			// 自チームの兵士が一人でもいたら自チームの勝利
+			return sq.infantry.get_status().team_name == m_team_name;
+		}
+	}
+
+	return false;
 }
