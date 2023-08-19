@@ -4,8 +4,8 @@ obj
 /HeisClient_CC/project_win/HeisClient_CC.vcxproj.user
 /HeisClient_CC/project_win/log/*.log
 /HeisClient_CC/project_linux/log/*.log
-/doc/メモ
-/doc/設計書
+/doc/*-env
+/doc/build/
 cmake_install.cmake
 CMakeCache.txt
 HeisClient_CC.exe
