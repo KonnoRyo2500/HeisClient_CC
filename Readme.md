@@ -25,7 +25,7 @@ CCは、Windows OSおよびLinux OS上で動作します。
 
 ## 詳細説明
 
-利用方法やAIの実装方法など、CCに関する詳細な説明はdocs/sourceディレクトリにある各種ドキュメントをご覧ください。
+利用方法やAIの実装方法など、CCに関する詳細な説明は[こちら(ReadTheDocsドキュメント)](https://heisclient-cc.readthedocs.io/en/latest/)をご覧ください。
 
 ## スペシャルサンクス
 
