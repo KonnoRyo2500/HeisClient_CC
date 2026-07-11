@@ -1,24 +1,24 @@
 /**
 *	@file		ai_factory.cpp
-*	@brief		heis AIƒtƒ@ƒNƒgƒŠ[ƒNƒ‰ƒX
+*	@brief		heis AIãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	ŠeíAIƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚½‚ß‚Ìƒtƒ@ƒNƒgƒŠ[ƒNƒ‰ƒXB
+*	@details	å„ç¨®AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include "ai_factory.h"
 #include "sample_ai.h"
 
 /**
-*	@brief AIƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é
-*	@param[in] commander i—ßŠ¯ƒCƒ“ƒXƒ^ƒ“ƒX
-*	@param[in] ai_impl_name AIÀ‘•‚Ì–¼‘O
-*	@return CAIBase* AIƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒAƒhƒŒƒX
+*	@brief AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
+*	@param[in] commander å¸ä»¤å®˜ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+*	@param[in] ai_impl_name AIå®Ÿè£…ã®åå‰
+*	@return CAIBase* AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 CAIBase* CAIFactory::create_instance(const CCommander& commander, const std::string& ai_impl_name) const
 {
 	CAIBase *ai_instance_addr;
 
-	// AIƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬
+	// AIã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆ
 	if (ai_impl_name == "Sample") {
 		ai_instance_addr = new CSampleAI(commander);
 	}

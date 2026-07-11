@@ -1,8 +1,8 @@
 /**
 *	@file		audience_setting_file.h
-*	@brief		heis ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
+*	@brief		heis è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‘‚«‚·‚éƒNƒ‰ƒXB
+*	@details	è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æ›¸ãã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #pragma once
@@ -12,14 +12,14 @@
 #include "setting.h"
 
 /**
-*	@brief	ŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹ƒNƒ‰ƒX
+*	@brief	è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹
 */
 class CAudienceSettingFile : public CSettingFileBase<AudienceSetting>
 {
-	// ƒƒ“ƒoŠÖ”
+	// ãƒ¡ãƒ³ãƒé–¢æ•°
 public:
-	// İ’è’l‚ğŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+	// è¨­å®šå€¤ã‚’è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
 	AudienceSetting load(const std::string& path) const;
-	// İ’è’l‚ğŠÏíƒ‚[ƒhİ’èƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
+	// è¨­å®šå€¤ã‚’è¦³æˆ¦ãƒ¢ãƒ¼ãƒ‰è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
 	void save(const std::string& path, const AudienceSetting& setting) const;
 };

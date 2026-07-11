@@ -1,42 +1,42 @@
 /**
 *	@file		action_json_converter.cpp
-*	@brief		heis us“®vJSON•ÏŠ·ƒNƒ‰ƒX
+*	@brief		heis ã€Œè¡Œå‹•ã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	us“®vJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
+*	@details	ã€Œè¡Œå‹•ã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include "action_json_converter.h"
 
 /**
-*	@brief us“®vJSON‚©‚çus“®vƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
-*	@param[in] json •ÏŠ·‘ÎÛ‚Ìus“®vJSON
-*	@return std::string •ÏŠ·Œ‹‰Ê‚Ìus“®vƒpƒPƒbƒg
+*	@brief ã€Œè¡Œå‹•ã€JSONã‹ã‚‰ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+*	@param[in] json å¤‰æ›å¯¾è±¡ã®ã€Œè¡Œå‹•ã€JSON
+*	@return std::string å¤‰æ›çµæœã®ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆ
 */
 JSONSendPacket_Action ActionJsonConverter::from_json_to_packet(const std::string& json) const
 {
-	// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Åus“®vJSON‚©‚çus“®vƒpƒPƒbƒg‚É•ÏŠ·‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
-	// •ÏŠ·‚·‚é•K—v‚ª¶‚¶‚½‚ç“K‹XÀ‘•‚·‚é
+	// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã§ã€Œè¡Œå‹•ã€JSONã‹ã‚‰ã€Œè¡Œå‹•ã€ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
+	// å¤‰æ›ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰é©å®œå®Ÿè£…ã™ã‚‹
 	return JSONSendPacket_Action();
 }
 
 /**
-*	@brief u”Õ–ÊvƒpƒPƒbƒg‚©‚çu”Õ–ÊvJSON‚É•ÏŠ·‚·‚é
-*	@param[in] pkt •ÏŠ·‘ÎÛ‚Ìu”Õ–ÊvƒpƒPƒbƒg
-*	@return std::string •ÏŠ·Œ‹‰Ê‚Ìu”Õ–ÊvJSON
+*	@brief ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œç›¤é¢ã€JSONã«å¤‰æ›ã™ã‚‹
+*	@param[in] pkt å¤‰æ›å¯¾è±¡ã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@return std::string å¤‰æ›çµæœã®ã€Œç›¤é¢ã€JSON
 */
 std::string ActionJsonConverter::from_packet_to_json(const JSONSendPacket_Action& pkt) const
 {
 	picojson::object action_obj;
 
-	// ƒpƒPƒbƒg‚©‚ç’¼Ú•ÏŠ·‚Å‚«‚é—v‘f‚ğJSON‚É’Ç‰Á
+	// ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ç›´æ¥å¤‰æ›ã§ãã‚‹è¦ç´ ã‚’JSONã«è¿½åŠ 
 	action_obj.insert(std::make_pair("turn_team", pkt.turn_team.get_value()));
 
-	// "contents"”z—ñ‚ğì¬
+	// "contents"é…åˆ—ã‚’ä½œæˆ
 	picojson::array contents;
 	for (auto& content : pkt.contents.get_value()) {
 		picojson::object contents_obj;
 
-		// "to"ƒIƒuƒWƒFƒNƒg‚Ìì¬
+		// "to"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
 		{
 			picojson::object to_obj;
 
@@ -45,7 +45,7 @@ std::string ActionJsonConverter::from_packet_to_json(const JSONSendPacket_Action
 			contents_obj.insert(std::make_pair("to", picojson::value(to_obj)));
 		}
 
-		// "atk"ƒIƒuƒWƒFƒNƒg‚Ìì¬
+		// "atk"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
 		{
 			picojson::object atk_obj;
 
@@ -54,7 +54,7 @@ std::string ActionJsonConverter::from_packet_to_json(const JSONSendPacket_Action
 			contents_obj.insert(std::make_pair("atk", picojson::value(atk_obj)));
 		}
 
-		// ì¬‚µ‚½ŠeƒIƒuƒWƒFƒNƒg‚ÆCƒ†ƒjƒbƒgID‚ğ”z—ñ—v‘f‚Æ‚µ‚Ä’Ç‰Á
+		// ä½œæˆã—ãŸå„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ï¼Œãƒ¦ãƒ‹ãƒƒãƒˆIDã‚’é…åˆ—è¦ç´ ã¨ã—ã¦è¿½åŠ 
 		contents_obj.insert(std::make_pair("unit_id", content.unit_id.get_value()));
 		contents.push_back(picojson::value(contents_obj));
 	}

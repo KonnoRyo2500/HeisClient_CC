@@ -1,30 +1,30 @@
 /**
 *	@file		board_json_converter.cpp
-*	@brief		heis u”Õ–ÊvJSON•ÏŠ·ƒNƒ‰ƒX
+*	@brief		heis ã€Œç›¤é¢ã€JSONå¤‰æ›ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	u”Õ–ÊvJSON‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒXB
+*	@details	ã€Œç›¤é¢ã€JSONã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include "board_json_converter.h"
 
 /**
-*	@brief u”Õ–ÊvJSON‚©‚çu”Õ–ÊvƒpƒPƒbƒg‚É•ÏŠ·‚·‚é
-*	@param[in] json •ÏŠ·‘ÎÛ‚Ìu”Õ–ÊvJSON
-*	@return std::string •ÏŠ·Œ‹‰Ê‚Ìu”Õ–ÊvƒpƒPƒbƒg
+*	@brief ã€Œç›¤é¢ã€JSONã‹ã‚‰ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹
+*	@param[in] json å¤‰æ›å¯¾è±¡ã®ã€Œç›¤é¢ã€JSON
+*	@return std::string å¤‰æ›çµæœã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
 */
 JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(const std::string& json) const
 {
 	JSONRecvPacket_Board board_pkt;
 	picojson::object root_obj = parse_json(json);
 
-	// ƒ‹[ƒgƒIƒuƒWƒFƒNƒg‚©‚ç’¼Úæ“¾‚Å‚«‚é’l‚ğæ“¾
+	// ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ç›´æ¥å–å¾—ã§ãã‚‹å€¤ã‚’å–å¾—
 	board_pkt.width.set_value((uint16_t)root_obj["width"].get<double>());
 	board_pkt.height.set_value((uint16_t)root_obj["height"].get<double>());
 	board_pkt.turn_team.set_value(root_obj["turn_team"].get<std::string>());
 	board_pkt.finished.set_value(root_obj["finished"].get<bool>());
 	board_pkt.count.set_value((uint32_t)root_obj["count"].get<double>());
 
-	// "players"”z—ñ‚Ì’l‚ğæ“¾
+	// "players"é…åˆ—ã®å€¤ã‚’å–å¾—
 	std::vector<std::string> players;
 	picojson::array players_array = root_obj["players"].get<picojson::array>();
 	for (auto& val : players_array) {
@@ -32,7 +32,7 @@ JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(const std::string& 
 	}
 	board_pkt.players.set_value(players);
 
-	// "units"”z—ñ‚Ì’l‚ğæ“¾
+	// "units"é…åˆ—ã®å€¤ã‚’å–å¾—
 	std::vector<UnitsArrayElem> units;
 	picojson::array units_array = root_obj["units"].get<picojson::array>();
 	for (auto& val : units_array) {
@@ -44,7 +44,7 @@ JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(const std::string& 
 		elem.type.set_value(obj["type"].get<std::string>());
 		elem.team.set_value(obj["team"].get<std::string>());
 
-		// "locate"ƒIƒuƒWƒFƒNƒg‚Ì’l‚ğæ“¾
+		// "locate"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å€¤ã‚’å–å¾—
 		LocateObjData locate;
 		picojson::object locate_obj = obj["locate"].get<picojson::object>();
 		locate.x.set_value((uint16_t)locate_obj["x"].get<double>());
@@ -59,13 +59,13 @@ JSONRecvPacket_Board BoardJsonConverter::from_json_to_packet(const std::string& 
 }
 
 /**
-*	@brief u”Õ–ÊvƒpƒPƒbƒg‚©‚çu”Õ–ÊvJSON‚É•ÏŠ·‚·‚é
-*	@param[in] pkt •ÏŠ·‘ÎÛ‚Ìu”Õ–ÊvƒpƒPƒbƒg
-*	@return std::string •ÏŠ·Œ‹‰Ê‚Ìu”Õ–ÊvJSON
+*	@brief ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œç›¤é¢ã€JSONã«å¤‰æ›ã™ã‚‹
+*	@param[in] pkt å¤‰æ›å¯¾è±¡ã®ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆ
+*	@return std::string å¤‰æ›çµæœã®ã€Œç›¤é¢ã€JSON
 */
 std::string BoardJsonConverter::from_packet_to_json(const JSONRecvPacket_Board& pkt) const
 {
-	// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Åu”Õ–ÊvƒpƒPƒbƒg‚©‚çu”Õ–ÊvJSON‚É•ÏŠ·‚·‚é•K—v‚ª‚È‚¢‚½‚ßADo Nothing
-	// •ÏŠ·‚·‚é•K—v‚ª¶‚¶‚½‚ç“K‹XÀ‘•‚·‚é
+	// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã§ã€Œç›¤é¢ã€ãƒ‘ã‚±ãƒƒãƒˆã‹ã‚‰ã€Œç›¤é¢ã€JSONã«å¤‰æ›ã™ã‚‹å¿…è¦ãŒãªã„ãŸã‚ã€Do Nothing
+	// å¤‰æ›ã™ã‚‹å¿…è¦ãŒç”Ÿã˜ãŸã‚‰é©å®œå®Ÿè£…ã™ã‚‹
 	return "";
 }

@@ -1,8 +1,8 @@
 /**
 *	@file		socket_base.h
-*	@brief		TCP/IPƒ\ƒPƒbƒgƒx[ƒXƒNƒ‰ƒX
+*	@brief		TCP/IPã‚½ã‚±ãƒƒãƒˆãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 *	@author		Ryo Konno
-*	@details	Šeíƒvƒ‰ƒbƒgƒtƒH[ƒ€‚É‚¨‚¯‚éƒ\ƒPƒbƒgƒNƒ‰ƒX‚Ìƒx[ƒXƒNƒ‰ƒXB
+*	@details	å„ç¨®ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«ãŠã‘ã‚‹ã‚½ã‚±ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #pragma once
@@ -10,41 +10,41 @@
 #include <string>
 
 /**
-*	@brief TCP/IPƒ\ƒPƒbƒgƒx[ƒXƒNƒ‰ƒX
+*	@brief TCP/IPã‚½ã‚±ãƒƒãƒˆãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 */
 class CSocketBase
 {
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 public:
-	// ƒ†[ƒUƒR[ƒh‚ÅŒÄ‚Î‚ê‚éŠÖ”‚ÍCSocketƒNƒ‰ƒX‚Å’è‹`‚·‚é
+	// ãƒ¦ãƒ¼ã‚¶ã‚³ãƒ¼ãƒ‰ã§å‘¼ã°ã‚Œã‚‹é–¢æ•°ã¯CSocketã‚¯ãƒ©ã‚¹ã§å®šç¾©ã™ã‚‹
 
-	// •W€‚Ìƒ\ƒPƒbƒgAPI‚ÆŠÖ”–¼‚ªÕ“Ë‚µ‚È‚¢‚æ‚¤Aƒ\ƒPƒbƒgAPI‚ÌŠÖ”–¼‚Æ‚Í•Ê‚ÌŠÖ”–¼‚É‚·‚é
-	// ƒ\ƒPƒbƒgAPI‚Å‚Í–¼‘O‹óŠÔ‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚¢‰Â”\«‚à‚ ‚é‚½‚ßA–¼‘OÕ“Ë‚ÍŠÖ”–¼‚Ì•ÏX‚Å‰ñ”ğ‚·‚é•K—v‚ª‚ ‚é
+	// æ¨™æº–ã®ã‚½ã‚±ãƒƒãƒˆAPIã¨é–¢æ•°åãŒè¡çªã—ãªã„ã‚ˆã†ã€ã‚½ã‚±ãƒƒãƒˆAPIã®é–¢æ•°åã¨ã¯åˆ¥ã®é–¢æ•°åã«ã™ã‚‹
+	// ã‚½ã‚±ãƒƒãƒˆAPIã§ã¯åå‰ç©ºé–“ãŒå®šç¾©ã•ã‚Œã¦ã„ãªã„å¯èƒ½æ€§ã‚‚ã‚ã‚‹ãŸã‚ã€åå‰è¡çªã¯é–¢æ•°åã®å¤‰æ›´ã§å›é¿ã™ã‚‹å¿…è¦ãŒã‚ã‚‹
 
-	// ƒ\ƒPƒbƒg‚É–¼‘O‚ğ•t‚¯‚é
+	// ã‚½ã‚±ãƒƒãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹
 	virtual void wrap_bind(const uint16_t dst_port, const std::string& src_addr) = 0;
-	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğó‚¯•t‚¯‚é
+	// ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å—ã‘ä»˜ã‘ã‚‹
 	virtual void wrap_listen() = 0;
-	// ‘Šè‚©‚ç‚ÌÚ‘±‚ğ‘Ò‚Â
+	// ç›¸æ‰‹ã‹ã‚‰ã®æ¥ç¶šã‚’å¾…ã¤
 	virtual void wrap_accept() = 0;
-	// ƒ\ƒPƒbƒg‚ğÚ‘±‚·‚é
+	// ã‚½ã‚±ãƒƒãƒˆã‚’æ¥ç¶šã™ã‚‹
 	virtual void wrap_connect(const std::string& addr, const uint16_t port) const = 0;
-	// ƒf[ƒ^‚ğ‘—M‚·‚é
+	// ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹
 	virtual void wrap_send(const std::string& data, const char terminal) = 0;
-	// ƒf[ƒ^‚ğóM‚·‚é
+	// ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ã™ã‚‹
 	virtual std::string wrap_recv(const char terminal) = 0;
-	// ƒ\ƒPƒbƒg‚ğ•Â‚¶‚é
+	// ã‚½ã‚±ãƒƒãƒˆã‚’é–‰ã˜ã‚‹
 	virtual void wrap_close() = 0;
-	// ƒ\ƒPƒbƒg‚ğì¬‚·‚é
+	// ã‚½ã‚±ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹
 	virtual int wrap_socket() = 0;
 
-	// ‰Šú‰»ˆ—‚ğs‚¤
+	// åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†
 	virtual bool initialize() = 0;
-	// I—¹ˆ—‚ğs‚¤
+	// çµ‚äº†å‡¦ç†ã‚’è¡Œã†
 	virtual bool finalize() = 0;
 
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 protected:
-	//! ƒ\ƒPƒbƒg‚ÌÀ‘Ì
+	//! ã‚½ã‚±ãƒƒãƒˆã®å®Ÿä½“
 	int m_socket;
 };
